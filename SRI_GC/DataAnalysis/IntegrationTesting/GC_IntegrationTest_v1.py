@@ -10,34 +10,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import datetime as dt
-import scipy
 import scipy.signal as scisig
+import scipy.ndimage as nd
 
 def get_raw_gc_data(filename):
     """Uses Matthias Richter's example code (translated from Matlab) to read GC .ASC files"""
     with open(filename, 'r') as f:
-        
+
         #Skip first 18 lines
         for i in range(18):
             next(f)
-        
+
         # Line 19, date
         [month, day, year] = [int(i.strip()) for i in f.readline().split("=")[1].split('-')]
-        
+
         # Line 20, time
         [hr, minute, second] = [int(i.strip()) for i in f.readline().split("=")[1].split(':')]
         timecode = dt.datetime(year, month, day, hr, minute, second).timestamp()
-        
+
         # Line 21, sampling rate
         rate = int(f.readline().split('=')[1][0])
-        
+
         # Line 22 # of data points
         size = int(f.readline().split("=")[1])
-        
+
         #Skip next 3 lines
         for i in range(3):
             next(f)
-        
+
         y=[]
         for line in f:
             if line.strip() == '': #Empty strings in between entries
@@ -65,7 +65,7 @@ def list_files(folder_path):
 
 
 def convert_to_ppm(Counts, ChemID):
-    """This function assumes you have imported the calibration data as a 
+    """This function assumes you have imported the calibration data as a
     global variable called CalDF. Turns integrated raw counts into real concentration."""
     [m, b] = (CalDF.loc[ChemID, ['slope', 'intercept']]) # Pull Cal data for given chemical
     y = m * Counts + b # Simple Calibration equation will need to edit if calibration isn't linear
@@ -73,7 +73,7 @@ def convert_to_ppm(Counts, ChemID):
 
 def integrate_peak(signal, left_index, right_index):
     """Integrates a single peak of a signal based on left and right indices."""
-    
+
     # Indices have to be rounded as they are fractional coming from scisig.peak_widths
     left_index = round(left_index)
     right_index = round(right_index)
@@ -87,18 +87,14 @@ def integrate_peak(signal, left_index, right_index):
 ##############################################################################
 # Calibration Location Info:
 # Format [ChemID, slope, intercept, start, end]
-CalibrationFolder = ('G:/Shared drives/Photocatalysis Reactor/'
-                   'Reactor Baseline Experiments/GC Calibration/'
-                   'calib_202012/')
-CalibrationFile = 'HayD_FID_Sophia_RawCounts.csv'
-CalibrationPath = CalibrationFolder+CalibrationFile
-CalDF = pd.read_csv(CalibrationPath, delimiter=',', index_col='Chem ID') # import all calibration data
-CalChemIDs = CalDF.index.to_numpy() # get chem IDs from calibration files
+#calibrationfolder = foldernamehere
+#calibrationfile = 'HayD_FID_Sophia_RawCounts.csv'
+#calibrationpath = calibrationfolder + calibrationfile
+#CalDF = pd.read_csv(calibrationpath, delimiter=',', index_col='Chem ID') # import all calibration data
+#CalChemIDs = CalDF.index.to_numpy() # get chem IDs from calibration files
 
 # Sample Location Info:
-folder = ('G:/Shared drives/Photocatalysis Reactor/Reactor System Automation/'
-          'SRI_GC/DataAnalysis/IntegrationTesting/20211007_TroubleChromatograms/')
-          
+folder = '/Users/ccarlin/src/Dionne-Lab/photoreactor/SRI_GC/DataAnalysis/IntegrationTesting/20211007_TroubleChromatograms/'
 filename = '20201217_calibration100ppm_FID01'
 
 
@@ -112,14 +108,26 @@ data = get_raw_gc_data(filepath)
     #This part of the analysis works ok for now. After working through the baseline
     #and the integration a bit, I'm going to want to fine tune the peak finding
     #using some challenging example sets (i.e. very low ethane)
+# peak finding
 peak_idx, _ = scisig.find_peaks(signal, prominence=1) # this works
 
 # Note to Claire:
     #This line and the integrate_peak fucntions are where I think we should work right now
-    #The easiest addition would be to add a derivative test to search for dips 
+    #The easiest addition would be to add a derivative test to search for dips
     #in between peaks (overlaping). (i.e. setting better bounds)
 #TODO: We should add baseline fitting
 #TODO: We could add peak fitting rather than just setting bounds (Amy did this, but Dayne said its overkill)
+
+# baseline correction
+# this baseline fitting technique is based on that used in PyMassSpec (pyms/TopHat.py)
+struct_elm_frac = 0.05 # default structural elemenet as fraction of total number of points
+struct_pts = int(round(signal.size * struct_elm_frac))
+str_el = np.repeat([1], struct_pts)
+line = nd.generate_binary_structure(rank=1, connectivity=9)
+signal_basesub = nd.white_tophat(input = signal, footprint=str_el)# structure = line)
+
+
+# peak widths
 _, _, left_idx, right_idx = scisig.peak_widths(signal, peak_idx, rel_height=0.9)
 
 
@@ -139,10 +147,10 @@ _, _, left_idx, right_idx = scisig.peak_widths(signal, peak_idx, rel_height=0.9)
 #      else:
 #          UnknownPeaks += 1
 #          # TODO I can take the ind_x and append this Unknown peak to the calibration df
-        
+
 # if UnknownPeaks>1:  # Theres always a peak from backflush right now
 #     print('Warning: %5d Unknown peaks detected' %(UnknownPeaks))
-     
+
 # if (Conc==0).all():  # Checks if all concentrations are zero
 #     print('Warning: Zero Molecules Detected')
 #------------------------------------------------------------------------------
@@ -158,20 +166,23 @@ plt.rcParams['axes.linewidth'] = 2
 # Another way to change tick width and length
 plt.gca().tick_params(which='both', width=1.5, length=6)
 plt.gca().tick_params(which='minor', width=1.5, length=3)
-    
+
 plt.figure
 [left_idx, right_idx] = (np.rint(left_idx).astype('int'), np.rint(right_idx).astype('int'))
-# Plot Signal
+# Plot signal
 plt.plot(time, signal, linewidth=2.5)
-# Plot Derivative
-plt.plot(time, 10*np.gradient(signal))
-# Plot peak and bounds 
-plt.plot(time[peak_idx], signal[peak_idx], 'o')
-plt.plot(time[left_idx], signal[left_idx], 'o')
-plt.plot(time[right_idx], signal[right_idx], 'o')
-    
+# Plot signal with baseline subtracted
+plt.plot(time, signal_basesub, linewidth=2.5)
+## Plot Derivative
+#plt.plot(time, 10*np.gradient(signal))
+## Plot peak and bounds
+#plt.plot(time[peak_idx], signal[peak_idx], 'o')
+#plt.plot(time[left_idx], signal[left_idx], 'o')
+#plt.plot(time[right_idx], signal[right_idx], 'o')
+
 plt.xlabel('Retention (min)', fontsize=18)
 plt.ylabel('Signal (a.u.)', fontsize=18)
 plt.xlim([0, 13])
-plt.tight_layout()    
+plt.tight_layout()
+plt.show()
 print('Finished')
