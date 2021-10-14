@@ -60,6 +60,7 @@ class GCData:
     ##############################################################################
 
     def baseline_correction(self):
+        """replaces signal with a signal with background subtraction using tophat filter (based on PyMassSpec/pyms/TopHat.py)"""
         struct_elm_frac = 0.1 # default structural elemenet as fraction of total number of points
         struct_pts = int(round(self.signal.size * struct_elm_frac))
         str_el = np.repeat([1], struct_pts)
@@ -68,6 +69,7 @@ class GCData:
         self.signal = signal_basesub
 
     def integration_ind(self):
+        """uses scipy.signal.find_peaks to find peaks in signal, uses scipy.signal.peak_widths to find left and right bounds for integration"""
         # Note to Claire:
         #This part of the analysis works ok for now. After working through the baseline
         #and the integration a bit, I'm going to want to fine tune the peak finding
@@ -90,8 +92,7 @@ class GCData:
         return round(counts)
 
     def get_concentrations(self, calDF):
-        """Reads in filepath for data set and output a Pandas series of chemical
-        concentrations in the same order as the calibration file"""
+        """returns a Pandas series of chemical concentrations in the same order as the calibration file"""
         self.integration_ind()
         conc = pd.Series(0, index=calDF.index[0:]) # Creates empty series where index are ChemIDs from Cal file
         UnknownPeaks = 0
@@ -127,7 +128,7 @@ class GCData:
     ##############################################################################
 
     def plot_integration(self):
-        #plt.close('all')
+        plt.close('all')
         # Plotting Things Unique to Matplotlib
         plt.rcParams.update({'font.size': 14})
         plt.rcParams['axes.linewidth'] = 2
@@ -160,6 +161,7 @@ class GCData:
     ##############################################################################
 
     def get_run_number(self):
+        """returns run number based on filename"""
         filename = os.path.basename(self.filepath)
         parts = filename.split('_')
         run_number = int(parts[-1][-2:].lstrip("0"))
