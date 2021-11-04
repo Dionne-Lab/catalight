@@ -54,10 +54,9 @@ namespace PeaksimpleClient
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(42, 48);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Location = new System.Drawing.Point(28, 31);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(412, 35);
+            this.button1.Size = new System.Drawing.Size(275, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Connect to local copy of Peakseimple, already running";
             this.button1.UseVisualStyleBackColor = true;
@@ -65,10 +64,9 @@ namespace PeaksimpleClient
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(42, 117);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button2.Location = new System.Drawing.Point(28, 76);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 35);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 0;
             this.button2.Text = "Test call";
             this.button2.UseVisualStyleBackColor = true;
@@ -76,26 +74,23 @@ namespace PeaksimpleClient
             // 
             // labelConnect
             // 
-            this.labelConnect.Location = new System.Drawing.Point(464, 55);
-            this.labelConnect.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelConnect.Location = new System.Drawing.Point(309, 36);
             this.labelConnect.Name = "labelConnect";
-            this.labelConnect.Size = new System.Drawing.Size(460, 28);
+            this.labelConnect.Size = new System.Drawing.Size(307, 18);
             this.labelConnect.TabIndex = 1;
             // 
             // labelSend
             // 
-            this.labelSend.Location = new System.Drawing.Point(291, 125);
-            this.labelSend.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelSend.Location = new System.Drawing.Point(194, 81);
             this.labelSend.Name = "labelSend";
-            this.labelSend.Size = new System.Drawing.Size(590, 28);
+            this.labelSend.Size = new System.Drawing.Size(393, 18);
             this.labelSend.TabIndex = 1;
             // 
             // buttonIsDataAvailable
             // 
-            this.buttonIsDataAvailable.Location = new System.Drawing.Point(42, 183);
-            this.buttonIsDataAvailable.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonIsDataAvailable.Location = new System.Drawing.Point(28, 119);
             this.buttonIsDataAvailable.Name = "buttonIsDataAvailable";
-            this.buttonIsDataAvailable.Size = new System.Drawing.Size(144, 35);
+            this.buttonIsDataAvailable.Size = new System.Drawing.Size(96, 23);
             this.buttonIsDataAvailable.TabIndex = 0;
             this.buttonIsDataAvailable.Text = "IsDataAvailable";
             this.buttonIsDataAvailable.UseVisualStyleBackColor = true;
@@ -103,18 +98,16 @@ namespace PeaksimpleClient
             // 
             // labelIsDataAvailable
             // 
-            this.labelIsDataAvailable.Location = new System.Drawing.Point(291, 190);
-            this.labelIsDataAvailable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelIsDataAvailable.Location = new System.Drawing.Point(194, 124);
             this.labelIsDataAvailable.Name = "labelIsDataAvailable";
-            this.labelIsDataAvailable.Size = new System.Drawing.Size(590, 28);
+            this.labelIsDataAvailable.Size = new System.Drawing.Size(393, 18);
             this.labelIsDataAvailable.TabIndex = 1;
             // 
             // buttonReadData
             // 
-            this.buttonReadData.Location = new System.Drawing.Point(42, 248);
-            this.buttonReadData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonReadData.Location = new System.Drawing.Point(28, 161);
             this.buttonReadData.Name = "buttonReadData";
-            this.buttonReadData.Size = new System.Drawing.Size(144, 35);
+            this.buttonReadData.Size = new System.Drawing.Size(96, 23);
             this.buttonReadData.TabIndex = 0;
             this.buttonReadData.Text = "ReadData";
             this.buttonReadData.UseVisualStyleBackColor = true;
@@ -122,28 +115,25 @@ namespace PeaksimpleClient
             // 
             // labelReadData
             // 
-            this.labelReadData.Location = new System.Drawing.Point(291, 255);
-            this.labelReadData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelReadData.Location = new System.Drawing.Point(194, 166);
             this.labelReadData.Name = "labelReadData";
-            this.labelReadData.Size = new System.Drawing.Size(590, 28);
+            this.labelReadData.Size = new System.Drawing.Size(393, 18);
             this.labelReadData.TabIndex = 1;
             // 
             // textBoxData
             // 
-            this.textBoxData.Location = new System.Drawing.Point(933, 48);
-            this.textBoxData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxData.Location = new System.Drawing.Point(622, 31);
             this.textBoxData.Multiline = true;
             this.textBoxData.Name = "textBoxData";
             this.textBoxData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxData.Size = new System.Drawing.Size(148, 562);
+            this.textBoxData.Size = new System.Drawing.Size(100, 367);
             this.textBoxData.TabIndex = 2;
             // 
             // buttonIsRunning
             // 
-            this.buttonIsRunning.Location = new System.Drawing.Point(42, 312);
-            this.buttonIsRunning.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonIsRunning.Location = new System.Drawing.Point(28, 203);
             this.buttonIsRunning.Name = "buttonIsRunning";
-            this.buttonIsRunning.Size = new System.Drawing.Size(144, 35);
+            this.buttonIsRunning.Size = new System.Drawing.Size(96, 23);
             this.buttonIsRunning.TabIndex = 0;
             this.buttonIsRunning.Text = "IsRunning";
             this.buttonIsRunning.UseVisualStyleBackColor = true;
@@ -151,18 +141,16 @@ namespace PeaksimpleClient
             // 
             // labelGetRunning
             // 
-            this.labelGetRunning.Location = new System.Drawing.Point(291, 320);
-            this.labelGetRunning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelGetRunning.Location = new System.Drawing.Point(194, 208);
             this.labelGetRunning.Name = "labelGetRunning";
-            this.labelGetRunning.Size = new System.Drawing.Size(590, 28);
+            this.labelGetRunning.Size = new System.Drawing.Size(393, 18);
             this.labelGetRunning.TabIndex = 1;
             // 
             // buttonStartRun
             // 
-            this.buttonStartRun.Location = new System.Drawing.Point(42, 372);
-            this.buttonStartRun.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonStartRun.Location = new System.Drawing.Point(28, 242);
             this.buttonStartRun.Name = "buttonStartRun";
-            this.buttonStartRun.Size = new System.Drawing.Size(202, 35);
+            this.buttonStartRun.Size = new System.Drawing.Size(135, 23);
             this.buttonStartRun.TabIndex = 0;
             this.buttonStartRun.Text = "Start run and collect data";
             this.buttonStartRun.UseVisualStyleBackColor = true;
@@ -170,10 +158,9 @@ namespace PeaksimpleClient
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(254, 372);
-            this.buttonStop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonStop.Location = new System.Drawing.Point(169, 242);
             this.buttonStop.Name = "buttonStop";
-            this.buttonStop.Size = new System.Drawing.Size(98, 35);
+            this.buttonStop.Size = new System.Drawing.Size(65, 23);
             this.buttonStop.TabIndex = 0;
             this.buttonStop.Text = "Stop run";
             this.buttonStop.UseVisualStyleBackColor = true;
@@ -181,18 +168,16 @@ namespace PeaksimpleClient
             // 
             // labelSetRunning
             // 
-            this.labelSetRunning.Location = new System.Drawing.Point(392, 380);
-            this.labelSetRunning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelSetRunning.Location = new System.Drawing.Point(261, 247);
             this.labelSetRunning.Name = "labelSetRunning";
-            this.labelSetRunning.Size = new System.Drawing.Size(369, 28);
+            this.labelSetRunning.Size = new System.Drawing.Size(246, 18);
             this.labelSetRunning.TabIndex = 1;
             // 
             // buttonLoadControlFile
             // 
-            this.buttonLoadControlFile.Location = new System.Drawing.Point(42, 432);
-            this.buttonLoadControlFile.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonLoadControlFile.Location = new System.Drawing.Point(28, 281);
             this.buttonLoadControlFile.Name = "buttonLoadControlFile";
-            this.buttonLoadControlFile.Size = new System.Drawing.Size(144, 35);
+            this.buttonLoadControlFile.Size = new System.Drawing.Size(96, 23);
             this.buttonLoadControlFile.TabIndex = 0;
             this.buttonLoadControlFile.Text = "LoadControlFile";
             this.buttonLoadControlFile.UseVisualStyleBackColor = true;
@@ -200,36 +185,32 @@ namespace PeaksimpleClient
             // 
             // labelLoadControlFile
             // 
-            this.labelLoadControlFile.Location = new System.Drawing.Point(291, 440);
-            this.labelLoadControlFile.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLoadControlFile.Location = new System.Drawing.Point(194, 286);
             this.labelLoadControlFile.Name = "labelLoadControlFile";
-            this.labelLoadControlFile.Size = new System.Drawing.Size(590, 28);
+            this.labelLoadControlFile.Size = new System.Drawing.Size(393, 18);
             this.labelLoadControlFile.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 551);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(28, 358);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 20);
+            this.label1.Size = new System.Drawing.Size(129, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Time out value (seconds):";
             // 
             // textBoxTimeOut
             // 
-            this.textBoxTimeOut.Location = new System.Drawing.Point(246, 546);
-            this.textBoxTimeOut.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxTimeOut.Location = new System.Drawing.Point(164, 355);
             this.textBoxTimeOut.Name = "textBoxTimeOut";
-            this.textBoxTimeOut.Size = new System.Drawing.Size(62, 26);
+            this.textBoxTimeOut.Size = new System.Drawing.Size(43, 20);
             this.textBoxTimeOut.TabIndex = 4;
             // 
             // buttonSetTimeOut
             // 
-            this.buttonSetTimeOut.Location = new System.Drawing.Point(327, 545);
-            this.buttonSetTimeOut.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonSetTimeOut.Location = new System.Drawing.Point(218, 354);
             this.buttonSetTimeOut.Name = "buttonSetTimeOut";
-            this.buttonSetTimeOut.Size = new System.Drawing.Size(90, 35);
+            this.buttonSetTimeOut.Size = new System.Drawing.Size(60, 23);
             this.buttonSetTimeOut.TabIndex = 5;
             this.buttonSetTimeOut.Text = "Set";
             this.buttonSetTimeOut.UseVisualStyleBackColor = true;
@@ -238,27 +219,24 @@ namespace PeaksimpleClient
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 495);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(28, 322);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(167, 20);
+            this.label2.Size = new System.Drawing.Size(111, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Channel number (1-6):";
             // 
             // textBoxChannel
             // 
-            this.textBoxChannel.Location = new System.Drawing.Point(246, 491);
-            this.textBoxChannel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxChannel.Location = new System.Drawing.Point(164, 319);
             this.textBoxChannel.Name = "textBoxChannel";
-            this.textBoxChannel.Size = new System.Drawing.Size(62, 26);
+            this.textBoxChannel.Size = new System.Drawing.Size(43, 20);
             this.textBoxChannel.TabIndex = 4;
             // 
             // buttonChannel
             // 
-            this.buttonChannel.Location = new System.Drawing.Point(327, 489);
-            this.buttonChannel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.buttonChannel.Location = new System.Drawing.Point(218, 318);
             this.buttonChannel.Name = "buttonChannel";
-            this.buttonChannel.Size = new System.Drawing.Size(90, 35);
+            this.buttonChannel.Size = new System.Drawing.Size(60, 23);
             this.buttonChannel.TabIndex = 5;
             this.buttonChannel.Text = "Set";
             this.buttonChannel.UseVisualStyleBackColor = true;
@@ -266,9 +244,9 @@ namespace PeaksimpleClient
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1127, 667);
+            this.ClientSize = new System.Drawing.Size(774, 451);
             this.Controls.Add(this.buttonChannel);
             this.Controls.Add(this.buttonSetTimeOut);
             this.Controls.Add(this.textBoxChannel);
@@ -291,11 +269,9 @@ namespace PeaksimpleClient
             this.Controls.Add(this.labelConnect);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "PeaksimpleConnector test harness";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

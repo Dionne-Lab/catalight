@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeaksimpleConnectorTestClient", "PeaksimpleClient\PeaksimpleConnectorTestClient.csproj", "{9ED98F85-C8C7-4688-9301-A5B5E8171696}"
 EndProject
 Global
@@ -29,8 +27,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5AA3B35C-23D9-4E00-8040-8A07F579E00D}
 	EndGlobalSection
 EndGlobal
