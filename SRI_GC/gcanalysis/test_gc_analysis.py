@@ -15,11 +15,11 @@ index=calDF.index[0:] # getting an error that it can't access index, thinks calD
 calchemIDs = calDF.index.to_numpy() # get chem IDs from calibration files
 
 # Sample Location Info:
-main = '/Users/ccarlin/src/Dionne-Lab/photoreactor/SRI_GC/DataAnalysis/IntegrationTesting/20211007_TroubleChromatograms/20201217_calibration100ppm_FID01.ASC'
+main = '/Users/ccarlin/src/Dionne-Lab/photoreactor/SRI_GC/gcanalysis/IntegrationTesting/20211007_TroubleChromatograms/20201217_calibration100ppm_FID01.ASC'
 data = gcdata.GCData(main)
 datacorrected = gcdata.GCData(main, basecorrect = True)
 
-print(datacorrected.peak_ind)
+print(datacorrected.apex_ind)
 
 # Plot to test
 ##############################################################################
