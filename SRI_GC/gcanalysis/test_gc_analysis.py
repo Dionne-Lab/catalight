@@ -19,36 +19,38 @@ main = '/Users/ccarlin/src/Dionne-Lab/photoreactor/SRI_GC/DataAnalysis/Integrati
 data = gcdata.GCData(main)
 datacorrected = gcdata.GCData(main, basecorrect = True)
 
+print(datacorrected.peak_ind)
 
 # Plot to test
 ##############################################################################
-plt.close('all')
-# Plotting Things Unique to Matplotlib
-plt.rcParams.update({'font.size': 14})
-plt.rcParams['axes.linewidth'] = 2
-# Another way to change tick width and length
-plt.gca().tick_params(which='both', width=1.5, length=6)
-plt.gca().tick_params(which='minor', width=1.5, length=3)
-
-plt.figure
-data.integration_ind()
-[left_idx, right_idx] = (np.rint(data.left_idx).astype('int'), np.rint(data.right_idx).astype('int'))
-# Plot signal
-plt.plot(data.time, data.signal, linewidth=2.5)
-# Plot background that will be subtracted
-plt.plot(data.time, data.signal-datacorrected.signal, linewidth=2.5)
-## Plot Derivative
-#plt.plot(time, 10*np.gradient(signal))
+#plt.close('all')
+## Plotting Things Unique to Matplotlib
+#plt.rcParams.update({'font.size': 14})
+#plt.rcParams['axes.linewidth'] = 2
+## Another way to change tick width and length
+#plt.gca().tick_params(which='both', width=1.5, length=6)
+#plt.gca().tick_params(which='minor', width=1.5, length=3)
+#
+#plt.figure
+#data.integration_ind()
+#[left_idx, right_idx] = (np.rint(data.left_idx).astype('int'), np.rint(data.right_idx).astype('int'))
+## Plot signal
+#plt.plot(data.time, data.signal, linewidth=2.5, label = 'original')
+## Plot background that will be subtracted
+##plt.plot(data.time, data.signal-datacorrected.signal, linewidth=2.5, label = 'subtracted')
+### Plot Derivative
+#plt.plot(data.time, 10*np.gradient(data.signal), label = 'derivative x10')
 ## Plot peak and bounds
-#plt.plot(time[peak_idx], signal[peak_idx], 'o')
-#plt.plot(time[left_idx], signal[left_idx], 'o')
-#plt.plot(time[right_idx], signal[right_idx], 'o')
-
-plt.xlabel('Retention (min)', fontsize=18)
-plt.ylabel('Signal (a.u.)', fontsize=18)
-plt.xlim([0, 13])
-plt.tight_layout()
-plt.show()
+#plt.plot(data.time[data.peak_idx], data.signal[data.peak_idx], 'o', label = 'peak index')
+#plt.plot(data.time[left_idx], data.signal[left_idx], 'o', label = 'left index')
+#plt.plot(data.time[right_idx], data.signal[right_idx], 'o', label = 'right index')
+#
+#plt.xlabel('Retention (min)', fontsize=18)
+#plt.ylabel('Signal (a.u.)', fontsize=18)
+#plt.xlim([0, 13])
+#plt.tight_layout()
+#plt.legend()
+#plt.show()
 
 
 # Helper functions

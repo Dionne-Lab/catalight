@@ -19,6 +19,7 @@ class GCData:
         self.signal = np.asarray(self.rawdata['Signal'])
         if basecorrect == True:
             self.baseline_correction()
+        self.find_peakapex_ind()
 
     def getrawdata(self): # reads data from ASCII, returns pandas dataframe
         """Uses Matthias Richter's example code (translated from Matlab) to read GC .ASC files, returns pandas dataframe"""
@@ -68,8 +69,26 @@ class GCData:
         signal_basesub = nd.white_tophat(input = self.signal, footprint=str_el)# structure = line)
         self.signal = signal_basesub
 
+
+    def find_peakapex_ind(self):
+        """uses scipy.signal.find_peaks to find peaks in signal, returns a numpy array with all peak indices (NOT times)"""
+        self.apex_ind, _ = scisig.find_peaks(self.signal, prominence=1)
+ # test
+
+    def find_peak_area(self, tol=0.5):
+       """
+       calculate the area under the peak with edge values determined by:
+       1. the added intensity adds less than 0.5% to the accumulated area; or
+       2. the added intensity starts increasing (i.e. when the ion is common to co-eluting compounds)
+
+       adapted from pyMS function peak_sum_area by Andrew Isaac and Sean O'Callaghan
+       https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py
+       """
+       sum_area = np.zeros(self.peak_ind.size) # array of area under each peak
+
+
     def integration_ind(self):
-        """uses scipy.signal.find_peaks to find peaks in signal, uses scipy.signal.peak_widths to find left and right bounds for integration"""
+        """OBSOLETE - TO BE DELETED"""
         # Note to Claire:
         #This part of the analysis works ok for now. After working through the baseline
         #and the integration a bit, I'm going to want to fine tune the peak finding
@@ -82,7 +101,7 @@ class GCData:
         _, _, self.left_idx, self.right_idx = scisig.peak_widths(self.signal, self.peak_idx, rel_height=0.9)
 
     def integrate_peak(self):
-        """Integrates a single peak of a signal based on left and right indices."""
+        """OBSOLETE - TO BE DELETED Integrates a single peak of a signal based on left and right indices."""
         # Indices have to be rounded as they are fractional coming from scisig.peak_widths
         left_index = round(self.left_idx)
         right_index = round(self.right_idx)
