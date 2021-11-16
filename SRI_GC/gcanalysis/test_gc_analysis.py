@@ -5,6 +5,7 @@ import gcdata
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import matplotlib.cm as cm
+import pdb
 
 # User inputs
 ##############################################################################
@@ -13,14 +14,14 @@ calibrationPath = '/Users/ccarlin/Google Drive/Shared drives/Photocatalysis Reac
 calDF = pd.read_csv(calibrationPath, delimiter=',', index_col='Chem ID') # import all calibration data
 index=calDF.index[0:] # getting an error that it can't access index, thinks calDF is a textfilereader, but it shouldn't be bc iterator defaults to False?
 calchemIDs = calDF.index.to_numpy() # get chem IDs from calibration files
-
 # Sample Location Info:
 main = '/Users/ccarlin/src/Dionne-Lab/photoreactor/SRI_GC/gcanalysis/IntegrationTesting/20211007_TroubleChromatograms/20201217_calibration100ppm_FID01.ASC'
 data = gcdata.GCData(main)
 datacorrected = gcdata.GCData(main, basecorrect = True)
-
-print(datacorrected.apex_ind)
-
+#pdb.set_trace()
+conc = datacorrected.get_concentrations(calDF)
+print(conc)
+datacorrected.plot_integration()
 # Plot to test
 ##############################################################################
 #plt.close('all')
