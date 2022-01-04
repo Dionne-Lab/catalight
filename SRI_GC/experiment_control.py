@@ -87,16 +87,19 @@ class Experiment:
         self.date = date.today().strftime('%Y%m%d') # Returns date as YYYYMMDD
         
         # Defines path for saving results
-        self.results_path = (MainFol + '/DummyResults/' + self.date
+        self.results_path = (MainFol + '\\Results\\' + self.date
                              + self.expt_type + '_' + self.expt_name)
         
         # Defines path for saving raw data
-        self.data_path = (MainFol + '/DummyData/' + 
+        self.data_path = (MainFol + '\\Data\\' + 
                           self.date+self.expt_type+'_'+self.expt_name)
         
+        os.makedirs(self.results_path, exist_ok=True)
         # Creates subfolders for each step of experiment
         for step in getattr(self, self.ind_var):
-            path = os.path.join(self.data_path, str(step))
+            units = (self.expt_list['Units']
+                     [self.expt_list['Active Status']].to_string(index=False)) # Compare Boolean
+            path = os.path.join(self.data_path, str(step)+units)
             os.makedirs(path, exist_ok=True)
             
         return

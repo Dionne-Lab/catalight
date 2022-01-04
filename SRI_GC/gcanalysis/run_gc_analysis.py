@@ -4,6 +4,7 @@ import os
 import numpy as np
 from .gcdata import GCData
 
+
 # User inputs
 ##############################################################################
 
@@ -21,6 +22,7 @@ maxRuns = 0
 
 # processing options
 basecorrect = True # True = data will be baseline corrected MOVE THIS TO INITIALIZATION OF CLASS
+
 # Analysis Loop
 ##############################################################################
 numFols = len(subfolders)
