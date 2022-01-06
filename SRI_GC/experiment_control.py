@@ -57,7 +57,8 @@ class Experiment:
         log_entry = [
             'Experiment Date = ' + self.date,
             'Experiment Type = ' + self.expt_type,
-            'Experiment Name = ' + self.sample_name,
+            'Experiment Name = ' + self.expt_name,
+            'Sample Name = ' + self.sample_name,
             'Temperature ['+ self.expt_list['Units'][0]+'] = ' + str(self.temp),
             'Power ['+self.expt_list['Units'][1]+'] = ' + str(self.power),
             'Gas 1 type = ' + self.gas_type[0],
@@ -79,19 +80,34 @@ class Experiment:
             data.append(line.split('=')[-1].strip(' \n'))
         
         self.date = data[0]
-        self.expt_type = data[1]
-        self.sample_name = data[2] 
+        self.set_expt_type(data[1])
+        self.expt_name = data[2] 
+        self.sample_name = data[3]
         
         # take in string of array, strip spaces and brackets from ends, 
         # seperate into list of strings, convert to np array
-        self.temp = np.array(data[3].strip(' []').split(' '), dtype=np.float32)
-        self.power = np.array(data[4].strip(' []').split(' '), dtype=np.float32)
-        self.gas_type = [data[5], data[6], data[7]]
-        self.gas_comp = [float(data[8]), float(data[9]), float(data[10])]
-        self.tot_flow = float(data[11])
+        self.temp = np.array(data[4].strip(' []').split(' '), dtype=np.float32)
+        self.power = np.array(data[5].strip(' []').split(' '), dtype=np.float32)
+        self.gas_type = [data[6], data[7], data[8]]
+        self.gas_comp = [float(data[9]), float(data[10]), float(data[11])]
+        self.tot_flow = float(data[12])
         log.close()
         return
         
+    def update_save_paths(self, log_path):
+        
+        MainFol = os.path.dirname(log_path)
+        # Defines path for saving results
+        self.results_path = (MainFol + '\\Results\\' + self.date
+                             + self.expt_type + '_' + self.expt_name)
+        
+        # Defines path for saving raw data
+        self.data_path = (MainFol + '\\Data\\' + self.date 
+                          + self.expt_type + '_' + self.expt_name)
+        if not (os.path.isdir(self.results_path) | os.path.isdir(self.data_path)):
+            raise ValueError('results/data path doesn''t exist where expected')
+            
+        return
 
     def create_dirs(self, MainFol):
         '''
