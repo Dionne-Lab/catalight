@@ -72,6 +72,27 @@ class Experiment:
         log.close()
         return
         
+    def read_expt_log(self, log_path):
+        log = open(log_path,'r')
+        data = []
+        for line in log: # read in the values after '=' sign line by line
+            data.append(line.split('=')[-1].strip(' \n'))
+        
+        self.date = data[0]
+        self.expt_type = data[1]
+        self.sample_name = data[2] 
+        
+        # take in string of array, strip spaces and brackets from ends, 
+        # seperate into list of strings, convert to np array
+        self.temp = np.array(data[3].strip(' []').split(' '), dtype=np.float32)
+        self.power = np.array(data[4].strip(' []').split(' '), dtype=np.float32)
+        self.gas_type = [data[5], data[6], data[7]]
+        self.gas_comp = [float(data[8]), float(data[9]), float(data[10])]
+        self.tot_flow = float(data[11])
+        log.close()
+        return
+        
+
     def create_dirs(self, MainFol):
         '''
         This function creates a set of directories to store experimental data 
