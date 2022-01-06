@@ -128,5 +128,5 @@ plt.tight_layout()
 ax2 = avg.plot(marker='o', yerr=std)
 ax2.set_xlabel('Temperature (K)', fontsize=18)
 ax2.set_ylabel('Conc (ppm)', fontsize=18)
-
+plt.tight_layout()
 print('Finished!')

@@ -51,7 +51,26 @@ class Experiment:
         var_list = self.expt_list['Independent Variable'] # Pull List
         ind_var_series = var_list[self.expt_list['Active Status']] # Compare Boolean
         self.ind_var = ind_var_series.to_string(index=False) # Convert to str
-
+    
+    def update_expt_log(self, sample_path):
+        log = open(os.path.join(sample_path, 'expt_log.txt'),'w+')
+        log_entry = [
+            'Experiment Date = ' + self.date,
+            'Experiment Type = ' + self.expt_type,
+            'Experiment Name = ' + self.sample_name,
+            'Temperature ['+ self.expt_list['Units'][0]+'] = ' + str(self.temp),
+            'Power ['+self.expt_list['Units'][1]+'] = ' + str(self.power),
+            'Gas 1 type = ' + self.gas_type[0],
+            'Gas 2 type = ' + self.gas_type[1],
+            'Gas 3 type = ' + self.gas_type[2],
+            'Gas 1 Flow ['+ self.expt_list['Units'][2]+'] = ' + str(self.gas_comp[0]),
+            'Gas 2 Flow ['+ self.expt_list['Units'][2]+'] = ' + str(self.gas_comp[1]),
+            'Gas 3 Flow ['+ self.expt_list['Units'][2]+'] = ' + str(self.gas_comp[2]),
+            'Total Flow ['+ self.expt_list['Units'][3]+'] = ' + str(self.tot_flow),
+            ]
+        log.write('\n'.join(log_entry))
+        log.close()
+        return
         
     def create_dirs(self, MainFol):
         '''
@@ -102,7 +121,10 @@ class Experiment:
             path = os.path.join(self.data_path, str(step)+units)
             os.makedirs(path, exist_ok=True)
             
+        self.update_expt_log(MainFol)
         return
+    
+             
 if __name__ == "__main__":
     # This is just a demo which runs when you run this class file as the main script
     MainFol = ("G:/Shared drives/Hydrogenation Projects/AgPd Polyhedra/"

@@ -5,9 +5,7 @@ The code is meant to restructure the data hierarchy of raw data from GC runs
 prior to the development of the photoreactor GUI. Input information about a set
 of files (an experiment) and output reorganized data in the new format (ready for analysis)
 TODO: show the user the produced experiment profile first, then ask to proceed
-TODO: make automatic switch to power sweeps
 TODO: code an exception in the event that a file path is >260 characters
-TODO: Add ability to define the flow rates for each gas
 Known Bugs: if file path is >260 characters, os.renames will give an error 
 that sounds like the issue is a missing file
 @author: brile
@@ -18,6 +16,7 @@ import os, shutil, time, re
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import datetime as dt
 
 def listfiles(folder_path):
     """Returns the .ASC files for FID data in the specified path."""
@@ -88,7 +87,7 @@ def calc_powersweep(P1, P2, delta_P, sample_rate, sample_set_size, t_buffer, t_r
     power_sweep = np.arange(P1, P2, delta_P)
     t1 = (sample_set_size-1) * sample_rate + t_buffer
     t_space = t1 + t_buffer + t_ramp
-    t_trans = np.append(34, np.ones(len(PowerSweep)-1)*t_space)*60
+    t_trans = np.append(34, np.ones(len(power_sweep)-1)*t_space)*60
     return (t_samples, t_trans, power_sweep)
     
 def plot_tempsweep(t_samples, Temp_starts, Temp_ends, Temps):
@@ -127,17 +126,16 @@ def plot_powersweep(t_samples, t_trans, power_sweep):
     plt.xlim(-3, np.cumsum(t_trans)[-1]/60+3)
     return
 
-def restructure_data(sample_path, Temps, sample_set_size):
+def restructure_data(sample_path, Expt1, sample_set_size):
     '''
     Calling this function will sort unorganized data in sample_path into a data
     hierarchy ready for analysis by GUI's analysis script
-    TODO: this code currently only accepts temperature sweeps, but could be generalized
     
     Parameters
     ----------
     sample_path : Path to original experiment data. this should be a folder
     with unorganized raw data ready to be sorted
-    Temps : numpy array of temperatures for a temperature sweep experiment
+    Expt1 : experiment object for the given run atleast containing sweep values
     sample_set_size : number of samples that were collected at each sweep value
 
     Returns
@@ -154,19 +152,15 @@ def restructure_data(sample_path, Temps, sample_set_size):
     # List all files in main fol regardless of extension
     full_file_list = sorted(os.listdir(sample_path))
     
-    # We create an "experiment" as if the GUI just ran
-    Expt1 = Experiment()
-    Expt1.set_expt_type('temp_sweep') # TODO this could be generalized
-    Expt1.temp = Temps + 273 # Input numpy array of temps in K
-    Expt1.create_dirs(sample_path)
-    
     # Pulls correct units given expt_type
     units = (Expt1.expt_list['Units']
              [Expt1.expt_list['Active Status']].to_string(index=False))
     
     starting_run_num = get_run_number(raw_files[0])
-    starting_date = os.path.getctime(raw_files[0])
+    starting_date = os.path.getmtime(os.path.join(sample_path, full_file_list[1]))
     Expt1.date = dt.datetime.utcfromtimestamp(starting_date).strftime('%Y%m%d')
+    Expt1.create_dirs(sample_path)
+    
     if starting_run_num != 1: # If the first run number isn't 1, renames every file
         
         # Create a new directory in which to place copy of files with original names
@@ -255,10 +249,9 @@ t_ramp = 1  # Ramp rate between temp set points
 
 # We create an "experiment" as if the GUI just ran
 Expt1 = Experiment()
-Expt1.set_expt_type('power_sweep') # current options are 'temp_sweep' or 'power_sweep'
-Expt1.gas_comp = [0, 0, 0] # [gas1, gas2, gas3] in sccm
+Expt1.set_expt_type('temp_sweep') # current options are 'temp_sweep' or 'power_sweep'
+Expt1.gas_comp = [0.5, 47, 2.5] # [gas1, gas2, gas3] in sccm
 Expt1.gas_type = ['C2H2', 'Ar', 'H2'] # gas types for 3 MFCs
-Expt1.sample_name = 'no_sample_name_given'
 
 # This should be the path where you want the data to be restructured.
 # currently only supports temp sweeps, but you can send a main folder which
@@ -284,8 +277,8 @@ elif Expt1.expt_type == 'power_sweep':
 else:
     raise ValueError('Experiment type not currently supported by program')
 
+
 Expt1.tot_flow = sum(Expt1.gas_comp) 
-Expt1.create_dirs(sample_path)
 
 # Finds bottom most directories (original experiments)
 sample_paths = [] 
@@ -295,5 +288,5 @@ for dirpath, dirnames, filenames in os.walk(main_dir):
 
 # Loops through experiment dirs and reorganizes data within each
 for sample_path in sample_paths:
-    restructure_data(sample_path, Temps, sample_set_size)
+    restructure_data(sample_path, Expt1, sample_set_size)
 print('Finished!!')
