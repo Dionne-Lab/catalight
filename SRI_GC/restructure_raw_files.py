@@ -4,6 +4,12 @@ Created on Wed Dec 22 14:20:44 2021
 The code is meant to restructure the data hierarchy of raw data from GC runs
 prior to the development of the photoreactor GUI. Input information about a set
 of files (an experiment) and output reorganized data in the new format (ready for analysis)
+TODO: show the user the produced experiment profile first, then ask to proceed
+TODO: make automatic switch to power sweeps
+TODO: code an exception in the event that a file path is >260 characters
+TODO: Add ability to define the flow rates for each gas
+Known Bugs: if file path is >260 characters, os.renames will give an error 
+that sounds like the issue is a missing file
 @author: brile
 """
 
@@ -56,45 +62,72 @@ def get_run_name(filename):
         run_name = False
     return(run_name)
 
-def calc_tempsweep(T1_K, T2_K, delta_T, SampleRate, SampleSetSize, t_Buffer, t_Ramp):
+def calc_tempsweep(T1_K, T2_K, delta_T, sample_rate, sample_set_size, t_buffer, t_ramp):
     T1_C = T1_K - 273
     T2_C = T2_K - 273
-    NumSteps = int(np.ceil((T2_C-T1_C) / delta_T))
-    SampleTot = SampleSetSize*(NumSteps+1)
-    t_Samples = np.arange(0, (SampleTot)*SampleRate, SampleRate)
-    t_Step = SampleRate*(SampleSetSize-1)+t_Buffer  # Runs t_Buffer min after last sample starts
-    t_steady = SampleRate-t_Ramp-t_Buffer
-    TempStarts = np.append(0, 
-                           (t_Step + t_Ramp + 
-                            np.arange(0, NumSteps)*(t_Step + t_Ramp + t_steady)
+    num_steps = int(np.ceil((T2_C-T1_C) / delta_T))
+    sample_tot = sample_set_size*(num_steps+1)
+    t_samples = np.arange(0, (sample_tot)*sample_rate, sample_rate)
+    t_Step = sample_rate*(sample_set_size-1)+t_buffer  # Runs t_buffer min after last sample starts
+    t_steady = sample_rate-t_ramp-t_buffer
+    Temp_starts = np.append(0, 
+                           (t_Step + t_ramp + 
+                            np.arange(0, num_steps)*(t_Step + t_ramp + t_steady)
                            )
                           )
-    TempEnds = np.append(t_Step, TempStarts[1:]+t_Step+t_steady)
+    Temp_ends = np.append(t_Step, Temp_starts[1:]+t_Step+t_steady)
     Temps = np.arange(T1_C, T2_C+delta_T, delta_T)
-    t_StepEvents = np.sort(np.concatenate((TempStarts, TempEnds)))
-    T_StepEvents = np.repeat(Temps, 2)
-    return (t_Samples, TempStarts, TempEnds, Temps)
+    t_step_events = np.sort(np.concatenate((Temp_starts, Temp_ends)))
+    T_step_events = np.repeat(Temps, 2)
+    return (t_samples, Temp_starts, Temp_ends, Temps)
 
-def plot_tempsweep(t_Samples, TempStarts, TempEnds, Temps):
+def calc_powersweep(P1, P2, delta_P, sample_rate, sample_set_size, t_buffer, t_ramp):
+    num_steps = int(np.ceil((P2-P1) / delta_P))
+    sample_tot = sample_set_size*(num_steps+1)
+    t_samples = np.arange(0, (sample_tot)*sample_rate, sample_rate)
+    power_sweep = np.arange(P1, P2, delta_P)
+    t1 = (sample_set_size-1) * sample_rate + t_buffer
+    t_space = t1 + t_buffer + t_ramp
+    t_trans = np.append(34, np.ones(len(PowerSweep)-1)*t_space)*60
+    return (t_samples, t_trans, power_sweep)
+    
+def plot_tempsweep(t_samples, Temp_starts, Temp_ends, Temps):
     # Plotting
     ##############################################################################
-    # Sections Inputs: t_Samples, TempStarts, TempEnds, Temps
+    # Sections Inputs: t_samples, Temp_starts, Temp_ends, Temps
     plt.close('all')
     ylim_max = 1.1*Temps[-1]
     ylim_min = 0
-    plt.vlines(t_Samples, ylim_min, ylim_max, linestyle='dashed', color = 'black')
-    plt.plot(TempStarts, Temps, 'o')
-    plt.plot(TempEnds, Temps, 'ro')
+    plt.vlines(t_samples, ylim_min, ylim_max, linestyle='dashed', color = 'black')
+    plt.plot(Temp_starts, Temps, 'o')
+    plt.plot(Temp_ends, Temps, 'ro')
     
     # Concantenates time and Temp events in correct order for plotting
-    t_StepEvents = np.sort(np.concatenate((TempStarts, TempEnds)))
-    T_StepEvents = np.repeat(Temps, 2)
+    t_step_events = np.sort(np.concatenate((Temp_starts, Temp_ends)))
+    T_step_events = np.repeat(Temps, 2)
     
-    plt.plot(t_StepEvents, T_StepEvents)
-    
+    plt.plot(t_step_events, T_step_events)
+    plt.xlabel('time (min)')
+    plt.ylabel('Temp (C)')
+    plt.ylim([ylim_min, ylim_max])
     return
 
-def restructure_data(sample_path, Temps, SampleSetSize):
+def plot_powersweep(t_samples, t_trans, power_sweep):
+    plt.close('all')
+    plt.figure()
+    ylim_max = 1.1*np.max(power_sweep)
+    ylim_min = 0
+    plt.vlines(t_Samples, ylim_min, ylim_max, linestyle='dashed', color = 'black')
+    plt.plot(np.cumsum(t_trans)/60, power_sweep, 'ro')
+    plt.plot((np.cumsum(t_trans)-t_trans)/60, power_sweep, 'o')
+    plt.hlines(power_sweep, (np.cumsum(t_trans)-t_trans)/60, np.cumsum(t_trans)/60)
+    plt.xlabel('time (min)')
+    plt.ylabel('Power (mW)')
+    plt.ylim([ylim_min-1, ylim_max])
+    plt.xlim(-3, np.cumsum(t_trans)[-1]/60+3)
+    return
+
+def restructure_data(sample_path, Temps, sample_set_size):
     '''
     Calling this function will sort unorganized data in sample_path into a data
     hierarchy ready for analysis by GUI's analysis script
@@ -105,7 +138,7 @@ def restructure_data(sample_path, Temps, SampleSetSize):
     sample_path : Path to original experiment data. this should be a folder
     with unorganized raw data ready to be sorted
     Temps : numpy array of temperatures for a temperature sweep experiment
-    SampleSetSize : number of samples that were collected at each sweep value
+    sample_set_size : number of samples that were collected at each sweep value
 
     Returns
     -------
@@ -113,7 +146,7 @@ def restructure_data(sample_path, Temps, SampleSetSize):
 
     '''
     # Calculate num of samples based on sample set size and num temp values
-    SampleTot = SampleSetSize*len(Temps)
+    sample_tot = sample_set_size*len(Temps)
     
     # List all files with .ASC extension (i.e. data files)
     raw_files = listfiles(sample_path)
@@ -132,7 +165,8 @@ def restructure_data(sample_path, Temps, SampleSetSize):
              [Expt1.expt_list['Active Status']].to_string(index=False))
     
     starting_run_num = get_run_number(raw_files[0])
-    
+    starting_date = os.path.getctime(raw_files[0])
+    Expt1.date = dt.datetime.utcfromtimestamp(starting_date).strftime('%Y%m%d')
     if starting_run_num != 1: # If the first run number isn't 1, renames every file
         
         # Create a new directory in which to place copy of files with original names
@@ -167,10 +201,11 @@ def restructure_data(sample_path, Temps, SampleSetSize):
         run_num = int(get_run_number(basename)) # Get run number from filename
         run_type = get_run_name(basename)[-3:] # Returns FID or TCD
         new_name = run_type+str(run_num)
-        expt_step = (run_num-1)//SampleSetSize # Starting at 0 for first step
+        expt_step = (run_num-1)//sample_set_size # Starting at 0 for first step
         
-        if expt_step < (SampleTot/SampleSetSize):
-            step_val = Temps[expt_step]+273
+        if expt_step < (sample_tot/sample_set_size):
+            #getattr returns sweep list for ind. variable
+            step_val = getattr(Expt1, Expt1.ind_var)[expt_step]            
             step_fol = (str(step_val) + units)
             
             # matching is list of files containing basename (all extensions)
@@ -178,6 +213,7 @@ def restructure_data(sample_path, Temps, SampleSetSize):
             while not os.path.isdir(os.path.join(Expt1.data_path, step_fol)):
                 time.sleep(0.01) # incase os.makedirs is slow
                 print('Waiting on Directory Creation')
+                
             for filename in matching: # for each file type, move to new location
                 og_filepath = os.path.join(sample_path, filename)
                 new_filepath = os.path.join(Expt1.data_path, step_fol, new_name+filename[-4:])
@@ -187,12 +223,12 @@ def restructure_data(sample_path, Temps, SampleSetSize):
         else:
             over_run_path = os.path.join(Expt1.data_path, 'Over Run Data')
             os.makedirs(over_run_path, exist_ok=True)
-            time.sleep(1)
             matching = [filename for filename in full_file_list if basename in filename]
 
             while not os.path.isdir(over_run_path): # incase os.makedirs is slow
                 time.sleep(0.01)
                 print('Waiting on Directory Creation')
+                
             for filename in matching:
                 og_filepath = os.path.join(sample_path, filename)
                 new_filepath = os.path.join(over_run_path, new_name+filename[-4:])
@@ -202,13 +238,27 @@ def restructure_data(sample_path, Temps, SampleSetSize):
                 
 # User Inputs
 ##############################################################################
+# Used if setting temp sweep
 T1_K = 300  # Starting Temp
 T2_K = 410  # Ending Temp
 delta_T = 10  # Temp Spacing
-SampleRate = 10  # Sample/min
-SampleSetSize = 4  # Samples/Condition Set
-t_Buffer = 4  # Time before transitioning after end of segment 
-t_Ramp = 1  # Ramp rate between temp set points
+
+# Used if setting power sweep
+P1 = 0 # Starting Power
+P2 = 100 # Ending Power
+delta_P = 10 # Power Spacing
+
+sample_rate = 10  # Sample/min
+sample_set_size = 4  # Samples/Condition Set
+t_buffer = 4  # Time before transitioning after end of segment 
+t_ramp = 1  # Ramp rate between temp set points
+
+# We create an "experiment" as if the GUI just ran
+Expt1 = Experiment()
+Expt1.set_expt_type('power_sweep') # current options are 'temp_sweep' or 'power_sweep'
+Expt1.gas_comp = [0, 0, 0] # [gas1, gas2, gas3] in sccm
+Expt1.gas_type = ['C2H2', 'Ar', 'H2'] # gas types for 3 MFCs
+Expt1.sample_name = 'no_sample_name_given'
 
 # This should be the path where you want the data to be restructured.
 # currently only supports temp sweeps, but you can send a main folder which
@@ -219,9 +269,23 @@ main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble 
 
 # Main Script
 ##############################################################################
-user_values = T1_K, T2_K, delta_T, SampleRate, SampleSetSize, t_Buffer, t_Ramp
-sweep_values = calc_tempsweep(*user_values)
-t_Samples, TempStarts, TempEnds, Temps = sweep_values
+if Expt1.expt_type == 'temp_sweep':
+    user_values = T1_K, T2_K, delta_T, sample_rate, sample_set_size, t_buffer, t_ramp
+    sweep_values = calc_tempsweep(*user_values)
+    t_samples, Temp_starts, Temp_ends, Temps = sweep_values
+    Expt1.temp = Temps + 273 # Input numpy array of temps in K
+    plot_tempsweep(t_samples, Temp_starts, Temp_ends, Temps)
+elif Expt1.expt_type == 'power_sweep':
+    user_values = P1, P2, delta_P, sample_rate, sample_set_size, t_buffer, t_ramp
+    sweep_values = calc_powersweep(*user_values)
+    t_samples, t_trans, power_sweep = sweep_values
+    Expt1.power = power_sweep
+    plot_powersweep(t_samples, t_trans, power_sweep)
+else:
+    raise ValueError('Experiment type not currently supported by program')
+
+Expt1.tot_flow = sum(Expt1.gas_comp) 
+Expt1.create_dirs(sample_path)
 
 # Finds bottom most directories (original experiments)
 sample_paths = [] 
@@ -231,5 +295,5 @@ for dirpath, dirnames, filenames in os.walk(main_dir):
 
 # Loops through experiment dirs and reorganizes data within each
 for sample_path in sample_paths:
-    restructure_data(sample_path, Temps, SampleSetSize)
+    restructure_data(sample_path, Temps, sample_set_size)
 print('Finished!!')

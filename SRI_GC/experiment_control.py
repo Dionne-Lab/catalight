@@ -37,6 +37,7 @@ class Experiment:
         self.tot_flow = sum(self.gas_comp)
         self.expt_type = 'Undefined'
         self.sample_name = 'no_sample_name_given'
+        self.date = date.today().strftime('%Y%m%d') # Returns todays date as YYYYMMDD by default
         
     def set_expt_type(self, expt_type):
         # Evaluate whether entered experiment type is in default list
@@ -84,7 +85,6 @@ class Experiment:
         # Only select fixed variable for path name
         fixed_vars = expt_settings[~self.expt_list['Active Status']]
         self.expt_name = '_'.join(fixed_vars.to_list()) # Define expt_name
-        self.date = date.today().strftime('%Y%m%d') # Returns date as YYYYMMDD
         
         # Defines path for saving results
         self.results_path = (MainFol + '\\Results\\' + self.date
