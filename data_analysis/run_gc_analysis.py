@@ -206,6 +206,7 @@ if __name__ == "__main__":
     log_path = (r'C:/Users/brile/Documents/Temp Files/'
                 '20210524_8%AgPdMix_1wt%__200C_24.8mg/PostReduction/expt_log.txt')
     main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
+    
     # Main Script
     ###########################################################################
     for dirpath, dirnames, filenames in os.walk(main_dir):
