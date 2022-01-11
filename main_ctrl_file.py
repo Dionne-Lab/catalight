@@ -8,6 +8,7 @@ Study control file: test main script before the development of a fully integrate
 from equipment.sri_gc import PeakSimple_Control
 from equipment.diode_laser import Diode_Laser
 from alicat import FlowController
+from experiment_control import Experiment
 
 def initialize_equipment():
     connector = PeakSimple_Control.initialize_connector()
@@ -16,8 +17,9 @@ def initialize_equipment():
     MFC_C = FlowController(port='COM6')
     MFC_D = FlowController(port='COM7')
     laser_controller = Diode_Laser
-    
+
     return Connector
 
 if __name__ == "__main__":
-    Connector = initialize_equipment()
+    initialize_equipment()
+    expt1 =
