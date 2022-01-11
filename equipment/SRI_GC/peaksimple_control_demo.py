@@ -7,7 +7,7 @@ Python using the python.NET package
 @author: Briley Bourgeois
 """
 
-import sys, os
+import os
 import clr  # python.NET is imported with the name clr (Common Language Runtime)
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -23,11 +23,7 @@ Connector = Peaksimple.PeaksimpleConnector()  # This class has all the functions
 
 ctrl_file = 'C:/Program Files/Added Programs/PeakSimple version 4.89Win10/DEFAULT2.CON'
 
+def initialize_connection()
 Connector.Connect() # Connect to running instance of peaksimple using class method
-Connector.LoadControlFile(ctrl_file) # Load ctrl file using class method
 
-with open(ctrl_file) as f:
-    contents = f.read()
-    
-print(contents)
 

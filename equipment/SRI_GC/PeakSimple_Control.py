@@ -2,8 +2,9 @@
 """
 Created on Thu Oct 14 17:30:17 2021
 
-This script is an example of how to import the PeaksimpleConnector class into 
-Python using the python.NET package
+This script simply creates and returns a running instance of PeaksimpleConnector()
+Note: if this connection is closed, Peaksimple also must be restarted
+
 @author: Briley Bourgeois
 """
 
@@ -23,11 +24,7 @@ Connector = Peaksimple.PeaksimpleConnector()  # This class has all the functions
 
 ctrl_file = 'C:/Program Files/Added Programs/PeakSimple version 4.89Win10/DEFAULT2.CON'
 
-Connector.Connect() # Connect to running instance of peaksimple using class method
-Connector.LoadControlFile(ctrl_file) # Load ctrl file using class method
-
-with open(ctrl_file) as f:
-    contents = f.read()
-    
-print(contents)
+def initialize_connector():
+    Connector.Connect() # Connect to running instance of peaksimple using class method
+    return Connector
 
