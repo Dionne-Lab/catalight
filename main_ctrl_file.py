@@ -5,16 +5,17 @@ Study control file: test main script before the development of a fully integrate
 
 @author: brile
 """
-from equipment.SRI_GC import PeakSimple_Control
+from equipment.sri_gc import PeakSimple_Control
+from equipment.diode_laser import Diode_Laser
 from alicat import FlowController
 
 def initialize_equipment():
-    Connector = PeakSimple_Control.initialize_connector()
+    connector = PeakSimple_Control.initialize_connector()
     MFC_A = FlowController(port='COM8')
     MFC_B = FlowController(port='COM9')
     MFC_C = FlowController(port='COM6')
     MFC_D = FlowController(port='COM7')
-    
+    laser_controller = Diode_Laser
     
     return Connector
 
