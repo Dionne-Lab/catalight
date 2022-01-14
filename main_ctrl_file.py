@@ -10,6 +10,7 @@ from equipment.diode_laser import Diode_Laser
 from alicat import FlowController
 from experiment_control import Experiment
 
+
 def initialize_equipment():
     connector = PeakSimple_Control.initialize_connector()
     MFC_A = FlowController(port='COM8')
@@ -20,6 +21,6 @@ def initialize_equipment():
 
     return Connector
 
+
 if __name__ == "__main__":
     initialize_equipment()
-    expt1 =

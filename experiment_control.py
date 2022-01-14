@@ -12,6 +12,7 @@ classes in the same module in the future
 """
 import os
 from datetime import date
+from ast import literal_eval
 import pandas as pd
 import numpy as np
 
@@ -24,41 +25,109 @@ class Experiment:
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
         self.expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', 0, 'K'],
-                ['power_sweep',     'power', 0, 'mW'],
-                ['comp_sweep',  'gas_comp', 0, 'sccm'],
-                ['flow_sweep',  'tot_flow', 0, 'tot_sccm']],
+            [['temp_sweep',      'temp', 0,    'K'],
+             ['power_sweep',    'power', 0,   'mW'],
+             ['comp_sweep',  'gas_comp', 0, 'frac'],
+             ['flow_sweep',  'tot_flow', 0, 'sccm']],
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
                      'Units'])
 
         # These are just random default values.
-        # only expt_type needs this so far
-        self.temp = 273
-        self.power = 0
-        self.gas_comp = [0, 0, 0]
-        self.gas_type = ['C2H2', 'Ar', 'H2']
-        self.tot_flow = sum(self.gas_comp)  # TODO turn this into a property
-        self.expt_type = 'Undefined'
-        self.sample_name = 'no_sample_name_given'
-        # Returns todays date as YYYYMMDD by default
-        self.date = date.today().strftime('%Y%m%d')
+        # these should all be numpy arrays and floats
+        self._temp = [273.0]
+        self._power = [0.0]
+        self._tot_flow = [0.0]  # This can't be larger than 50
+        # Every row should add to one
+        self._gas_comp = [[0.0, 50.0, 0.0]]
+        self._gas_type = ['C2H2', 'Ar', 'H2']
 
-    def set_expt_type(self, expt_type):
+        # Returns todays date as YYYYMMDD by default
+        self._date = date.today().strftime('%Y%m%d')
+        self._expt_type = 'Undefined'
+        self._sample_name = 'Undefined'
+        self._ind_var = 'Undefined'
+        self._expt_name = 'Undefined'
+        self._results_path = 'Undefined'
+        self._data_path = 'Undefined'
+
+    def _str_setter(attr):
+        def set_any(self, value):
+
+            setattr(self, attr, value)
+        return set_any
+
+    def _num_setter(attr):
+        def set_any(self, value):
+
+            if isinstance(value, np.ndarray):
+                value = list(value)
+
+            if not isinstance(value, list):
+                raise AttributeError(attr+' must be list')
+            elif (attr == 'tot_flow') & (max(value) > 50):
+                raise AttributeError('Total flow must be <= 50')
+            elif (attr == 'gas_comp'):
+                for composition in value:
+                    if sum(composition) != 1:
+                        raise AttributeError(
+                            'Gas comp. must be list of list == 1')
+            else:
+                setattr(self, attr, value)
+        return set_any
+
+    def _attr_getter(attr):
+        def get_any(self):
+            return getattr(self, attr)
+        return get_any
+
+    # Numpy Properties
+    temp = property(fget=_attr_getter('_temp'),
+                    fset=_num_setter('_temp'))
+    power = property(fget=_attr_getter('_power'),
+                     fset=_num_setter('_power'))
+    tot_flow = property(fget=_attr_getter('_tot_flow'),
+                        fset=_num_setter('_tot_flow'))
+    gas_comp = property(fget=_attr_getter('_gas_comp'),
+                        fset=_num_setter('_gas_comp'))
+
+    # String Properties
+    gas_type = property(fget=_attr_getter('_gas_type'),
+                        fset=_str_setter('_gas_type'))
+    sample_name = property(fget=_attr_getter('_sample_name'),
+                           fset=_str_setter('_sample_name'))
+
+    # Read only properties
+    date = property(lambda self: self._date)
+    ind_var = property(lambda self: self._ind_var)
+    expt_name = property(lambda self: self._expt_name)
+    results_path = property(lambda self: self._results_path)
+    data_path = property(lambda self: self._data_path)
+
+    @property
+    def expt_type(self):
+        return self._expt_type
+
+    @expt_type.setter
+    def expt_type(self, expt_type):
         # Evaluate whether entered experiment type is in default list
         if expt_type not in self.expt_list['Expt Name'].tolist():
             raise AttributeError('Invalid Experiment Type Provided')
 
-        self.expt_type = expt_type
+        self._expt_type = expt_type
         self.expt_list['Active Status'] = (
-            self.expt_list['Expt Name'] == self.expt_type)
+            self.expt_list['Expt Name'] == self._expt_type)
 
-        # Defines Independent Variable as string provided by experiment list
+        # Defines Independent Variable as string provided by expt list
         var_list = self.expt_list['Independent Variable']  # Pull List
         # Compare Boolean
         ind_var_series = var_list[self.expt_list['Active Status']]
-        self.ind_var = ind_var_series.to_string(index=False)  # Convert to str
+        # Convert to str
+        self._ind_var = ind_var_series.to_string(index=False)
+
+    def update_date(self):
+        self._date = date.today().strftime('%Y%m%d')
 
     def update_expt_log(self, sample_path):
         with open(os.path.join(sample_path, 'expt_log.txt'), 'w+') as log:
@@ -67,69 +136,128 @@ class Experiment:
                 'Experiment Type = ' + self.expt_type,
                 'Experiment Name = ' + self.expt_name,
                 'Sample Name = ' + self.sample_name,
-                'Temperature [' + self.expt_list['Units'][0] +
-                '] = ' + str(self.temp),
+                'Temperature [' + self.expt_list['Units'][0] + '] = '
+                + str(self.temp),
                 'Power ['+self.expt_list['Units'][1]+'] = ' + str(self.power),
                 'Gas 1 type = ' + self.gas_type[0],
                 'Gas 2 type = ' + self.gas_type[1],
                 'Gas 3 type = ' + self.gas_type[2],
-                'Gas 1 Flow [' + self.expt_list['Units'][2] +
+                'Gas Composition [' + self.expt_list['Units'][2] +
                 '] = ' + str(self.gas_comp[0]),
-                'Gas 2 Flow [' + self.expt_list['Units'][2] +
-                '] = ' + str(self.gas_comp[1]),
-                'Gas 3 Flow [' + self.expt_list['Units'][2] +
-                '] = ' + str(self.gas_comp[2]),
                 'Total Flow [' + self.expt_list['Units'][3] +
-                '] = ' + str(self.tot_flow),
+                '] = ' + str(self.tot_flow)
             ]
             log.write('\n'.join(log_entry))
 
     def read_expt_log(self, log_path):
+        """
+        Reads data from an existing log file and updates object parameters
+
+        Parameters
+        ----------
+        log_path : str
+            string to the full file path of the log file ('./expt_log.txt').
+
+        Returns
+        -------
+        None.
+
+        """
+
         with open(log_path, 'r') as log:
             data = []
             for line in log:  # read in the values after '=' sign line by line
                 data.append(line.split('=')[-1].strip(' \n'))
 
-            self.date = data[0]
-            self.set_expt_type(data[1])
-            self.expt_name = data[2]
+            self._date = data[0]
+            self.expt_type(data[1])
+            self._expt_name = data[2]
             self.sample_name = data[3]
-
-            # take in string of array, strip spaces and brackets from ends,
-            # seperate into list of strings, convert to np array
-            self.temp = np.array(data[4].strip(
-                ' []').split(' '), dtype=np.float32)
-            self.power = np.array(data[5].strip(
-                ' []').split(' '), dtype=np.float32)
+            self.temp = literal_eval(data[4])
+            self.power = literal_eval(data[5])
             self.gas_type = [data[6], data[7], data[8]]
-            self.gas_comp = [float(data[9]), float(data[10]), float(data[11])]
-            self.tot_flow = float(data[12])
+            self.gas_comp = literal_eval(data[9])
+            self.tot_flow = literal_eval(data[10])
+            self.update_save_paths()  # Will throw error if no data folders
 
-    def update_save_paths(self, log_path):
+    def _update_expt_name(self):
+        """
+        Non-public function that updates expt_name based on current settings
 
-        main_fol = os.path.dirname(log_path)
-        # Defines path for saving results
-        self.results_path = (main_fol + '\\Results\\' + self.date
-                             + self.expt_type + '_' + self.expt_name)
+        Returns
+        -------
+        None.
 
-        # Defines path for saving raw data
-        self.data_path = (main_fol + '\\Data\\' + self.date
-                          + self.expt_type + '_' + self.expt_name)
-        if not (os.path.isdir(self.results_path) | os.path.isdir(self.data_path)):
-            raise ValueError('results/data path doesn''t exist where expected')
+        """
 
-    def create_dirs(self, main_fol):
-        '''
-        This function creates a set of directories to store experimental data
-        for a given experiment and the results of the experiment
+        # Defines all settings to be included in path name and adds units
+        expt_settings = pd.Series(
+            [str(self.temp), str(self.power),
+             '_'.join([str(m)+n for m, n in zip(self.gas_comp,
+                                                self.gas_type)]),
+             str(self.tot_flow)]) + self.expt_list['Units']
+
+        # Only select fixed variable for path name
+        fixed_vars = expt_settings[~self.expt_list['Active Status']]
+        self._expt_name = '_'.join(fixed_vars.to_list())  # Define expt_name
+
+    def update_save_paths(self, log_path, should_exist=True):
+        """
+        Updates data/results paths for the object. Used when readin expt from
+        log file or creating new expt data set
 
         Parameters
         ----------
-        main_fol : Input the path where the data should be stored (sample folder)
+        log_path : str
+            string to the full file path of the log file ('./expt_log.txt').
+        should_exist : Boolean, optional
+            If updating based on existing log file, set to true.
+            The default is True.
 
         Raises
         ------
-        AttributeError : Throws error if expt_type is undefined
+        ValueError
+            Gives error if should_exist=True and
+            no results/data directories exists,
+
+        Returns
+        -------
+        None.
+
+        """
+
+        sample_path = os.path.dirname(log_path)
+
+        # Defines path for saving results
+        self._results_path = os.path.join(sample_path, 'Results',
+                                          self.date + self.expt_type
+                                          + '_' + self.expt_name)
+
+        # Defines path for saving raw data
+        self._data_path = os.path.join(sample_path, 'Data',
+                                       self.date + self.expt_type
+                                       + '_' + self.expt_name)
+
+        # If updating paths from file, paths should exist in log directory
+        exists = (os.path.isdir(self.results_path)
+                  | os.path.isdir(self.data_path))
+        if (should_exist) & (not exists):
+            raise ValueError('results/data path doesn''t exist where expected')
+
+    def create_dirs(self, sample_path):
+        '''
+        This function creates a set of directories to store experimental data
+        for a given experiment and the results of the analysis. Updates the
+        experiment name based on current expt settings and creates/updates the
+        experiment log file in the sample path
+
+        Parameters
+        ----------
+        sample_path: Input the path where the data should be stored (sample folder)
+
+        Raises
+        ------
+        AttributeError: Throws error if expt_type is undefined
 
         Returns
         -------
@@ -141,49 +269,34 @@ class Experiment:
             raise AttributeError(
                 'Experiment Type Must Be Defined Before Creating Directories')
 
-        # Defines all settings to be included in path name and adds units
-        expt_settings = pd.Series(
-            [str(self.temp),
-             str(self.power),
-             '_'.join([str(m)+n for m, n in zip(self.gas_comp, self.gas_type)]),
-             str(self.tot_flow)]) + self.expt_list['Units']
-
-        # Only select fixed variable for path name
-        fixed_vars = expt_settings[~self.expt_list['Active Status']]
-        self.expt_name = '_'.join(fixed_vars.to_list())  # Define expt_name
-
-        # Defines path for saving results
-        self.results_path = (main_fol + '\\Results\\' + self.date
-                             + self.expt_type + '_' + self.expt_name)
-
-        # Defines path for saving raw data
-        self.data_path = (main_fol + '\\Data\\' +
-                          self.date+self.expt_type+'_'+self.expt_name)
+        self.update_save_paths(os.path.join(sample_path, 'expt_log.txt'),
+                               should_exist=False)
+        self._update_expt_name()
 
         os.makedirs(self.results_path, exist_ok=True)
         # Creates subfolders for each step of experiment
-        for step in getattr(self, self.ind_var):
+        for step in getattr(self, self._ind_var):
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
             path = os.path.join(self.data_path, str(step)+units)
             os.makedirs(path, exist_ok=True)
 
-        self.update_expt_log(main_fol)
+        self.update_expt_log(sample_path)
 
 
 if __name__ == "__main__":
+
     # This is just a demo which runs when you run this class file as the main script
-    main_fol = ("G:/Shared drives/Hydrogenation Projects/AgPd Polyhedra/"
-                "Ensemble Reactor/202111_pretreatment_tests/"
-                "20210524_8%AgPdMix_1wt%__200C_24.8mg/PostReduction")
+    main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
+                "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
     Expt1 = Experiment()
-    Expt1.set_expt_type('temp_sweep')
+    Expt1.expt_type = 'temp_sweep'
     Expt1.temp = np.arange(30, 150, 10)
-    Expt1.gas_comp = [0.5, 47, 2.5]
+    Expt1.gas_comp = np.array([0.5, 47, 2.5])
     Expt1.sample_name = '20211221_fakesample'
-    Expt1.create_dirs(main_fol)
+    # Expt1.create_dirs(main_fol)
     Expt2 = Experiment()
-    Expt2.set_expt_type('power_sweep')
+    Expt2.expt_type = 'power_sweep'
     Expt2.power = np.arange(30, 150, 10)
-    Expt2.create_dirs(main_fol)
+    # Expt2.create_dirs(main_fol)
