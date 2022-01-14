@@ -15,12 +15,44 @@ from datetime import date
 from ast import literal_eval
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Experiment:
-    """this is the general class for creating a new experiment"""
+    '''
+    An object that contains all of the information necessary to run a
+    particular experiment.
+
+    Attributes
+    ----------
+        expt_list : pandas data frame; defines possible experiment types
+        temp : list of floats; one element if constant or multiple for sweep
+        power : list of floats; ''
+        tot_flow : list of floats; ''
+        gas_comp : list of list [[gas1, gas2, gas3],[...]]
+        gas_type : list of strings
+        date : str; update w/ method. For logging
+        expt_type : str; allowable sweep type. New additions need to be coded
+        sample_name : str; non-public attr for logging
+        ind_var : str; non-public for internal use
+        expt_name : str; list fixed variables for expt
+        results_path : str; save location for analysis, defined relative to log
+        data_path : str; save location for raw data, defined relative to log
+    '''
 
     def __init__(self, eqpt_list='None'):
+        """
+
+        Parameters
+        ----------
+        eqpt_list : , optional
+            DESCRIPTION. The default is 'None'.
+
+        Returns
+        -------
+        None.
+
+        """
 
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
@@ -253,7 +285,8 @@ class Experiment:
 
         Parameters
         ----------
-        sample_path: Input the path where the data should be stored (sample folder)
+        sample_path: str
+            Input the path where the data should be stored (sample folder)
 
         Raises
         ------
@@ -284,19 +317,112 @@ class Experiment:
 
         self.update_expt_log(sample_path)
 
+    def plot_sweep(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
+        # plot the sweep parameter vs time
+        # have to get the sample run time from GC
+        print('we are in the plotter')
+        # Some Plot Defaults
+        plt.rcParams['axes.linewidth'] = 2
+        plt.rcParams['lines.linewidth'] = 1.5
+        plt.rcParams['xtick.major.size'] = 6
+        plt.rcParams['xtick.major.width'] = 1.5
+        plt.rcParams['ytick.major.size'] = 6
+        plt.rcParams['ytick.major.width'] = 1.5
+        plt.rcParams['figure.figsize'] = (6.5, 8)
+        plt.rcParams['font.size'] = 14
+        plt.rcParams['axes.labelsize'] = 18
+
+        sample_rate = 10  # TODO import this, sample/min
+        heat_rate = 10  # TODO import, deg/min
+        sweep_val = getattr(self, self.ind_var)
+        selector = self.expt_list['Active Status']
+        sweep_title = (self.expt_list['Independent Variable']
+                       [selector].to_string(index=False))
+        units = self.expt_list['Units'][selector].to_string(index=False)
+
+        t_batch = list(t_steady_state
+                       + sample_rate*np.arange(0, sample_set_size))
+        setpoint0 = 0
+        if self.expt_type == 'temp_sweep':
+            if units == 'K':
+                setpoint0 = 293
+            elif units == 'C':
+                setpoint0 = 20
+
+            heat_rate = 10  # TODO import, deg/min
+            delta_T = np.diff(sweep_val)
+            t_trans = np.append((sweep_val[0]-setpoint0), delta_T)/heat_rate
+        else:
+            t_trans = np.array([0]*len(sweep_val))
+
+        # Define the values for the first step condition
+        # These two define time and value setting of reactor
+        t_set = np.array([0, t_trans[0], t_batch[-1]+t_buffer])
+        setpoint = np.array([setpoint0, sweep_val[0], sweep_val[0]])
+        # These two define time and value GC collects data
+        t_sample = np.array(t_batch)
+        sample_val = np.array([sweep_val[0]]*sample_set_size)
+
+        # Loop through remaining setpoints
+        for step_num in range(1, len(sweep_val)):
+            t_sample = np.append(t_sample,
+                                 t_sample[-1]+t_buffer+t_batch)
+            sample_val = np.append(sample_val,
+                                   [sweep_val[step_num]]*sample_set_size)
+            t_set = np.append(t_set, [t_set[-1] + t_trans[step_num],
+                                      t_set[-1] + t_batch[-1] + t_buffer])
+            setpoint = np.append(setpoint, [sweep_val[step_num]]*2)
+
+        fig, (ax1, ax2) = plt.subplots(2, 1)
+        ax1.plot(t_set, setpoint, '-o')
+        ax1.plot(t_sample, sample_val, 'x')
+        ylim_max = 1.1*max(sweep_val)  # TODO what about gas comp
+        ylim_min = 0.9*min(sweep_val)-0.05
+        ax1.set_ylim([ylim_min, ylim_max])
+
+        ax2.plot(t_set[1:6], setpoint[1:6], '-o')
+        ax2.plot(t_sample[3:8], sample_val[3:8], 'x')
+        ylim_max = 1.1*sample_val[7]  # TODO what about gas comp
+        ylim_min = 0.9*sample_val[3]-0.05
+        #ax2.set_ylim([ylim_min, ylim_max])
+        ax2.set_xlim([t_sample[3]-5, t_sample[7]+t_buffer+5])
+
+        fig.add_subplot(111, frameon=False)
+        # hide tick and tick label of the big axis
+        plt.tick_params(labelcolor='none', which='both',
+                        top=False, bottom=False, left=False, right=False)
+        plt.xlabel("time [min]")
+        plt.ylabel(sweep_title + ' ['+units+']')
+        plt.tight_layout()
+
+        return (fig, ax1, ax2)
+
+    # def run_experiment(self, t_steady_state=15, num_samples=4):
+        # pick equipment thats needed
+        # loop through set points
+        #   wait
+        #   collect data
+        # return status when finished
+
 
 if __name__ == "__main__":
 
     # This is just a demo which runs when you run this class file as the main script
+    print('started')
+    plt.close('all')
     main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
                 "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
     Expt1 = Experiment()
     Expt1.expt_type = 'temp_sweep'
-    Expt1.temp = np.arange(30, 150, 10)
+    Expt1.temp = np.arange(30, 150, 10)+273
     Expt1.gas_comp = np.array([0.5, 47, 2.5])
     Expt1.sample_name = '20211221_fakesample'
+    Expt1.plot_sweep()
+    print('finished expt1')
     # Expt1.create_dirs(main_fol)
     Expt2 = Experiment()
     Expt2.expt_type = 'power_sweep'
     Expt2.power = np.arange(30, 150, 10)
+    Expt2.plot_sweep()
+    print('finished expt 2')
     # Expt2.create_dirs(main_fol)
