@@ -1,0 +1,5 @@
+name: ReactorAutomation
+channels:
+  - defaults
+prefix: C:\Users\brile\.conda\envs\ReactorAutomation
+
