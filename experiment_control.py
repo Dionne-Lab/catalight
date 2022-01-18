@@ -10,13 +10,12 @@ This File can likely get folded into gcdata.py to define experiment and data
 classes in the same module in the future
 @author: Briley Bourgeois
 """
-import os
-from datetime import date
-from ast import literal_eval
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-
+import numpy as np
+import pandas as pd
+from ast import literal_eval
+from datetime import date
+import os, time
 
 class Experiment:
     '''
@@ -40,7 +39,7 @@ class Experiment:
         data_path : str; save location for raw data, defined relative to log
     '''
 
-    def __init__(self, eqpt_list='None'):
+    def __init__(self, eqpt_list=False):
         """
 
         Parameters
@@ -83,7 +82,14 @@ class Experiment:
         self._expt_name = 'Undefined'
         self._results_path = 'Undefined'
         self._data_path = 'Undefined'
-
+        
+        if eqpt_list != False:
+            #eqpt_list needs to be tuple
+            (gc_control, laser_control) = eqpt_list
+            # (gc_control, MFC_A, MFC_B, MFC_C, MFC_D, laser_control) = eqpt_list
+            # (gc_control, MFC_A, MFC_B, MFC_C, MFC_D,
+            #  laser_control, heater) = eqpt_list
+            
     def _str_setter(attr):
         def set_any(self, value):
 
@@ -320,7 +326,6 @@ class Experiment:
     def plot_sweep(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         # plot the sweep parameter vs time
         # have to get the sample run time from GC
-        print('we are in the plotter')
         # Some Plot Defaults
         plt.rcParams['axes.linewidth'] = 2
         plt.rcParams['lines.linewidth'] = 1.5
@@ -394,21 +399,68 @@ class Experiment:
         plt.xlabel("time [min]")
         plt.ylabel(sweep_title + ' ['+units+']')
         plt.tight_layout()
+        plt.show()
 
         return (fig, ax1, ax2)
 
-    # def run_experiment(self, t_steady_state=15, num_samples=4):
-        # pick equipment thats needed
-        # loop through set points
-        #   wait
-        #   collect data
-        # return status when finished
+    def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
+        print('running expt')
+    
+        # Creates subfolders for each step of experiment
+        for step in getattr(self, self._ind_var):
+            
+            # Compare Boolean
+            units = (self.expt_list['Units']
+                     [self.expt_list['Active Status']].to_string(index=False))
+            path = os.path.join(self.data_path, str(step)+units)
+            
+            # This chooses the run type and sets condition accordingly
+            if self.expt_type == 'temp_sweep':
+                print('temp_sweep no yet fully supported')
+            elif self.expt_type == 'power_sweep':
+                laser_control.set_power(step)
+            elif self.expt_type == 'comp_sweep':
+                # TODO check MFC labels
+                # MFC_A.set_gas(self.gas_type[0])
+                # MFC_B.set_gas(self.gas_type[1])
+                # MFC_C.set_gas(self.gas_type[2])
+                # MFC_D.set_gas(self.gas_type[1])
+                
+                # MFC_A.set_flow_rate(step[0]*self.tot_flow)
+                # MFC_B.set_flow_rate(step[1]*self.tot_flow)
+                # MFC_C.set_flow_rate(step[2]*self.tot_flow)
+                print(self.gas_type)
+                print(step*self.tot_flow)
+                
+            elif self.expt_type == 'flow_sweep':
+                # MFC_A.set_gas(self.gas_type[0])
+                # MFC_B.set_gas(self.gas_type[1])
+                # MFC_C.set_gas(self.gas_type[2])
+                # MFC_D.set_gas(self.gas_type[1])
+                
+                # MFC_A.set_flow_rate(self.gas_comp[0]*step)
+                # MFC_B.set_flow_rate(self.gas_comp[1]*step)
+                # MFC_C.set_flow_rate(self.gas_comp[2]*step)
+                print(self.gas_type)
+                print(self.gas_comp*step)
+            print('Waiting for steady state:')    
+            print(time.strftime("%H:%M:%S", time.localtime()))
+            gc_control.update_ctrl_file(path)
+            time.sleep(t_steady_state)
+            print('Starting Collection:')    
+            print(time.strftime("%H:%M:%S", time.localtime()))
+            gc_control.peaksimple.SetRunning(1, True)
+            while gc_control.peaksimple.IsRunning(1):
+                time.sleep(1)
+            print('Finished Collecting:')
+            print(time.strftime("%H:%M:%S", time.localtime()))
+            time.sleep(t_buffer)
+            print('Step Finished:')
+            print(time.strftime("%H:%M:%S", time.localtime()))
 
 
 if __name__ == "__main__":
-
     # This is just a demo which runs when you run this class file as the main script
-    print('started')
     plt.close('all')
     main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
                 "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")

@@ -5,22 +5,41 @@ Study control file: test main script before the development of a fully integrate
 
 @author: brile
 """
-from equipment.sri_gc import PeakSimple_Control
-from equipment.diode_laser import Diode_Laser
+from equipment.sri_gc.gc_control import GC_Connector
+from equipment.diode_laser.diode_control import Diode_Laser
 from alicat import FlowController
 from experiment_control import Experiment
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 def initialize_equipment():
-    connector = PeakSimple_Control.initialize_connector()
-    MFC_A = FlowController(port='COM8')
-    MFC_B = FlowController(port='COM9')
-    MFC_C = FlowController(port='COM6')
-    MFC_D = FlowController(port='COM7')
-    laser_controller = Diode_Laser
+    gc_connector = GC_Connector()
+    # MFC_A = FlowController(port='COM8')
+    # MFC_B = FlowController(port='COM9')
+    # MFC_C = FlowController(port='COM6')
+    # MFC_D = FlowController(port='COM7')
+    laser_controller = Diode_Laser()
 
-    return Connector
+    return (gc_connector, laser_controller)
 
 
 if __name__ == "__main__":
-    initialize_equipment()
+    eqpt_list = initialize_equipment()
+    plt.close('all')
+    main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
+                "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
+    Expt1 = Experiment()
+    Expt1.expt_type = 'temp_sweep'
+    Expt1.temp = list(np.arange(30, 150, 10)+273)
+    Expt1.gas_comp = [0.5, 47, 2.5]
+    Expt1.sample_name = '20211221_fakesample'
+    Expt1.plot_sweep()
+    print('finished expt1')
+    # Expt1.create_dirs(main_fol)
+    Expt2 = Experiment()
+    Expt2.expt_type = 'power_sweep'
+    Expt2.power = np.arange(30, 150, 10)
+    Expt2.plot_sweep()
+    print('finished expt 2')
+    # Expt2.create_dirs(main_fol)
