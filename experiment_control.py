@@ -17,7 +17,9 @@ import numpy as np
 import pandas as pd
 from ast import literal_eval
 from datetime import date
-import os, time
+import os
+import time
+
 
 class Experiment:
     '''
@@ -84,14 +86,18 @@ class Experiment:
         self._expt_name = 'Undefined'
         self._results_path = 'Undefined'
         self._data_path = 'Undefined'
-        
-        if eqpt_list != False:
-            #eqpt_list needs to be tuple
-            # (gc_control, laser_control) = eqpt_list
-            (gc_control, MFC_A, MFC_B, MFC_C, MFC_D, laser_control) = eqpt_list
-            # (gc_control, MFC_A, MFC_B, MFC_C, MFC_D,
-            #  laser_control, heater) = eqpt_list
-            
+
+        if eqpt_list is not False:
+            # eqpt_list needs to be tuple
+            self._gc_control = eqpt_list[0]
+            self._laser_control = eqpt_list[1]
+            self._MFC_A = eqpt_list[2]
+            self._MFC_B = eqpt_list[3]
+            self._MFC_C = eqpt_list[4]
+            self._MFC_D = eqpt_list[5]
+            self._heater = eqpt_list[6]
+
+    # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
         def set_any(self, value):
 
@@ -100,21 +106,22 @@ class Experiment:
 
     def _num_setter(attr):
         def set_any(self, value):
-
+            print('Checking the parameters')
+            print('value = ' + str(value))
+            print('attr = ' + attr)
             if isinstance(value, np.ndarray):
                 value = list(value)
 
             if not isinstance(value, list):
                 raise AttributeError(attr+' must be list')
-            elif (attr == 'tot_flow') & (np.max(value) > 50):
+            elif (attr == '_tot_flow') & (np.max(value) > 50):
                 raise AttributeError('Total flow must be <= 50')
-            elif (attr == 'gas_comp'):
+            elif (attr == '_gas_comp'):
                 for composition in value:
                     if sum(composition) != 1:
                         raise AttributeError(
                             'Gas comp. must be list of list == 1')
-            else:
-                setattr(self, attr, value)
+            setattr(self, attr, value)
         return set_any
 
     def _attr_getter(attr):
@@ -122,7 +129,7 @@ class Experiment:
             return getattr(self, attr)
         return get_any
 
-    # Numpy Properties
+    # Number Properties
     temp = property(fget=_attr_getter('_temp'),
                     fset=_num_setter('_temp'))
     power = property(fget=_attr_getter('_power'),
@@ -349,7 +356,7 @@ class Experiment:
 
         t_batch = list(t_steady_state
                        + sample_rate*np.arange(0, sample_set_size))
-        setpoint0 = 0
+        setpoint0 = [0]*np.size(sweep_val[0])
         if self.expt_type == 'temp_sweep':
             if units == 'K':
                 setpoint0 = 293
@@ -365,34 +372,35 @@ class Experiment:
         # Define the values for the first step condition
         # These two define time and value setting of reactor
         t_set = np.array([0, t_trans[0], t_batch[-1]+t_buffer])
-        setpoint = np.array([setpoint0, sweep_val[0], sweep_val[0]])
+        setpoint = np.vstack((setpoint0, sweep_val[0], sweep_val[0]))
         # These two define time and value GC collects data
         t_sample = np.array(t_batch)
-        sample_val = np.array([sweep_val[0]]*sample_set_size)
+        # sample_val = np.array([sweep_val[0]]*sample_set_size)
         sample_val = np.tile(sweep_val[0], (sample_set_size, 1))
-        
+
         # Loop through remaining setpoints
         for step_num in range(1, len(sweep_val)):
             t_sample = np.append(t_sample,
                                  t_sample[-1]+t_buffer+t_batch)
-            sample_val = np.append(sample_val,
-                                   [sweep_val[step_num]]*sample_set_size)
+            sample_val = np.concatenate((sample_val, np.tile(sweep_val[step_num],
+                                                             (sample_set_size, 1))))
             t_set = np.append(t_set, [t_set[-1] + t_trans[step_num],
                                       t_set[-1] + t_batch[-1] + t_buffer])
-            setpoint = np.append(setpoint, [sweep_val[step_num]]*2)
+            setpoint = np.concatenate(
+                (setpoint, np.tile(sweep_val[step_num], (2, 1))))
 
         fig, (ax1, ax2) = plt.subplots(2, 1)
         ax1.plot(t_set, setpoint, '-o')
         ax1.plot(t_sample, sample_val, 'x')
-        ylim_max = 1.1*max(sweep_val)  # TODO what about gas comp
-        ylim_min = 0.9*min(sweep_val)-0.05
+        ylim_max = 1.1*np.max(sweep_val)  # TODO what about gas comp
+        ylim_min = 0.9*np.min(sweep_val)-0.05
         ax1.set_ylim([ylim_min, ylim_max])
 
         ax2.plot(t_set[1:6], setpoint[1:6], '-o')
         ax2.plot(t_sample[3:8], sample_val[3:8], 'x')
-        ylim_max = 1.1*sample_val[7]  # TODO what about gas comp
-        ylim_min = 0.9*sample_val[3]-0.05
-        #ax2.set_ylim([ylim_min, ylim_max])
+        ylim_max = 1.1*np.max(sample_val[7])  # TODO what about gas comp
+        ylim_min = 0.9*np.max(sample_val[3])-0.05
+        # ax2.set_ylim([ylim_min, ylim_max])
         ax2.set_xlim([t_sample[3]-5, t_sample[7]+t_buffer+5])
 
         fig.add_subplot(111, frameon=False)
@@ -408,48 +416,51 @@ class Experiment:
 
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
+
         # TODO create custom gas mix for this
-        MFC_A.set_gas(self.gas_type[0])
-        MFC_B.set_gas(self.gas_type[1])
-        MFC_C.set_gas(self.gas_type[2])
-        MFC_D.set_gas(self.gas_type[1])
+        # Note: I could wrap all the MFCs in a single class
+        self._MFC_A.set_gas(self.gas_type[0])
+        self._MFC_B.set_gas(self.gas_type[1])
+        self._MFC_C.set_gas(self.gas_type[2])
+        self._MFC_D.set_gas(self.gas_type[1])
+
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
-            
+
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
             path = os.path.join(self.data_path, str(step)+units)
-            
+
             # This chooses the run type and sets condition accordingly
             if self.expt_type == 'temp_sweep':
                 print('temp_sweep no yet fully supported')
             elif self.expt_type == 'power_sweep':
-                laser_control.set_power(step)
+                self._laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
-                
-                MFC_A.set_flow_rate(step[0]*self.tot_flow)
-                MFC_B.set_flow_rate(step[1]*self.tot_flow)
-                MFC_C.set_flow_rate(step[2]*self.tot_flow)
+
+                self._MFC_A.set_flow_rate(step[0]*self.tot_flow)
+                self._MFC_B.set_flow_rate(step[1]*self.tot_flow)
+                self._MFC_C.set_flow_rate(step[2]*self.tot_flow)
                 print(self.gas_type)
                 print(step*self.tot_flow)
-                
+
             elif self.expt_type == 'flow_sweep':
-                
-                MFC_A.set_flow_rate(self.gas_comp[0]*step)
-                MFC_B.set_flow_rate(self.gas_comp[1]*step)
-                MFC_C.set_flow_rate(self.gas_comp[2]*step)
+
+                self._MFC_A.set_flow_rate(self.gas_comp[0]*step)
+                self._MFC_B.set_flow_rate(self.gas_comp[1]*step)
+                self._MFC_C.set_flow_rate(self.gas_comp[2]*step)
                 print(self.gas_type)
                 print(self.gas_comp*step)
-                
-            print('Waiting for steady state:')    
+
+            print('Waiting for steady state:')
             print(time.strftime("%H:%M:%S", time.localtime()))
-            gc_control.update_ctrl_file(path)
+            self._gc_control.update_ctrl_file(path)
             time.sleep(t_steady_state)
-            print('Starting Collection:')    
+            print('Starting Collection:')
             print(time.strftime("%H:%M:%S", time.localtime()))
-            gc_control.peaksimple.SetRunning(1, True)
-            while gc_control.peaksimple.IsRunning(1):
+            self._gc_control.peaksimple.SetRunning(1, True)
+            while self._gc_control.peaksimple.IsRunning(1):
                 time.sleep(1)
             print('Finished Collecting:')
             print(time.strftime("%H:%M:%S", time.localtime()))
@@ -466,7 +477,7 @@ if __name__ == "__main__":
     Expt1 = Experiment()
     Expt1.expt_type = 'temp_sweep'
     Expt1.temp = list(np.arange(30, 150, 10)+273)
-    Expt1.gas_comp = [[1, 100-6, 5]]
+    Expt1.gas_comp = [[0.01, 1-0.06, 0.05]]
     Expt1.tot_flow = [50]
     Expt1.sample_name = '20211221_fakesample'
     Expt1.plot_sweep()
@@ -475,7 +486,7 @@ if __name__ == "__main__":
     Expt2 = Experiment()
     Expt2.expt_type = 'power_sweep'
     Expt2.power = list(np.arange(30, 150, 10))
-    Expt2.gas_comp = [[1, 100-6, 5]]
+    Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
     Expt2.tot_flow = [50]
     Expt2.plot_sweep()
     print('finished expt 2')
@@ -483,7 +494,7 @@ if __name__ == "__main__":
     Expt3 = Experiment()
     Expt3.expt_type = 'flow_sweep'
     Expt3.temp = [273]
-    Expt3.gas_comp = [[1, 100-6, 5]]
+    Expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
     Expt3.tot_flow = list(np.arange(10, 60, 10))
     Expt3.sample_name = '20211221_fakesample'
     Expt3.plot_sweep()
@@ -491,9 +502,9 @@ if __name__ == "__main__":
     Expt4 = Experiment()
     Expt4.expt_type = 'comp_sweep'
     Expt4.temp = [273]
-    P_c2h2 = np.arange(0.5, 3.1, 0.5)
+    P_c2h2 = np.arange(0.5, 3.1, 0.5)/100
     P_h2 = P_c2h2*5
-    P_Ar = 100-P_c2h2-P_h2
+    P_Ar = 1-P_c2h2-P_h2
     Expt4.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
     Expt4.tot_flow = [50]
     Expt4.sample_name = '20211221_fakesample'
