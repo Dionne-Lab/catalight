@@ -4,7 +4,7 @@ Created on Thu Oct 14 17:30:17 2021
 
 This script simply creates and returns a running instance of PeaksimpleConnector()
 Note: if this connection is closed, Peaksimple also must be restarted
-
+TODO: integrate TCD
 @author: Briley Bourgeois
 """
 
@@ -19,8 +19,10 @@ clr.AddReference(assemblydir) # Add the assembly to python.NET
 # Now that the Assembly has been added to python.NET, 
 # it can be imported like a normal module
 import Peaksimple  # Import the assembly namespace, which has a different name
-
-default_ctrl_file = os.path.join(dir_path, 'DEFAULT.CON')
+# the default won't run from the repo for some reason
+default_ctrl_file = ("C:\\Peak489Win10\\CONTROL_FILE\\"
+                     "HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN.CON")
+print(default_ctrl_file)
 
 class GC_Connector():
     def __init__(self, ctrl_file=default_ctrl_file):
@@ -54,6 +56,7 @@ class GC_Connector():
                     line = ('<CHANNEL 1 POSTRUN AUTOINCREMENT>=1\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE IMAGE>=', line):
                     line = ('<CHANNEL 1 POSTRUN SAVE IMAGE>=1\n')
+        print(self.ctrl_file)
         self.peaksimple.LoadControlFile(self.ctrl_file)
         
     def read_ctrl_file(self):

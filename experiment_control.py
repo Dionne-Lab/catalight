@@ -6,6 +6,8 @@ self.create_dirs : make directories for raw data and results
 TODO setting experimental parameters
 TODO running the experiment
 TODO analyzing the data
+TODO step number on folder incase nonmonotonic
+TODO matlab cases? switch?
 This File can likely get folded into gcdata.py to define experiment and data
 classes in the same module in the future
 @author: Briley Bourgeois
@@ -85,8 +87,8 @@ class Experiment:
         
         if eqpt_list != False:
             #eqpt_list needs to be tuple
-            (gc_control, laser_control) = eqpt_list
-            # (gc_control, MFC_A, MFC_B, MFC_C, MFC_D, laser_control) = eqpt_list
+            # (gc_control, laser_control) = eqpt_list
+            (gc_control, MFC_A, MFC_B, MFC_C, MFC_D, laser_control) = eqpt_list
             # (gc_control, MFC_A, MFC_B, MFC_C, MFC_D,
             #  laser_control, heater) = eqpt_list
             
@@ -104,7 +106,7 @@ class Experiment:
 
             if not isinstance(value, list):
                 raise AttributeError(attr+' must be list')
-            elif (attr == 'tot_flow') & (max(value) > 50):
+            elif (attr == 'tot_flow') & (np.max(value) > 50):
                 raise AttributeError('Total flow must be <= 50')
             elif (attr == 'gas_comp'):
                 for composition in value:
@@ -367,7 +369,8 @@ class Experiment:
         # These two define time and value GC collects data
         t_sample = np.array(t_batch)
         sample_val = np.array([sweep_val[0]]*sample_set_size)
-
+        sample_val = np.tile(sweep_val[0], (sample_set_size, 1))
+        
         # Loop through remaining setpoints
         for step_num in range(1, len(sweep_val)):
             t_sample = np.append(t_sample,
@@ -405,7 +408,11 @@ class Experiment:
 
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
-    
+        # TODO create custom gas mix for this
+        MFC_A.set_gas(self.gas_type[0])
+        MFC_B.set_gas(self.gas_type[1])
+        MFC_C.set_gas(self.gas_type[2])
+        MFC_D.set_gas(self.gas_type[1])
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
             
@@ -420,29 +427,21 @@ class Experiment:
             elif self.expt_type == 'power_sweep':
                 laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
-                # TODO check MFC labels
-                # MFC_A.set_gas(self.gas_type[0])
-                # MFC_B.set_gas(self.gas_type[1])
-                # MFC_C.set_gas(self.gas_type[2])
-                # MFC_D.set_gas(self.gas_type[1])
                 
-                # MFC_A.set_flow_rate(step[0]*self.tot_flow)
-                # MFC_B.set_flow_rate(step[1]*self.tot_flow)
-                # MFC_C.set_flow_rate(step[2]*self.tot_flow)
+                MFC_A.set_flow_rate(step[0]*self.tot_flow)
+                MFC_B.set_flow_rate(step[1]*self.tot_flow)
+                MFC_C.set_flow_rate(step[2]*self.tot_flow)
                 print(self.gas_type)
                 print(step*self.tot_flow)
                 
             elif self.expt_type == 'flow_sweep':
-                # MFC_A.set_gas(self.gas_type[0])
-                # MFC_B.set_gas(self.gas_type[1])
-                # MFC_C.set_gas(self.gas_type[2])
-                # MFC_D.set_gas(self.gas_type[1])
                 
-                # MFC_A.set_flow_rate(self.gas_comp[0]*step)
-                # MFC_B.set_flow_rate(self.gas_comp[1]*step)
-                # MFC_C.set_flow_rate(self.gas_comp[2]*step)
+                MFC_A.set_flow_rate(self.gas_comp[0]*step)
+                MFC_B.set_flow_rate(self.gas_comp[1]*step)
+                MFC_C.set_flow_rate(self.gas_comp[2]*step)
                 print(self.gas_type)
                 print(self.gas_comp*step)
+                
             print('Waiting for steady state:')    
             print(time.strftime("%H:%M:%S", time.localtime()))
             gc_control.update_ctrl_file(path)
@@ -466,15 +465,37 @@ if __name__ == "__main__":
                 "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
     Expt1 = Experiment()
     Expt1.expt_type = 'temp_sweep'
-    Expt1.temp = np.arange(30, 150, 10)+273
-    Expt1.gas_comp = np.array([0.5, 47, 2.5])
+    Expt1.temp = list(np.arange(30, 150, 10)+273)
+    Expt1.gas_comp = [[1, 100-6, 5]]
+    Expt1.tot_flow = [50]
     Expt1.sample_name = '20211221_fakesample'
     Expt1.plot_sweep()
     print('finished expt1')
     # Expt1.create_dirs(main_fol)
     Expt2 = Experiment()
     Expt2.expt_type = 'power_sweep'
-    Expt2.power = np.arange(30, 150, 10)
+    Expt2.power = list(np.arange(30, 150, 10))
+    Expt2.gas_comp = [[1, 100-6, 5]]
+    Expt2.tot_flow = [50]
     Expt2.plot_sweep()
     print('finished expt 2')
     # Expt2.create_dirs(main_fol)
+    Expt3 = Experiment()
+    Expt3.expt_type = 'flow_sweep'
+    Expt3.temp = [273]
+    Expt3.gas_comp = [[1, 100-6, 5]]
+    Expt3.tot_flow = list(np.arange(10, 60, 10))
+    Expt3.sample_name = '20211221_fakesample'
+    Expt3.plot_sweep()
+    print('finished expt3')
+    Expt4 = Experiment()
+    Expt4.expt_type = 'comp_sweep'
+    Expt4.temp = [273]
+    P_c2h2 = np.arange(0.5, 3.1, 0.5)
+    P_h2 = P_c2h2*5
+    P_Ar = 100-P_c2h2-P_h2
+    Expt4.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
+    Expt4.tot_flow = [50]
+    Expt4.sample_name = '20211221_fakesample'
+    Expt4.plot_sweep()
+    print('finished expt4')

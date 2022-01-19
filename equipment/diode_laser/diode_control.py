@@ -84,17 +84,17 @@ class Diode_Laser():
         m = self._calibration[0]
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
-        # Vout = I_set/self._k_mod  # (V) Voltage output set point
+        Vout = I_set/self._k_mod  # (V) Voltage output set point
         # Convert to 16bit
-        # Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+        Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
         # Send signal to DAQ Board
-        # ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-        # Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
-        # Vin_eng_units_value = ul.to_eng_units(self.board_num,
-        #                                       self._ai_range, Vin_value)
+        ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+        Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+        Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                              self._ai_range, Vin_value)
 
-        # print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
+        print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
         print('Set Point = ' + str(P_set))
         print(time.ctime())
         # Sets Vol in dB -0.0 is 100%
@@ -158,7 +158,7 @@ class Diode_Laser():
         # Sets Vol in dB -0.0 is 100%
         volume_control.SetMasterVolumeLevel(-2.0, None)
         voice_control.say(
-            f'Warning: Diode laser will automatically engage in {60*time_left} minutes')
+            f'Warning: Diode laser will automatically engage in {time_left} minutes')
         voice_control.runAndWait()
 
 
