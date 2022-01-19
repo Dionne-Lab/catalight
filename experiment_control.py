@@ -316,10 +316,11 @@ class Experiment:
         if self.expt_type == 'Undefined':
             raise AttributeError(
                 'Experiment Type Must Be Defined Before Creating Directories')
-
+        
+        self._update_expt_name()
         self.update_save_paths(os.path.join(sample_path, 'expt_log.txt'),
                                should_exist=False)
-        self._update_expt_name()
+
 
         os.makedirs(self.results_path, exist_ok=True)
         # Creates subfolders for each step of experiment
@@ -453,18 +454,21 @@ class Experiment:
                 print(self.gas_type)
                 print(self.gas_comp*step)
 
+            # Very important to have a pause after using the GC!!
             print('Waiting for steady state:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.update_ctrl_file(path)
             time.sleep(t_steady_state)
+            
             print('Starting Collection:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.peaksimple.SetRunning(1, True)
-            while self._gc_control.peaksimple.IsRunning(1):
-                time.sleep(1)
+            time.sleep(self._gc_control.sample_rate*sample_set_size)
+            
             print('Finished Collecting:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer)
+            
             print('Step Finished:')
             print(time.strftime("%H:%M:%S", time.localtime()))
 
