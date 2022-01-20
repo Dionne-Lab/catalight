@@ -95,7 +95,7 @@ class Experiment:
             self._MFC_B = eqpt_list[3]
             self._MFC_C = eqpt_list[4]
             self._MFC_D = eqpt_list[5]
-            self._heater = eqpt_list[6]
+            #self._heater = eqpt_list[6]
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
@@ -106,9 +106,6 @@ class Experiment:
 
     def _num_setter(attr):
         def set_any(self, value):
-            print('Checking the parameters')
-            print('value = ' + str(value))
-            print('attr = ' + attr)
             if isinstance(value, np.ndarray):
                 value = list(value)
 
@@ -239,10 +236,10 @@ class Experiment:
 
         # Defines all settings to be included in path name and adds units
         expt_settings = pd.Series(
-            [str(self.temp), str(self.power),
-             '_'.join([str(m)+n for m, n in zip(self.gas_comp,
+            [str(self.temp[0]), str(self.power[0]),
+             '_'.join([str(m)+n for m, n in zip(self.gas_comp[0],
                                                 self.gas_type)]),
-             str(self.tot_flow)]) + self.expt_list['Units']
+             str(self.tot_flow[0])]) + self.expt_list['Units']
 
         # Only select fixed variable for path name
         fixed_vars = expt_settings[~self.expt_list['Active Status']]
@@ -440,34 +437,50 @@ class Experiment:
                 self._laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
 
-                self._MFC_A.set_flow_rate(step[0]*self.tot_flow)
-                self._MFC_B.set_flow_rate(step[1]*self.tot_flow)
-                self._MFC_C.set_flow_rate(step[2]*self.tot_flow)
+                self._MFC_A.set_flow_rate(float(step[0]*self.tot_flow))
+                self._MFC_B.set_flow_rate(float(step[1]*self.tot_flow))
+                self._MFC_C.set_flow_rate(float(step[2]*self.tot_flow))
                 print(self.gas_type)
                 print(step*self.tot_flow)
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
 
             elif self.expt_type == 'flow_sweep':
 
-                self._MFC_A.set_flow_rate(self.gas_comp[0]*step)
-                self._MFC_B.set_flow_rate(self.gas_comp[1]*step)
-                self._MFC_C.set_flow_rate(self.gas_comp[2]*step)
+                self._MFC_A.set_flow_rate(float(self.gas_comp[0]*step))
+                self._MFC_B.set_flow_rate(float(self.gas_comp[1]*step))
+                self._MFC_C.set_flow_rate(float(self.gas_comp[2]*step))
                 print(self.gas_type)
                 print(self.gas_comp*step)
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
+                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
+                      + self._MFC_A.get()['gas'] )
 
             # Very important to have a pause after using the GC!!
             print('Waiting for steady state:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.update_ctrl_file(path)
-            time.sleep(t_steady_state)
+            time.sleep(t_steady_state*60)
             
             print('Starting Collection:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.peaksimple.SetRunning(1, True)
-            time.sleep(self._gc_control.sample_rate*sample_set_size)
+            time.sleep(self._gc_control.sample_rate*sample_set_size*60)
             
             print('Finished Collecting:')
             print(time.strftime("%H:%M:%S", time.localtime()))
-            time.sleep(t_buffer)
+            time.sleep(t_buffer*60)
             
             print('Step Finished:')
             print(time.strftime("%H:%M:%S", time.localtime()))
