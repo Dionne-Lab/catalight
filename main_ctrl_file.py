@@ -34,7 +34,7 @@ if __name__ == "__main__":
     
     plt.close('all')
     main_fol = (r"C:\\Peak489Win10\\GCDATA\\"
-                "20220120_CodeTest")
+                "20220122_CodeTest")
     os.makedirs(main_fol, exist_ok=True)
     Expt3 = Experiment(eqpt_list)
     Expt3.expt_type = 'flow_sweep'
@@ -47,3 +47,7 @@ if __name__ == "__main__":
     Expt3.create_dirs(main_fol)
     Expt3.run_experiment()
     print('finished expt3')
+    MFC_A.set_flow_rate(1)
+    MFC_B.set_flow_rate(1)
+    MFC_C.set_flow_rate(1)
+

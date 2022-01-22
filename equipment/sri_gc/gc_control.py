@@ -26,6 +26,7 @@ print(default_ctrl_file)
 
 class GC_Connector():
     def __init__(self, ctrl_file=default_ctrl_file):
+        print('Connecting to Peaksimple...'
         self.peaksimple = Peaksimple.PeaksimpleConnector()  # This class has all the functions
         self.peaksimple.Connect()
         time.sleep(20) # I think peaksimple is cranky when rushed
@@ -37,7 +38,8 @@ class GC_Connector():
         # Sample rate is read only
         self._sample_rate = 0
         self.read_ctrl_file()
-    
+        print('Connected!'
+              
     sample_rate = property(lambda self: self._sample_rate)
         
     def update_ctrl_file(self, data_file_path):
@@ -69,7 +71,15 @@ class GC_Connector():
             
         print(self.ctrl_file)
         
-        self.peaksimple.LoadControlFile(self.ctrl_file)
+        
+        for attempt in range(0,3):
+            try:
+                self.peaksimple.LoadControlFile(self.ctrl_file)
+                break
+            except Peaksimple.ConnectionWriteFailedException:
+                print('Write error. Retrying...')
+                time.sleep(1)
+                continue
         time.sleep(60) # I think peaksimple is cranky when rushed
         
     def read_ctrl_file(self):
