@@ -60,10 +60,12 @@ class Experiment:
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
         self.expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', 0,    'K'],
-             ['power_sweep',    'power', 0,   'mW'],
-             ['comp_sweep',  'gas_comp', 0, 'frac'],
-             ['flow_sweep',  'tot_flow', 0, 'sccm']],
+            [['temp_sweep',      'temp', False,    'K'],
+             ['power_sweep',    'power', False,   'mW'],
+             ['comp_sweep',  'gas_comp', False, 'frac'],
+             ['flow_sweep',  'tot_flow', False, 'sccm'],
+             ['calibration', 'gas_comp', False,  'ppm'],
+             ['stability_test',  'time', False,  'min']],
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
@@ -164,7 +166,7 @@ class Experiment:
             self.expt_list['Expt Name'] == self._expt_type)
 
         # Defines Independent Variable as string provided by expt list
-        var_list = self.expt_list['Independent Variable']  # Pull List
+        var_list = self.expt_list['Independent Variable'][0:4]  # Pull List
         # Compare Boolean
         ind_var_series = var_list[self.expt_list['Active Status']]
         # Convert to str
@@ -313,20 +315,22 @@ class Experiment:
         if self.expt_type == 'Undefined':
             raise AttributeError(
                 'Experiment Type Must Be Defined Before Creating Directories')
-        
+
         self._update_expt_name()
         self.update_save_paths(os.path.join(sample_path, 'expt_log.txt'),
                                should_exist=False)
 
-
         os.makedirs(self.results_path, exist_ok=True)
+        step_num = 1
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-            path = os.path.join(self.data_path, str(step)+units)
+            path = os.path.join(self.data_path,
+                                ('%i %d%s' % (step_num, step, units)))
             os.makedirs(path, exist_ok=True)
+            step_num += 1
 
         self.update_expt_log(sample_path)
 
@@ -422,13 +426,16 @@ class Experiment:
         self._MFC_C.set_gas(self.gas_type[2])
         self._MFC_D.set_gas(self.gas_type[1])
 
+        step_num = 1
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
 
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-            path = os.path.join(self.data_path, str(step)+units)
+            path = os.path.join(self.data_path,
+                                ('%i %d%s' % (step_num, step, units)))
+            step_num += 1
 
             # This chooses the run type and sets condition accordingly
             if self.expt_type == 'temp_sweep':
@@ -443,13 +450,13 @@ class Experiment:
                 print(self.gas_type)
                 print(step*self.tot_flow)
                 print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-                      + self._MFC_A.get()['gas'] )
+                      + self._MFC_A.get()['gas'])
                 print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-                      + self._MFC_B.get()['gas'] )
+                      + self._MFC_B.get()['gas'])
                 print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-                      + self._MFC_C.get()['gas'] )
+                      + self._MFC_C.get()['gas'])
                 print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-                      + self._MFC_D.get()['gas'] )
+                      + self._MFC_D.get()['gas'])
 
             elif self.expt_type == 'flow_sweep':
 
@@ -459,13 +466,13 @@ class Experiment:
                 print(self.gas_type)
                 print(np.array(self.gas_comp)*step)
                 print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-                      + self._MFC_A.get()['gas'] )
+                      + self._MFC_A.get()['gas'])
                 print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-                      + self._MFC_B.get()['gas'] )
+                      + self._MFC_B.get()['gas'])
                 print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-                      + self._MFC_C.get()['gas'] )
+                      + self._MFC_C.get()['gas'])
                 print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-                      + self._MFC_D.get()['gas'] )
+                      + self._MFC_D.get()['gas'])
 
             # Very important to have a pause after using the GC!!
             print('Waiting for steady state:')
@@ -475,16 +482,16 @@ class Experiment:
             t2 = time.time()
             t_passed = t2-t1
             time.sleep(t_steady_state*60-t_passed)
-            
+
             print('Starting Collection:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.peaksimple.SetRunning(1, True)
             time.sleep(self._gc_control.sample_rate*sample_set_size*60)
-            
+
             print('Finished Collecting:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer*60)
-            
+
             print('Step Finished:')
             print(time.strftime("%H:%M:%S", time.localtime()))
 
