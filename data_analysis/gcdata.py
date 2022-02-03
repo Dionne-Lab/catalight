@@ -11,7 +11,8 @@ import scipy.ndimage as nd
 
 class GCData:
 
-    def __init__(self, filepath, basecorrect = False): # set basecorrect to True if you want correction, default is false
+    def __init__(self, filepath, basecorrect=False):
+        # set basecorrect to True if you want correction, default is false
         """initialize the class with the attributes filename and data (which has been read from ASCII and is a pandas dataframe)"""
         self.filepath = filepath
         self.rawdata = self.getrawdata()
@@ -182,14 +183,6 @@ class GCData:
             print('Warning: Zero Molecules Detected')
 
         return (conc)
-
-    # def find_conversion(filepath):
-    #     conversion = round((ethylene + ethane) / (ethylene + ethane + acetylene) * 100, 2)
-    #     return conversion
-
-    # def find_selectivity(filepath):
-    #     selectivity =  round(ethylene / (ethylene + ethane) * 100, 2)
-    #     return selectivity
 
     # Plotting functions
     ##############################################################################

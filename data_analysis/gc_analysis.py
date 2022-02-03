@@ -55,29 +55,31 @@ def get_run_number(filename):
     return int(run_number.group()) if run_number else None
 
 
-def analyze_cal_data(Expt1, calDF, figsize=(6.5, 4.5)):
+def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     # do something
     print('Analyzing Calibration data')
-    print('Plotting...')
     plt.close('all')
 
-    if figsize[0] < 6:
-        fontsize = [11, 14]
-    elif figsize[0] > 7:
-        fontsize = [16, 20]
-    else:
-        fontsize = [14, 18]
+    # Returns raw counts with error bars for each chemical in each folder
+    results, avg, std = run_analysis(Expt1, calDF)
 
-    # Some Plot Defaults
-    plt.rcParams['axes.linewidth'] = 2
-    plt.rcParams['lines.linewidth'] = 1.5
-    plt.rcParams['xtick.major.size'] = 6
-    plt.rcParams['xtick.major.width'] = 1.5
-    plt.rcParams['ytick.major.size'] = 6
-    plt.rcParams['ytick.major.width'] = 1.5
+    # if figsize[0] < 6:
+    #     fontsize = [11, 14]
+    # elif figsize[0] > 7:
+    #     fontsize = [16, 20]
+    # else:
+    #     fontsize = [14, 18]
+
+    # # Some Plot Defaults
+    # plt.rcParams['axes.linewidth'] = 2
+    # plt.rcParams['lines.linewidth'] = 1.5
+    # plt.rcParams['xtick.major.size'] = 6
+    # plt.rcParams['xtick.major.width'] = 1.5
+    # plt.rcParams['ytick.major.size'] = 6
+    # plt.rcParams['ytick.major.width'] = 1.5
     plt.rcParams['figure.figsize'] = figsize
-    plt.rcParams['font.size'] = fontsize[0]
-    plt.rcParams['axes.labelsize'] = fontsize[1]
+    # plt.rcParams['font.size'] = fontsize[0]
+    # plt.rcParams['axes.labelsize'] = fontsize[1]
 
     # Initilize run num plot
 
@@ -105,23 +107,62 @@ def analyze_cal_data(Expt1, calDF, figsize=(6.5, 4.5)):
         ind_results = results[:, chem_num, :]
         ind_results = ind_results[~np.isnan(ind_results)]
         ax1 = subplots1.ravel()[chem_num]
-        ax1.plot(ind_results, 'o', label=chemical)
+        ax1.plot(ind_results/1000, 'o', label=chemical)
+        ax1.text(.5, .85, chemical,
+                 horizontalalignment='center',
+                 transform=ax1.transAxes)
 
         ax2 = subplots2.ravel()[chem_num]
         expected_ppm = calDF.loc[chemical, 'ppm']*calgas_flow
-        ax2.plot(expected_ppm, avg[chemical], marker='o')
+        ax2.errorbar(expected_ppm, avg[chemical]/1000, yerr=std[chemical]/1000, fmt='o')
+
+        if force_zero:
+            x_data = np.append(0, expected_ppm)
+            y_data = np.append(0, avg[chemical].to_numpy())
+            y_err = np.append(1e-19, std[chemical].to_numpy())
+        else:
+            x_data = expected_ppm
+            y_data = avg[chemical].to_numpy()
+            y_err = std[chemical].to_numpy()
+        try:
+            p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1/y_err)
+            x_fit = np.linspace(0, max(x_data), 100)
+            ax2.plot(x_fit, (p[0]*x_fit+p[1])/1000, '--r')
+            label = '\n'.join([chemical,
+                               "m: %4.2f +/- %4.2f" % (p[0], np.sqrt(V[0][0])),
+                               "b: %4.2f +/- %4.2f" % (p[1], np.sqrt(V[1][1]))])
+
+            ax2.text(.02, .75, label,
+                     horizontalalignment='left',
+                     transform=ax2.transAxes, fontsize=8)
+        except(np.linalg.LinAlgError):
+            label = chemical + '\nBad Fit'
+            ax2.text(.02, .75, label,
+                     horizontalalignment='left',
+                     transform=ax2.transAxes, fontsize=8)
         # avg[chemical].plot(ax=ax2, marker='o')
         # Plotting:
         # avg[0:len(x_data)].plot(ax=ax2, marker='o', yerr=std)
 
-    # ax2.set_xlabel(Expt1.ind_var + ' ['+units+']')
-    # ax2.set_ylabel('Conc (ppm)')
-    # plt.tight_layout()
+    ax1 = fig1.add_subplot(111, frameon=False)
+    # hide tick and tick label of the big axis
+    ax1.tick_params(labelcolor='none', which='both',
+                    top=False, bottom=False, left=False, right=False)
+    ax1.set_xlabel("Run Number")
+    ax1.set_ylabel('Counts/1000')
+    #plt.tight_layout()
+    #plt.show()
 
-    # plt.xlabel('Run Number (#)')
-    # plt.ylabel('Conc (ppm)')
-    # plt.tight_layout()
+    ax2 = fig2.add_subplot(111, frameon=False)
+    # hide tick and tick label of the big axis
+    ax2.tick_params(labelcolor='none', which='both',
+                    top=False, bottom=False, left=False, right=False)
+    ax2.set_xlabel("ppm")
+    ax2.set_ylabel('Counts/1000')
+    #plt.tight_layout()
+    #plt.show()
 
+    return(subplots1, subplots2)
 
 def run_analysis(Expt1, calDF, basecorrect='True'):
     # Analysis Loop
