@@ -1,5 +1,8 @@
 # to actually run some analysis!
-import os, re, sys
+
+import os
+import re
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -18,65 +21,89 @@ from experiment_control import Experiment
 
 # Helper functions
 ##############################################################################
-def listfiles(folder_path):
+
+
+def list_FID(folder_path):
     """Returns the .ASC files for FID data in the specified path."""
     files_list = []
     for filename in sorted(os.listdir(folder_path)):
-        if (filename.endswith('.ASC')) & ('FID' in filename): # Only assessing files that end with specified filetype
-#            id = filename[:len(filename)-4] # Disregards the file type and run number
-#            if id[:-2].endswith('FID'): # Only selects for FID entries
+        # Only assessing files that end with specified filetype
+        if (filename.endswith('.ASC')) & ('FID' in filename):
+            #            id = filename[:len(filename)-4] # Disregards the file type and run number
+            #            if id[:-2].endswith('FID'): # Only selects for FID entries
             files_list.append(filename)
     return files_list
 
+
+def list_TCD(folder_path):
+    """Returns the .ASC files for TCD data in the specified path."""
+    files_list = []
+    for filename in sorted(os.listdir(folder_path)):
+        # Only assessing files that end with specified filetype
+        if (filename.endswith('.ASC')) & ('TCD' in filename):
+            files_list.append(filename)
+    return files_list
+
+
 def get_run_number(filename):
     """returns run number based on filename"""
-    parts = filename.split('.') # Seperate filename at each period
+    parts = filename.split('.')  # Seperate filename at each period
     # Second to last part always has run num
     run_num_part = parts[len(parts)-2]
-    run_number = re.search(r'\d+$', run_num_part) # \d digit; + however many; $ at end
+    # \d digit; + however many; $ at end
+    run_number = re.search(r'\d+$', run_num_part)
     return int(run_number.group()) if run_number else None
+
+
+def analyze_cal_data():
+    # do something
+    print('Analyzing Calibration data')
+
 
 def run_analysis(Expt1, calDF, basecorrect='True'):
     # Analysis Loop
+    # TODO add TCD part
     ##############################################################################
     print('Analyzing Data...')
 
     expt_data_fol = Expt1.data_path
     expt_results_fol = Expt1.results_path
-    os.makedirs(expt_results_fol, exist_ok=True)
-    calchemIDs = calDF.index.to_numpy() # get chem IDs from calibration files
+    os.makedirs(expt_results_fol, exist_ok=True)  # Make dir if not there
+    calchemIDs = calDF.index.to_numpy()  # get chem IDs from calibration files
     max_runs = 0
     step_path_list = []
     for dirpath, dirnames, filenames in os.walk(expt_data_fol):
-        num_data_points = len(listfiles(dirpath)) # only looks at .ASC
-        if not dirnames: # determine bottom most dirs
+        num_data_points = len(list_FID(dirpath))  # only looks at .ASC
+        if not dirnames:  # determine bottom most dirs
             step_path_list.append(dirpath)
-        if num_data_points>max_runs: # Determines largest # of runs in any dir
+            print(dirpath)
+        if num_data_points > max_runs:  # Determines largest # of runs in any dir
             max_runs = num_data_points
 
     num_fols = len(step_path_list)
     num_chems = int(len(calchemIDs))
 
-    run_number = [] # this might be unused
-    conversion = [] # this might be unused
-    condition = np.full( num_fols, 0, dtype=object)
-    results = np.full( (num_fols, num_chems, max_runs), np.nan )
+    run_number = []  # this might be unused
+    conversion = []  # this might be unused
+    condition = np.full(num_fols, 0, dtype=object)
+    results = np.full((num_fols, num_chems, max_runs), np.nan)
 
     # Loops through the ind var step and calculates conc in each data file
-    for step_num in range(0, len(step_path_list)):
-        step_path = step_path_list[step_num]
-        data_list = listfiles(step_path)
-        condition[step_num] = os.path.basename(step_path)
+    for step_path in step_path_list:
+        step_num, step_val = os.path.basename(step_path).split(' ')
+        step_num = int(step_num)-1
+        data_list = list_FID(step_path)
+        condition[step_num] = step_val
         conc = []
         for file in data_list:
             filepath = os.path.join(step_path, file)
             # data is an instance of a class, for signal use data.signal etc
             data = GCData(filepath)
 
-            if basecorrect == True:
+            if basecorrect is True:
                 data.baseline_correction()
 
-            run_num = get_run_number(file) # this might be unused...
+            run_num = get_run_number(file)  # this might be unused...
             values = data.get_concentrations(calDF)
             conc.append(values.tolist())
 
@@ -96,22 +123,26 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
     return(results, avg, std)
 
+
 def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Plotting
     ###########################################################################
     print('Plotting...')
     plt.close('all')
 
-    if figsize[0] < 6 : fontsize = [11, 14]
-    elif figsize[0] > 7: fontsize = [16, 20]
-    else: fontsize = [14, 18]
+    if figsize[0] < 6:
+        fontsize = [11, 14]
+    elif figsize[0] > 7:
+        fontsize = [16, 20]
+    else:
+        fontsize = [14, 18]
 
     # Some Plot Defaults
     plt.rcParams['axes.linewidth'] = 2
     plt.rcParams['lines.linewidth'] = 1.5
-    plt.rcParams['xtick.major.size'] =  6
+    plt.rcParams['xtick.major.size'] = 6
     plt.rcParams['xtick.major.width'] = 1.5
-    plt.rcParams['ytick.major.size'] =  6
+    plt.rcParams['ytick.major.size'] = 6
     plt.rcParams['ytick.major.width'] = 1.5
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
@@ -120,7 +151,7 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Initilize run num plot
     fig1, ax1 = plt.subplots()
     # Calculations:
-    calchemIDs = calDF.index.to_numpy() # get chem IDs from calibration files
+    calchemIDs = calDF.index.to_numpy()  # get chem IDs from calibration files
     stoyk = []
 
     # Plotting:
@@ -128,7 +159,7 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
         chemical = calchemIDs[chem_num]
 
         # read number after 'c' in each chem name
-        stoyk.append(re.findall( mass_bal+r"(\d+)", chemical))
+        stoyk.append(re.findall(mass_bal+r"(\d+)", chemical))
         ind_results = results[:, chem_num, :]
         ind_results = ind_results[~np.isnan(ind_results)]
         ax1.plot(ind_results, 'o', label=chemical)
@@ -158,12 +189,12 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Initilize Conv and Selectivity plot
     fig3, ax3 = plt.subplots()
     # Calculations:
-    C_Tot = avg.sum(axis=1) # total conc of all molecules
-    C_reactant = avg[reactant] # total conc of reactant molecule
-    X = (1 - C_reactant/C_Tot)*100 # conversion assuming 100% mol bal
+    C_Tot = avg.sum(axis=1)  # total conc of all molecules
+    C_reactant = avg[reactant]  # total conc of reactant molecule
+    X = (1 - C_reactant/C_Tot)*100  # conversion assuming 100% mol bal
     rel_err = std/avg
     X_err = ((rel_err**2).sum(axis=1))**(1/2)*rel_err[reactant]
-    S = (avg[s[0]]/(C_Tot*X/100))*100 # selectivity
+    S = (avg[s[0]]/(C_Tot*X/100))*100  # selectivity
 
     # Plotting:
     X[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--o')
@@ -175,11 +206,16 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     plt.tight_layout()
 
     # Figure Export
-    fig1.savefig(os.path.join(Expt1.results_path, str(figsize[0])+'w_run_num_plot.svg'), format="svg")
-    fig2.savefig(os.path.join(Expt1.results_path, str(figsize[0])+'w_avg_conc_plot.svg'), format="svg")
-    fig3.savefig(os.path.join(Expt1.results_path, str(figsize[0])+'w_Conv_Sel_plot.svg'), format="svg")
+    fig1.savefig(os.path.join(Expt1.results_path, str(
+        figsize[0])+'w_run_num_plot.svg'), format="svg")
+    fig2.savefig(os.path.join(Expt1.results_path, str(
+        figsize[0])+'w_avg_conc_plot.svg'), format="svg")
+    fig3.savefig(os.path.join(Expt1.results_path, str(
+        figsize[0])+'w_Conv_Sel_plot.svg'), format="svg")
 
     return (ax1, ax2, ax3)
+
+
 if __name__ == "__main__":
 
     # User inputs
@@ -206,18 +242,21 @@ if __name__ == "__main__":
     log_path = (r'C:/Users/brile/Documents/Temp Files/'
                 '20210524_8%AgPdMix_1wt%__200C_24.8mg/PostReduction/expt_log.txt')
     main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
+    main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
 
     # Main Script
     ###########################################################################
     for dirpath, dirnames, filenames in os.walk(main_dir):
-       for filename in filenames:
-           if filename == 'expt_log.txt':
+        for filename in filenames:
+            if filename == 'expt_log.txt':
                 log_path = os.path.join(dirpath, filename)
+                expt_path = os.path.dirname(log_path)
                 # import all calibration data
-                calDF = pd.read_csv(calibration_path, delimiter=',', index_col='Chem ID')
-                Expt1 = Experiment() # Initialize experiment obj
-                Expt1.read_expt_log(log_path) # Read expt parameters from log
-                Expt1.update_save_paths(log_path) # update file paths
+                calDF = pd.read_csv(
+                    calibration_path, delimiter=',', index_col='Chem ID')
+                Expt1 = Experiment()  # Initialize experiment obj
+                Expt1.read_expt_log(log_path)  # Read expt parameters from log
+                Expt1.update_save_paths(expt_path)  # update file paths
 
                 (results, avg, std) = run_analysis(Expt1, calDF)
                 (ax1, ax2, ax3) = plot_results(Expt1, calDF, s=['c2h4'],

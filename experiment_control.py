@@ -166,7 +166,7 @@ class Experiment:
             self.expt_list['Expt Name'] == self._expt_type)
 
         # Defines Independent Variable as string provided by expt list
-        var_list = self.expt_list['Independent Variable'][0:4]  # Pull List
+        var_list = self.expt_list['Independent Variable']  # Pull List
         # Compare Boolean
         ind_var_series = var_list[self.expt_list['Active Status']]
         # Convert to str
@@ -175,8 +175,8 @@ class Experiment:
     def update_date(self):
         self._date = date.today().strftime('%Y%m%d')
 
-    def update_expt_log(self, sample_path):
-        with open(os.path.join(sample_path, 'expt_log.txt'), 'w+') as log:
+    def update_expt_log(self, expt_path):
+        with open(os.path.join(expt_path, 'expt_log.txt'), 'w+') as log:
             log_entry = [
                 'Experiment Date = ' + self.date,
                 'Experiment Type = ' + self.expt_type,
@@ -189,7 +189,7 @@ class Experiment:
                 'Gas 2 type = ' + self.gas_type[1],
                 'Gas 3 type = ' + self.gas_type[2],
                 'Gas Composition [' + self.expt_list['Units'][2] +
-                '] = ' + str(self.gas_comp[0]),
+                '] = ' + str(self.gas_comp),
                 'Total Flow [' + self.expt_list['Units'][3] +
                 '] = ' + str(self.tot_flow)
             ]
@@ -216,7 +216,7 @@ class Experiment:
                 data.append(line.split('=')[-1].strip(' \n'))
 
             self._date = data[0]
-            self.expt_type(data[1])
+            self.expt_type = data[1]
             self._expt_name = data[2]
             self.sample_name = data[3]
             self.temp = literal_eval(data[4])
@@ -224,7 +224,8 @@ class Experiment:
             self.gas_type = [data[6], data[7], data[8]]
             self.gas_comp = literal_eval(data[9])
             self.tot_flow = literal_eval(data[10])
-            self.update_save_paths()  # Will throw error if no data folders
+            expt_path = os.path.dirname(log_path)
+            self.update_save_paths(expt_path)  # Will throw error if no data folders
 
     def _update_expt_name(self):
         """
@@ -241,21 +242,22 @@ class Experiment:
             [str(self.temp[0]), str(self.power[0]),
              '_'.join([str(m)+n for m, n in zip(self.gas_comp[0],
                                                 self.gas_type)]),
-             str(self.tot_flow[0])]) + self.expt_list['Units']
+             str(self.tot_flow[0])]) + self.expt_list['Units'][0:4]
 
         # Only select fixed variable for path name
-        fixed_vars = expt_settings[~self.expt_list['Active Status']]
+        fixed_vars = expt_settings[self.expt_list['Independent Variable']
+                                   != self.ind_var]
         self._expt_name = '_'.join(fixed_vars.to_list())  # Define expt_name
 
-    def update_save_paths(self, log_path, should_exist=True):
+    def update_save_paths(self, expt_path, should_exist=True):
         """
         Updates data/results paths for the object. Used when readin expt from
         log file or creating new expt data set
 
         Parameters
         ----------
-        log_path : str
-            string to the full file path of the log file ('./expt_log.txt').
+        expt_path : str
+            string to the full file path of the experiments dir.
         should_exist : Boolean, optional
             If updating based on existing log file, set to true.
             The default is True.
@@ -272,17 +274,11 @@ class Experiment:
 
         """
 
-        sample_path = os.path.dirname(log_path)
-
         # Defines path for saving results
-        self._results_path = os.path.join(sample_path, 'Results',
-                                          self.date + self.expt_type
-                                          + '_' + self.expt_name)
+        self._results_path = os.path.join(expt_path, 'Results')
 
         # Defines path for saving raw data
-        self._data_path = os.path.join(sample_path, 'Data',
-                                       self.date + self.expt_type
-                                       + '_' + self.expt_name)
+        self._data_path = os.path.join(expt_path, 'Data')
 
         # If updating paths from file, paths should exist in log directory
         exists = (os.path.isdir(self.results_path)
@@ -317,8 +313,10 @@ class Experiment:
                 'Experiment Type Must Be Defined Before Creating Directories')
 
         self._update_expt_name()
-        self.update_save_paths(os.path.join(sample_path, 'expt_log.txt'),
-                               should_exist=False)
+        expt_path = os.path.join(sample_path, self.date + self.expt_type
+                                 + '_' + self.expt_name)
+
+        self.update_save_paths(expt_path, should_exist=False)
 
         os.makedirs(self.results_path, exist_ok=True)
         step_num = 1
@@ -327,12 +325,19 @@ class Experiment:
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-            path = os.path.join(self.data_path,
-                                ('%i %d%s' % (step_num, step, units)))
+
+            if self._ind_var == 'gas_comp':
+                step_str = '_'.join([str(m)+n for m, n in zip(step, self.gas_type)])
+                path = os.path.join(self.data_path,
+                                    ('%i %s%s' % (step_num, step_str, units)))
+            else:
+                path = os.path.join(self.data_path,
+                                    ('%i %d%s' % (step_num, step, units)))
+
             os.makedirs(path, exist_ok=True)
             step_num += 1
 
-        self.update_expt_log(sample_path)
+        self.update_expt_log(expt_path)
 
     def plot_sweep(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         # plot the sweep parameter vs time
@@ -433,8 +438,14 @@ class Experiment:
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-            path = os.path.join(self.data_path,
-                                ('%i %d%s' % (step_num, step, units)))
+
+            if self._ind_var == 'gas_comp':
+                step_str = '_'.join([str(m)+n for m, n in zip(step, self.gas_type)])
+                path = os.path.join(self.data_path,
+                                    ('%i %s%s' % (step_num, step_str, units)))
+            else:
+                path = os.path.join(self.data_path,
+                                    ('%i %d%s' % (step_num, step, units)))
             step_num += 1
 
             # This chooses the run type and sets condition accordingly
@@ -499,8 +510,9 @@ class Experiment:
 if __name__ == "__main__":
     # This is just a demo which runs when you run this class file as the main script
     plt.close('all')
-    main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
-                "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
+    # main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
+    #             "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
+    main_fol = 'C:\\Users\\brile\\Documents\\Temp Files\\Calibration_dummy'
     Expt1 = Experiment()
     Expt1.expt_type = 'temp_sweep'
     Expt1.temp = list(np.arange(30, 150, 10)+273)
@@ -510,6 +522,7 @@ if __name__ == "__main__":
     Expt1.plot_sweep()
     print('finished expt1')
     # Expt1.create_dirs(main_fol)
+
     Expt2 = Experiment()
     Expt2.expt_type = 'power_sweep'
     Expt2.power = list(np.arange(30, 150, 10))
@@ -518,6 +531,7 @@ if __name__ == "__main__":
     Expt2.plot_sweep()
     print('finished expt 2')
     # Expt2.create_dirs(main_fol)
+
     Expt3 = Experiment()
     Expt3.expt_type = 'flow_sweep'
     Expt3.temp = [273]
@@ -526,6 +540,7 @@ if __name__ == "__main__":
     Expt3.sample_name = '20211221_fakesample'
     Expt3.plot_sweep()
     print('finished expt3')
+
     Expt4 = Experiment()
     Expt4.expt_type = 'comp_sweep'
     Expt4.temp = [273]
@@ -537,3 +552,18 @@ if __name__ == "__main__":
     Expt4.sample_name = '20211221_fakesample'
     Expt4.plot_sweep()
     print('finished expt4')
+
+    Expt5 = Experiment()
+    Expt5.expt_type = 'calibration'
+    Expt5.gas_type = ['CalGas', 'H2', 'Ar']
+    Expt5.temp = [273]
+    P_CalGas = np.array([100, 50, 1])/100  # pretend one 1000ppm gas
+    P_h2 = P_CalGas*0
+    P_Ar = 1-P_CalGas-P_h2
+    Expt5.gas_comp = np.stack([P_CalGas, P_Ar, P_h2], axis=1).tolist()
+    Expt5.tot_flow = [50]
+    Expt5.sample_name = '20211221_fakesample'
+    Expt5.plot_sweep()
+    Expt5.create_dirs(main_fol)
+    print('finished expt5')
+    print('finished expt5')
