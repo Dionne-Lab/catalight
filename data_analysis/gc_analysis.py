@@ -81,15 +81,13 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     # plt.rcParams['font.size'] = fontsize[0]
     # plt.rcParams['axes.labelsize'] = fontsize[1]
 
-    # Initilize run num plot
-
     # Calculations:
     calchemIDs = calDF.index.to_numpy()  # get chem IDs from calibration files
-    units = (Expt1.expt_list['Units']
-             [Expt1.expt_list['Active Status']].to_string(index=False))
-    x_data = getattr(Expt1, Expt1.ind_var)
+    new_calibration = calDF.copy()
+
     n_rows = len(calchemIDs)//3
     n_cols = -(-len(calchemIDs)//n_rows)  # Gives Ceiling
+    # Initilize run num plot
     fig1, subplots1 = plt.subplots(n_rows, n_cols)
     # Initilize ppm vs ind_var plot
     fig2, subplots2 = plt.subplots(n_rows, n_cols)
@@ -126,11 +124,13 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
             y_err = std[chemical].to_numpy()
         try:
             p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1/y_err)
+            m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
             x_fit = np.linspace(0, max(x_data), 100)
+
             ax2.plot(x_fit, (p[0]*x_fit+p[1])/1000, '--r')
             label = '\n'.join([chemical,
-                               "m: %4.2f +/- %4.2f" % (p[0], np.sqrt(V[0][0])),
-                               "b: %4.2f +/- %4.2f" % (p[1], np.sqrt(V[1][1]))])
+                               "m: %4.2f +/- %4.2f" % (m, err_m),
+                               "b: %4.2f +/- %4.2f" % (b, err_b)])
 
             ax2.text(.02, .75, label,
                      horizontalalignment='left',
@@ -140,9 +140,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
             ax2.text(.02, .75, label,
                      horizontalalignment='left',
                      transform=ax2.transAxes, fontsize=8)
-        # avg[chemical].plot(ax=ax2, marker='o')
-        # Plotting:
-        # avg[0:len(x_data)].plot(ax=ax2, marker='o', yerr=std)
+        new_calibration.loc[chemical, 'slope':'err_intercept'] = [m, err_m, b, err_b]
 
     ax1 = fig1.add_subplot(111, frameon=False)
     # hide tick and tick label of the big axis
@@ -150,8 +148,6 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
                     top=False, bottom=False, left=False, right=False)
     ax1.set_xlabel("Run Number")
     ax1.set_ylabel('Counts/1000')
-    #plt.tight_layout()
-    #plt.show()
 
     ax2 = fig2.add_subplot(111, frameon=False)
     # hide tick and tick label of the big axis
@@ -159,8 +155,13 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
                     top=False, bottom=False, left=False, right=False)
     ax2.set_xlabel("ppm")
     ax2.set_ylabel('Counts/1000')
-    #plt.tight_layout()
-    #plt.show()
+
+    # Figure Export
+    fig1.savefig(os.path.join(Expt1.results_path, str(
+        figsize[0])+'w_run_num_plot_individuals.svg'), format="svg")
+    fig2.savefig(os.path.join(Expt1.results_path, str(
+        figsize[0])+'w_calibration_plot.svg'), format="svg")
+    new_calibration.to_csv(os.path.join(Expt1.results_path, 'calibration.csv'))
 
     return(subplots1, subplots2)
 
