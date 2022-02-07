@@ -555,12 +555,12 @@ if __name__ == "__main__":
 
     Expt5 = Experiment()
     Expt5.expt_type = 'calibration'
-    Expt5.gas_type = ['CalGas', 'H2', 'Ar']
+    Expt5.gas_type = ['CalGas', 'Ar', 'H2']
     Expt5.temp = [273]
     P_CalGas = np.array([100, 50, 10])/100  # pretend one 1000ppm gas
-    P_h2 = P_CalGas*0
-    P_Ar = 1-P_CalGas-P_h2
-    Expt5.gas_comp = np.stack([P_CalGas, P_Ar, P_h2], axis=1).tolist()
+    P_H2 = P_CalGas*0
+    P_Ar = 1-P_CalGas-P_H2
+    Expt5.gas_comp = np.stack([P_CalGas, P_Ar, P_H2], axis=1).tolist()
     Expt5.tot_flow = [50]
     Expt5.sample_name = '20211221_fakesample'
     Expt5.plot_sweep()

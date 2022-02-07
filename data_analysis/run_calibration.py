@@ -37,13 +37,12 @@ if __name__ == "__main__":
     ###########################################################################
 
     log_path = os.path.join(main_dir, 'expt_log.txt')
-    expt_path = os.path.dirname(log_path)
     # import all calibration data
     calDF = pd.read_csv(
         calibration_path, delimiter=',', index_col='Chem ID')
     Expt1 = Experiment()  # Initialize experiment obj
     Expt1.read_expt_log(log_path)  # Read expt parameters from log
-    Expt1.update_save_paths(expt_path)  # update file paths
+    Expt1.update_save_paths(os.path.dirname(log_path))  # update file paths
 
     subplots1, subplots2 = gc_analysis.analyze_cal_data(Expt1, calDF)
 # Standard figsize

@@ -29,8 +29,8 @@ def list_FID(folder_path):
     for filename in sorted(os.listdir(folder_path)):
         # Only assessing files that end with specified filetype
         if (filename.endswith('.ASC')) & ('FID' in filename):
-            #            id = filename[:len(filename)-4] # Disregards the file type and run number
-            #            if id[:-2].endswith('FID'): # Only selects for FID entries
+            # id = filename[:len(filename)-4] # Disregards the file type and run number
+            # if id[:-2].endswith('FID'): # Only selects for FID entries
             files_list.append(filename)
     return files_list
 
@@ -61,7 +61,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     plt.close('all')
 
     # Returns raw counts with error bars for each chemical in each folder
-    results, avg, std = run_analysis(Expt1, calDF)
+    results, avg, std, time_stamps = run_analysis(Expt1, calDF)
 
     # if figsize[0] < 6:
     #     fontsize = [11, 14]
@@ -165,6 +165,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
 
     return(subplots1, subplots2)
 
+
 def run_analysis(Expt1, calDF, basecorrect='True'):
     # Analysis Loop
     # TODO add TCD part
@@ -188,7 +189,8 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     num_fols = len(step_path_list)
     num_chems = int(len(calchemIDs))
     condition = np.full(num_fols, 0, dtype=object)
-    results = np.full((num_fols, num_chems, max_runs), np.nan)
+    results = np.full((num_fols, num_chems+1, max_runs), np.nan)
+    time_stamps = [[] for _ in range(num_fols)]
 
     # Loops through the ind var step and calculates conc in each data file
     for step_path in step_path_list:
@@ -200,29 +202,26 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
         for file in data_list:
             filepath = os.path.join(step_path, file)
             # data is an instance of a class, for signal use data.signal etc
-            data = GCData(filepath)
-
-            if basecorrect is True:
-                data.baseline_correction()
+            data = GCData(filepath, basecorrect=True)
 
             values = data.get_concentrations(calDF)
             conc.append(values.tolist())
 
         num_runs = len(conc)
-        # [Condition x ChemID x run number]
+        # [Condition x [Timestamps, ChemID] x run number]
         results[step_num, :, 0:num_runs] = np.asarray(conc).T
 
     # Results
     ###########################################################################
-    avg_dat = np.nanmean(results, axis=2)
+    avg_dat = np.nanmean(results[:, 1:, :], axis=2)
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)
-    std_dat = np.nanstd(results, axis=2)
+    std_dat = np.nanstd(results[:, 1:, :], axis=2)
     std = pd.DataFrame(std_dat, columns=calchemIDs, index=condition)
 
     np.save(os.path.join(expt_results_fol, 'results'), results)
     avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
     std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
-    return(results, avg, std)
+    return(results, avg, std, time_stamps)
 
 
 def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
@@ -252,13 +251,15 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Initilize run num plot
     fig1, ax1 = plt.subplots()
     # Calculations:
-    calchemIDs = calDF.index.to_numpy()  # get chem IDs from calibration files
-    stoyk = np.zeros(len(calchemIDs))
+    calchemIDs = calDF.index  # get chem IDs from calibration files
+    stoyk = pd.Series(0, index=calchemIDs)
+    time_stamps = results[:, 0, :].reshape(-1)
+    time_stamps = time_stamps[~np.isnan(time_stamps)]
+    time_passed = (time_stamps-time_stamps[0])/60
 
     # Plotting:
-    for chem_num in range(len(calchemIDs)):
-        chemical = calchemIDs[chem_num]
-
+    for chemical in calchemIDs:
+        chem_num = calchemIDs.get_loc(chemical)+1  # index 0 is timestamp
         # read number after 'c' in each chem name
         count = re.findall(mass_bal+r"(\d+)", chemical, re.IGNORECASE)
         if not count:
@@ -269,10 +270,10 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
         else:
             count = int(count[0])
 
-        stoyk[chem_num] = count
+        stoyk[chemical] = count
         ind_results = results[:, chem_num, :]
         ind_results = ind_results[~np.isnan(ind_results)]
-        ax1.plot(ind_results, 'o', label=chemical)
+        ax1.plot(time_passed, ind_results, 'o', label=chemical)
 
     ax1.legend()
     plt.xlabel('Run Number (#)')
@@ -341,18 +342,18 @@ if __name__ == "__main__":
     #                     'Photocatalysis Reactor/Reactor Baseline Experiments/'
     #                     'GC Calibration/calib_202012/HayD_FID_SophiaCal.csv')
 
-    calibration_path = ("G:\\Shared drives\\Photocatalysis Reactor\\"
-                        "Reactor Baseline Experiments\\GC Calibration\\"
-                        "calib_202012\\HayD_FID_Sophia_RawCounts.csv")
-
     # calibration_path = ("G:\\Shared drives\\Photocatalysis Reactor\\"
     #                     "Reactor Baseline Experiments\\GC Calibration\\"
-    #                     "20210930_DummyCalibration\\HayN_FID_C2H2_DummyCal.csv")
+    #                     "calib_202012\\HayD_FID_Sophia_RawCounts.csv")
+
+    calibration_path = ("G:\\Shared drives\\Photocatalysis Reactor\\"
+                        "Reactor Baseline Experiments\\GC Calibration\\"
+                        "20210930_DummyCalibration\\HayN_FID_C2H2_DummyCal.csv")
 
     # Sample Location Info:
     main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
     main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
-    main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220202calibration_273K_0.0mW_50sccm"
+    # main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220202calibration_273K_0.0mW_50sccm"
 
     # Main Script
     ###########################################################################
@@ -368,7 +369,7 @@ if __name__ == "__main__":
                 Expt1.read_expt_log(log_path)  # Read expt parameters from log
                 Expt1.update_save_paths(expt_path)  # update file paths
 
-                (results, avg, std) = run_analysis(Expt1, calDF)
+                (results, avg, std, time_stamps) = run_analysis(Expt1, calDF)
                 (ax1, ax2, ax3) = plot_results(Expt1, calDF, s=['c2h4'], mass_bal='C',
                                                reactant='c2h2', figsize=(4.35, 3.25))
 # Standard figsize
