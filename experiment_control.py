@@ -320,6 +320,12 @@ class Experiment:
 
         os.makedirs(self.results_path, exist_ok=True)
         step_num = 1
+        if self.expt_type == 'stability_test':
+            path = self.data_path
+            os.makedirs(path, exist_ok=True)
+            self.update_expt_log(expt_path)
+            return
+
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
             # Compare Boolean
@@ -564,5 +570,19 @@ if __name__ == "__main__":
     Expt5.tot_flow = [50]
     Expt5.sample_name = '20211221_fakesample'
     Expt5.plot_sweep()
-    Expt5.create_dirs(main_fol)
+    #Expt5.create_dirs(main_fol)
     print('finished expt5')
+
+    Expt6 = Experiment()
+    Expt6.expt_type = 'stability_test'
+    Expt6.gas_type = ['c2h2', 'Ar', 'H2']
+    Expt6.temp = [100]
+    P_c2h2 = 1/100
+    P_h2 = P_c2h2*5
+    P_Ar = 1-P_c2h2-P_h2
+    Expt4.gas_comp = [[P_c2h2, P_Ar, P_h2]]
+    Expt6.tot_flow = [50]
+    Expt6.sample_name = '20210524_8%AgPdMix_1wt%_25mg'
+    Expt6._date = '20211208'
+    Expt6.create_dirs(main_fol)
+    print('finished Expt6')
