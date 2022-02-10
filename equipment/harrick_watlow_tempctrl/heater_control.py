@@ -9,6 +9,14 @@ from pywatlow.watlow import Watlow
 import numpy as np
 import time
 
+def f_to_c(f):
+    """Convert Fahrenheit to Celsius."""
+    return (f - 32.0) / 1.8
+
+
+def c_to_f(c):
+    """Convert Celsius to Fahrenheit."""
+    return c * 1.8 + 32.0
 
 class Heater:
     '''
@@ -51,14 +59,17 @@ class Heater:
         T2 : target setpoint
             DESCRIPTION. The default is 'None'.
         '''
-        refresh_rate = 2  # 1/min
+        T2 = c_to_f(T2)
+        T1 = c_to_f(T1)
+        refresh_rate = 20  # 1/min
         ramp_time = (T2-T1)/self.ramp_rate  # min
-        setpoints = np.linspace(T1, T2, ramp_time*refresh_rate)
+        setpoints = np.linspace(T1, T2, int(ramp_time*refresh_rate))
         for temp in setpoints:
-            self.controller.set(temp)
+            self.controller.write(temp)
             time.sleep(60/refresh_rate)
 
 
 if __name__ == "__main__":
 
     heater = Heater()
+    heater.ramp(0,90)
