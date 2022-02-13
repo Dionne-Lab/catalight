@@ -61,7 +61,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     plt.close('all')
 
     # Returns raw counts with error bars for each chemical in each folder
-    results, avg, std, time_stamps = run_analysis(Expt1, calDF)
+    results, avg, std = run_analysis(Expt1, calDF)
 
     # if figsize[0] < 6:
     #     fontsize = [11, 14]
@@ -190,7 +190,6 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     num_chems = int(len(calchemIDs))
     condition = np.full(num_fols, 0, dtype=object)
     results = np.full((num_fols, num_chems+1, max_runs), np.nan)
-    time_stamps = [[] for _ in range(num_fols)]
 
     # Loops through the ind var step and calculates conc in each data file
     for step_path in step_path_list:
@@ -221,7 +220,7 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     np.save(os.path.join(expt_results_fol, 'results'), results)
     avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
     std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
-    return(results, avg, std, time_stamps)
+    return(results, avg, std)
 
 
 def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
@@ -255,7 +254,13 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     stoyk = pd.Series(0, index=calchemIDs)
     time_stamps = results[:, 0, :].reshape(-1)
     time_stamps = time_stamps[~np.isnan(time_stamps)]
-    time_passed = (time_stamps-time_stamps[0])/60
+    switch_to_hours = 2  # number of hours when axis changes from minutes
+    if np.max(time_stamps) > (switch_to_hours*60*60):
+        time_passed = (time_stamps-np.min(time_stamps))/60/60
+        time_unit = 'hr'
+    else:
+        time_passed = (time_stamps-np.min(time_stamps))/60
+        time_unit = 'min'
 
     # Plotting:
     for chemical in calchemIDs:
@@ -276,8 +281,9 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
         ax1.plot(time_passed, ind_results, 'o', label=chemical)
 
     ax1.legend()
-    plt.xlabel('Run Number (#)')
-    plt.ylabel('Conc (ppm)')
+    plt.xlabel('Time ['+time_unit+']')
+    # TODO add second x axis
+    plt.ylabel('Conc [ppm]')
     plt.tight_layout()
 
     # Initilize ppm vs ind_var plot
@@ -285,15 +291,25 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Calculations:
     units = (Expt1.expt_list['Units']
              [Expt1.expt_list['Active Status']].to_string(index=False))
-    x_data = getattr(Expt1, Expt1.ind_var)
+    try:
+        x_data = getattr(Expt1, Expt1.ind_var)
+    except AttributeError:
+        order = np.argsort(time_passed)
+        x_data = time_passed[order]
+        avg = pd.DataFrame(results[0,1:,order])
+        avg.columns = calchemIDs
+        avg.index = x_data
+        std = 0*avg
+        units = time_unit
+
     mol_count = avg @ (np.array(stoyk, dtype=int))
     print(mass_bal)
     mol_count.columns = ['Total ' + mass_bal]
     mol_error = std @ (np.array(stoyk, dtype=int))
 
     # Plotting:
-    avg[0:len(x_data)].plot(ax=ax2, marker='o', yerr=std)
-    mol_count[0:len(x_data)].plot(ax=ax2, marker='o', yerr=mol_error[0:len(x_data)])
+    avg.iloc[0:len(x_data)].plot(ax=ax2, marker='o', yerr=std)
+    mol_count.iloc[0:len(x_data)].plot(ax=ax2, marker='o', yerr=mol_error.iloc[0:len(x_data)])
     ax2.set_xlabel(Expt1.ind_var + ' ['+units+']')
     ax2.set_ylabel('Conc (ppm)')
     plt.tight_layout()
@@ -309,8 +325,8 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     S = (avg[s[0]]/(C_Tot*X/100))*100  # selectivity
 
     # Plotting:
-    X[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--o')
-    S[0:len(x_data)].plot(ax=ax3, yerr=X_err*S, fmt='--^')
+    X.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--o')
+    S.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*S, fmt='--^')
     ax3.set_xlabel(Expt1.ind_var + ' ['+units+']')
     ax3.set_ylabel('Conv./Selec. [%]')
     plt.legend(['Conversion', 'Selectivity'])
@@ -354,7 +370,7 @@ if __name__ == "__main__":
     main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
     main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
     # main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220202calibration_273K_0.0mW_50sccm"
-
+    main_dir = r"C:\Users\brile\Documents\Temp Files\20211208stability_test_100K_0.0mW_0.01c2h2_0.94Ar_0.05H2frac_50sccm"
     # Main Script
     ###########################################################################
     for dirpath, dirnames, filenames in os.walk(main_dir):
@@ -369,7 +385,7 @@ if __name__ == "__main__":
                 Expt1.read_expt_log(log_path)  # Read expt parameters from log
                 Expt1.update_save_paths(expt_path)  # update file paths
 
-                (results, avg, std, time_stamps) = run_analysis(Expt1, calDF)
+                (results, avg, std) = run_analysis(Expt1, calDF)
                 (ax1, ax2, ax3) = plot_results(Expt1, calDF, s=['c2h4'], mass_bal='C',
                                                reactant='c2h2', figsize=(4.35, 3.25))
 # Standard figsize

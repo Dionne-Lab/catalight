@@ -321,7 +321,7 @@ class Experiment:
         os.makedirs(self.results_path, exist_ok=True)
         step_num = 1
         if self.expt_type == 'stability_test':
-            path = self.data_path
+            path = os.path.join(self.data_path, '1 Stability_Test')
             os.makedirs(path, exist_ok=True)
             self.update_expt_log(expt_path)
             return
@@ -518,7 +518,7 @@ if __name__ == "__main__":
     plt.close('all')
     # main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
     #             "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")
-    main_fol = 'C:\\Users\\brile\\Documents\\Temp Files\\Calibration_dummy'
+    main_fol = 'C:\\Users\\brile\\Documents\\Temp Files'
     Expt1 = Experiment()
     Expt1.expt_type = 'temp_sweep'
     Expt1.temp = list(np.arange(30, 150, 10)+273)
@@ -580,7 +580,7 @@ if __name__ == "__main__":
     P_c2h2 = 1/100
     P_h2 = P_c2h2*5
     P_Ar = 1-P_c2h2-P_h2
-    Expt4.gas_comp = [[P_c2h2, P_Ar, P_h2]]
+    Expt6.gas_comp = [[P_c2h2, P_Ar, P_h2]]
     Expt6.tot_flow = [50]
     Expt6.sample_name = '20210524_8%AgPdMix_1wt%_25mg'
     Expt6._date = '20211208'
