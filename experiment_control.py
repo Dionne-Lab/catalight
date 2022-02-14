@@ -93,11 +93,8 @@ class Experiment:
             # eqpt_list needs to be tuple
             self._gc_control = eqpt_list[0]
             self._laser_control = eqpt_list[1]
-            self._MFC_A = eqpt_list[2]
-            self._MFC_B = eqpt_list[3]
-            self._MFC_C = eqpt_list[4]
-            self._MFC_D = eqpt_list[5]
-            #self._heater = eqpt_list[6]
+            self._gas_control = eqpt_list[2]
+            self._heater = eqpt_list[3]
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
@@ -359,8 +356,8 @@ class Experiment:
         plt.rcParams['font.size'] = 14
         plt.rcParams['axes.labelsize'] = 18
 
-        sample_rate = 10  # TODO import this, sample/min
-        heat_rate = 10  # TODO import, deg/min
+        sample_rate = self._gc_control.sample_rate  # sample/min
+        heat_rate = self._heater.ramp_rate  # deg/min
         sweep_val = getattr(self, self.ind_var)
         selector = self.expt_list['Active Status']
         sweep_title = (self.expt_list['Independent Variable']
@@ -376,7 +373,6 @@ class Experiment:
             elif units == 'C':
                 setpoint0 = 20
 
-            heat_rate = 10  # TODO import, deg/min
             delta_T = np.diff(sweep_val)
             t_trans = np.append((sweep_val[0]-setpoint0), delta_T)/heat_rate
         else:
@@ -427,15 +423,15 @@ class Experiment:
 
         return (fig, ax1, ax2)
 
+    def set_initial_conditions(self):
+
+        self._heater.ramp(self.temp[0])
+        self._laser_control.set_power(self.power[0])
+        self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
+        self._gas_control.set_gasses(self.gas_type)
+
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
-
-        # TODO create custom gas mix for this
-        # Note: I could wrap all the MFCs in a single class
-        self._MFC_A.set_gas(self.gas_type[0])
-        self._MFC_B.set_gas(self.gas_type[1])
-        self._MFC_C.set_gas(self.gas_type[2])
-        self._MFC_D.set_gas(self.gas_type[1])
 
         step_num = 1
         # Creates subfolders for each step of experiment
@@ -456,40 +452,20 @@ class Experiment:
 
             # This chooses the run type and sets condition accordingly
             if self.expt_type == 'temp_sweep':
-                print('temp_sweep no yet fully supported')
+                self._heater.ramp(step)
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
-
-                self._MFC_A.set_flow_rate(float(step[0]*self.tot_flow[0]))
-                self._MFC_B.set_flow_rate(float(step[1]*self.tot_flow[0]))
-                self._MFC_C.set_flow_rate(float(step[2]*self.tot_flow[0]))
+                self._gas_control.set_flows(step, self.tot_flow[0])
                 print(self.gas_type)
                 print(step*self.tot_flow)
-                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-                      + self._MFC_A.get()['gas'])
-                print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-                      + self._MFC_B.get()['gas'])
-                print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-                      + self._MFC_C.get()['gas'])
-                print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-                      + self._MFC_D.get()['gas'])
+                self._gas_control.print_flows()
 
             elif self.expt_type == 'flow_sweep':
-
-                self._MFC_A.set_flow_rate(float(self.gas_comp[0][0]*step))
-                self._MFC_B.set_flow_rate(float(self.gas_comp[0][1]*step))
-                self._MFC_C.set_flow_rate(float(self.gas_comp[0][2]*step))
+                self._gas_control.set_flows(self.gas_comp[0], step)
                 print(self.gas_type)
                 print(np.array(self.gas_comp)*step)
-                print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-                      + self._MFC_A.get()['gas'])
-                print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-                      + self._MFC_B.get()['gas'])
-                print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-                      + self._MFC_C.get()['gas'])
-                print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-                      + self._MFC_D.get()['gas'])
+                self._gas_control.print_flows()
 
             # Very important to have a pause after using the GC!!
             print('Waiting for steady state:')

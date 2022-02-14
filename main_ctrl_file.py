@@ -7,7 +7,8 @@ Study control file: test main script before the development of a fully integrate
 """
 from equipment.sri_gc.gc_control import GC_Connector
 from equipment.diode_laser.diode_control import Diode_Laser
-from alicat import FlowController, FlowMeter
+from equipment.harrick_watlow.heater_control import Heater
+from equipment.alicat_MFC.gas_control import Gas_System
 from experiment_control import Experiment
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,20 +18,15 @@ import os
 def initialize_equipment():
     gc_connector = GC_Connector()
     laser_controller = Diode_Laser()
-    MFC_A = FlowController(port='COM8', address='A')
-    MFC_B = FlowController(port='COM9', address='B')
-    MFC_C = FlowController(port='COM6', address='C')
-    MFC_D = FlowMeter(port='COM7', address='D')
-    # Heater will be added hear in future
-
-    return (gc_connector, laser_controller, MFC_A, MFC_B, MFC_C, MFC_D)
+    gas_controller = Gas_System()
+    heater = Heater()
+    return (gc_connector, laser_controller, gas_controller, heater)
 
 
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()
-    MFC_A, MFC_B, MFC_C, MFC_D = eqpt_list[2:6]
-    for MFC in [MFC_A, MFC_B, MFC_C, MFC_D]:
-        print(MFC.get())
+    gas_controller = eqpt_list[2]
+    gas_controller.print_details()
 
     plt.close('all')
     main_fol = (r"C:\\Peak489Win10\\GCDATA\\"
@@ -47,6 +43,7 @@ if __name__ == "__main__":
     Expt1.create_dirs(main_fol)
     Expt1.run_experiment()
     print('finished expt3')
-    MFC_A.set_flow_rate(1)
-    MFC_B.set_flow_rate(1)
-    MFC_C.set_flow_rate(1)
+
+    # Shutdown Process
+    gas_controller.shut_down()
+    eqpt_list[3].turn_off()
