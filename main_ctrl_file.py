@@ -28,26 +28,25 @@ def initialize_equipment():
 
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()
-    MFC_A, MFC_B, MFC_C, MFC_D = eqpt_list[2:6] 
+    MFC_A, MFC_B, MFC_C, MFC_D = eqpt_list[2:6]
     for MFC in [MFC_A, MFC_B, MFC_C, MFC_D]:
         print(MFC.get())
-    
+
     plt.close('all')
     main_fol = (r"C:\\Peak489Win10\\GCDATA\\"
                 "20220122_CodeTest")
     os.makedirs(main_fol, exist_ok=True)
-    Expt3 = Experiment(eqpt_list)
-    Expt3.expt_type = 'flow_sweep'
-    Expt3.temp = [273]
-    Expt3.gas_type = ['N2', 'Ar', 'N2']
-    Expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
-    Expt3.tot_flow = list(np.arange(10, 60, 10))
-    Expt3.sample_name = '20211221_fakesample'
-    Expt3.plot_sweep()
-    Expt3.create_dirs(main_fol)
-    Expt3.run_experiment()
+    Expt1 = Experiment(eqpt_list)
+    Expt1.expt_type = 'flow_sweep'
+    Expt1.temp = [273]
+    Expt1.gas_type = ['N2', 'Ar', 'N2']
+    Expt1.gas_comp = [[0.01, 1-0.06, 0.05]]
+    Expt1.tot_flow = list(np.arange(10, 60, 10))
+    Expt1.sample_name = '20211221_fakesample'
+    Expt1.plot_sweep()
+    Expt1.create_dirs(main_fol)
+    Expt1.run_experiment()
     print('finished expt3')
     MFC_A.set_flow_rate(1)
     MFC_B.set_flow_rate(1)
     MFC_C.set_flow_rate(1)
-
