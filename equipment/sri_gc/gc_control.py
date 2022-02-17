@@ -8,7 +8,6 @@ TODO: integrate TCD
 @author: Briley Bourgeois
 """
 
-import Peaksimple  # Import the assembly namespace, which has a different name
 import os
 import re
 import time
@@ -18,7 +17,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 assemblydir = os.path.join(dir_path, 'PeaksimpleClient', 'PeaksimpleConnector.dll')
 
 clr.AddReference(assemblydir)  # Add the assembly to python.NET
-
+import Peaksimple  # Import the assembly namespace, which has a different name
 # Now that the Assembly has been added to python.NET,
 # it can be imported like a normal module
 # the default won't run from the repo for some reason

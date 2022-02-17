@@ -22,7 +22,7 @@ def convert_temp(old_unit, new_unit, temp):
     return conversion[old_unit.lower()+'_to_'+new_unit.lower()]
 
 max_temp = 450  # Max temp in C; 450C reduces lifetime 900C is real max
-
+#TODO integrate max temp
 class Heater:
     '''
     Connects with and controls watlow heater. allows ramping, reading set point
@@ -33,8 +33,8 @@ class Heater:
         """Connects to watlow, prints current state"""
         self.controller = Watlow(port='COM5', address=1)
         print('Heater Initializing...')
-        print('Current temperature = ' + self.read_temp() + ' C')
-        print('Current setpoint = ' + self.read_setpoint() + ' C')
+        print('Current temperature = ' + str(self.read_temp()) + ' C')
+        print('Current setpoint = ' + str(self.read_setpoint()) + ' C')
         self.ramp_rate = 15  # C/min
 
     def read_temp(self, temp_units='C'):
@@ -80,11 +80,15 @@ class Heater:
         refresh_rate = 20  # 1/min
         ramp_time = (T2-T1)/self.ramp_rate  # min
         setpoints = np.linspace(T1, T2, abs(int(ramp_time*refresh_rate)))
+        print('Starting Temp = ' + str(self.read_temp()))
+      
         for temp in setpoints:
             temp = convert_temp('C', 'F', temp)  # Change units to F
             self.controller.write(temp)  # write to controller
             time.sleep(60/refresh_rate)  # wait
-
+        
+        print('Soak Temp = ' + str(self.read_temp()))
+        
     def test_heater_performance(self, T2, T1=None, temp_units='C'):
         '''
         ramps the heater from T1 to T2
@@ -129,7 +133,7 @@ class Heater:
         return (read_out, ax.get_figure(), ax)
 
 if __name__ == "__main__":
-    save_path = 'something'
+    save_path = r"C:\temp control\20210214_heater_test"
     heater = Heater()
     heater.ramp(30)
     time.sleep(300)

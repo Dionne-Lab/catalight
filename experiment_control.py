@@ -222,7 +222,8 @@ class Experiment:
             self.gas_comp = literal_eval(data[9])
             self.tot_flow = literal_eval(data[10])
             expt_path = os.path.dirname(log_path)
-            self.update_save_paths(expt_path)  # Will throw error if no data folders
+            # Will throw error if no data folders
+            self.update_save_paths(expt_path)
 
     def _update_expt_name(self):
         """
@@ -330,7 +331,8 @@ class Experiment:
                      [self.expt_list['Active Status']].to_string(index=False))
 
             if self._ind_var == 'gas_comp':
-                step_str = '_'.join([str(m)+n for m, n in zip(step, self.gas_type)])
+                step_str = '_'.join(
+                    [str(m)+n for m, n in zip(step, self.gas_type)])
                 path = os.path.join(self.data_path,
                                     ('%i %s%s' % (step_num, step_str, units)))
             else:
@@ -425,14 +427,15 @@ class Experiment:
 
     def set_initial_conditions(self):
 
-        self._heater.ramp(self.temp[0])
-        self._laser_control.set_power(self.power[0])
+        self._heater.ramp(self.temp[0], temp_units=self.expt_list['Units'][0])
+        if self.power[0] > 0:
+            self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
 
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
-
+        self.set_initial_conditions()
         step_num = 1
         # Creates subfolders for each step of experiment
         for step in getattr(self, self._ind_var):
@@ -442,7 +445,8 @@ class Experiment:
                      [self.expt_list['Active Status']].to_string(index=False))
 
             if self._ind_var == 'gas_comp':
-                step_str = '_'.join([str(m)+n for m, n in zip(step, self.gas_type)])
+                step_str = '_'.join(
+                    [str(m)+n for m, n in zip(step, self.gas_type)])
                 path = os.path.join(self.data_path,
                                     ('%i %s%s' % (step_num, step_str, units)))
             else:
@@ -452,7 +456,7 @@ class Experiment:
 
             # This chooses the run type and sets condition accordingly
             if self.expt_type == 'temp_sweep':
-                self._heater.ramp(step)
+                self._heater.ramp(step,  temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
@@ -546,7 +550,7 @@ if __name__ == "__main__":
     Expt5.tot_flow = [50]
     Expt5.sample_name = '20211221_fakesample'
     Expt5.plot_sweep()
-    #Expt5.create_dirs(main_fol)
+    # Expt5.create_dirs(main_fol)
     print('finished expt5')
 
     Expt6 = Experiment()
@@ -560,5 +564,5 @@ if __name__ == "__main__":
     Expt6.tot_flow = [50]
     Expt6.sample_name = '20210524_8%AgPdMix_1wt%_25mg'
     Expt6._date = '20211208'
-    Expt6.create_dirs(main_fol)
+    #Expt6.create_dirs(main_fol)
     print('finished Expt6')
