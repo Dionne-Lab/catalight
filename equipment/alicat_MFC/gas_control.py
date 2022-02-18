@@ -36,14 +36,14 @@ class Gas_System:
 
     def print_flows(self):
 
-        print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-              + self._MFC_A.get()['gas'])
-        print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-              + self._MFC_B.get()['gas'])
-        print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-              + self._MFC_C.get()['gas'])
-        print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-              + self._MFC_D.get()['gas'])
+        print('MFC A = ' + str(self.mfc_A.get()['setpoint'])
+              + self.mfc_A.get()['gas'])
+        print('MFC B = ' + str(self.mfc_B.get()['setpoint'])
+              + self.mfc_B.get()['gas'])
+        print('MFC C = ' + str(self.mfc_C.get()['setpoint'])
+              + self.mfc_C.get()['gas'])
+        print('MFC D = ' + str(self.mfc_D.get()['mass_flow'])
+              + self.mfc_D.get()['gas'])
 
     def print_details(self):
         print(self.mfc_A.get())
