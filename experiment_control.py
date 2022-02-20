@@ -65,7 +65,7 @@ class Experiment:
              ['comp_sweep',  'gas_comp', False, 'frac'],
              ['flow_sweep',  'tot_flow', False, 'sccm'],
              ['calibration', 'gas_comp', False,  'ppm'],
-             ['stability_test',  'time', False,  'min']],
+             ['stability_test',  'temp', False,  'min']],
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
@@ -432,6 +432,7 @@ class Experiment:
             self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
+        self._gas_control.set_gasD(self.gas_type, self.gas_comp[0])
 
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
