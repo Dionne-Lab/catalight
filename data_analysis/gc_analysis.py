@@ -182,7 +182,6 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
         num_data_points = len(list_FID(dirpath))  # only looks at .ASC
         if not dirnames:  # determine bottom most dirs
             step_path_list.append(dirpath)
-            print(dirpath)
         if num_data_points > max_runs:  # Determines largest # of runs in any dir
             max_runs = num_data_points
 
@@ -223,11 +222,13 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     return(results, avg, std)
 
 
-def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
+def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     # Plotting
     ###########################################################################
     print('Plotting...')
     plt.close('all')
+
+    results, avg, std = data_list
 
     if figsize[0] < 6:
         fontsize = [11, 14]
@@ -323,6 +324,7 @@ def plot_results(Expt1, calDF, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
     rel_err = std/avg
     X_err = ((rel_err**2).sum(axis=1))**(1/2)*rel_err[reactant]
     S = (avg[s[0]]/(C_Tot*X/100))*100  # selectivity
+    S = S.fillna(0)
 
     # Plotting:
     X.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--o')
@@ -367,10 +369,9 @@ if __name__ == "__main__":
                         "20210930_DummyCalibration\\HayN_FID_C2H2_DummyCal.csv")
 
     # Sample Location Info:
-    main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
-    main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
-    # main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220202calibration_273K_0.0mW_50sccm"
-    main_dir = r"C:\Users\brile\Documents\Temp Files\20211208stability_test_100K_0.0mW_0.01c2h2_0.94Ar_0.05H2frac_50sccm"
+    main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
+                r'\Ensemble Reactor\20220201_Ag95Pd5_2wt%_25.2mg_shaken')
+
     # Main Script
     ###########################################################################
     for dirpath, dirnames, filenames in os.walk(main_dir):
@@ -386,7 +387,7 @@ if __name__ == "__main__":
                 Expt1.update_save_paths(expt_path)  # update file paths
 
                 (results, avg, std) = run_analysis(Expt1, calDF)
-                (ax1, ax2, ax3) = plot_results(Expt1, calDF, s=['c2h4'], mass_bal='C',
+                (ax1, ax2, ax3) = plot_results(Expt1, calDF, (results, avg, std), s=['c2h4'], mass_bal='C',
                                                reactant='c2h2', figsize=(4.35, 3.25))
 # Standard figsize
 # 1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
