@@ -76,6 +76,8 @@ class GC_Connector():
         for attempt in range(0, 3):
             try:
                 self.peaksimple.LoadControlFile(self.ctrl_file)
+                if attempt > 0:
+                    print('Successful!')
                 break
             except Peaksimple.ConnectionWriteFailedException:
                 print('Write error. Retrying...')

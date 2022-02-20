@@ -7,6 +7,7 @@ Created on Sun Feb 13 20:56:51 2022
 
 from alicat import FlowController, FlowMeter
 import pandas as pd
+import numpy as np
 
 factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
                   'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
@@ -23,7 +24,6 @@ class Gas_System:
         self.mfc_A.set_gas(gas_list[0])
         self.mfc_B.set_gas(gas_list[1])
         self.mfc_C.set_gas(gas_list[2])
-        self.mfc_D.set_gas(gas_list[1])
 
     def set_flows(self, comp_list, tot_flow):
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
@@ -31,19 +31,25 @@ class Gas_System:
         self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
 
     def set_gasD(self, gas_list, comp_list):
+        # convert to percents, make dict, drop zero values
+        percents = np.array(comp_list, dtype=float)*100
+        gas_dict = dict(zip(gas_list, percents))
+        gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
+        
         self.mfc_D.create_mix(mix_no=236, name='output',
-                              gases=dict(zip(gas_list, comp_list)))
+                              gases=gas_dict)
+        self.mfc_D.set_gas(236)
 
     def print_flows(self):
 
-        print('MFC A = ' + str(self._MFC_A.get()['setpoint'])
-              + self._MFC_A.get()['gas'])
-        print('MFC B = ' + str(self._MFC_B.get()['setpoint'])
-              + self._MFC_B.get()['gas'])
-        print('MFC C = ' + str(self._MFC_C.get()['setpoint'])
-              + self._MFC_C.get()['gas'])
-        print('MFC D = ' + str(self._MFC_D.get()['mass_flow'])
-              + self._MFC_D.get()['gas'])
+        print('MFC A = ' + str(self.mfc_A.get()['setpoint'])
+              + self.mfc_A.get()['gas'])
+        print('MFC B = ' + str(self.mfc_B.get()['setpoint'])
+              + self.mfc_B.get()['gas'])
+        print('MFC C = ' + str(self.mfc_C.get()['setpoint'])
+              + self.mfc_C.get()['gas'])
+        print('MFC D = ' + str(self.mfc_D.get()['mass_flow'])
+              + self.mfc_D.get()['gas'])
 
     def print_details(self):
         print(self.mfc_A.get())
