@@ -8,6 +8,8 @@ Created on Sun Feb 13 20:56:51 2022
 from alicat import FlowController, FlowMeter
 import pandas as pd
 import numpy as np
+import time
+import os
 
 factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
                   'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
@@ -58,11 +60,22 @@ class Gas_System:
         print(self.mfc_D.get())
 
     def shut_down(self):
-        '''Sets MFC B to 1 sccm and others to 0'''
-        self.mfc_A.set_flow_rate(0.0)
-        self.mfc_B.set_flow_rate(1.0)
-        self.mfc_C.set_flow_rate(0.0)
+        '''Sets MFC with Ar or N2 running to 1 sccm and others to 0'''
+        mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C]
+        for mfc in mfc_list:
+            if mfc.get()['gas'] in ['Ar', 'N2']:
+                self.mfc.set_flow_rate(1.0)
+            else:
+                self.mfc.set_flow_rate(0.0)
 
+    def disconnect(self):
+        self.shut_down()
+        self.mfc_A.close()
+        self.mfc_B.close()
+        self.mfc_C.close()
+        self.mfc_D.close()
+        del self
+        
     def set_calibration_gas(self, mfc, calDF, fill_gas='Ar'):
         '''Sets a custom gas mixture for the mfc of choice, typically for
         calibration gas. This function uses the standard calDF format utilized
@@ -78,3 +91,38 @@ class Gas_System:
             new_idx.loc[chemical] = chemical in factory_gasses
         percents = percents[new_idx[0]]
         mfc.create_mix(mix_no=237, name='CalGas', gases=percents[0:5].to_dict())
+
+    def test_pressure(self, path):
+        print('Testing Pressure Build-up...')
+        output = pd.DataFrame(columns=['time', 'setpoint', 'flow rate', 'pressure'])
+        mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C]
+        sample_num = 0
+        for mfc in mfc_list:
+            if mfc.get()['gas'] in ['Ar', 'N2']:
+                test_mfc = mfc
+            else:
+                mfc.set_flow_rate(0.0)
+        print('Starting Conditions:')
+        self.print_flows()
+        start_time = time.time()
+        for setpoint in range(5, 51, 5):
+            test_mfc.set_flow_rate(setpoint)
+            for sample in range(0,5):
+                pressure = test_mfc.get()['pressure']
+                flow_rate = test_mfc.get()['mass_flow']
+                reading = [(time.time()-start_time)/60,
+                           setpoint, flow_rate, pressure]
+                print('time: %4.1f (min) setpoint: %4.2f (sccm) '
+                      'flow rate: %4.2f (sccm) pressure: %4.2f (psia)' % tuple(reading))
+                output.loc[sample_num] = reading
+                time.sleep(60)
+                sample_num += 1
+        
+        ax1 = output.plot(x='time', y='pressure', ylabel='Pressure (psia)')
+        ax2 = ax1.twinx()
+        ax2.spines['right'].set_position(('axes', 1.0))
+        output.plot(ax=ax2, x='time', 
+                    y=['setpoint', 'flow rate'], ylabel='Flow Rate (sccm)')
+        fig = ax1.get_figure()
+        fig.savefig(os.path.join(path, 'flow_test.svg'), format='svg')
+        output.to_csv(os.path.join(path, 'flow_test.csv'))
