@@ -64,9 +64,9 @@ class Gas_System:
         mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C]
         for mfc in mfc_list:
             if mfc.get()['gas'] in ['Ar', 'N2']:
-                self.mfc.set_flow_rate(1.0)
+                mfc.set_flow_rate(1.0)
             else:
-                self.mfc.set_flow_rate(0.0)
+                mfc.set_flow_rate(0.0)
 
     def disconnect(self):
         self.shut_down()
@@ -102,6 +102,7 @@ class Gas_System:
                 test_mfc = mfc
             else:
                 mfc.set_flow_rate(0.0)
+        self.mfc_D.set_gas(test_mfc.get()['gas'])
         print('Starting Conditions:')
         self.print_flows()
         start_time = time.time()
@@ -109,7 +110,7 @@ class Gas_System:
             test_mfc.set_flow_rate(setpoint)
             for sample in range(0,5):
                 pressure = test_mfc.get()['pressure']
-                flow_rate = test_mfc.get()['mass_flow']
+                flow_rate = self.mfc_D.get()['mass_flow']
                 reading = [(time.time()-start_time)/60,
                            setpoint, flow_rate, pressure]
                 print('time: %4.1f (min) setpoint: %4.2f (sccm) '
@@ -118,7 +119,7 @@ class Gas_System:
                 time.sleep(60)
                 sample_num += 1
         
-        ax1 = output.plot(x='time', y='pressure', ylabel='Pressure (psia)')
+        ax1 = output.plot(x='time', y='pressure', ylabel='Pressure (psia)', style='--ok')
         ax2 = ax1.twinx()
         ax2.spines['right'].set_position(('axes', 1.0))
         output.plot(ax=ax2, x='time', 
