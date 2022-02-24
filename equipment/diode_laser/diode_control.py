@@ -166,6 +166,8 @@ class Diode_Laser():
         '''Sets current output of controller. Use this only when running
         calibration reads warning messages when changing power'''
         Vout = I_set/self._k_mod  # (V) Voltage output set point
+        print(I_set)
+        print(Vout)
         # Convert to 16bit
         Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
@@ -180,8 +182,8 @@ class Diode_Laser():
         # Unmutes and sets Vol in dB -0.0 is 100%
         volume_control.SetMute(0, None)
         volume_control.SetMasterVolumeLevel(-2.0, None)
-        voice_control.say('Warning: Setting power to'
-                          + str(P_set) + 'milliwatts')
+        voice_control.say('Warning: Setting current to'
+                          + str(I_set) + 'milliamps')
         voice_control.runAndWait()
 
 if __name__ == "__main__":

@@ -45,10 +45,37 @@ if __name__ == "__main__":
     # Expt1.run_experiment()
     # print('finished Expt1')
     
+    # eqpt_list[0].sample_set_size = 4
+    # Expt2 = Experiment(eqpt_list)
+    # Expt2.expt_type = 'temp_sweep'
+    # Expt2.temp = list(np.arange(300, 401, 10))
+    # Expt2.gas_type = ['C2H2', 'Ar', 'H2']
+    # Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
+    # Expt2.tot_flow = [10]
+    # Expt2.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
+    # Expt2.plot_sweep()
+    # Expt2.create_dirs(main_fol)
+    # Expt2.run_experiment()
+    # print('finished Expt2')
+    
+    # eqpt_list[0].sample_set_size = 4
+    # Expt3 = Experiment(eqpt_list)
+    # Expt3.expt_type = 'temp_sweep'
+    # Expt3.temp = list(np.arange(300, 401, 10))
+    # Expt3.gas_type = ['C2H2', 'Ar', 'H2']
+    # Expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
+    # Expt3.tot_flow = [10]
+    # Expt3.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
+    # Expt3.plot_sweep()
+    # Expt3.create_dirs(main_fol)
+    # Expt3.run_experiment()
+    # print('finished Expt3')
+    
     eqpt_list[0].sample_set_size = 4
     Expt2 = Experiment(eqpt_list)
-    Expt2.expt_type = 'temp_sweep'
-    Expt2.temp = list(np.arange(300, 401, 10))
+    Expt2.expt_type = 'power_sweep'
+    Expt2.temp = [300]
+    Expt2.power = list(np.arange(50, 300, 75))
     Expt2.gas_type = ['C2H2', 'Ar', 'H2']
     Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
     Expt2.tot_flow = [10]
@@ -60,8 +87,9 @@ if __name__ == "__main__":
     
     eqpt_list[0].sample_set_size = 4
     Expt3 = Experiment(eqpt_list)
-    Expt3.expt_type = 'temp_sweep'
-    Expt3.temp = list(np.arange(300, 401, 10))
+    Expt3.expt_type = 'power_sweep'
+    Expt3.temp = [300]
+    Expt2.power = list(np.arange(50, 300, 75))
     Expt3.gas_type = ['C2H2', 'Ar', 'H2']
     Expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
     Expt3.tot_flow = [10]
@@ -74,6 +102,7 @@ if __name__ == "__main__":
     # Shutdown Process
     gas_controller.shut_down()
     eqpt_list[3].turn_off()
+    eqpt_list[1].power_off()
     
     # Expt3 = Experiment(eqpt_list)
     # Expt3.expt_type = 'flow_sweep'

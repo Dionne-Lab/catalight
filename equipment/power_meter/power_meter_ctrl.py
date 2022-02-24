@@ -30,18 +30,6 @@ class NewportMeter:
         else:
             print('No Sensor attached to {0} !!!'.format(self.Device))
     
-    # def change_range(self):
-    #     # An Example for Range control. first get the ranges
-    #     ranges = self.OphirCOM.GetRanges(self.DeviceHandle, 0)
-    #     print (ranges)
-    #     # change range at your will
-    #     if ranges[0] > 0:
-    #         newRange = ranges[0]-1
-    #     else:
-    #         newRange = ranges[0]+1
-    #     # set new range
-    #     self.OphirCOM.SetRange(self.DeviceHandle, 0, newRange)
-    
     def change_wavelength(self, wavelength):
         # Changes to desired wavelength, modifies slot 4 if wavelength DNE
         wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
@@ -52,15 +40,14 @@ class NewportMeter:
         self.OphirCOM.SetWavelength(self.DeviceHandle, 0, idx)
     
     def read(self, averaging_time=0.5):
-      
+        # Reads out averaged power in mW
+        self.OphirCOM.SetRange(self.DeviceHandle, 0, 0)  # set range to auto
         self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
         time.sleep(averaging_time)  # wait a little for data
         data = self.OphirCOM.GetData(self.DeviceHandle, 0)
-        reading = sum(list(data[0]))/len(data[0])  # average the readout
+        reading = sum(list(data[0]))/len(data[0])*1000 # average the readout
         timestamp = time.time()  # get time
         self.OphirCOM.StopAllStreams() # stop measuring
-        range_info = self.OphirCOM.GetRanges(self.DeviceHandle, 0)
-        range_val = range_info[1][range_info[0]] # I might need this later
         return(timestamp, reading)
     
     def shut_down(self):
