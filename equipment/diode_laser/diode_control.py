@@ -77,7 +77,7 @@ class Diode_Laser():
     ai_range = property(lambda self: self._ai_range)
 
     def set_power(self, P_set):
-        '''Reads in laser power and sends signal to DAQ to mach input power.
+        '''Reads in laser power and sends signal to DAQ to match input power.
         The necessary current is sent based on a externally performed
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
@@ -97,7 +97,8 @@ class Diode_Laser():
         print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
         print('Set Point = ' + str(P_set))
         print(time.ctime())
-        # Sets Vol in dB -0.0 is 100%
+        # Unmutes and sets Vol in dB -0.0 is 100%
+        volume_control.SetMute(0, None)
         volume_control.SetMasterVolumeLevel(-2.0, None)
         voice_control.say('Warning: Setting power to'
                           + str(P_set) + 'milliwatts')
@@ -155,12 +156,35 @@ class Diode_Laser():
         read outs warning message'''
         # Consider upgrading this to use asyncio or threading.Timer and have
         # the code put out 5 4 3 2 1 minute warnings on a seperate thread
-        # Sets Vol in dB -0.0 is 100%
-        volume_control.SetMasterVolumeLevel(-2.0, None)
+        # Unmutes and sets Vol in dB -0.0 is 100%
+        volume_control.SetMute(0, None)
         voice_control.say(
             f'Warning: Diode laser will automatically engage in {time_left} minutes')
         voice_control.runAndWait()
+        
+    def set_current(self, I_set):
+        '''Sets current output of controller. Use this only when running
+        calibration reads warning messages when changing power'''
+        Vout = I_set/self._k_mod  # (V) Voltage output set point
+        print(I_set)
+        print(Vout)
+        # Convert to 16bit
+        Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
+        # Send signal to DAQ Board
+        ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+        Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+        Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                              self._ai_range, Vin_value)
+
+        print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
+        print(time.ctime())
+        # Unmutes and sets Vol in dB -0.0 is 100%
+        volume_control.SetMute(0, None)
+        volume_control.SetMasterVolumeLevel(-2.0, None)
+        voice_control.say('Warning: Setting current to'
+                          + str(I_set) + 'milliamps')
+        voice_control.runAndWait()
 
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
