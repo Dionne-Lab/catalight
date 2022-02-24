@@ -249,7 +249,7 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     plt.rcParams['axes.labelsize'] = fontsize[1]
 
     # Initilize run num plot
-    fig1, ax1 = plt.subplots()
+    fig1, ax1 = plt.subfigs()
     # Calculations:
     calchemIDs = calDF.index  # get chem IDs from calibration files
     stoyk = pd.Series(0, index=calchemIDs)
