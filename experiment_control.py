@@ -432,6 +432,8 @@ class Experiment:
 
         self._heater.ramp(self.temp[0], temp_units=self.expt_list['Units'][0])
         if self.power[0] > 0:
+            self._laser_control.time_warning(1)
+            time.sleep(60)  # Wait for a minute before turning on laser for safety
             self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)

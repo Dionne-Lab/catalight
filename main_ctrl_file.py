@@ -56,6 +56,8 @@ if __name__ == "__main__":
     main_fol = (r'C:\Peak489Win10\GCDATA\20220201_Ag95Pd5_2wt%_25.2mg_shaken')
     os.makedirs(main_fol, exist_ok=True)
 
+    eqpt_list[2].test_pressure(path)
+
     eqpt_list[0].sample_set_size = 4
     Expt2 = Experiment(eqpt_list)
     Expt2.expt_type = 'temp_sweep'
