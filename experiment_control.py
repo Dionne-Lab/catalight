@@ -425,7 +425,7 @@ class Experiment:
         plt.ylabel(sweep_title + ' ['+units+']')
         plt.tight_layout()
         plt.show()
-        run_time = t_set[-1]
+        run_time = t_set[-1]  #TODO break this out into seperate func
         return (fig, ax1, ax2, run_time)
 
     def set_initial_conditions(self):
