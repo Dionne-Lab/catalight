@@ -34,10 +34,13 @@ def calculate_time(expt_list):
             time_off = time.strftime('%b-%d at %I:%M%p', laser_off)
             print('laser on from %s to %s' % (time_on, time_off))
 
+        end_time = time.localtime(start_time + 60*sum(run_time))
+        print('experiment will end on %s' % end_time)
+
 def shut_down(eqpt_list):
     gc_connector, laser_controller, gas_controller, heater = eqpt_list
-    laser_controller.power_off()
-    heater.turn_off()
+    laser_controller.shut_down()
+    heater.shut_down()
     gas_controller.shut_down()
 
 def run_study(expt_list, eqpt_list):

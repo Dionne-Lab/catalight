@@ -104,7 +104,7 @@ class Diode_Laser():
                           + str(P_set) + 'milliwatts')
         voice_control.runAndWait()
 
-    def power_off(self):
+    def shut_down(self):
         '''Sets power of laser to 0'''
         Vout = 0  # (V) Voltage output set point
         # Convert to 16bit
@@ -161,7 +161,7 @@ class Diode_Laser():
         voice_control.say(
             f'Warning: Diode laser will automatically engage in {time_left} minutes')
         voice_control.runAndWait()
-        
+
     def set_current(self, I_set):
         '''Sets current output of controller. Use this only when running
         calibration reads warning messages when changing power'''
@@ -192,4 +192,4 @@ if __name__ == "__main__":
     laser_controller.set_power(90)
     time.sleep(10)
     laser_controller.set_power(100)
-    laser_controller.power_off()
+    laser_controller.shut_down()

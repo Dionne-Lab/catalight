@@ -51,7 +51,7 @@ class Heater:
             setpoint = convert_temp('F', temp_units, setpoint)
         return setpoint
 
-    def turn_off(self):
+    def shut_down(self):
         '''Sets heater to 0 F'''
         self.controller.write(0)
 
@@ -81,14 +81,14 @@ class Heater:
         ramp_time = (T2-T1)/self.ramp_rate  # min
         setpoints = np.linspace(T1, T2, abs(int(ramp_time*refresh_rate)))
         print('Starting Temp = ' + str(self.read_temp()))
-      
+
         for temp in setpoints:
             temp = convert_temp('C', 'F', temp)  # Change units to F
             self.controller.write(temp)  # write to controller
             time.sleep(60/refresh_rate)  # wait
-        
+
         print('Soak Temp = ' + str(self.read_temp()))
-        
+
     def test_heater_performance(self, T2, T1=None, temp_units='C'):
         '''
         ramps the heater from T1 to T2
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     for rate in np.arange(5, 31, 5):
         heater.ramp_rate = rate
         read_out, fig, ax = heater.test_heater_performance(140, T1=30)
-        heater.turn_off()
+        heater.shut_down()
         while heater.read_temp() > 30:
             time.sleep(60)
         read_out.to_csv(os.path.join(save_path, str(rate)+'_heater_read_out.csv'))
