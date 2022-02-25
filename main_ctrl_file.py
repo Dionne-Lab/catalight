@@ -27,6 +27,7 @@ def calculate_time(expt_list):
     run_time = []
     for expt in expt_list:
         run_time.append(expt.plot_sweep()[-1])
+        print(run_time)
         if max(expt.power) > 0:
             laser_on = time.localtime(start_time + 60*sum(run_time[:-1]))
             laser_off = time.localtime(start_time + 60*sum(run_time))
@@ -34,8 +35,9 @@ def calculate_time(expt_list):
             time_off = time.strftime('%b-%d at %I:%M%p', laser_off)
             print('laser on from %s to %s' % (time_on, time_off))
 
-        end_time = time.localtime(start_time + 60*sum(run_time))
-        print('experiment will end on %s' % end_time)
+    end_time = time.localtime(start_time + 60*sum(run_time))
+    end_time = time.strftime('%b-%d at %I:%M%p', end_time)
+    print('experiment will end on %s' % (end_time))
 
 def shut_down(eqpt_list):
     gc_connector, laser_controller, gas_controller, heater = eqpt_list
@@ -66,16 +68,14 @@ if __name__ == "__main__":
     Expt2.gas_comp = [[0.1, 1-0.6, 0.5]]
     Expt2.tot_flow = [10]
     Expt2.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    Expt2.plot_sweep()
     Expt2.create_dirs(main_fol)
-    Expt2.run_experiment()
     print('finished Expt2')
 
     eqpt_list[0].sample_set_size = 4
     Expt3 = Experiment(eqpt_list)
     Expt3.expt_type = 'power_sweep'
     Expt3.temp = [300]
-    Expt2.power = list(np.arange(50, 300, 75))
+    Expt3.power = list(np.arange(50, 300, 75))
     Expt3.gas_type = ['C2H2', 'Ar', 'H2']
     Expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
     Expt3.tot_flow = [10]
@@ -98,7 +98,6 @@ if __name__ == "__main__":
     # Expt1.create_dirs(main_fol)
     # time = 2 * 60  # hrs * minutes/hr
     # eqpt_list[0].sample_set_size = time/eqpt_list[0].sample_rate
-    # Expt1.run_experiment()
     # print('finished Expt1')
 
     # eqpt_list[0].sample_set_size = 4
@@ -109,9 +108,7 @@ if __name__ == "__main__":
     # Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
     # Expt2.tot_flow = [10]
     # Expt2.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt2.plot_sweep()
     # Expt2.create_dirs(main_fol)
-    # Expt2.run_experiment()
     # print('finished Expt2')
 
     # eqpt_list[0].sample_set_size = 4
@@ -122,9 +119,7 @@ if __name__ == "__main__":
     # Expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
     # Expt3.tot_flow = [10]
     # Expt3.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt3.plot_sweep()
     # Expt3.create_dirs(main_fol)
-    # Expt3.run_experiment()
     # print('finished Expt3')
 
     # eqpt_list[0].sample_set_size = 4
@@ -146,7 +141,5 @@ if __name__ == "__main__":
     # Expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
     # Expt3.tot_flow = list(np.arange(10, 60, 10))
     # Expt3.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt3.plot_sweep()
     # Expt3.create_dirs(main_fol)
-    # Expt3.run_experiment()
     # print('finished expt3')
