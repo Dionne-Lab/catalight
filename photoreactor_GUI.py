@@ -5,72 +5,44 @@ Created on Sun Feb 20 18:45:10 2022
 @author: brile
 """
 import sys
-
+from experiment_control import Experiment
+from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (
     QApplication,
-    QCheckBox,
-    QComboBox,
-    QDateEdit,
-    QDateTimeEdit,
-    QDial,
-    QDoubleSpinBox,
-    QFontComboBox,
-    QLabel,
-    QLCDNumber,
-    QLineEdit,
-    QMainWindow,
-    QProgressBar,
-    QPushButton,
-    QRadioButton,
-    QSlider,
-    QSpinBox,
-    QTimeEdit,
-    QVBoxLayout,
+    QDialog,
     QWidget,
-)
+    QListWidgetItem)
 
 
+experiment_list = []
 # Subclass QMainWindow to customize your application's main window
-class MainWindow(QMainWindow):
+class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("BruceJr")
+        loadUi('reactorUI.ui', self)
+        self.butAddExpt.clicked.connect(self.add_expt)
+        self.butDelete.clicked.connect(self.delete_expt)
+        self.listWidget.currentItemChanged.connect(self.display_expt)
 
-        self.setWindowTitle("Widgets App")
+    def add_expt(self):
+        print('clicked!')
+        item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
+        item.setData(Qt.UserRole, Experiment())
 
-        layout = QVBoxLayout()
-        widgets = [
-            QCheckBox,
-            QComboBox,
-            QDateEdit,
-            QDateTimeEdit,
-            QDial,
-            QDoubleSpinBox,
-            QFontComboBox,
-            QLCDNumber,
-            QLabel,
-            QLineEdit,
-            QProgressBar,
-            QPushButton,
-            QRadioButton,
-            QSlider,
-            QSpinBox,
-            QTimeEdit,
-        ]
+    def delete_expt(self):
+        item = self.listWidget.currentItem()
+        self.listWidget.takeItem(self.listWidget.row(item))
 
-        for w in widgets:
-            layout.addWidget(w())
-
-        widget = QWidget()
-        widget.setLayout(layout)
-
-        # Set the central widget of the Window. Widget will expand
-        # to take up all the space in the window by default.
-        self.setCentralWidget(widget)
+    def display_expt(self):
+        item = self.listWidget.currentItem()
+        print(item.data(Qt.UserRole).temp)
 
 
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 
-app.exec()
+sys.exit(app.exec())

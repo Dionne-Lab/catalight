@@ -358,8 +358,11 @@ class Experiment:
         plt.rcParams['font.size'] = 14
         plt.rcParams['axes.labelsize'] = 18
 
-        sample_rate = self._gc_control.sample_rate  # sample/min
-        heat_rate = self._heater.ramp_rate  # deg/min
+        # TODO what do i do when not connected to eqpt??
+        # sample_rate = self._gc_control.sample_rate  # sample/min
+        # heat_rate = self._heater.ramp_rate  # deg/min
+        sample_rate = 10  # sample/min
+        heat_rate = 15  # deg/min
         sweep_val = getattr(self, self.ind_var)
         selector = self.expt_list['Active Status']
         sweep_title = (self.expt_list['Independent Variable']
@@ -422,8 +425,8 @@ class Experiment:
         plt.ylabel(sweep_title + ' ['+units+']')
         plt.tight_layout()
         plt.show()
-
-        return (fig, ax1, ax2)
+        run_time = t_set[-1]
+        return (fig, ax1, ax2, run_time)
 
     def set_initial_conditions(self):
 
@@ -525,7 +528,7 @@ if __name__ == "__main__":
     Expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
     Expt3.tot_flow = list(np.arange(10, 60, 10))
     Expt3.sample_name = '20211221_fakesample'
-    Expt3.plot_sweep()
+    _, _, _, t = Expt3.plot_sweep()
     print('finished expt3')
 
     Expt4 = Experiment()
