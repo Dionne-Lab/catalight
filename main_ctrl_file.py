@@ -55,8 +55,9 @@ if __name__ == "__main__":
     plt.close('all')
     main_fol = (r'C:\Peak489Win10\GCDATA\20220201_Ag95Pd5_2wt%_25.2mg_shaken')
     os.makedirs(main_fol, exist_ok=True)
-
-    eqpt_list[2].test_pressure(path)
+    
+    p_sweep_path = r"C:\Peak489Win10\GCDATA\pressure_tests\20220201_Ag95Pd5_2wt%_25.2mg_stirred_try2"
+    eqpt_list[2].test_pressure(p_sweep_path)
 
     eqpt_list[0].sample_set_size = 4
     Expt2 = Experiment(eqpt_list)
