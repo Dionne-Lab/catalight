@@ -370,7 +370,7 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220201_Ag95Pd5_2wt%_stirred')
+                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol')
 
 
     # Main Script
