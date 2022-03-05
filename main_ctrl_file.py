@@ -54,6 +54,7 @@ def run_study(expt_list, eqpt_list):
             print('Finished ' + expt.expt_type + expt.expt_name)
         except:
             shut_down(eqpt_list)
+            raise
 
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()
