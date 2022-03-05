@@ -110,14 +110,14 @@ if __name__ == "__main__":
     expt4.sample_name = sample_name
     expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
    
-    expt5 = Experiment(eqpt_list)
-    expt5.expt_type = 'temp_sweep'
-    expt5.temp = list(np.arange(300, 481, 20))
-    expt5.gas_type = ['C2H2', 'Ar', 'H2']
-    expt5.gas_comp = [[0.1, 1-0.6, 0.5]]
-    expt5.tot_flow = [10]
-    expt5.sample_name = sample_name
-    expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt5 = Experiment(eqpt_list)
+    # expt5.expt_type = 'temp_sweep'
+    # expt5.temp = list(np.arange(300, 481, 20))
+    # expt5.gas_type = ['C2H2', 'Ar', 'H2']
+    # expt5.gas_comp = [[0.1, 1-0.6, 0.5]]
+    # expt5.tot_flow = [10]
+    # expt5.sample_name = sample_name
+    # expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
     
     # eqpt_list[0].sample_set_size = 12
     # reduction = Experiment(eqpt_list)
@@ -153,7 +153,7 @@ if __name__ == "__main__":
     # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
     # print('finished expt4')
 
-    expt_list = [expt5, expt1, expt2, expt3, expt4]
+    expt_list = [expt1, expt2, expt3, expt4]
     #calculate_time(expt_list)
     run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)
