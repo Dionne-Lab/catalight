@@ -77,10 +77,19 @@ class Heater:
         elif  temp_units.upper() != 'C':
             raise ValueError('Temp Unit not recognized')
 
+        if T2 > max_temp:
+            print('Desired setpoint is above maximum safe working temp!!!')
+            print('Resetting T2 to heater max instead...')
+            T2 = max_temp
         refresh_rate = 20  # 1/min
         ramp_time = (T2-T1)/self.ramp_rate  # min
         setpoints = np.linspace(T1, T2, abs(int(ramp_time*refresh_rate)))
-        print('Starting Temp = ' + str(self.read_temp()))
+        starting_temp = self.read_temp()
+        print('Starting Temp = ' + str(starting_temp))
+        while (starting_temp > 30) and (starting_temp > T1):
+            print('Reactor is hotter than starting setpoint. Cooling...')
+            time.sleep(120)
+            starting_temp = self.read_temp()
 
         for temp in setpoints:
             temp = convert_temp('C', 'F', temp)  # Change units to F

@@ -249,7 +249,7 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     plt.rcParams['axes.labelsize'] = fontsize[1]
 
     # Initilize run num plot
-    fig1, ax1 = plt.subfigs()
+    fig1, ax1 = plt.subplots()
     # Calculations:
     calchemIDs = calDF.index  # get chem IDs from calibration files
     stoyk = pd.Series(0, index=calchemIDs)
@@ -370,7 +370,8 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220201_Ag95Pd5_2wt%_25.2mg_shaken')
+                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol')
+
 
     # Main Script
     ###########################################################################

@@ -89,12 +89,22 @@ class Experiment:
         self._results_path = 'Undefined'
         self._data_path = 'Undefined'
 
+        self.sample_set_size = 4
+        self._sample_rate = 10
+
+
+
+
         if eqpt_list is not False:
             # eqpt_list needs to be tuple
             self._gc_control = eqpt_list[0]
             self._laser_control = eqpt_list[1]
             self._gas_control = eqpt_list[2]
             self._heater = eqpt_list[3]
+
+            # Import sample rate from connected control file, make non-public
+            self._sample_rate = self._gc_control.sample_rate
+
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
@@ -147,6 +157,17 @@ class Experiment:
     expt_name = property(lambda self: self._expt_name)
     results_path = property(lambda self: self._results_path)
     data_path = property(lambda self: self._data_path)
+
+    # Setting sample rate changes when connected to GC
+    @property
+    def sample_rate(self):
+        return self._sample_rate
+    @sample_rate.setter
+    def sample_rate(self, sample_rate):
+        if hasattr(self, '_gc_control'):
+            print('Cannot update sample rate when connected to GC')
+        else:
+            self._sample_rate = sample_rate
 
     @property
     def expt_type(self):
@@ -439,6 +460,7 @@ class Experiment:
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_gasD(self.gas_type, self.gas_comp[0])
         self._gas_control.print_flows()
+        self._gc_control.sample_set_size = self.sample_set_size
 
     def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
         print('running expt')
