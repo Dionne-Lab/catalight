@@ -92,9 +92,6 @@ class Experiment:
         self.sample_set_size = 4
         self._sample_rate = 10
 
-
-
-
         if eqpt_list is not False:
             # eqpt_list needs to be tuple
             self._gc_control = eqpt_list[0]
@@ -104,7 +101,6 @@ class Experiment:
 
             # Import sample rate from connected control file, make non-public
             self._sample_rate = self._gc_control.sample_rate
-
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
