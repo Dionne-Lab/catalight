@@ -85,6 +85,8 @@ class Diode_Laser():
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
         Vout = I_set/self._k_mod  # (V) Voltage output set point
+        if P_set == 0:
+            Vout = 0
         # Convert to 16bit
         Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 

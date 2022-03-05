@@ -84,12 +84,6 @@ class Heater:
         refresh_rate = 20  # 1/min
         ramp_time = (T2-T1)/self.ramp_rate  # min
         setpoints = np.linspace(T1, T2, abs(int(ramp_time*refresh_rate)))
-        starting_temp = self.read_temp()
-        print('Starting Temp = ' + str(starting_temp))
-        while (starting_temp > 30) and (starting_temp > T1):
-            print('Reactor is hotter than starting setpoint. Cooling...')
-            time.sleep(120)
-            starting_temp = self.read_temp()
 
         for temp in setpoints:
             temp = convert_temp('C', 'F', temp)  # Change units to F
@@ -144,14 +138,14 @@ class Heater:
 if __name__ == "__main__":
     save_path = r"C:\temp control\20210214_heater_test"
     heater = Heater()
-    heater.ramp(30)
-    time.sleep(300)
-    for rate in np.arange(5, 31, 5):
-        heater.ramp_rate = rate
-        read_out, fig, ax = heater.test_heater_performance(140, T1=30)
-        heater.shut_down()
-        while heater.read_temp() > 30:
-            time.sleep(60)
-        read_out.to_csv(os.path.join(save_path, str(rate)+'_heater_read_out.csv'))
-        fig.savefig(os.path.join(save_path,
-                                 str(rate)+'_heater_test.svg'), format="svg")
+    # heater.ramp(30)
+    # time.sleep(300)
+    # for rate in np.arange(5, 31, 5):
+    #     heater.ramp_rate = rate
+    #     read_out, fig, ax = heater.test_heater_performance(140, T1=30)
+    #     heater.shut_down()
+    #     while heater.read_temp() > 30:
+    #         time.sleep(60)
+    #     read_out.to_csv(os.path.join(save_path, str(rate)+'_heater_read_out.csv'))
+    #     fig.savefig(os.path.join(save_path,
+    #                              str(rate)+'_heater_test.svg'), format="svg")
