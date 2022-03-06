@@ -91,6 +91,7 @@ class Experiment:
 
         self.sample_set_size = 4
         self._sample_rate = 10
+        self.heat_rate = 15
 
         if eqpt_list is not False:
             # eqpt_list needs to be tuple
@@ -101,6 +102,7 @@ class Experiment:
 
             # Import sample rate from connected control file, make non-public
             self._sample_rate = self._gc_control.sample_rate
+            self._heater.ramp_rate = self.heat_rate
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
@@ -361,7 +363,7 @@ class Experiment:
 
         self.update_expt_log(expt_path)
 
-    def plot_sweep(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
+    def plot_sweep(self, t_steady_state=15, t_buffer=5):
         # plot the sweep parameter vs time
         # have to get the sample run time from GC
         # Some Plot Defaults
@@ -375,11 +377,6 @@ class Experiment:
         plt.rcParams['font.size'] = 14
         plt.rcParams['axes.labelsize'] = 18
 
-        # TODO what do i do when not connected to eqpt??
-        # sample_rate = self._gc_control.sample_rate  # sample/min
-        # heat_rate = self._heater.ramp_rate  # deg/min
-        sample_rate = 10  # sample/min
-        heat_rate = 15  # deg/min
         sweep_val = getattr(self, self.ind_var)
         selector = self.expt_list['Active Status']
         sweep_title = (self.expt_list['Independent Variable']
@@ -387,7 +384,7 @@ class Experiment:
         units = self.expt_list['Units'][selector].to_string(index=False)
 
         t_batch = list(t_steady_state
-                       + sample_rate*np.arange(0, sample_set_size))
+                       + self.sample_rate*np.arange(0, self.sample_set_size))
         setpoint0 = [0]*np.size(sweep_val[0])
         if self.expt_type == 'temp_sweep':
             if units == 'K':
@@ -396,7 +393,7 @@ class Experiment:
                 setpoint0 = 20
 
             delta_T = np.diff(sweep_val)
-            t_trans = np.append((sweep_val[0]-setpoint0), delta_T)/heat_rate
+            t_trans = np.append((sweep_val[0]-setpoint0), delta_T)/self.heat_rate
         else:
             t_trans = np.array([0]*len(sweep_val))
 
@@ -406,15 +403,15 @@ class Experiment:
         setpoint = np.vstack((setpoint0, sweep_val[0], sweep_val[0]))
         # These two define time and value GC collects data
         t_sample = np.array(t_batch)
-        # sample_val = np.array([sweep_val[0]]*sample_set_size)
-        sample_val = np.tile(sweep_val[0], (sample_set_size, 1))
+        # sample_val = np.array([sweep_val[0]]*self.sample_set_size)
+        sample_val = np.tile(sweep_val[0], (self.sample_set_size, 1))
 
         # Loop through remaining setpoints
         for step_num in range(1, len(sweep_val)):
             t_sample = np.append(t_sample,
                                  t_sample[-1]+t_buffer+t_batch)
             sample_val = np.concatenate((sample_val, np.tile(sweep_val[step_num],
-                                                             (sample_set_size, 1))))
+                                                             (self.sample_set_size, 1))))
             t_set = np.append(t_set, [t_set[-1] + t_trans[step_num],
                                       t_set[-1] + t_batch[-1] + t_buffer])
             setpoint = np.concatenate(
@@ -426,13 +423,13 @@ class Experiment:
         ylim_max = 1.1*np.max(sweep_val)  # TODO what about gas comp
         ylim_min = 0.9*np.min(sweep_val)-0.05
         ax1.set_ylim([ylim_min, ylim_max])
-
-        ax2.plot(t_set[1:6], setpoint[1:6], '-o')
-        ax2.plot(t_sample[3:8], sample_val[3:8], 'x')
-        ylim_max = 1.1*np.max(sample_val[7])  # TODO what about gas comp
-        ylim_min = 0.9*np.max(sample_val[3])-0.05
+        ax2.plot(t_set[0:3], setpoint[0:3], '-o')
+        ax2.plot(t_sample[0:self.sample_set_size],
+                 sample_val[0:self.sample_set_size], 'x')
+        ylim_max = 1.1*np.max(sample_val[self.sample_set_size-1])  # TODO what about gas comp
+        ylim_min = 0.9*np.max(sample_val[0])-0.05
         # ax2.set_ylim([ylim_min, ylim_max])
-        ax2.set_xlim([t_sample[3]-5, t_sample[7]+t_buffer+5])
+        ax2.set_xlim([t_set[0]-5, t_set[2]+t_buffer+5])
 
         fig.add_subplot(111, frameon=False)
         # hide tick and tick label of the big axis
@@ -455,11 +452,11 @@ class Experiment:
             print('Reactor is hotter than starting setpoint. Cooling...')
             time.sleep(120)
             starting_temp = self._heater.read_temp()
-            
+
         if self.power[0] > 0:
             self._laser_control.time_warning(1)
             time.sleep(60)  # Wait for a minute before turning on laser for safety
-            
+
         self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
@@ -467,7 +464,7 @@ class Experiment:
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
 
-    def run_experiment(self, t_steady_state=15, sample_set_size=4, t_buffer=5):
+    def run_experiment(self, t_steady_state = 15, t_buffer=5):
         print('running expt')
         self.set_initial_conditions()
         step_num = 1
@@ -517,7 +514,7 @@ class Experiment:
             print('Starting Collection:')
             print(time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.peaksimple.SetRunning(1, True)
-            time.sleep(self._gc_control.sample_rate*sample_set_size*60)
+            time.sleep(self._gc_control.sample_rate*self.sample_set_size*60)
 
             print('Finished Collecting:')
             print(time.strftime("%H:%M:%S", time.localtime()))
@@ -598,5 +595,6 @@ if __name__ == "__main__":
     Expt6.tot_flow = [50]
     Expt6.sample_name = '20210524_8%AgPdMix_1wt%_25mg'
     Expt6._date = '20211208'
+    Expt6.plot_sweep()
     #Expt6.create_dirs(main_fol)
     print('finished Expt6')
