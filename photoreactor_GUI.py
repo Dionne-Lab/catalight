@@ -5,6 +5,14 @@ Created on Sun Feb 20 18:45:10 2022
 @author: brile
 """
 import sys
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use('Qt5Agg')
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+
 from experiment_control import Experiment
 from equipment.sri_gc.gc_control import GC_Connector
 #from equipment.diode_laser.diode_control import Diode_Laser
@@ -15,6 +23,8 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import (Qt, QTimer, QDateTime)
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import (
+    QPushButton,
+    QLabel,
     QApplication,
     QDialog,
     QWidget,
@@ -22,6 +32,8 @@ from PyQt5.QtWidgets import (
 
 
 experiment_list = []
+update_flag = False
+
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QDialog):
     def __init__(self):
@@ -37,9 +49,9 @@ class MainWindow(QDialog):
         self.setTemp.valueChanged.connect(self.update_expt)
         self.setPower.valueChanged.connect(self.update_expt)
         self.setFlow.valueChanged.connect(self.update_expt)
-        # self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
-        # self.setSampleSize.valueChanged.connect(self.update_expt)
-        # self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
+        self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
+        self.setSampleSize.valueChanged.connect(self.update_expt)
+        self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
         # self.setBuffer.valueChanged.connect(self.update_expt)
         self.setGasAComp.valueChanged.connect(self.update_expt)
         self.setGasAType.currentIndexChanged.connect(self.update_expt)
@@ -48,6 +60,9 @@ class MainWindow(QDialog):
         self.setGasCComp.valueChanged.connect(self.update_expt)
         self.setGasCType.currentIndexChanged.connect(self.update_expt)
         # lineEdit.editingFinished() good one
+        self.IndVar_start.valueChanged.connect(self.update_expt)
+        self.IndVar_stop.valueChanged.connect(self.update_expt)
+        self.IndVar_step.valueChanged.connect(self.update_expt)
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_eqpt_status)
@@ -55,6 +70,40 @@ class MainWindow(QDialog):
         self.setGasAType.insertItems(0, gas_control.factory_gasses)
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
+
+        self.figure = plt.figure(figsize=(8,8))
+        #This is the Canvas Widget that displays the `figure`
+        #It takes the `figure` instance as a parameter to __init__
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas2 = FigureCanvas(self.figure)
+        #Create and control gridlayout below
+        layout = self.horizontalLayout_4
+
+        #For reference AddWidget works like this: (Widgetname, rowStart, columnStart, rowSpan, columnSpan)
+        layout.addWidget(self.canvas)
+        self.horizontalLayout_5.addWidget(self.canvas2)
+
+
+
+    # def plot(self):
+    #     ''' This function plots the TEM image with a red colored mask overlaid showing the objects that are measured. '''
+    #     print('plotting')
+    #     #Turn off button to plot
+    #     self.plot_button.setEnabled(False)
+    #     # instead of ax.hold(False)
+    #     self.figure.clear()
+    #     # create an axis
+    #     # self.figure = fig
+    #     # create an axis
+    #     ax = self.figure.add_subplot(111)
+
+    #     x_coords = np.arange(1, 11, 1)
+    #     y_coords = x_coords + np.random.rand(len(x_coords)) - 0.5
+    #     ax.plot(x_coords, y_coords, 'r', alpha = 0.3, linewidth = 2)
+    #     # refresh canvas
+    #     self.canvas.draw()
+    #     self.canvas.show()
+    #     self.plot_button.setEnabled(True)
 
     def update_eqpt_status(self):
         time = QDateTime.currentDateTime()
@@ -76,18 +125,25 @@ class MainWindow(QDialog):
     def add_expt(self):
         print('clicked!')
         item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
-        item.setData(Qt.UserRole, Experiment())
+        expt = Experiment()
+        item.setData(Qt.UserRole, expt)
+        if self.expt_types.count() < len(expt.expt_list['Expt Name']):
+            self.expt_types.addItem('Undefined')
+            self.expt_types.addItems(expt.expt_list['Expt Name'].to_list())
+
 
     def delete_expt(self):
         item = self.listWidget.currentItem()
         self.listWidget.takeItem(self.listWidget.row(item))
 
     def display_expt(self):
+        self.tabWidget.setUpdatesEnabled(False)
+        global update_flag
+        update_flag = False
         item = self.listWidget.currentItem()
         expt = item.data(Qt.UserRole)
         print(expt.temp)
 
-        self.expt_types.addItems(expt.expt_list['Expt Name'].to_list())
         self.expt_types.setCurrentText(expt.expt_type)
         self.setTemp.setValue(expt.temp[0])
 
@@ -95,9 +151,9 @@ class MainWindow(QDialog):
 
         self.setFlow.setValue(expt.tot_flow[0])
 
-        self.setSampleRate.setValue(99)  # This needs to have a min set by ctrl file
-        self.setSampleSize.setValue(99)
-        self.setRampRate.setValue(99)  # get from heater?
+        self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
+        self.setSampleSize.setValue(expt.sample_set_size)
+        self.setRampRate.setValue(expt.heat_rate)  # get from heater?
         self.setBuffer.setValue(99)
 
         self.setGasAComp.setValue(expt.gas_comp[0][0])
@@ -106,10 +162,13 @@ class MainWindow(QDialog):
         self.setGasBType.setCurrentText(expt.gas_type[1])
         self.setGasCComp.setValue(expt.gas_comp[0][2])
         self.setGasCType.setCurrentText(expt.gas_type[2])
+        self.tabWidget.setUpdatesEnabled(True)
+        update_flag = True
 
     def update_expt(self):
         item = self.listWidget.currentItem()
-        if item:
+        global update_flag
+        if (item is not None) & update_flag:
             print('expt updated')
             expt = item.data(Qt.UserRole)
 
@@ -121,10 +180,10 @@ class MainWindow(QDialog):
 
             expt.tot_flow[0] = self.setFlow.value()
 
-            # self.setSampleRate.setValue(99)  # This needs to have a min set by ctrl file
-            # self.setSampleSize.setValue(99)
-            # self.setRampRate.setValue(99)  # get from heater?
-            # self.setBuffer.setValue(99)
+            expt.sample_rate = self.setSampleRate.value()  # This needs to have a min set by ctrl file
+            expt.sample_set_size = self.setSampleSize.value()
+            expt.heat_rate = self.setRampRate.value()  # get from heater?
+            # self.setBuffer.value(99)
 
             expt.gas_comp[0][0] = self.setGasAComp.value()
             expt.gas_type[0] = self.setGasAType.currentText()
@@ -132,7 +191,17 @@ class MainWindow(QDialog):
             expt.gas_type[1] = self.setGasBType.currentText()
             expt.gas_comp[0][2] = self.setGasCComp.value()
             expt.gas_type[2] = self.setGasCType.currentText()
-
+            self.label_IndVar.setText(expt.ind_var)
+            sweep_vals = [self.IndVar_start.value(),
+                          self.IndVar_stop.value(),
+                          self.IndVar_step.value()]
+            if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
+                setattr(expt, expt.ind_var, list(np.arange(*sweep_vals)))
+                expt.plot_sweep(self.figure)
+                self.canvas.draw()
+                self.canvas.show()
+                self.canvas2.draw()
+                self.canvas2.show()
 
 
 

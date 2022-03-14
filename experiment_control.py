@@ -59,7 +59,7 @@ class Experiment:
 
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
-        self.expt_list = pd.DataFrame(
+        self._expt_list = pd.DataFrame(
             [['temp_sweep',      'temp', False,    'K'],
              ['power_sweep',    'power', False,   'mW'],
              ['comp_sweep',  'gas_comp', False, 'frac'],
@@ -155,6 +155,7 @@ class Experiment:
     expt_name = property(lambda self: self._expt_name)
     results_path = property(lambda self: self._results_path)
     data_path = property(lambda self: self._data_path)
+    expt_list = property(lambda self: self._expt_list)
 
     # Setting sample rate changes when connected to GC
     @property
@@ -178,7 +179,7 @@ class Experiment:
             raise AttributeError('Invalid Experiment Type Provided')
 
         self._expt_type = expt_type
-        self.expt_list['Active Status'] = (
+        self._expt_list['Active Status'] = (
             self.expt_list['Expt Name'] == self._expt_type)
 
         # Defines Independent Variable as string provided by expt list
@@ -363,7 +364,7 @@ class Experiment:
 
         self.update_expt_log(expt_path)
 
-    def plot_sweep(self, t_steady_state=15, t_buffer=5):
+    def plot_sweep(self, fig=None, t_steady_state=15, t_buffer=5):
         # plot the sweep parameter vs time
         # have to get the sample run time from GC
         # Some Plot Defaults
@@ -373,7 +374,7 @@ class Experiment:
         plt.rcParams['xtick.major.width'] = 1.5
         plt.rcParams['ytick.major.size'] = 6
         plt.rcParams['ytick.major.width'] = 1.5
-        plt.rcParams['figure.figsize'] = (6.5, 8)
+        #plt.rcParams['figure.figsize'] = (6.5, 8)
         plt.rcParams['font.size'] = 14
         plt.rcParams['axes.labelsize'] = 18
 
@@ -417,7 +418,13 @@ class Experiment:
             setpoint = np.concatenate(
                 (setpoint, np.tile(sweep_val[step_num], (2, 1))))
 
-        fig, (ax1, ax2) = plt.subplots(2, 1)
+        if fig is None:
+            fig = plt.figure()
+
+        fig.clear()
+        ax1 = fig.add_subplot(2, 1, 1)
+        ax2 = fig.add_subplot(2, 1, 2)
+
         ax1.plot(t_set, setpoint, '-o')
         ax1.plot(t_sample, sample_val, 'x')
         ylim_max = 1.1*np.max(sweep_val)  # TODO what about gas comp
@@ -438,7 +445,7 @@ class Experiment:
         plt.xlabel("time [min]")
         plt.ylabel(sweep_title + ' ['+units+']')
         plt.tight_layout()
-        plt.show()
+
         run_time = t_set[-1]  #TODO break this out into seperate func
         return (fig, ax1, ax2, run_time)
 
