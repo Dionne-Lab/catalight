@@ -303,17 +303,26 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
         std = 0*avg
         units = time_unit
 
+    if units == 'frac':
+        avg.index = avg.index.str.replace('_', '\n')
+        avg.index = avg.index.str.replace('frac', '')
+        std.index = std.index.str.replace('_', '\n')
+        std.index = std.index.str.replace('frac', '')
+
     mol_count = avg @ (np.array(stoyk, dtype=int))
     print(mass_bal)
     mol_count.columns = ['Total ' + mass_bal]
     mol_error = std @ (np.array(stoyk, dtype=int))
 
     # Plotting:
+
     avg.iloc[0:len(x_data)].plot(ax=ax2, marker='o', yerr=std)
     mol_count.iloc[0:len(x_data)].plot(ax=ax2, marker='o', yerr=mol_error.iloc[0:len(x_data)])
     ax2.set_xlabel(Expt1.ind_var + ' ['+units+']')
     ax2.set_ylabel('Conc (ppm)')
+    # ax2.set_xticklabels(avg.iloc[0:len(x_data)], rotation=90)
     plt.tight_layout()
+
 
     # Initilize Conv and Selectivity plot
     fig3, ax3 = plt.subplots()
@@ -370,7 +379,7 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol\postreduction')
+                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol\postreduction\20220306comp_sweep_373K_0.0mW_10sccm')
 
 
     # Main Script
