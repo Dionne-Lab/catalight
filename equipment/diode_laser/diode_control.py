@@ -96,7 +96,7 @@ class Diode_Laser():
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
 
-        print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
+        print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
         print('Set Point = ' + str(P_set))
         print(time.ctime())
         # Unmutes and sets Vol in dB -0.0 is 100%
@@ -106,6 +106,15 @@ class Diode_Laser():
                           + str(P_set) + 'milliwatts')
         voice_control.runAndWait()
 
+    def read_output(self):
+        Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+        Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                              self._ai_range, Vin_value)
+
+        print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
+        
+        
+        
     def shut_down(self):
         '''Sets power of laser to 0'''
         Vout = 0  # (V) Voltage output set point

@@ -99,7 +99,7 @@ if __name__ == "__main__":
     expt3.sample_name = sample_name
     expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
     
-    expt4 = Experiment()
+    expt4 = Experiment(eqpt_list)
     expt4.expt_type = 'comp_sweep'
     expt4.temp = [373]
     P_h2 = 0.01*np.array([0.5, 1, 2, 5, 10, 15, 20])
@@ -154,6 +154,7 @@ if __name__ == "__main__":
     # print('finished expt4')
 
     expt_list = [expt1, expt2, expt3, expt4]
+    expt_list = [expt4]
     #calculate_time(expt_list)
     run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)

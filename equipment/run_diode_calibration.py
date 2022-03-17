@@ -45,7 +45,7 @@ except(np.linalg.LinAlgError):
 x_fit = np.linspace(0, max(x_data), 100)
 ax1.plot(x_fit, (p[0]*x_fit+p[1]), '--r')
 diode.update_calibration(p[0], p[1])
-
+diode.shut_down()
 fig = ax1.get_figure()
 fig.savefig('diode_laser/calibration_plot.svg', format="svg")
 print(label)

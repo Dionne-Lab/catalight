@@ -499,8 +499,6 @@ class Experiment:
                 self._laser_control.set_power(step)
             elif self.expt_type == 'comp_sweep':
                 self._gas_control.set_flows(step, self.tot_flow[0])
-                print(self.gas_type)
-                print(step*self.tot_flow)
                 self._gas_control.print_flows()
 
             elif self.expt_type == 'flow_sweep':
