@@ -28,7 +28,8 @@ from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
     QWidget,
-    QListWidgetItem)
+    QListWidgetItem,
+    QFileDialog)
 
 
 experiment_list = []
@@ -40,11 +41,15 @@ class MainWindow(QDialog):
         super().__init__()
         loadUi('reactorUI.ui', self)
         # TODO initialize equipment, print results to window
+        # Connect Study Overview Tab Contents
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
         self.listWidget.itemClicked.connect(self.display_expt)
+        self.findCalFile.clicked.connect(self.select_cal_file)
+        self.findCtrlFile.clicked.connect(self.select_ctrl_file)
 
+        # Connect Experiment Design Tab Contents
         self.expt_types.currentIndexChanged.connect(self.update_expt)
         self.setTemp.valueChanged.connect(self.update_expt)
         self.setPower.valueChanged.connect(self.update_expt)
@@ -63,49 +68,26 @@ class MainWindow(QDialog):
         self.IndVar_start.valueChanged.connect(self.update_expt)
         self.IndVar_stop.valueChanged.connect(self.update_expt)
         self.IndVar_step.valueChanged.connect(self.update_expt)
-
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_eqpt_status)
-
         self.setGasAType.insertItems(0, gas_control.factory_gasses)
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
 
+        # Connect timer for live feed
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_eqpt_status)
+
+        # This is the Canvas Widget that displays the `figure`
+        # It takes the `figure` instance as a parameter to __init__
+        # Initialize figure canvas and add to:
         self.figure = plt.figure(figsize=(8,8))
-        #This is the Canvas Widget that displays the `figure`
-        #It takes the `figure` instance as a parameter to __init__
         self.canvas = FigureCanvas(self.figure)
         self.canvas2 = FigureCanvas(self.figure)
-        #Create and control gridlayout below
-        layout = self.horizontalLayout_4
-
-        #For reference AddWidget works like this: (Widgetname, rowStart, columnStart, rowSpan, columnSpan)
-        layout.addWidget(self.canvas)
-        self.horizontalLayout_5.addWidget(self.canvas2)
-
-
-
-    # def plot(self):
-    #     ''' This function plots the TEM image with a red colored mask overlaid showing the objects that are measured. '''
-    #     print('plotting')
-    #     #Turn off button to plot
-    #     self.plot_button.setEnabled(False)
-    #     # instead of ax.hold(False)
-    #     self.figure.clear()
-    #     # create an axis
-    #     # self.figure = fig
-    #     # create an axis
-    #     ax = self.figure.add_subplot(111)
-
-    #     x_coords = np.arange(1, 11, 1)
-    #     y_coords = x_coords + np.random.rand(len(x_coords)) - 0.5
-    #     ax.plot(x_coords, y_coords, 'r', alpha = 0.3, linewidth = 2)
-    #     # refresh canvas
-    #     self.canvas.draw()
-    #     self.canvas.show()
-    #     self.plot_button.setEnabled(True)
+        self.horizontalLayout_4.addWidget(self.canvas) # Study Overview
+        self.horizontalLayout_5.addWidget(self.canvas2)  # Experiment Design
 
     def update_eqpt_status(self):
+        '''This function updates the live view of the equipment'''
+        # TODO replace timeDisplay with real readouts
         time = QDateTime.currentDateTime()
         timeDisplay = time.toString("mm:ss")
         self.current_power_1.display(timeDisplay)
@@ -120,6 +102,7 @@ class MainWindow(QDialog):
 
     def update_thread(self):
         # Set the time interval and start the timer
+        # I'm not sure this does anything....
         self.timer.start(1000)
 
     def add_expt(self):
@@ -203,9 +186,34 @@ class MainWindow(QDialog):
                 self.canvas2.draw()
                 self.canvas2.show()
 
+    def manual_ctrl(self):
+        temp = self.manualTemp.value()
+        temp = self.manualBuffer.value()
+        temp = self.manualPower.value()
+        temp = self.manualRamp.value()
+        temp = self.manualSampleRate.value()
+        temp = self.manualSampleSize.value()
+        temp = self.manualGasAComp.value()
+        temp = self.manualGasAType.currentText()
+        temp = self.manualGasBComp.value()
+        temp = self.manualGasBType.currentText()
+        temp = self.manualGasCComp.value()
+        temp = self.manualGasCType.currentText()
+        temp = self.manualFlow.value()
 
+    def update_ctrl_file(self):
 
+        print('update ctrl file')
 
+    def select_ctrl_file(self):
+        print('clicked')
+        self.cal_path.setText(QFileDialog.getOpenFileName())
+        print('step two')
+        QFileDialog.show()
+
+    def select_cal_file(self):
+        self.ctrl_path.setText(QFileDialog.getOpenFileName())
+        QFileDialog.show()
 
 
 app = QApplication(sys.argv)
