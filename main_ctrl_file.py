@@ -59,7 +59,7 @@ def run_study(expt_list, eqpt_list):
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()
     plt.close('all')
-    sample_name = '20220201_Ag95Pd5_6wt%_20mg_sasol'
+    sample_name = '20220201_Ag95Pd5_6wt%_3.5mg_sasol'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
     p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
     os.makedirs(main_fol, exist_ok=True)
@@ -67,48 +67,54 @@ if __name__ == "__main__":
     
     
     #eqpt_list[2].test_pressure(p_sweep_path)
+    reduction = Experiment(eqpt_list)
+    reduction.sample_set_size = 12
+    reduction.expt_type = 'temp_sweep'
+    reduction.temp = [273+250]
+    reduction.gas_type = ['C2H2', 'Ar', 'H2']
+    reduction.gas_comp = [[0, 1-0.05, 0.05]]
+    reduction.tot_flow = [50]
+    reduction.sample_name = sample_name
+    reduction.create_dirs(main_fol)
 
-    eqpt_list[0].sample_set_size = 4
     expt1 = Experiment(eqpt_list)
     expt1.expt_type = 'temp_sweep'
-    expt1.temp = list(np.arange(300, 481, 20))
+    expt1.temp = list(np.arange(300, 400, 10))
     expt1.gas_type = ['C2H2', 'Ar', 'H2']
     expt1.gas_comp = [[0.01, 1-0.06, 0.05]]
     expt1.tot_flow = [10]
     expt1.sample_name = sample_name
     expt1.create_dirs(os.path.join(main_fol, 'postreduction'))
 
-
-    eqpt_list[0].sample_set_size = 4
     expt2 = Experiment(eqpt_list)
     expt2.expt_type = 'power_sweep'
     expt2.temp = [300]
-    expt2.power = list(np.arange(50, 300, 75))
+    expt2.power = list(np.arange(50, 300, 50))
     expt2.gas_type = ['C2H2', 'Ar', 'H2']
     expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
     expt2.tot_flow = [10]
     expt2.sample_name = sample_name
     expt2.create_dirs(os.path.join(main_fol, 'postreduction'))
    
-    expt3 = Experiment(eqpt_list)
-    expt3.expt_type = 'flow_sweep'
-    expt3.temp = [373]
-    expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
-    expt3.tot_flow = list(np.arange(10, 60, 10))
-    expt3.sample_name = sample_name
-    expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt3 = Experiment(eqpt_list)
+    # expt3.expt_type = 'flow_sweep'
+    # expt3.temp = [373]
+    # expt3.gas_type = ['C2H2', 'Ar', 'H2']
+    # expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
+    # expt3.tot_flow = list(np.arange(10, 60, 10))
+    # expt3.sample_name = sample_name
+    # expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
     
-    expt4 = Experiment(eqpt_list)
-    expt4.expt_type = 'comp_sweep'
-    expt4.temp = [373]
-    P_h2 = 0.01*np.array([0.5, 1, 2, 5, 10, 15, 20])
-    P_c2h2 = 0.01*np.ones(len(P_h2))
-    P_Ar = 1-P_c2h2-P_h2
-    expt4.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
-    expt4.tot_flow = [10]
-    expt4.sample_name = sample_name
-    expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt4 = Experiment(eqpt_list)
+    # expt4.expt_type = 'comp_sweep'
+    # expt4.temp = [373]
+    # P_h2 = 0.01*np.array([0.5, 1, 2, 5, 10, 15, 20])
+    # P_c2h2 = 0.01*np.ones(len(P_h2))
+    # P_Ar = 1-P_c2h2-P_h2
+    # expt4.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
+    # expt4.tot_flow = [10]
+    # expt4.sample_name = sample_name
+    # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
    
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
@@ -118,17 +124,6 @@ if __name__ == "__main__":
     # expt5.tot_flow = [10]
     # expt5.sample_name = sample_name
     # expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
-    # eqpt_list[0].sample_set_size = 12
-    # reduction = Experiment(eqpt_list)
-    # reduction.expt_type = 'temp_sweep'
-    # reduction.temp = [273+250]
-    # reduction.gas_type = ['C2H2', 'Ar', 'H2']
-    # reduction.gas_comp = [[0, 1-0.5, 0.5]]
-    # reduction.tot_flow = [50]
-    # reduction.sample_name = sample_name
-    # reduction.create_dirs(main_fol)
-    # print('finished reduction')
     
     # eqpt_list[0].sample_set_size = 4
     # expt3 = Experiment(eqpt_list)
@@ -153,64 +148,15 @@ if __name__ == "__main__":
     # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
     # print('finished expt4')
 
-    expt_list = [expt1, expt2, expt3, expt4]
-    expt_list = [expt4]
-    #calculate_time(expt_list)
-    run_study(expt_list, eqpt_list)
+    stability_test = Experiment(eqpt_list)
+    stability_test.sample_set_size = 6*42
+    stability_test.expt_type = 'temp_sweep'
+    stability_test.temp = [400]
+    stability_test.gas_type = ['C2H2', 'Ar', 'H2']
+    stability_test.gas_comp = [[0.01, 1-0.06, 0.05]]
+    stability_test.tot_flow = [10]
+    stability_test.sample_name = sample_name
+    stability_test.create_dirs(main_fol)
+    
+    run_study([stability_test], eqpt_list)
     shut_down(eqpt_list)
-
-    # Expt1 = Experiment(eqpt_list)
-    # Expt1.expt_type = 'stability_test'
-    # Expt1.temp = [320+273]
-    # Expt1.gas_type = ['C2H2', 'Ar', 'H2']
-    # Expt1.gas_comp = [[0.0, 1-0.05, 0.05]]
-    # Expt1.tot_flow = [50]
-    # Expt1.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt1.create_dirs(main_fol)
-    # time = 2 * 60  # hrs * minutes/hr
-    # eqpt_list[0].sample_set_size = time/eqpt_list[0].sample_rate
-    # print('finished Expt1')
-
-    # eqpt_list[0].sample_set_size = 4
-    # Expt2 = Experiment(eqpt_list)
-    # Expt2.expt_type = 'temp_sweep'
-    # Expt2.temp = list(np.arange(300, 401, 10))
-    # Expt2.gas_type = ['C2H2', 'Ar', 'H2']
-    # Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # Expt2.tot_flow = [10]
-    # Expt2.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt2.create_dirs(main_fol)
-    # print('finished Expt2')
-
-    # eqpt_list[0].sample_set_size = 4
-    # Expt3 = Experiment(eqpt_list)
-    # Expt3.expt_type = 'temp_sweep'
-    # Expt3.temp = list(np.arange(300, 401, 10))
-    # Expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    # Expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
-    # Expt3.tot_flow = [10]
-    # Expt3.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt3.create_dirs(main_fol)
-    # print('finished Expt3')
-
-    # eqpt_list[0].sample_set_size = 4
-    # Expt2 = Experiment(eqpt_list)
-    # Expt2.expt_type = 'power_sweep'
-    # Expt2.temp = [300]
-    # Expt2.power = list(np.arange(50, 300, 75))
-    # Expt2.gas_type = ['C2H2', 'Ar', 'H2']
-    # Expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # Expt2.tot_flow = [10]
-    # Expt2.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt2.create_dirs(main_fol)
-    # print('finished Expt2')
-
-    # Expt3 = Experiment(eqpt_list)
-    # Expt3.expt_type = 'flow_sweep'
-    # Expt3.temp = [373]
-    # Expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    # Expt3.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # Expt3.tot_flow = list(np.arange(10, 60, 10))
-    # Expt3.sample_name = '20220201_Ag95Pd5_2wt%_25.2mg_shaken'
-    # Expt3.create_dirs(main_fol)
-    # print('finished expt3')
