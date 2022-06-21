@@ -166,7 +166,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     return(subplots1, subplots2)
 
 
-def run_analysis(Expt1, calDF, basecorrect='True'):
+def run_analysis(Expt1, calDF, basecorrect='True', savedata='True'):
     # Analysis Loop
     # TODO add TCD part
     ##############################################################################
@@ -215,14 +215,31 @@ def run_analysis(Expt1, calDF, basecorrect='True'):
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)
     std_dat = np.nanstd(results[:, 1:, :], axis=2)
     std = pd.DataFrame(std_dat, columns=calchemIDs, index=condition)
-
-    np.save(os.path.join(expt_results_fol, 'results'), results)
-    avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
-    std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
+    if savedata:
+        np.save(os.path.join(expt_results_fol, 'results'), results)
+        avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
+        std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
     return(results, avg, std)
 
+def get_bool(prompt):
+    while True:
+        acceptable_answers = {"true":True,
+                              "false":False,
+                              'yes':True,
+                              'no':False}
+        try:
+           return acceptable_answers[input(prompt).lower()]
+        except KeyError:
+           print("Invalid input please enter True or False!")
 
-def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.5, 4.5)):
+def load_results(expt):
+    fol = expt.results_path
+    avg = pd.read_csv(os.path.join(fol, 'avg_conc.csv'), index_col=(0))
+    std = pd.read_csv(os.path.join(fol, 'std_conc.csv'), index_col=(0))
+    results = np.load(os.path.join(fol, 'results.npy'))
+    return(results, avg, std)
+
+def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.5, 4.5), savedata='True'):
     # Plotting
     ###########################################################################
     print('Plotting...')
@@ -331,7 +348,7 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     C_reactant = avg[reactant]  # total conc of reactant molecule
     X = (1 - C_reactant/C_Tot)*100  # conversion assuming 100% mol bal
     rel_err = std/avg
-    X_err = ((rel_err**2).sum(axis=1))**(1/2)*rel_err[reactant]
+    X_err = ((rel_err**2).sum(axis=1))**(1/2)*rel_err.max(axis=1)
     S = (avg[s[0]]/(C_Tot*X/100))*100  # selectivity
     S = S.fillna(0)
 
@@ -345,12 +362,13 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     plt.tight_layout()
 
     # Figure Export
-    fig1.savefig(os.path.join(Expt1.results_path, str(
-        figsize[0])+'w_run_num_plot.svg'), format="svg")
-    fig2.savefig(os.path.join(Expt1.results_path, str(
-        figsize[0])+'w_avg_conc_plot.svg'), format="svg")
-    fig3.savefig(os.path.join(Expt1.results_path, str(
-        figsize[0])+'w_Conv_Sel_plot.svg'), format="svg")
+    if savedata:
+        fig1.savefig(os.path.join(Expt1.results_path, str(
+            figsize[0])+'w_run_num_plot.svg'), format="svg")
+        fig2.savefig(os.path.join(Expt1.results_path, str(
+            figsize[0])+'w_avg_conc_plot.svg'), format="svg")
+        fig3.savefig(os.path.join(Expt1.results_path, str(
+            figsize[0])+'w_Conv_Sel_plot.svg'), format="svg")
 
     return (ax1, ax2, ax3)
 
@@ -379,8 +397,7 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol\postreduction\20220306comp_sweep_373K_0.0mW_10sccm')
-
+                r'\Ensemble Reactor\20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr')
 
     # Main Script
     ###########################################################################

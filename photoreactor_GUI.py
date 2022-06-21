@@ -21,7 +21,8 @@ from equipment.alicat_MFC.gas_control import Gas_System
 from equipment.alicat_MFC import gas_control
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import (Qt, QTimer, QDateTime)
-from PyQt5 import QtWidgets
+#from PyQt5 import QtWidgets
+from System.Threading import Thread, ThreadStart, ApartmentState
 from PyQt5.QtWidgets import (
     QPushButton,
     QLabel,
@@ -76,6 +77,8 @@ class MainWindow(QDialog):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_eqpt_status)
 
+        self.file_browser = QFileDialog()
+
         # This is the Canvas Widget that displays the `figure`
         # It takes the `figure` instance as a parameter to __init__
         # Initialize figure canvas and add to:
@@ -83,7 +86,7 @@ class MainWindow(QDialog):
         self.canvas = FigureCanvas(self.figure)
         self.canvas2 = FigureCanvas(self.figure)
         self.horizontalLayout_4.addWidget(self.canvas) # Study Overview
-        self.horizontalLayout_5.addWidget(self.canvas2)  # Experiment Design
+        self.horizontalLayout_10.addWidget(self.canvas2)  # Experiment Design
 
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment'''
@@ -125,13 +128,22 @@ class MainWindow(QDialog):
         update_flag = False
         item = self.listWidget.currentItem()
         expt = item.data(Qt.UserRole)
-        print(expt.temp)
 
         self.expt_types.setCurrentText(expt.expt_type)
+
+        if expt.ind_var != 'Undefined':
+            values = getattr(expt, expt.ind_var)
+            if len(values) > 1:
+                self.IndVar_start.setValue(np.min(values))
+                self.IndVar_stop.setValue(np.max(values))
+                self.IndVar_step.setValue(np.diff(values)[0])
+        else:
+            self.IndVar_start.setValue(0)
+            self.IndVar_stop.setValue(0)
+            self.IndVar_step.setValue(0)
+
         self.setTemp.setValue(expt.temp[0])
-
         self.setPower.setValue(expt.power[0])
-
         self.setFlow.setValue(expt.tot_flow[0])
 
         self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
@@ -145,6 +157,7 @@ class MainWindow(QDialog):
         self.setGasBType.setCurrentText(expt.gas_type[1])
         self.setGasCComp.setValue(expt.gas_comp[0][2])
         self.setGasCType.setCurrentText(expt.gas_type[2])
+        self.update_plot(expt)
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
 
@@ -174,17 +187,27 @@ class MainWindow(QDialog):
             expt.gas_type[1] = self.setGasBType.currentText()
             expt.gas_comp[0][2] = self.setGasCComp.value()
             expt.gas_type[2] = self.setGasCType.currentText()
-            self.label_IndVar.setText(expt.ind_var)
-            sweep_vals = [self.IndVar_start.value(),
-                          self.IndVar_stop.value(),
-                          self.IndVar_step.value()]
-            if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
-                setattr(expt, expt.ind_var, list(np.arange(*sweep_vals)))
-                expt.plot_sweep(self.figure)
-                self.canvas.draw()
-                self.canvas.show()
-                self.canvas2.draw()
-                self.canvas2.show()
+
+            expt._update_expt_name()
+            item.setText(expt.expt_type+expt.expt_name)
+            units = (expt.expt_list['Units']
+                     [expt.expt_list['Active Status']].to_string(index=False))
+            self.label_IndVar.setText(expt.ind_var+' ['+units+']')
+            self.update_plot(expt)
+
+    def update_plot(self, expt):
+        sweep_vals = [self.IndVar_start.value(),
+                      self.IndVar_stop.value(),
+                      self.IndVar_step.value()]
+        if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
+            setattr(expt, expt.ind_var, list(np.arange(*sweep_vals)))
+            expt.plot_sweep(self.figure)
+        else:
+            self.figure.clear()
+        self.canvas.draw()
+        self.canvas.show()
+        self.canvas2.draw()
+        self.canvas2.show()
 
     def manual_ctrl(self):
         temp = self.manualTemp.value()
@@ -207,17 +230,40 @@ class MainWindow(QDialog):
 
     def select_ctrl_file(self):
         print('clicked')
-        self.cal_path.setText(QFileDialog.getOpenFileName())
+        options = self.file_browser.Options()
+        options |= self.file_browser.DontUseNativeDialog
+        filePath = self.file_browser.getExistingDirectory(None, "Select Directory", options=options)
+        self.ctrl_path.setText(filePath)
         print('step two')
-        QFileDialog.show()
+
 
     def select_cal_file(self):
-        self.ctrl_path.setText(QFileDialog.getOpenFileName())
-        QFileDialog.show()
+        print('clicked')
+        options = self.file_browser.Options()
+        options |= self.file_browser.DontUseNativeDialog
+        filePath = self.file_browser.getExistingDirectory(None, "Select Directory")
+        self.cal_path.setText(filePath)
 
+def check_state():
+    current_state = Thread.CurrentThread.GetApartmentState()
+    if current_state == ApartmentState.STA:
+        print('Current state: STA')
+    elif current_state == ApartmentState.MTA:
+        print('Current state: MTA')
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-window.update_thread()
-sys.exit(app.exec())
+def app_thread():
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    window.update_thread()
+    sys.exit(app.exec())
+
+check_state()
+print('start thread')
+thread = Thread(ThreadStart(app_thread))
+print('set thread apartment STA')
+check_state()
+thread.SetApartmentState(ApartmentState.STA)
+check_state()
+thread.Start()
+thread.Join()
