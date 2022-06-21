@@ -483,8 +483,9 @@ class Experiment:
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-
-            if self._ind_var == 'gas_comp':
+            
+            ## This sets path for data storage according to expt type
+            if self._ind_var == 'gas_comp':  # merge gas_comp into name
                 step_str = '_'.join(
                     [str(m)+n for m, n in zip(step, self.gas_type)])
                 path = os.path.join(self.data_path,
@@ -496,7 +497,7 @@ class Experiment:
                                     ('%i %d%s' % (step_num, step, units)))
             step_num += 1
 
-            # This chooses the run type and sets condition accordingly
+            ##  This chooses the run type and sets condition accordingly
             if self.expt_type == 'temp_sweep':
                 self._heater.ramp(step,  temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
@@ -504,7 +505,6 @@ class Experiment:
             elif self.expt_type == 'comp_sweep':
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()
-
             elif self.expt_type == 'flow_sweep':
                 self._gas_control.set_flows(self.gas_comp[0], step)
                 print(self.gas_type)
@@ -512,13 +512,13 @@ class Experiment:
                 self._gas_control.print_flows()
             # Stability Test conditions set in initial conditions
             
+            ## This segment times when to start GC and prints status
             print('Waiting for steady state: ' 
                   + time.strftime("%H:%M:%S", time.localtime()))
             t1 = time.time()
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()
-            t_passed = round(t2-t1)  # GC can take a while to respond
-            # Very important to have a pause after using the GC!!
+            t_passed = round(t2-t1)  # GC can take a while to respond            
             for i in range(t_steady_state*60-t_passed):
                 time.sleep(1) # Break sleep in bits so keyboard interupt works
 
@@ -532,9 +532,10 @@ class Experiment:
             print('Finished Collecting: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer*60)
-
-            print('Step Finished:')
-            print(time.strftime("%H:%M:%S", time.localtime()))
+            
+            print('Step Finished: ' 
+                  + time.strftime("%H:%M:%S", time.localtime()))
+            
         print('Finished ' + self.expt_type + self.expt_name)
 
 if __name__ == "__main__":
