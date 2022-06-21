@@ -489,6 +489,8 @@ class Experiment:
                     [str(m)+n for m, n in zip(step, self.gas_type)])
                 path = os.path.join(self.data_path,
                                     ('%i %s%s' % (step_num, step_str, units)))
+            elif self.expt_type == 'stability_test':
+                path = os.path.join(self.data_path, '1 Stability_Test')
             else:
                 path = os.path.join(self.data_path,
                                     ('%i %d%s' % (step_num, step, units)))
@@ -508,7 +510,8 @@ class Experiment:
                 print(self.gas_type)
                 print(np.array(self.gas_comp)*step)
                 self._gas_control.print_flows()
-
+            # Stability Test conditions set in initial conditions
+            
             print('Waiting for steady state: ' 
                   + time.strftime("%H:%M:%S", time.localtime()))
             t1 = time.time()
