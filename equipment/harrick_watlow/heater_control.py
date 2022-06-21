@@ -42,14 +42,14 @@ class Heater:
         temp = self.controller.read()['data']
         if temp_units.upper() != 'F':
             temp = convert_temp('F', temp_units, temp)
-        return temp
+        return round(temp, 3)
 
     def read_setpoint(self, temp_units='C'):
         '''returns current controller setpoint in defined units (default=C)'''
         setpoint = self.controller.readSetpoint()['data']
         if temp_units.upper() != 'F':
             setpoint = convert_temp('F', temp_units, setpoint)
-        return setpoint
+        return round(setpoint, 3)
 
     def shut_down(self):
         '''Sets heater to 0 F'''

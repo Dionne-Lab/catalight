@@ -450,6 +450,7 @@ class Experiment:
         return (fig, ax1, ax2, run_time)
 
     def set_initial_conditions(self):
+        self.update_date()
         unit = self.expt_list['Units'][0]
         self._heater.ramp(self.temp[0], temp_units=unit)
         starting_temp = self._heater.read_temp()
@@ -468,11 +469,12 @@ class Experiment:
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_gasD(self.gas_type, self.gas_comp[0])
+        time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
 
     def run_experiment(self, t_steady_state = 15, t_buffer=5):
-        print('running expt')
+        print('Starting ' + self.expt_type + self.expt_name)
         self.set_initial_conditions()
         step_num = 1
         # Creates subfolders for each step of experiment
@@ -507,27 +509,30 @@ class Experiment:
                 print(np.array(self.gas_comp)*step)
                 self._gas_control.print_flows()
 
-            # Very important to have a pause after using the GC!!
-            print('Waiting for steady state:')
-            print(time.strftime("%H:%M:%S", time.localtime()))
+            print('Waiting for steady state: ' 
+                  + time.strftime("%H:%M:%S", time.localtime()))
             t1 = time.time()
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()
-            t_passed = t2-t1
-            time.sleep(t_steady_state*60-t_passed)
+            t_passed = round(t2-t1)  # GC can take a while to respond
+            # Very important to have a pause after using the GC!!
+            for i in range(t_steady_state*60-t_passed):
+                time.sleep(1) # Break sleep in bits so keyboard interupt works
 
-            print('Starting Collection:')
-            print(time.strftime("%H:%M:%S", time.localtime()))
+            print('Starting Collection: ' 
+                  + time.strftime("%H:%M:%S", time.localtime()))
             self._gc_control.peaksimple.SetRunning(1, True)
-            time.sleep(self._gc_control.sample_rate*self.sample_set_size*60)
+            t_collect = self._gc_control.sample_rate*self.sample_set_size*60
+            for i in range(int(t_collect)):
+                time.sleep(1)
 
-            print('Finished Collecting:')
-            print(time.strftime("%H:%M:%S", time.localtime()))
+            print('Finished Collecting: '
+                  + time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer*60)
 
             print('Step Finished:')
             print(time.strftime("%H:%M:%S", time.localtime()))
-
+        print('Finished ' + self.expt_type + self.expt_name)
 
 if __name__ == "__main__":
     # This is just a demo which runs when you run this class file as the main script

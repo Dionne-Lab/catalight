@@ -81,38 +81,68 @@ class Diode_Laser():
         The necessary current is sent based on a externally performed
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
-        m = self._calibration[0]
-        b = self._calibration[1]
-        I_set = (P_set-b)/m  # (mA) Based on calibration
-        Vout = I_set/self._k_mod  # (V) Voltage output set point
-        if P_set == 0:
-            Vout = 0
-        # Convert to 16bit
-        Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
-
-        # Send signal to DAQ Board
-        ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-        Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
-        Vin_eng_units_value = ul.to_eng_units(self.board_num,
-                                              self._ai_range, Vin_value)
-
-        print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
-        print('Set Point = ' + str(P_set))
-        print(time.ctime())
+        
         # Unmutes and sets Vol in dB -0.0 is 100%
-        volume_control.SetMute(0, None)
+        volume_control.SetMute(0, None) # Unmutes and sets Vol in dB -0.0 is 100%
         volume_control.SetMasterVolumeLevel(-2.0, None)
         voice_control.say('Warning: Setting power to'
                           + str(P_set) + 'milliwatts')
         voice_control.runAndWait()
+        
+        m = self._calibration[0]
+        b = self._calibration[1]
+        I_set = (P_set-b)/m  # (mA) Based on calibration
+        I_start = self.read_output()
+        refresh_rate = 20  # 1/min
+        ramp_time = (I_set - I_start)/650  # min - reaches max in 2 min
+        setpoints = np.linspace(I_start, I_set, abs(int(ramp_time*refresh_rate)))
+
+        for I in setpoints:
+            # Ramps the current slowly        
+            Vout = I/self._k_mod  # (V) Voltage output set point
+            if P_set == 0:
+                Vout = 0
+                # Convert to 16bit
+                Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+        
+                # Send signal to DAQ Board
+                ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+                Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+                Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                                      self._ai_range, Vin_value)
+                break
+            # Convert to 16bit
+            Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+    
+            # Send signal to DAQ Board
+            ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+            Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+            Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                                  self._ai_range, Vin_value)
+            time.sleep(60/refresh_rate)  # wait
+
+        self.read_output()
+        print('Set Point = ' + str(P_set))
+        print(time.ctime())
+       
 
     def read_output(self):
+        '''returns the current measured by DAQ'''
+        m = self._calibration[0]
+        b = self._calibration[1]
+        
+        # Get input value into DAQ
         Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
-
-        print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
         
+        # Convert to relevant output numbers
+        V = round(Vin_eng_units_value, 3)
+        I = V*self._k_mod
+        P = round(I*m+b, 3)
+        
+        print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
+        return(abs(I))
         
         
     def shut_down(self):
@@ -188,7 +218,7 @@ class Diode_Laser():
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
 
-        print('Reading = ' + str(Vin_eng_units_value*self._k_mod))
+        self.read_output()
         print(time.ctime())
         # Unmutes and sets Vol in dB -0.0 is 100%
         volume_control.SetMute(0, None)
