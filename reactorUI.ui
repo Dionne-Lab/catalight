@@ -118,7 +118,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>Sample Mass:</string>
+                 <string>Sample Mass (mg):</string>
                 </property>
                </widget>
               </item>
@@ -158,7 +158,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>PushButton</string>
+                 <string>Find File</string>
                 </property>
                </widget>
               </item>
@@ -181,7 +181,7 @@
             <item>
              <widget class="QPushButton" name="findCtrlFile">
               <property name="text">
-               <string>PushButton</string>
+               <string>Find File</string>
               </property>
              </widget>
             </item>
@@ -199,20 +199,32 @@
       <attribute name="title">
        <string>Experiment Design</string>
       </attribute>
-      <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <widget class="QWidget" name="horizontalLayoutWidget_3">
        <property name="geometry">
         <rect>
          <x>10</x>
          <y>10</y>
          <width>1061</width>
-         <height>621</height>
+         <height>581</height>
         </rect>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_8">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>20</number>
+          </property>
           <item>
            <layout class="QFormLayout" name="formLayout_6">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <property name="verticalSpacing">
+             <number>9</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_5">
               <property name="text">
@@ -226,22 +238,51 @@
            </layout>
           </item>
           <item>
-           <widget class="QLabel" name="label_IndVar">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>13</height>
-             </size>
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
             </property>
-            <property name="text">
-             <string>Independent Variable</string>
-            </property>
-           </widget>
+            <item>
+             <widget class="QLabel" name="IndVar">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Independent Variable:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_IndVar">
+              <property name="text">
+               <string> - </string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <layout class="QGridLayout" name="gridLayout_9">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetMaximumSize</enum>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_78">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="text">
                <string>Start</string>
               </property>
@@ -249,6 +290,12 @@
             </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_79">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="text">
                <string>Stop</string>
               </property>
@@ -256,6 +303,12 @@
             </item>
             <item row="0" column="2">
              <widget class="QLabel" name="label_80">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>30</height>
+               </size>
+              </property>
               <property name="text">
                <string>Step</string>
               </property>
@@ -286,6 +339,9 @@
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout_4">
+            <property name="verticalSpacing">
+             <number>20</number>
+            </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_7">
               <property name="text">
@@ -379,7 +435,7 @@
             <item row="6" column="0">
              <widget class="QLabel" name="label_15">
               <property name="text">
-               <string>Total Flow</string>
+               <string>Total Flow (sccm)</string>
               </property>
              </widget>
             </item>
@@ -400,10 +456,13 @@
           </item>
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
+            <property name="verticalSpacing">
+             <number>16</number>
+            </property>
             <item row="0" column="1">
              <widget class="QLabel" name="label_16">
               <property name="text">
-               <string>Composition</string>
+               <string>Composition (frac)</string>
               </property>
              </widget>
             </item>
@@ -421,7 +480,7 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1" rowspan="2">
+            <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="setGasAComp">
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -437,17 +496,14 @@
             <item row="1" column="2">
              <widget class="QComboBox" name="setGasAType"/>
             </item>
-            <item row="2" column="2" rowspan="2">
-             <widget class="QComboBox" name="setGasBType"/>
-            </item>
-            <item row="3" column="0">
+            <item row="2" column="0">
              <widget class="QLabel" name="label_13">
               <property name="text">
                <string>Gas B</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1" rowspan="2">
+            <item row="2" column="1">
              <widget class="QDoubleSpinBox" name="setGasBComp">
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -460,17 +516,17 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2" rowspan="2">
-             <widget class="QComboBox" name="setGasCType"/>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="setGasBType"/>
             </item>
-            <item row="5" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_14">
               <property name="text">
                <string>Gas C</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="setGasCComp">
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -482,6 +538,9 @@
                <double>0.010000000000000</double>
               </property>
              </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QComboBox" name="setGasCType"/>
             </item>
            </layout>
           </item>
@@ -498,7 +557,7 @@
        <property name="geometry">
         <rect>
          <x>450</x>
-         <y>140</y>
+         <y>70</y>
          <width>247</width>
          <height>251</height>
         </rect>
@@ -626,8 +685,8 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>60</y>
+         <x>90</x>
+         <y>70</y>
          <width>321</width>
          <height>421</height>
         </rect>

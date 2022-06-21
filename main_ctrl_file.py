@@ -61,12 +61,7 @@ if __name__ == "__main__":
     plt.close('all')
     sample_name = '20220201_Ag95Pd5_6wt%_20mg_sasol'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
-    p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
     os.makedirs(main_fol, exist_ok=True)
-    os.makedirs(p_sweep_path, exist_ok=True)
-    
-    
-    #eqpt_list[2].test_pressure(p_sweep_path)
 
     eqpt_list[0].sample_set_size = 4
     expt1 = Experiment(eqpt_list)
@@ -78,6 +73,10 @@ if __name__ == "__main__":
     expt1.sample_name = sample_name
     expt1.create_dirs(os.path.join(main_fol, 'postreduction'))
 
+    expt_list = [expt1]
+    calculate_time(expt_list)
+    run_study(expt_list, eqpt_list)
+    shut_down(eqpt_list)
 
     eqpt_list[0].sample_set_size = 4
     expt2 = Experiment(eqpt_list)
@@ -89,7 +88,7 @@ if __name__ == "__main__":
     expt2.tot_flow = [10]
     expt2.sample_name = sample_name
     expt2.create_dirs(os.path.join(main_fol, 'postreduction'))
-   
+
     expt3 = Experiment(eqpt_list)
     expt3.expt_type = 'flow_sweep'
     expt3.temp = [373]
@@ -98,7 +97,7 @@ if __name__ == "__main__":
     expt3.tot_flow = list(np.arange(10, 60, 10))
     expt3.sample_name = sample_name
     expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
+
     expt4 = Experiment(eqpt_list)
     expt4.expt_type = 'comp_sweep'
     expt4.temp = [373]
@@ -109,7 +108,7 @@ if __name__ == "__main__":
     expt4.tot_flow = [10]
     expt4.sample_name = sample_name
     expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
-   
+
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
     # expt5.temp = list(np.arange(300, 481, 20))
@@ -118,7 +117,7 @@ if __name__ == "__main__":
     # expt5.tot_flow = [10]
     # expt5.sample_name = sample_name
     # expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
+
     # eqpt_list[0].sample_set_size = 12
     # reduction = Experiment(eqpt_list)
     # reduction.expt_type = 'temp_sweep'
@@ -129,7 +128,7 @@ if __name__ == "__main__":
     # reduction.sample_name = sample_name
     # reduction.create_dirs(main_fol)
     # print('finished reduction')
-    
+
     # eqpt_list[0].sample_set_size = 4
     # expt3 = Experiment(eqpt_list)
     # expt3.expt_type = 'temp_sweep'

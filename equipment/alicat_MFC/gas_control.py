@@ -37,7 +37,7 @@ class Gas_System:
         percents = np.array(comp_list, dtype=float)*100
         gas_dict = dict(zip(gas_list, percents))
         gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
-        
+
         self.mfc_D.create_mix(mix_no=236, name='output',
                               gases=gas_dict)
         self.mfc_D.set_gas(236)
@@ -75,7 +75,7 @@ class Gas_System:
         self.mfc_C.close()
         self.mfc_D.close()
         del self
-        
+
     def set_calibration_gas(self, mfc, calDF, fill_gas='Ar'):
         '''Sets a custom gas mixture for the mfc of choice, typically for
         calibration gas. This function uses the standard calDF format utilized
@@ -118,11 +118,11 @@ class Gas_System:
                 output.loc[sample_num] = reading
                 time.sleep(60)
                 sample_num += 1
-        
+
         ax1 = output.plot(x='time', y='pressure', ylabel='Pressure (psia)', style='--ok')
         ax2 = ax1.twinx()
         ax2.spines['right'].set_position(('axes', 1.0))
-        output.plot(ax=ax2, x='time', 
+        output.plot(ax=ax2, x='time',
                     y=['setpoint', 'flow rate'], ylabel='Flow Rate (sccm)')
         fig = ax1.get_figure()
         fig.savefig(os.path.join(path, 'flow_test.svg'), format='svg')

@@ -8,10 +8,8 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER
 from mcculw import ul
-from mcculw.enums import ScanOptions, FunctionType, Status
 from mcculw.device_info import DaqDeviceInfo
 from datetime import date
-import numpy as np
 import time
 import re
 import os
@@ -33,7 +31,7 @@ volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
 
 class Diode_Laser():
-    def __init__(self, eqpt_list='None'):
+    def __init__(self):
 
         # Set public attr
         self.board_num = 0
@@ -65,7 +63,7 @@ class Diode_Laser():
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
         self.read_calibration()
-        # self.set_power(0)
+        self.set_power(0)
 
     # Read Only Attributes
     I_max = property(lambda self: self._I_max)
@@ -112,9 +110,7 @@ class Diode_Laser():
                                               self._ai_range, Vin_value)
 
         print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
-        
-        
-        
+
     def shut_down(self):
         '''Sets power of laser to 0'''
         Vout = 0  # (V) Voltage output set point
