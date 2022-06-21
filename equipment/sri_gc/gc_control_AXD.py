@@ -8,11 +8,7 @@ TODO: integrate TCD
 @author: Briley Bourgeois
 
 AXD - changed default control file to CO2 (2022-03-28)
-
-2022-05-31
 Changed it back to C2H2 and added line to print what control file is loading
-Added Channel 2 file updating (for TCD)
-
 """
 
 import os
@@ -42,7 +38,8 @@ class GC_Connector():
         time.sleep(20)  # I think peaksimple is cranky when rushed
         self.ctrl_file = ctrl_file
         print('Loading', ctrl_file)
-        self.load_ctrl_file()
+        self.peaksimple.LoadControlFile(self.ctrl_file)
+        time.sleep(60)
         self.sample_set_size = 4 #default value, can change in main .py script per experiment
 
         # Sample rate is read only
@@ -60,11 +57,10 @@ class GC_Connector():
                 if re.search('<DATA FILE PATH>=', line):
                     line = ('<DATA FILE PATH>=' + data_file_path + '\n')
                 elif re.search('<CHANNEL 1 POSTRUN CYCLE>=', line):
-                    line = ('<CHANNEL 1 POSTRUN CYCLE>=1\n')
+                    line = ('<CHANNEL 1 POSTRUN CYCLE>=' + '1\n')
                 elif re.search('<CHANNEL 1 POSTRUN REPEAT>=', line):
                     line = ('<CHANNEL 1 POSTRUN REPEAT>='
                             + str(self.sample_set_size) + '\n')
-                    
                 elif re.search('<CHANNEL 1 FILE>=', line):
                     line = ('<CHANNEL 1 FILE>=FID\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE DATA>=', line):
@@ -75,26 +71,13 @@ class GC_Connector():
                     line = ('<CHANNEL 1 POSTRUN AUTOINCREMENT>=1\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE IMAGE>=', line):
                     line = ('<CHANNEL 1 POSTRUN SAVE IMAGE>=1\n')
-                    
-                elif re.search('<CHANNEL 2 FILE>=', line):
-                    line = ('<CHANNEL 2 FILE>=TCD\n')
-                elif re.search('<CHANNEL 2 POSTRUN SAVE DATA>=', line):
-                    line = ('<CHANNEL 2 POSTRUN SAVE DATA>=1\n')
-                elif re.search('<CHANNEL 2 POSTRUN SAVE RESULTS>=', line):
-                    line = ('<CHANNEL 2 POSTRUN SAVE RESULTS>=1\n')
-                elif re.search('<CHANNEL 2 POSTRUN AUTOINCREMENT>=', line):
-                    line = ('<CHANNEL 2 POSTRUN AUTOINCREMENT>=1\n')
-                elif re.search('<CHANNEL 2 POSTRUN SAVE IMAGE>=', line):
-                    line = ('<CHANNEL 2 POSTRUN SAVE IMAGE>=1\n')
 
                 new_ctrl_file += line
             ctrl_file.seek(0)
             ctrl_file.writelines(new_ctrl_file)
 
         print(self.ctrl_file)
-        self.load_ctrl_file()
-    
-    def load_ctrl_file(self):
+
         for attempt in range(0, 3):
             try:
                 self.peaksimple.LoadControlFile(self.ctrl_file)
@@ -106,7 +89,7 @@ class GC_Connector():
                 time.sleep(1)
                 continue
         time.sleep(60)  # I think peaksimple is cranky when rushed
-        
+
     def read_ctrl_file(self):
         '''
         Reads loaded control file and updates run time
