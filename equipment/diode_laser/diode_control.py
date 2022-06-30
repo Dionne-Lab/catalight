@@ -133,11 +133,7 @@ class Diode_Laser():
         Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
-<<<<<<< HEAD
 
-        print('Laser output = ' + str(Vin_eng_units_value*self._k_mod))
-
-=======
         
         # Convert to relevant output numbers
         V = round(Vin_eng_units_value, 3)
@@ -147,8 +143,6 @@ class Diode_Laser():
         print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
         return(abs(I))
         
-        
->>>>>>> b723a6e617ca5dbbd74b7202c0467db5a9bb520f
     def shut_down(self):
         '''Sets power of laser to 0'''
         Vout = 0  # (V) Voltage output set point

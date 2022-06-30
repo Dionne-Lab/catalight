@@ -165,7 +165,7 @@ if __name__ == "__main__":
     # expt8.sample_name = sample_name
     # expt8.create_dirs(os.path.join(main_fol, 'postreduction'))
     
-    expt_list = [expt3, expt4, expt7]
-    calculate_time(expt_list)
-    run_study(expt_list, eqpt_list)
+    # expt_list = [expt3, expt4, expt7]
+    # calculate_time(expt_list)
+    # run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)
