@@ -8,6 +8,7 @@ import re, os
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from data_extractor import DataExtractor
 
 def plot_results(file_list, s, reactant, figsize=(6.5, 4.5)):
     # Plotting
@@ -65,20 +66,25 @@ def plot_results(file_list, s, reactant, figsize=(6.5, 4.5)):
 
 # Sample Location Info:
 main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-             r'\Ensemble Reactor')
+            r'\Ensemble Reactor')
 
-expt1 = (r'20220201_Ag95Pd5_6wt%_3.5mg_sasol\postreduction'
-         r'\20220317temp_sweep_0.0mW_0.01C2H2_0.94Ar_0.05H2frac_10sccm')
-expt2 = (r'20220201_Ag95Pd5_6wt%_3.5mg_sasol\postreduction'
-         r'\20220317power_sweep_300K_0.01C2H2_0.94Ar_0.05H2frac_10sccm')
-expt3 = (r'20220201_Ag95Pd5_6wt%_20mg_sasol\postreduction'
-         r'\20220305temp_sweep_0.0mW_0.01C2H2_0.94Ar_0.05H2frac_10sccm')
-expt4 = (r'20220201_Ag95Pd5_6wt%_20mg_sasol\postreduction'
-         r'\20220305power_sweep_300K_0.01C2H2_0.94Ar_0.05H2frac_10sccm')
+expt1 = (r'20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr\postreduction'
+          r'\20220618temp_sweep_0.0mW_0.01C2H2_0.94Ar_0.05H2frac_50sccm')
+expt2 = (r'20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr\postreduction'
+          r'\20220618power_sweep_300K_0.01C2H2_0.94Ar_0.05H2frac_50sccm')
+expt3 = (r'20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr\postreduction'
+          r'\20220608temp_sweep_0.0mW_0.01C2H2_0.94Ar_0.05H2frac_50sccm')
+expt4 = (r'20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr\postreduction'
+          r'\20220608power_sweep_300K_0.01C2H2_0.94Ar_0.05H2frac_50sccm')
 file_list = []
 for expt_path in [expt1, expt2, expt3, expt4]:
     file_path = os.path.join(main_dir, expt_path)
     file_list.append(file_path)
+
+
+# dialog = DataExtractor()
+# if dialog.exec_() == DataExtractor.Accepted:
+#     file_list, data_labels = dialog.get_output()
 
 fig1, ax1 = plot_results([file_list[i] for i in [0, 2]], s=['c2h4'], reactant='c2h2')
 fig2, ax2 = plot_results([file_list[i] for i in [1, 3]], s=['c2h4'], reactant='c2h2')
