@@ -3,10 +3,6 @@
 Created on Tue Dec 21 08:30:33 2021
 This is the experiment class file. Ultimately, this class will be capable of:
 self.create_dirs : make directories for raw data and results
-TODO setting experimental parameters
-TODO running the experiment
-TODO analyzing the data
-TODO step number on folder incase nonmonotonic
 TODO matlab cases? switch?
 This File can likely get folded into gcdata.py to define experiment and data
 classes in the same module in the future
