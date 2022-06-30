@@ -10,6 +10,7 @@ from ctypes import cast, POINTER
 from mcculw import ul
 from mcculw.device_info import DaqDeviceInfo
 from datetime import date
+import numpy as np
 import time
 import re
 import os
@@ -114,9 +115,6 @@ class Diode_Laser():
     
             # Send signal to DAQ Board
             ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-            Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
-            Vin_eng_units_value = ul.to_eng_units(self.board_num,
-                                                  self._ai_range, Vin_value)
             time.sleep(60/refresh_rate)  # wait
 
         self.read_output()
@@ -136,8 +134,8 @@ class Diode_Laser():
 
         
         # Convert to relevant output numbers
-        V = round(Vin_eng_units_value, 3)
-        I = V*self._k_mod
+        V = Vin_eng_units_value
+        I = round(V*self._k_mod, 3)
         P = round(I*m+b, 3)
         
         print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')

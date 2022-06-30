@@ -520,6 +520,7 @@ class Experiment:
 
             print('Starting Collection: ' 
                   + time.strftime("%H:%M:%S", time.localtime()))
+            print('Current Temp = ', self._heater.read_temp(), ' C')
             self._gc_control.peaksimple.SetRunning(1, True)
             t_collect = self._gc_control.sample_rate*self.sample_set_size*60
             for i in range(int(t_collect)):
