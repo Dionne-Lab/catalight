@@ -276,10 +276,12 @@ Expt1.gas_type = ['C2H2', 'Ar', 'H2']  # gas types for 3 MFCs
 # This should be the path where you want the data to be restructured.
 # currently only supports temp sweeps, but you can send a main folder which
 # which contains multiple folders worth of temp sweeps
-# main_dir = "G:\\Shared drives\\Hydrogenation Projects\\AgPd Polyhedra\\Ensemble Reactor\\202111_pretreatment_tests\\"
+main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
+            r'\Ensemble Reactor\20210524_8%AgPdMix_1wt%_pretreatment_test')
+
 #main_dir = 'C:\\Users\\brile\\Documents\\Temp Files\\202111_pretreatment_tests - Copy'
 #main_dir = "C:\\Users\\brile\\Documents\\Temp Files\\20211223_filecopytest\\"
-main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
+#main_dir = r"C:\Users\brile\Documents\Temp Files\20210524_8%AgPdMix_1wt%__400C_25mg"
 
 # Main Script
 ##############################################################################

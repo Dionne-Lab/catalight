@@ -353,12 +353,12 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     S = S.fillna(0)
 
     # Plotting:
-    X.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--o')
-    S.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*S, fmt='--^')
+    X.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*X, fmt='--ok')
+    S.iloc[0:len(x_data)].plot(ax=ax3, yerr=X_err*S, fmt='--^r')
     ax3.set_xlabel(Expt1.ind_var + ' ['+units+']')
     ax3.set_ylabel('Conv./Selec. [%]')
     plt.legend(['Conversion', 'Selectivity'])
-    ax3.set_ylim([0, 100])
+    ax3.set_ylim([0, 105])
     plt.tight_layout()
 
     # Figure Export
@@ -396,26 +396,35 @@ if __name__ == "__main__":
                         "20210930_DummyCalibration\\HayN_FID_C2H2_DummyCal.csv")
 
     # Sample Location Info:
-    main_dir = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr')
+    root = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
+                r'\Ensemble Reactor')
+    dir_list = ['20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr',
+                '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr',
+                '20220201_Ag95Pd5_6wt%_20mg_sasol',
+                '20220201_Ag95Pd5_6wt%_3.5mg_sasol']
+    for dir_name in dir_list:
+        main_dir = os.path.join(root, dir_name)
+        # Main Script
+        ###########################################################################
+        for dirpath, dirnames, filenames in os.walk(main_dir):
+            for filename in filenames:
+                if filename == 'expt_log.txt':
+                    log_path = os.path.join(dirpath, filename)
+                    expt_path = os.path.dirname(log_path)
+                    print(os.path.split(dirpath)[1])
+                    if os.path.split(dirpath)[1] == '20220317temp_sweep_0.0mW_0C2H2_0.95Ar_0.05H2frac_50sccm':
+                        continue
+                    # import all calibration data
+                    calDF = pd.read_csv(
+                        calibration_path, delimiter=',', index_col='Chem ID')
+                    Expt1 = Experiment()  # Initialize experiment obj
+                    Expt1.read_expt_log(log_path)  # Read expt parameters from log
+                    Expt1.update_save_paths(expt_path)  # update file paths
 
-    # Main Script
-    ###########################################################################
-    for dirpath, dirnames, filenames in os.walk(main_dir):
-        for filename in filenames:
-            if filename == 'expt_log.txt':
-                log_path = os.path.join(dirpath, filename)
-                expt_path = os.path.dirname(log_path)
-                # import all calibration data
-                calDF = pd.read_csv(
-                    calibration_path, delimiter=',', index_col='Chem ID')
-                Expt1 = Experiment()  # Initialize experiment obj
-                Expt1.read_expt_log(log_path)  # Read expt parameters from log
-                Expt1.update_save_paths(expt_path)  # update file paths
-
-                (results, avg, std) = run_analysis(Expt1, calDF)
-                (ax1, ax2, ax3) = plot_results(Expt1, calDF, (results, avg, std), s=['c2h4'], mass_bal='C',
-                                               reactant='c2h2', figsize=(4.35, 3.25))
+                    #(results, avg, std) = run_analysis(Expt1, calDF) # first run
+                    (results, avg, std) = load_results(Expt1)  # if you already ran analysis
+                    (ax1, ax2, ax3) = plot_results(Expt1, calDF, (results, avg, std), s=['c2h4'], mass_bal='C',
+                                                    reactant='c2h2', figsize=(6.5, 4.5))
 # Standard figsize
 # 1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
 # 1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
