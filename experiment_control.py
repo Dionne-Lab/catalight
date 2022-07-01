@@ -3,10 +3,6 @@
 Created on Tue Dec 21 08:30:33 2021
 This is the experiment class file. Ultimately, this class will be capable of:
 self.create_dirs : make directories for raw data and results
-TODO setting experimental parameters
-TODO running the experiment
-TODO analyzing the data
-TODO step number on folder incase nonmonotonic
 TODO matlab cases? switch?
 This File can likely get folded into gcdata.py to define experiment and data
 classes in the same module in the future
@@ -524,6 +520,7 @@ class Experiment:
 
             print('Starting Collection: ' 
                   + time.strftime("%H:%M:%S", time.localtime()))
+            print('Starting Temp = ', self._heater.read_temp(), ' C')
             self._gc_control.peaksimple.SetRunning(1, True)
             t_collect = self._gc_control.sample_rate*self.sample_set_size*60
             for i in range(int(t_collect)):
@@ -532,6 +529,7 @@ class Experiment:
             print('Finished Collecting: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer*60)
+            print('Ending = ', self._heater.read_temp(), ' C')
             
             print('Step Finished: ' 
                   + time.strftime("%H:%M:%S", time.localtime()))

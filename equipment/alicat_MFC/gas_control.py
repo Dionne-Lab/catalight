@@ -39,12 +39,6 @@ class Gas_System:
         percents = np.array(comp_list, dtype=float)*100
         gas_dict = dict(zip(gas_list, percents))
         gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
-<<<<<<< HEAD
-
-        self.mfc_D.create_mix(mix_no=236, name='output',
-                              gases=gas_dict)
-        self.mfc_D.set_gas(236)
-=======
         
         if len(gas_dict)>1: # if more than 1 gas, creates mix
             self.mfc_D.create_mix(mix_no=236, name='output',
@@ -52,8 +46,7 @@ class Gas_System:
             self.mfc_D.set_gas(236)
         else:  # If only one gas, sets that as output
             self.mfc_D.set_gas(list(gas_dict)[0])
-        
->>>>>>> b723a6e617ca5dbbd74b7202c0467db5a9bb520f
+    
 
     def print_flows(self):
 

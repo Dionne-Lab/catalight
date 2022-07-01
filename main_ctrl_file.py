@@ -101,7 +101,7 @@ if __name__ == "__main__":
     expt3.expt_type = 'temp_sweep'
     expt3.temp = list(np.arange(300, 401, 10))
     expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    expt3.gas_comp = [[0.01, 1-0.03, 0.02]]
+    expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
     expt3.tot_flow = [50]
     expt3.sample_name = sample_name
     expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
@@ -111,7 +111,7 @@ if __name__ == "__main__":
     expt4.temp = [300]
     expt4.power = list(np.arange(0, 301, 50))
     expt4.gas_type = ['C2H2', 'Ar', 'H2']
-    expt4.gas_comp = [[0.01, 1-0.03, 0.02]]
+    expt4.gas_comp = [[0.1, 1-0.6, 0.5]]
     expt4.tot_flow = [50]
     expt4.sample_name = sample_name
     expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
