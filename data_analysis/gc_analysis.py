@@ -264,6 +264,8 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
+    #plt.rcParams['text.usetex'] = False
+    plt.rcParams['svg.fonttype'] = 'none'
 
     # Initilize run num plot
     fig1, ax1 = plt.subplots()

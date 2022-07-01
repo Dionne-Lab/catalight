@@ -92,6 +92,7 @@ def plot_results(results_dict, figsize=(6.5, 4.5)):
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
+    plt.rcParams['svg.fonttype'] = 'none'
 
     # Initilize Conv and Selectivity plot
     figX, axX = plt.subplots()
@@ -109,16 +110,18 @@ def plot_results(results_dict, figsize=(6.5, 4.5)):
 
     axX.set_ylabel('Conversion [%]')
     axX.set_xlabel('Blank')
-    axX.set_ylim([0, 100])
+    axX.set_ylim([0, 105])
     plt.legend()
-    plt.tight_layout()
+    figX.tight_layout()
 
     axS.set_ylabel('Selectivity [%]')
     axS.set_xlabel('Blank')
-    axS.set_ylim([0, 100])
+    axS.set_ylim([0, 105])
     plt.legend()
-    plt.tight_layout()
-    plt.show()
+    figS.tight_layout()
+    figX.show()
+    figS.show()
+
 
 
     return ((figX, axX), (figS, axS))
@@ -126,7 +129,7 @@ def plot_results(results_dict, figsize=(6.5, 4.5)):
 
 if __name__ == "__main__":
 
-
+    plt.close('all')
     dialog = DataExtractor()
     if dialog.exec_() == DataExtractor.Accepted:
         file_list, data_labels = dialog.get_output()

@@ -33,6 +33,7 @@ def plot_results(file_list, s, reactant, figsize=(6.5, 4.5)):
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
+    plt.rcParams['svg.fonttype'] = 'none'
 
     # Initilize Conv and Selectivity plot
     fig3, ax3 = plt.subplots()
