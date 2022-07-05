@@ -48,14 +48,19 @@ def load_results(expt):
     results = np.load(os.path.join(fol, 'results.npy'))
     return(results, avg, std)
 
+def convert_index(dataframe):
+    '''take in dataframe, convert index from string to float'''
+    unit = re.sub("\d+", "", dataframe.index[0])
+    dataframe.drop('Over_Run_Data', errors='ignore', inplace=True)
+    x_data = dataframe.index.str.replace(r'\D', '', regex=True).astype(float)
+    dataframe.index = x_data
+    return dataframe
+
+
 def calculate(expt, reactant, s):
     results, avg, std = load_results(expt)
-    unit = re.sub("\d+", "", avg.index[0])
-    avg.drop('Over_Run_Data', errors='ignore', inplace=True)
-    std.drop('Over_Run_Data', errors='ignore', inplace=True)
-    x_data = avg.index.str.replace(r'\D', '', regex=True).astype(float)
-    avg.index = x_data
-    std.index = x_data
+    avg = convert_index(avg)
+    std = convert_index(std)
 
     # Calculations:
     C_Tot = avg.sum(axis=1)  # total conc of all molecules

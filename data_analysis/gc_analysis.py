@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from gcdata import GCData
+import pickle
 
 # getting the name of the directory where the this file is present.
 current = os.path.dirname(os.path.realpath(__file__))
@@ -239,6 +240,14 @@ def load_results(expt):
     results = np.load(os.path.join(fol, 'results.npy'))
     return(results, avg, std)
 
+def convert_index(dataframe):
+    '''take in dataframe, convert index from string to float'''
+    unit = re.sub("\d+", "", dataframe.index[0])
+    dataframe.drop('Over_Run_Data', errors='ignore', inplace=True)
+    x_data = dataframe.index.str.replace(r'\D', '', regex=True).astype(float)
+    dataframe.index = x_data
+    return dataframe
+
 def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.5, 4.5), savedata='True'):
     # Plotting
     ###########################################################################
@@ -327,6 +336,9 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
         avg.index = avg.index.str.replace('frac', '')
         std.index = std.index.str.replace('_', '\n')
         std.index = std.index.str.replace('frac', '')
+    else:
+        avg = convert_index(avg)
+        std = convert_index(std)
 
     mol_count = avg @ (np.array(stoyk, dtype=int))
     print(mass_bal)
@@ -365,12 +377,20 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
 
     # Figure Export
     if savedata:
-        fig1.savefig(os.path.join(Expt1.results_path, str(
-            figsize[0])+'w_run_num_plot.svg'), format="svg")
-        fig2.savefig(os.path.join(Expt1.results_path, str(
-            figsize[0])+'w_avg_conc_plot.svg'), format="svg")
-        fig3.savefig(os.path.join(Expt1.results_path, str(
-            figsize[0])+'w_Conv_Sel_plot.svg'), format="svg")
+        fig1_path = os.path.join(os.path.join(Expt1.results_path,
+                                              str(figsize[0])+'w_run_num_plot'))
+        fig2_path = os.path.join(os.path.join(Expt1.results_path,
+                                              str(figsize[0])+'w_avg_conc_plot'))
+        fig3_path = os.path.join(os.path.join(Expt1.results_path,
+                                              str(figsize[0])+'w_Conv_Sel_plot'))
+
+        fig1.savefig(fig1_path, format="svg")
+        fig2.savefig(fig2_path, format="svg")
+        fig3.savefig(fig3_path, format="svg")
+
+        pickle.dump(fig1, open(fig1_path+'.pickle', 'wb'))
+        pickle.dump(fig2, open(fig2_path+'.pickle', 'wb'))
+        pickle.dump(fig3, open(fig3_path+'.pickle', 'wb'))
 
     return (ax1, ax2, ax3)
 
@@ -399,11 +419,14 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     root = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor')
-    dir_list = ['20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr',
-                '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr',
-                '20220201_Ag95Pd5_6wt%_20mg_sasol',
-                '20220201_Ag95Pd5_6wt%_3.5mg_sasol']
+                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol')
+    # dir_list = ['20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr',
+    #             '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr',
+    #             '20220201_Ag95Pd5_6wt%_20mg_sasol',
+    #             '20220201_Ag95Pd5_6wt%_3.5mg_sasol']
+
+    dir_list = ['prereduction']
+
     for dir_name in dir_list:
         main_dir = os.path.join(root, dir_name)
         # Main Script
@@ -413,7 +436,7 @@ if __name__ == "__main__":
                 if filename == 'expt_log.txt':
                     log_path = os.path.join(dirpath, filename)
                     expt_path = os.path.dirname(log_path)
-                    print(os.path.split(dirpath)[1])
+                    print(os.path.split(expt_path)[1])
                     if os.path.split(dirpath)[1] == '20220317temp_sweep_0.0mW_0C2H2_0.95Ar_0.05H2frac_50sccm':
                         continue
                     # import all calibration data
