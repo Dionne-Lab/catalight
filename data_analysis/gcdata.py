@@ -193,7 +193,7 @@ class GCData:
 
         if UnknownPeaks>1:  # Theres always a peak from backflush right now
             print('Warning: %5d Unknown peaks detected' %(UnknownPeaks))
-
+            print(self.filepath)
         if (conc==0).all():  # Checks if all concentrations are zero
             print('Warning: Zero Molecules Detected')
 
