@@ -4,6 +4,8 @@ Created on Fri Jan  7 16:59:01 2022
 Study control file: test main script before the development of a fully integrated GUI
 
 @author: brile, AXD edits with no python knowledge
+
+boop
 """
 from equipment.sri_gc.gc_control import GC_Connector
 from equipment.diode_laser.diode_control import Diode_Laser
