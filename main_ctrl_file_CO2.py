@@ -81,15 +81,25 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
 
     expt1 = Experiment(eqpt_list)
     expt1.expt_type = 'temp_sweep'
+<<<<<<< HEAD
     expt1.sample_set_size = 4
     expt1.temp = list(np.arange(300, 701, 25))
     #expt1.temp = [425+273]
+=======
+    expt1.sample_set_size = 10
+    #expt1.temp = list(np.arange(300, 701, 25))
+    expt1.temp = [425+273]
+>>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
     expt1.gas_type = ['N2', 'CO2', 'H2']
     expt1.gas_comp = [[0.0, 0.5, 0.5]]
     expt1.tot_flow = [10]
     expt1.sample_name = sample_name
     expt1.power = [0]
+<<<<<<< HEAD
     expt1.create_dirs(os.path.join(main_fol, 'expt2_fulltempsweep'))
+=======
+    expt1.create_dirs(os.path.join(main_fol, 'run13_698K_N2_H2'))
+>>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
     
     # expt1 = Experiment(eqpt_list)
     # expt1.expt_type = 'temp_sweep'
@@ -213,5 +223,9 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # stability_test.create_dirs(main_fol)
     
     #always run these two lines
+<<<<<<< HEAD
     #run_study([expt1], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
+=======
+    run_study([expt1], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
+>>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
     shut_down(eqpt_list)
