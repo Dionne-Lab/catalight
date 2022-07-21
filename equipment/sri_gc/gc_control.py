@@ -23,6 +23,8 @@ import clr  # python.NET is imported with the name clr (Common Language Runtime)
 dir_path = os.path.dirname(os.path.realpath(__file__))
 assemblydir = os.path.join(dir_path, 'PeaksimpleClient', 'PeaksimpleConnector.dll')
 
+# if the assembly can't be found, find the .dll file, right click, properties,
+# check "unblock", click apply
 clr.AddReference(assemblydir)  # Add the assembly to python.NET
 import Peaksimple  # Import the assembly namespace, which has a different name
 # Now that the Assembly has been added to python.NET,
@@ -30,9 +32,6 @@ import Peaksimple  # Import the assembly namespace, which has a different name
 # the default won't run from the repo for some reason
 default_ctrl_file = ("C:\\Peak489Win10\\CONTROL_FILE\\"
                      "HayN_C2H2_Hydrogenation\\C2H2_Hydro_HayN_TCD_off.CON")
-#default_ctrl_file = ("C:\\Peak489Win10\\CONTROL_FILE\\"
-#                      "HayN_CO2_Hydrogenation\\CO2_Hydro_p417min-backflush_7minFon_17mintotal_TCDoff.CON")
-
 
 class GC_Connector():
     def __init__(self, ctrl_file=default_ctrl_file):
