@@ -5,6 +5,7 @@ Study control file: test main script before the development of a fully integrate
 
 @author: brile
 """
+import equipment.sri_gc.gc_control
 from equipment.sri_gc.gc_control import GC_Connector
 from equipment.diode_laser.diode_control import Diode_Laser
 from equipment.harrick_watlow.heater_control import Heater
@@ -61,7 +62,7 @@ if __name__ == "__main__":
     plt.close('all')
     sample_name = '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
-    os.makedirs(main_fol, exist_ok=True)
+    # os.makedirs(main_fol, exist_ok=True)
    
     # os.makedirs(p_sweep_path, exist_ok=True)
     # p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
@@ -97,24 +98,24 @@ if __name__ == "__main__":
     # reduction.sample_name = sample_name
     # reduction.create_dirs(main_fol)
    
-    expt3 = Experiment(eqpt_list)
-    expt3.expt_type = 'temp_sweep'
-    expt3.temp = list(np.arange(300, 401, 10))
-    expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
-    expt3.tot_flow = [50]
-    expt3.sample_name = sample_name
-    expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt3 = Experiment(eqpt_list)
+    # expt3.expt_type = 'temp_sweep'
+    # expt3.temp = list(np.arange(300, 401, 10))
+    # expt3.gas_type = ['C2H2', 'Ar', 'H2']
+    # expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
+    # expt3.tot_flow = [50]
+    # expt3.sample_name = sample_name
+    # expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
 
-    expt4 = Experiment(eqpt_list)
-    expt4.expt_type = 'power_sweep'
-    expt4.temp = [300]
-    expt4.power = list(np.arange(0, 301, 50))
-    expt4.gas_type = ['C2H2', 'Ar', 'H2']
-    expt4.gas_comp = [[0.1, 1-0.6, 0.5]]
-    expt4.tot_flow = [50]
-    expt4.sample_name = sample_name
-    expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt4 = Experiment(eqpt_list)
+    # expt4.expt_type = 'power_sweep'
+    # expt4.temp = [300]
+    # expt4.power = list(np.arange(0, 301, 50))
+    # expt4.gas_type = ['C2H2', 'Ar', 'H2']
+    # expt4.gas_comp = [[0.1, 1-0.6, 0.5]]
+    # expt4.tot_flow = [50]
+    # expt4.sample_name = sample_name
+    # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
 
     # stability_test = Experiment(eqpt_list)
     # stability_test.sample_set_size = 6*42
@@ -145,14 +146,14 @@ if __name__ == "__main__":
     # expt6.sample_name = sample_name
     # expt6.create_dirs(os.path.join(main_fol, 'postreduction'))
     
-    expt7 = Experiment(eqpt_list)
-    expt7.expt_type = 'flow_sweep'
-    expt7.temp = [340]
-    expt7.gas_type = ['C2H2', 'Ar', 'H2']
-    expt7.gas_comp = [[0.01, 1-0.03, 0.02]]
-    expt7.tot_flow = list(np.arange(10, 60, 10))
-    expt7.sample_name = sample_name
-    expt7.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt7 = Experiment(eqpt_list)
+    # expt7.expt_type = 'flow_sweep'
+    # expt7.temp = [340]
+    # expt7.gas_type = ['C2H2', 'Ar', 'H2']
+    # expt7.gas_comp = [[0.01, 1-0.03, 0.02]]
+    # expt7.tot_flow = list(np.arange(10, 60, 10))
+    # expt7.sample_name = sample_name
+    # expt7.create_dirs(os.path.join(main_fol, 'postreduction'))
     
     # expt8 = Experiment(eqpt_list)
     # expt8.expt_type = 'comp_sweep'
@@ -165,7 +166,7 @@ if __name__ == "__main__":
     # expt8.sample_name = sample_name
     # expt8.create_dirs(os.path.join(main_fol, 'postreduction'))
     
-    expt_list = [expt3, expt4, expt7]
-    calculate_time(expt_list)
-    run_study(expt_list, eqpt_list)
+    # expt_list = [expt3, expt4, expt7]
+    # calculate_time(expt_list)
+    # run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)
