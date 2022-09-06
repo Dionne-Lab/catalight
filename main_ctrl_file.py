@@ -5,7 +5,6 @@ Study control file: test main script before the development of a fully integrate
 
 @author: brile
 """
-import equipment.sri_gc.gc_control
 from equipment.sri_gc.gc_control import GC_Connector
 from equipment.diode_laser.diode_control import Diode_Laser
 from equipment.harrick_watlow.heater_control import Heater

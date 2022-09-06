@@ -79,50 +79,39 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # reduction.create_dirs(main_fol, 'blah') #change "blah" to folder name you want to create to contain your data
     # #to run this block of code only, highlight and press F9
 
-    expt1 = Experiment(eqpt_list)
-    expt1.expt_type = 'temp_sweep'
-<<<<<<< HEAD
-    expt1.sample_set_size = 4
-    expt1.temp = list(np.arange(300, 701, 25))
-    #expt1.temp = [425+273]
-=======
-    expt1.sample_set_size = 10
-    #expt1.temp = list(np.arange(300, 701, 25))
-    expt1.temp = [425+273]
->>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
-    expt1.gas_type = ['N2', 'CO2', 'H2']
-    expt1.gas_comp = [[0.0, 0.5, 0.5]]
-    expt1.tot_flow = [10]
-    expt1.sample_name = sample_name
-    expt1.power = [0]
-<<<<<<< HEAD
-    expt1.create_dirs(os.path.join(main_fol, 'expt2_fulltempsweep'))
-=======
-    expt1.create_dirs(os.path.join(main_fol, 'run13_698K_N2_H2'))
->>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
-    
+    # expt1 = Experiment(eqpt_list)
+    # expt1.expt_type = 'temp_sweep'
+    # expt1.sample_set_size = 4
+    # expt1.temp = list(np.arange(300, 701, 25))
+    # expt1.gas_type = ['N2', 'CO2', 'H2']
+    # expt1.gas_comp = [[0.5, 0.25, 0.25]]
+    # expt1.tot_flow = [10]
+    # expt1.sample_name = sample_name
+    # expt1.power = [0]
+    # expt1.create_dirs(os.path.join(main_fol, 'expt5_CO2_fulltempsweep_N2'))
+
     # expt1 = Experiment(eqpt_list)
     # expt1.expt_type = 'temp_sweep'
     # expt1.sample_set_size = 20
-    # expt1.temp = [573]
+    # expt1.temp = [700]
     # expt1.gas_type = ['N2', 'CO2', 'H2']
-    # expt1.gas_comp = [[0.125, 0, 0.875]]
-    # expt1.tot_flow = [50]
+    # expt1.gas_comp = [[0.5, 0.25, 0.25]]
+    # expt1.tot_flow = [10]
     # expt1.sample_name = sample_name
     # expt1.power = [0]
-    # expt1.create_dirs(os.path.join(main_fol, 'run6_reduction'))
+    # expt1.create_dirs(os.path.join(main_fol, 'expt6_hightempCO2_postC2H2'))
 
-    # expt2 = Experiment(eqpt_list)
-    # expt2.expt_type = 'power_sweep'
-    # expt2.sample_set_size = 1
-    # expt2.temp = [425 + 273]
-    # expt2.power = list(np.arange(0, 901, 100))
-    # expt2.gas_type = ['N2', 'CO2', 'H2']
-    # expt2.gas_comp = [[0.00, 0.2, 0.8]]
-    # expt2.tot_flow = [10]
-    # expt2.sample_name = sample_name
-    # expt2.create_dirs(os.path.join(main_fol, 'run6_425C_450nm_powersweep_4xH2'))
-    
+    expt2 = Experiment(eqpt_list)
+    expt2.expt_type = 'power_sweep'
+    expt2.sample_set_size = 4
+    expt2.temp = [300]
+    expt2.power = list(np.arange(0, 1001, 100))
+    expt2.gas_type = ['N2', 'CO2', 'H2']
+    expt2.gas_comp = [[0.00, 0.5, 0.5]]
+    expt2.tot_flow = [10]
+    expt2.sample_name = sample_name
+    expt2.create_dirs(os.path.join(main_fol, 'expt8_roomtempCO2_powersweep'))
+
     # expt3 = Experiment(eqpt_list)
     # expt3.expt_type = 'power_sweep'
     # expt3.sample_set_size = 20
@@ -182,12 +171,14 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
    
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
+    # expt5.sample_set_size = 4
     # expt5.temp = list(np.arange(300, 481, 20))
     # expt5.gas_type = ['C2H2', 'Ar', 'H2']
     # expt5.gas_comp = [[0.1, 1-0.6, 0.5]]
     # expt5.tot_flow = [10]
+    # expt5.power = [0]
     # expt5.sample_name = sample_name
-    # expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
+    # expt5.create_dirs(os.path.join(main_fol, 'expt3_fulltempsweep_C2H2'))
     
     # eqpt_list[0].sample_set_size = 4
     # expt3 = Experiment(eqpt_list)
@@ -223,9 +214,5 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # stability_test.create_dirs(main_fol)
     
     #always run these two lines
-<<<<<<< HEAD
-    #run_study([expt1], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
-=======
-    run_study([expt1], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
->>>>>>> d313a5a9f688f7e23af8766592c2ebc819b69875
+    run_study([expt2], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
     shut_down(eqpt_list)
