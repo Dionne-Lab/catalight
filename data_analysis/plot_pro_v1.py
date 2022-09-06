@@ -94,6 +94,8 @@ def plot_results(results_dict, figsize=(6.5, 4.5)):
     plt.rcParams['xtick.major.width'] = 1.5
     plt.rcParams['ytick.major.size'] = 6
     plt.rcParams['ytick.major.width'] = 1.5
+    plt.rcParams['lines.markeredgewidth'] = 0
+    plt.rcParams['lines.markersize'] = 8
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
@@ -127,10 +129,57 @@ def plot_results(results_dict, figsize=(6.5, 4.5)):
     figX.show()
     figS.show()
 
-
-
     return ((figX, axX), (figS, axS))
 
+def plot_SelVsConv(results_dict, figsize=(6.5, 4.5)):
+    # Plotting
+    ###########################################################################
+    print('Plotting...')
+    plt.close('all')
+
+    if figsize[0] < 6:
+        fontsize = [11, 14]
+    elif figsize[0] > 7:
+        fontsize = [16, 20]
+    else:
+        fontsize = [14, 18]
+
+    # Some Plot Defaults
+    plt.rcParams['axes.linewidth'] = 2
+    plt.rcParams['lines.linewidth'] = 1.5
+    plt.rcParams['xtick.major.size'] = 6
+    plt.rcParams['xtick.major.width'] = 1.5
+    plt.rcParams['ytick.major.size'] = 6
+    plt.rcParams['ytick.major.width'] = 1.5
+    plt.rcParams['lines.markeredgewidth'] = 0
+    plt.rcParams['lines.markersize'] = 8
+    plt.rcParams['figure.figsize'] = figsize
+    plt.rcParams['font.size'] = fontsize[0]
+    plt.rcParams['axes.labelsize'] = fontsize[1]
+    plt.rcParams['svg.fonttype'] = 'none'
+
+    # Initilize Conv and Selectivity plot
+    fig, ax = plt.subplots()
+
+
+    for data_set in results_dict.items():
+        data_label = data_set[0]
+        results = data_set[1]
+        X = results['Conversion']
+        S = results['Selectivity']
+        X_err = results['Error']*results['Conversion']
+        S_err = results['Error']*results['Selectivity']
+        ax.plot(X, S, '--o', label=data_label)
+
+
+    ax.set_ylabel('Selectivity [%]')
+    ax.set_xlabel('Conversion [%]')
+    ax.set_xlim([0, 105])
+    ax.set_ylim([0, 105])
+    plt.legend()
+    fig.tight_layout()
+    fig.show()
+    return (fig, ax)
 
 if __name__ == "__main__":
 
@@ -149,7 +198,8 @@ if __name__ == "__main__":
         print(os.path.split(expt_path)[1])
         result = calculate(expt, 'c2h2', ['c2h4'])
         results_dict[data_label] = result
-    plot_results(results_dict)
+    # ((figX, axX), (figS, axS)) = plot_results(results_dict)
+    fig, ax = plot_SelVsConv(results_dict)
     # Standard figsize
     # 1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
     # 1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
