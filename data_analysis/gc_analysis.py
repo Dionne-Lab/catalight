@@ -384,9 +384,9 @@ def plot_results(Expt1, calDF, data_list, s, reactant, mass_bal='c', figsize=(6.
         fig3_path = os.path.join(os.path.join(Expt1.results_path,
                                               str(figsize[0])+'w_Conv_Sel_plot'))
 
-        fig1.savefig(fig1_path, format="svg")
-        fig2.savefig(fig2_path, format="svg")
-        fig3.savefig(fig3_path, format="svg")
+        fig1.savefig(fig1_path+'.svg', format="svg")
+        fig2.savefig(fig2_path+'.svg', format="svg")
+        fig3.savefig(fig3_path+'.svg', format="svg")
 
         pickle.dump(fig1, open(fig1_path+'.pickle', 'wb'))
         pickle.dump(fig2, open(fig2_path+'.pickle', 'wb'))
@@ -419,14 +419,14 @@ if __name__ == "__main__":
 
     # Sample Location Info:
     root = (r'G:\Shared drives\Photocatalysis Projects\AgPd Polyhedra'
-                r'\Ensemble Reactor\20220201_Ag95Pd5_6wt%_20mg_sasol')
+                r'\Ensemble Reactor\20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr')
     # dir_list = ['20220602_Ag5Pd95_6wt%_20.18mg_sasol900_300C_3hr',
     #             '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr',
     #             '20220201_Ag95Pd5_6wt%_20mg_sasol',
     #             '20220201_Ag95Pd5_6wt%_3.5mg_sasol']
 
-    dir_list = ['prereduction']
-
+    dir_list = ['postreduction']
+    plt.ioff() # suppress plot windows
     for dir_name in dir_list:
         main_dir = os.path.join(root, dir_name)
         # Main Script
