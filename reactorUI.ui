@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -205,7 +205,7 @@
          <x>10</x>
          <y>10</y>
          <width>1061</width>
-         <height>581</height>
+         <height>619</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -691,7 +691,7 @@
          <height>421</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
+       <layout class="QVBoxLayout" name="manualControlLayout">
         <item>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
@@ -859,7 +859,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_13">
+           <widget class="QDoubleSpinBox" name="manualFlow">
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
