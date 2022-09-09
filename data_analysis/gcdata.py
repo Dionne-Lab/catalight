@@ -15,7 +15,7 @@ class GCData:
         (which has been read from ASCII and is a pandas dataframe)"""
         self.filepath = filepath
         self.timestamp, self.rawdata = self.getrawdata()
-        self.time = np.asarray(self.rawdata['Time'])
+        self.time = np.asarray(self.rawdata['Time']) # in minutes
         if basecorrect:
             self.signal = self.baseline_correction()
         else:
@@ -136,38 +136,14 @@ class GCData:
         return index
 
     def integrate_peak(self):
+        """ This finds the area under the peak using a trapezoidal method
+        for each peak identified and using the bounds from integration_inds """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
-            counts[i] = np.trapz(self.signal[self.lind[i]:self.rind[i]])
+            counts[i] = np.trapz(self.signal[self.lind[i]:self.rind[i]], x=60*self.time[self.lind[i]:self.rind[i]])
             if counts[i] == 0:
                 counts[i] = 1
-
         return np.around(counts)
-
-
-#    def integration_ind(self):
-#        """OBSOLETE - TO BE DELETED"""
-#        # Note to Claire:
-#        #This part of the analysis works ok for now. After working through the baseline
-#        #and the integration a bit, I'm going to want to fine tune the peak finding
-#        #using some challenging example sets (i.e. very low ethane)
-#        # Note to Claire:
-#        #This line and the integrate_peak fucntions are where I think we should work right now
-#        #The easiest addition would be to add a derivative test to search for dips
-#        #in between peaks (overlaping). (i.e. setting better bounds)
-#        self.peak_idx, _ = scisig.find_peaks(self.signal, prominence=1)
-#        _, _, self.left_idx, self.right_idx = scisig.peak_widths(self.signal, self.peak_idx, rel_height=0.9)
-
-
-#    def integrate_peak(self):
-#        """OBSOLETE - TO BE DELETED Integrates a single peak of a signal based on left and right indices."""
-#        # Indices have to be rounded as they are fractional coming from scisig.peak_widths
-#        left_index = round(self.left_idx)
-#        right_index = round(self.right_idx)
-#        counts = np.trapz(self.signal[left_index:right_index])
-#        if counts == 0:
-#            counts = 1
-#        return round(counts)
 
     def get_concentrations(self, calDF):
         """returns a Pandas series of chemical concentrations
