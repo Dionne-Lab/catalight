@@ -30,6 +30,27 @@ class Gas_System:
         self.mfc_C.set_gas(gas_list[2])
 
     def set_flows(self, comp_list, tot_flow):
+        '''
+        sets the flow rate of all mfc based on a desired total flow 
+        and the desired gas composition
+        TODO: add limit for tot_flow for each MFC
+        Parameters
+        ----------
+        comp_list : list of gas fraction for mfc [a, b, c]. should add to one
+        tot_flow : total flow to send
+
+        Raises
+        ------
+        AttributeError
+            if gas comp doesn't sum to one
+
+        Returns
+        -------
+        None.
+
+        '''
+        if sum(comp_list) != 1:
+            raise AttributeError('Gas comp. must be list of list == 1')
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
         self.mfc_B.set_flow_rate(float(comp_list[1]*tot_flow))
         self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
@@ -49,7 +70,7 @@ class Gas_System:
     
 
     def print_flows(self):
-
+        '''prints mass flow rates and gas type for each MFC to console'''
         print('MFC A = ' + str(self.mfc_A.get()['mass_flow'])
               + self.mfc_A.get()['gas'])
         print('MFC B = ' + str(self.mfc_B.get()['mass_flow'])
@@ -60,11 +81,32 @@ class Gas_System:
               + self.mfc_D.get()['gas'])
 
     def print_details(self):
+        '''
+        Runs mfc.get() for each mfc, printing full status details
+        Returns
+        -------
+        None.
+
+        '''
         print(self.mfc_A.get())
         print(self.mfc_B.get())
         print(self.mfc_C.get())
         print(self.mfc_D.get())
+    
+    def read_flows(self):
+        '''
 
+        Returns
+        -------
+        Nested Dictionary 
+        '''
+        
+        flow_dict = {'mfc_A': self.mfc_A.get(),
+                     'mfc_B': self.mfc_B.get(),
+                     'mfc_C': self.mfc_C.get(),
+                     'mfc_D': self.mfc_D.get()}
+        return(flow_dict)
+    
     def shut_down(self):
         '''Sets MFC with Ar or N2 running to 1 sccm and others to 0'''
         mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C]
@@ -75,6 +117,7 @@ class Gas_System:
                 mfc.set_flow_rate(0.0)
 
     def disconnect(self):
+        '''Sets MFC with Ar/N2 to 1sccm, others to 0, and closes connections'''
         self.shut_down()
         self.mfc_A.close()
         self.mfc_B.close()

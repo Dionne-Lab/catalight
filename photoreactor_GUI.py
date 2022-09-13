@@ -12,10 +12,13 @@ matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
+import psutil
+import subprocess
+import time
 
 from experiment_control import Experiment
 from equipment.sri_gc.gc_control import GC_Connector
-#from equipment.diode_laser.diode_control import Diode_Laser
+from equipment.diode_laser.diode_control import Diode_Laser
 from equipment.harrick_watlow.heater_control import Heater
 from equipment.alicat_MFC.gas_control import Gas_System
 from equipment.alicat_MFC import gas_control
@@ -32,16 +35,20 @@ from PyQt5.QtWidgets import (
     QListWidgetItem,
     QFileDialog)
 
-
-experiment_list = []
-update_flag = False
-
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
         loadUi('reactorUI.ui', self)
-        # TODO initialize equipment, print results to window
+        
+        # Initilize equipment
+        # Maybe eqpt_list should be own class?
+        eqpt_list = self.initialize_equipment()
+        self.gc_connector = eqpt_list[0]
+        self.laser_controller = eqpt_list[1]
+        self.gas_controller = eqpt_list[2]
+        self.heater = eqpt_list[3]
+        
         # Connect Study Overview Tab Contents
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
@@ -72,6 +79,25 @@ class MainWindow(QDialog):
         self.setGasAType.insertItems(0, gas_control.factory_gasses)
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
+        
+        # Connect Manual Control
+        self.manualGasAType.insertItems(0, gas_control.factory_gasses)
+        self.manualGasBType.insertItems(0, gas_control.factory_gasses)
+        self.manualGasCType.insertItems(0, gas_control.factory_gasses)
+        self.init_manual_ctrl()
+        # self.manualTemp.value()
+        # self.manualBuffer.value()
+        # self.manualPower.value()
+        # self.manualRamp.value()
+        # self.manualSampleRate.value()
+        # self.manualSampleSize.value()
+        self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
 
         # Connect timer for live feed
         self.timer = QTimer(self)
@@ -93,20 +119,21 @@ class MainWindow(QDialog):
         # TODO replace timeDisplay with real readouts
         time = QDateTime.currentDateTime()
         timeDisplay = time.toString("mm:ss")
+        flow_dict = self.gas_controller.read_flows()
         self.current_power_1.display(timeDisplay)
         self.current_temp_1.display(timeDisplay)
-        self.current_gasA_comp_1.display(timeDisplay)
-        self.current_gasA_type_1.setText(timeDisplay)
-        self.current_gasB_comp_1.display(timeDisplay)
-        self.current_gasB_type_1.setText(timeDisplay)
-        self.current_gasC_comp_1.display(timeDisplay)
-        self.current_gasC_type_1.setText(timeDisplay)
-        self.current_gasD_flow_1.display(timeDisplay)
+        self.current_gasA_comp_1.display(flow_dict['mfc_A']['mass_flow'])
+        self.current_gasA_type_1.setText(flow_dict['mfc_A']['gas'])
+        self.current_gasB_comp_1.display(flow_dict['mfc_B']['mass_flow'])
+        self.current_gasB_type_1.setText(flow_dict['mfc_B']['gas'])
+        self.current_gasC_comp_1.display(flow_dict['mfc_C']['mass_flow'])
+        self.current_gasC_type_1.setText(flow_dict['mfc_C']['gas'])
+        self.current_gasD_flow_1.display(flow_dict['mfc_D']['mass_flow'])
 
     def update_thread(self):
         # Set the time interval and start the timer
         # I'm not sure this does anything....
-        self.timer.start(1000)
+        self.timer.start(100)
 
     def add_expt(self):
         print('clicked!')
@@ -169,13 +196,9 @@ class MainWindow(QDialog):
             expt = item.data(Qt.UserRole)
 
             expt.expt_type = self.expt_types.currentText()
-
             expt.temp[0] = self.setTemp.value()
-
             expt.power[0] = self.setPower.value()
-
             expt.tot_flow[0] = self.setFlow.value()
-
             expt.sample_rate = self.setSampleRate.value()  # This needs to have a min set by ctrl file
             expt.sample_set_size = self.setSampleSize.value()
             expt.heat_rate = self.setRampRate.value()  # get from heater?
@@ -208,24 +231,57 @@ class MainWindow(QDialog):
         self.canvas.show()
         self.canvas2.draw()
         self.canvas2.show()
+    
+    def init_manual_ctrl(self):
+        
+        self.tabWidget.setUpdatesEnabled(False)
+        # self.setTemp.setValue(expt.temp[0])
+        # self.setPower.setValue(expt.power[0])
+        # self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
+        # self.setSampleSize.setValue(expt.sample_set_size)
+        # self.setRampRate.setValue(expt.heat_rate)  # get from heater?
+        # self.setBuffer.setValue(99)
+        
+        flow_dict = self.gas_controller.read_flows()
+        print(flow_dict)
+        tot_flow = (flow_dict['mfc_A']['setpoint'] +
+                    flow_dict['mfc_B']['setpoint'] +
+                    flow_dict['mfc_C']['setpoint'])
+        self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
+        self.manualGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
+        self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
+        self.manualGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
+        self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
+        self.manualGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
+        self.manualFlow.setValue(tot_flow)
+        self.tabWidget.setUpdatesEnabled(True)
+      
+        
+    def manual_ctrl_update(self):
 
-    def manual_ctrl(self):
-        temp = self.manualTemp.value()
-        temp = self.manualBuffer.value()
-        temp = self.manualPower.value()
-        temp = self.manualRamp.value()
-        temp = self.manualSampleRate.value()
-        temp = self.manualSampleSize.value()
-        temp = self.manualGasAComp.value()
-        temp = self.manualGasAType.currentText()
-        temp = self.manualGasBComp.value()
-        temp = self.manualGasBType.currentText()
-        temp = self.manualGasCComp.value()
-        temp = self.manualGasCType.currentText()
-        temp = self.manualFlow.value()
+        # temp = self.manualTemp.value()
+        # temp = self.manualBuffer.value()
+        # temp = self.manualPower.value()
+        # temp = self.manualRamp.value()
+        # temp = self.manualSampleRate.value()
+        # temp = self.manualSampleSize.value()
+        comp_list = [self.manualGasAComp.value(),
+                     self.manualGasBComp.value(),
+                     self.manualGasCComp.value()]
+        gas_list = [self.manualGasAType.currentText(),
+                    self.manualGasBType.currentText(),
+                    self.manualGasCType.currentText()]
+        tot_flow = self.manualFlow.value()
+        print('\n comp list')
+        print(comp_list)
+        print('\n gas list')
+        print(gas_list)
+        print('\n tot flow')
+        print(tot_flow)
+        self.gas_controller.set_gasses(gas_list)
+        self.gas_controller.set_flows(comp_list, tot_flow)
 
     def update_ctrl_file(self):
-
         print('update ctrl file')
 
     def select_ctrl_file(self):
@@ -243,6 +299,13 @@ class MainWindow(QDialog):
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser.getExistingDirectory(None, "Select Directory")
         self.cal_path.setText(filePath)
+        
+    def initialize_equipment(self):
+        gc_connector = GC_Connector()
+        laser_controller = Diode_Laser()
+        gas_controller = Gas_System()
+        heater = Heater()
+        return (gc_connector, laser_controller, gas_controller, heater)
 
 def check_state():
     current_state = Thread.CurrentThread.GetApartmentState()
@@ -251,19 +314,39 @@ def check_state():
     elif current_state == ApartmentState.MTA:
         print('Current state: MTA')
 
-def app_thread():
+def app_thread(peaksimple):
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     window.update_thread()
-    sys.exit(app.exec())
+    #sys.exit(app.exec())
+    app.exec()
+    print('does this get played')
+    peaksimple.kill()
 
-check_state()
-print('start thread')
-thread = Thread(ThreadStart(app_thread))
-print('set thread apartment STA')
-check_state()
-thread.SetApartmentState(ApartmentState.STA)
-check_state()
-thread.Start()
-thread.Join()
+def open_peaksimple(path_name):
+    '''closes peaksimple if currently running,
+        opens new edition with subprocess'''
+    for process in psutil.process_iter():
+        if 'Peak489Win10' in process.name():
+            process.kill()
+            time.sleep(5)
+    process = subprocess.Popen(path_name)
+    time.sleep(10)
+    return process
+
+plt.close('all')
+update_flag = False
+peaksimple = open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+app_thread(peaksimple)
+
+
+# check_state()
+# print('start thread')
+# thread = Thread(ThreadStart(app_thread))
+# print('set thread apartment STA')
+# check_state()
+# thread.SetApartmentState(ApartmentState.STA)
+# check_state()
+# thread.Start()
+# thread.Join()

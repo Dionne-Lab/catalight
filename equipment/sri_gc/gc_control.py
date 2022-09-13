@@ -37,8 +37,7 @@ class GC_Connector():
     def __init__(self, ctrl_file=default_ctrl_file):
         print('Connecting to Peaksimple...')
         self.peaksimple = Peaksimple.PeaksimpleConnector()  # This class has all the functions
-        self.peaksimple.Connect()
-        time.sleep(20)  # I think peaksimple is cranky when rushed
+        self.connect()
         self.ctrl_file = ctrl_file
         print('Loading', ctrl_file)
         self.load_ctrl_file()
@@ -104,8 +103,22 @@ class GC_Connector():
                 print('Write error. Retrying...')
                 time.sleep(1)
                 continue
-        time.sleep(60)  # I think peaksimple is cranky when rushed
-        
+        time.sleep(30)  # I think peaksimple is cranky when rushed
+    
+    def connect(self):
+        '''Tries to connect to peak simple once/second for a minute'''
+        for attempt in range(0, 60):
+            try:
+                self.peaksimple.Connect()
+                if attempt > 0:
+                    print('Connected!')
+                break
+            except Peaksimple.ConnectionFailedException:
+                print('Connection error. Retrying...')
+                time.sleep(1)
+                continue
+            print('Cannot Connect :(')
+    
     def read_ctrl_file(self):
         '''
         Reads loaded control file and updates run time
