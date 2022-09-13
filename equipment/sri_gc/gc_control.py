@@ -103,15 +103,14 @@ class GC_Connector():
                 print('Write error. Retrying...')
                 time.sleep(1)
                 continue
-        time.sleep(30)  # I think peaksimple is cranky when rushed
+        time.sleep(5)  # I think peaksimple is cranky when rushed
     
     def connect(self):
-        '''Tries to connect to peak simple once/second for a minute'''
-        for attempt in range(0, 60):
+        '''Tries to connect to peak simple 5 times'''
+        for attempt in range(0, 5):
             try:
                 self.peaksimple.Connect()
-                if attempt > 0:
-                    print('Connected!')
+                print('Connected!')
                 break
             except Peaksimple.ConnectionFailedException:
                 print('Connection error. Retrying...')

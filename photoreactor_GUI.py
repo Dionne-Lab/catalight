@@ -91,13 +91,17 @@ class MainWindow(QDialog):
         # self.manualRamp.value()
         # self.manualSampleRate.value()
         # self.manualSampleSize.value()
-        self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
+        # self.buttonBox.button(QDialogButtonBox.Ok).connect(self.manual_ctrl_update)
+        # self.buttonBox.button(QDialogButtonBox.Ok).connect(self.manual_ctrl_update)
+        self.buttonBox.accepted(self.manual_ctrl_update)
+        self.buttonBox.rejected(self.init_manual_ctrl)
 
         # Connect timer for live feed
         self.timer = QTimer(self)
@@ -322,7 +326,7 @@ def app_thread(peaksimple):
     #sys.exit(app.exec())
     app.exec()
     print('does this get played')
-    peaksimple.kill()
+    peaksimple.kill()  # I don't think this closes if theres an error
 
 def open_peaksimple(path_name):
     '''closes peaksimple if currently running,
