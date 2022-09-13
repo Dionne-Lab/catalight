@@ -91,7 +91,7 @@ class Diode_Laser():
         m = self._calibration[0]
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
-        I_start = self.read_output()
+        I_start = self.get_output_current()
         refresh_rate = 20  # 1/min
         ramp_time = (I_set - I_start)/650  # min - reaches max in 2 min
         setpoints = np.linspace(I_start, I_set, abs(int(ramp_time*refresh_rate)))
@@ -117,29 +117,36 @@ class Diode_Laser():
             ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
             time.sleep(60/refresh_rate)  # wait
 
-        self.read_output()
+        self.print_output()
         print('Set Point = ' + str(P_set))
         print(time.ctime())
        
 
-    def read_output(self):
+    def get_output_current(self):
         '''returns the current measured by DAQ'''
-        m = self._calibration[0]
-        b = self._calibration[1]
-        
         # Get input value into DAQ
         Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
-
-        
         # Convert to relevant output numbers
         V = Vin_eng_units_value
         I = round(V*self._k_mod, 3)
-        P = round(I*m+b, 3)
-        
-        print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
         return(abs(I))
+    
+    def get_output_power(self):
+        '''returns the calculates output power from 
+        current measured and saved calibration'''
+        m = self._calibration[0]
+        b = self._calibration[1]
+        I = self.get_output_current()
+        P = round(I*m+b, 3)
+        return(P)
+        
+    def print_output(self):
+        '''prints the output current and power to console'''
+        I = self.get_output_current()
+        P = self.get_output_power()
+        print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
         
     def shut_down(self):
         '''Sets power of laser to 0'''
@@ -214,7 +221,7 @@ class Diode_Laser():
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                               self._ai_range, Vin_value)
 
-        self.read_output()
+        self.print_output()
         print(time.ctime())
         # Unmutes and sets Vol in dB -0.0 is 100%
         volume_control.SetMute(0, None)
