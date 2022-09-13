@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -688,7 +688,7 @@
          <x>90</x>
          <y>70</y>
          <width>321</width>
-         <height>421</height>
+         <height>422</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="manualControlLayout">
@@ -862,6 +862,22 @@
            <widget class="QDoubleSpinBox" name="manualFlow">
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QDialogButtonBox" name="buttonBox">
+            <property name="layoutDirection">
+             <enum>Qt::RightToLeft</enum>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="standardButtons">
+             <set>QDialogButtonBox::Apply|QDialogButtonBox::Reset</set>
+            </property>
+            <property name="centerButtons">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
