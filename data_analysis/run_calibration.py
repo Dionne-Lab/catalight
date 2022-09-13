@@ -7,6 +7,7 @@ Created on Thu Feb  3 09:25:10 2022
 import pandas as pd
 import gc_analysis
 import os
+import pdb
 import sys
 
 # getting the name of the directory where the this file is present.
@@ -26,12 +27,11 @@ if __name__ == "__main__":
     ###########################################################################
     # Calibration Location Info:
     # Format [ChemID, slope, intercept, start, end]
-    calibration_path = ("G:\\Shared drives\\Photocatalysis Reactor\\"
-                        "Reactor Baseline Experiments\\GC Calibration\\"
-                        "calib_202012\\HayD_FID_Sophia_RawCounts.csv")
+    calibration_path = ("/Volumes/GoogleDrive/Shared drives/Ensemble Photoreactor/Reactor Baseline Experiments/GC Calibration/calib_202012/HayD_FID_Sophia_RawCounts.csv")
 
     # Sample Location Info:
-    main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220203calibration_273K_0.0mW_50sccm"
+    # main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220203calibration_273K_0.0mW_50sccm"
+    main_dir = r"/Users/ccarlin/Documents/calibration/20220418calibration_273K_0.0mW_50sccm"
 
     # Main Script
     ###########################################################################
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     Expt1 = Experiment()  # Initialize experiment obj
     Expt1.read_expt_log(log_path)  # Read expt parameters from log
     Expt1.update_save_paths(os.path.dirname(log_path))  # update file paths
-
+    # pdb.set_trace()
     subplots1, subplots2 = gc_analysis.analyze_cal_data(Expt1, calDF)
 # Standard figsize
 # 1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
