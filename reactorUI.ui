@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1111</width>
-    <height>765</height>
+    <width>821</width>
+    <height>687</height>
    </rect>
   </property>
   <property name="palette">
@@ -589,7 +589,7 @@
       <string notr="true">background-color: rgb(190,190,190);</string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -600,7 +600,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>1061</width>
+         <width>771</width>
          <height>621</height>
         </rect>
        </property>
@@ -770,7 +770,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>1061</width>
+         <width>771</width>
          <height>619</height>
         </rect>
        </property>
@@ -1122,8 +1122,8 @@
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>90</x>
-         <y>70</y>
+         <x>80</x>
+         <y>30</y>
          <width>321</width>
          <height>422</height>
         </rect>
@@ -1331,8 +1331,8 @@
       <widget class="QProgressBar" name="progressBar">
        <property name="geometry">
         <rect>
-         <x>430</x>
-         <y>430</y>
+         <x>460</x>
+         <y>295</y>
          <width>251</width>
          <height>31</height>
         </rect>
@@ -1347,8 +1347,8 @@
       <widget class="QLabel" name="label_18">
        <property name="geometry">
         <rect>
-         <x>430</x>
-         <y>410</y>
+         <x>460</x>
+         <y>275</y>
          <width>181</width>
          <height>19</height>
         </rect>
@@ -1360,10 +1360,10 @@
       <widget class="QGroupBox" name="groupBox">
        <property name="geometry">
         <rect>
-         <x>420</x>
-         <y>60</y>
+         <x>460</x>
+         <y>25</y>
          <width>226</width>
-         <height>241</height>
+         <height>240</height>
         </rect>
        </property>
        <property name="title">
@@ -1500,8 +1500,8 @@
       <widget class="QWidget" name="layoutWidget_9">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>40</y>
+         <x>40</x>
+         <y>30</y>
          <width>234</width>
          <height>245</height>
         </rect>
