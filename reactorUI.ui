@@ -600,7 +600,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>771</width>
+         <width>360</width>
          <height>621</height>
         </rect>
        </property>
@@ -759,6 +759,22 @@
          </layout>
         </item>
        </layout>
+      </widget>
+      <widget class="QFrame" name="frame">
+       <property name="geometry">
+        <rect>
+         <x>370</x>
+         <y>10</y>
+         <width>421</width>
+         <height>621</height>
+        </rect>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tabExperimentDesign">
