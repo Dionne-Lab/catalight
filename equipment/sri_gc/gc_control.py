@@ -103,15 +103,14 @@ class GC_Connector():
                 print('Write error. Retrying...')
                 time.sleep(1)
                 continue
-        time.sleep(30)  # I think peaksimple is cranky when rushed
+        time.sleep(5)  # I think peaksimple is cranky when rushed
     
     def connect(self):
-        '''Tries to connect to peak simple once/second for a minute'''
-        for attempt in range(0, 60):
+        '''Tries to connect to peak simple 5 times'''
+        for attempt in range(0, 5):
             try:
                 self.peaksimple.Connect()
-                if attempt > 0:
-                    print('Connected!')
+                print('Connected!')
                 break
             except Peaksimple.ConnectionFailedException:
                 print('Connection error. Retrying...')
@@ -144,12 +143,12 @@ if __name__ == "__main__":
     print(dir_path)
     gc1 = GC_Connector()
     data_path = 'C:\\Peak489Win10\\GCDATA\\20220118_CodeTest'
-    gc1.sample_set_size = 2
-    gc1.update_ctrl_file(data_path)
-    gc1.peaksimple.SetRunning(1, True)
-    time.sleep(10)
-    for n in range(0, 21):
-        print(gc1.peaksimple.IsRunning(1))
-        # IsRunning returns false inbetween runs
-        time.sleep(60)
-    print('Finished')
+    # gc1.sample_set_size = 2
+    # gc1.update_ctrl_file(data_path)
+    # gc1.peaksimple.SetRunning(1, True)
+    # time.sleep(10)
+    # for n in range(0, 21):
+    #     print(gc1.peaksimple.IsRunning(1))
+    #     # IsRunning returns false inbetween runs
+    #     time.sleep(60)
+    # print('Finished')

@@ -36,6 +36,7 @@ class Heater:
         print('Current temperature = ' + str(self.read_temp()) + ' C')
         print('Current setpoint = ' + str(self.read_setpoint()) + ' C')
         self.ramp_rate = 15  # C/min
+        # TODO put check on heat rate
 
     def read_temp(self, temp_units='C'):
         '''returns current controller temp in defined units (default = C)'''
@@ -138,7 +139,7 @@ class Heater:
 if __name__ == "__main__":
     save_path = r"C:\temp control\20210214_heater_test"
     heater = Heater()
-    # heater.ramp(30)
+    heater.ramp(30)
     # time.sleep(300)
     # for rate in np.arange(5, 31, 5):
     #     heater.ramp_rate = rate
