@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>821</width>
+    <width>1076</width>
     <height>687</height>
    </rect>
   </property>
@@ -589,7 +589,7 @@
       <string notr="true">background-color: rgb(190,190,190);</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -760,21 +760,16 @@
         </item>
        </layout>
       </widget>
-      <widget class="QFrame" name="frame">
+      <widget class="QWidget" name="verticalLayoutWidget">
        <property name="geometry">
         <rect>
-         <x>370</x>
+         <x>379</x>
          <y>10</y>
-         <width>421</width>
+         <width>661</width>
          <height>621</height>
         </rect>
        </property>
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
-       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7"/>
       </widget>
      </widget>
      <widget class="QWidget" name="tabExperimentDesign">
@@ -786,7 +781,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>771</width>
+         <width>361</width>
          <height>619</height>
         </rect>
        </property>
@@ -1129,6 +1124,17 @@
          </layout>
         </item>
        </layout>
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>10</y>
+         <width>661</width>
+         <height>621</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8"/>
       </widget>
      </widget>
      <widget class="QWidget" name="tabManualControl">
