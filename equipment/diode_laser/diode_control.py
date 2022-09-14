@@ -24,12 +24,28 @@ calibration_path = os.path.join(package_dir, 'diode_calibration.txt')
 # Initiate a voice control object to send alert messages
 voice_control = pyttsx3.init()
 voice_control.setProperty('volume', 1.0)
+rate = voice_control.getProperty('rate')
+voice_control.setProperty('rate', rate + 1)
+
 
 # This is some code I took off the internet to get control over the speakers
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
+
+# def speak(phrase):
+    
+#     # Make sure volume is turned up
+#     volume_control.SetMute(0, None) # Unmutes and sets Vol in dB -0.0 is 100%
+#     volume_control.SetMasterVolumeLevel(-2.0, None)
+   
+#     voice_control.setProperty('volume', 1.0)
+#     voice_control.say(phrase)
+#     voice_control.runAndWait()
+#     voice_control.stop()
+#     del(voice_control) # Delete because controller bugs on 2nd call
+#     voice_control = pyttsx3.init() #init controller
 
 class Diode_Laser():
     def __init__(self):
@@ -80,14 +96,14 @@ class Diode_Laser():
         The necessary current is sent based on a externally performed
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
-        
-        # Unmutes and sets Vol in dB -0.0 is 100%
-        volume_control.SetMute(0, None) # Unmutes and sets Vol in dB -0.0 is 100%
-        volume_control.SetMasterVolumeLevel(-2.0, None)
-        voice_control.say('Warning: Setting power to'
-                          + str(P_set) + 'milliwatts')
+        #TODO put check on max power
+        print('about to speak')
+        voice_control.setProperty('volume', 1.0)
+        voice_control.say('Warning: Setting power to' + str(P_set) + 'milliwatts')
         voice_control.runAndWait()
-        
+        voice_control.stop()
+        #speak('Warning: Setting power to' + str(P_set) + 'milliwatts')
+        print('finished voice thing')
         m = self._calibration[0]
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
@@ -95,7 +111,9 @@ class Diode_Laser():
         refresh_rate = 20  # 1/min
         ramp_time = (I_set - I_start)/650  # min - reaches max in 2 min
         setpoints = np.linspace(I_start, I_set, abs(int(ramp_time*refresh_rate)))
-
+        setpoints = np.append(setpoints, I_set)
+        print('ramp time = ', ramp_time)
+        print(setpoints)
         for I in setpoints:
             # Ramps the current slowly        
             Vout = I/self._k_mod  # (V) Voltage output set point
@@ -116,6 +134,7 @@ class Diode_Laser():
             # Send signal to DAQ Board
             ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
             time.sleep(60/refresh_rate)  # wait
+            print(I)
 
         self.print_output()
         print('Set Point = ' + str(P_set))
@@ -232,8 +251,8 @@ class Diode_Laser():
 
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
-    laser_controller.time_warning(5/60)
-    laser_controller.set_power(90)
+    laser_controller.time_warning(0.5/60)
+    laser_controller.set_power(1)
     time.sleep(10)
-    laser_controller.set_power(100)
+    laser_controller.set_power(0)
     laser_controller.shut_down()
