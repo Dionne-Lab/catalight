@@ -45,8 +45,15 @@ class MainWindow(QDialog):
         loadUi('reactorUI.ui', self)
         
         # Initilize equipment
-        self.initialize_equipment()
+        # self.initialize_equipment()
+        # self.connect_study_overview()
+        # self.connect_expt_design()
+        # self.connect_manual_control()
+        # self.init_figs()
+        # self.file_browser = QFileDialog()
+        self.timer = QTimer(self)
         
+    def connect_study_overview(self):
         # Connect Study Overview Tab Contents
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
@@ -54,7 +61,8 @@ class MainWindow(QDialog):
         self.listWidget.itemClicked.connect(self.display_expt)
         self.findCalFile.clicked.connect(self.select_cal_file)
         self.findCtrlFile.clicked.connect(self.select_ctrl_file)
-
+        
+    def connect_expt_design(self):
         # Connect Experiment Design Tab Contents
         self.expt_types.currentIndexChanged.connect(self.update_expt)
         self.setTemp.valueChanged.connect(self.update_expt)
@@ -78,6 +86,7 @@ class MainWindow(QDialog):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         
+    def connect_manual_control(self):
         # Connect Manual Control
         self.manualGasAType.insertItems(0, gas_control.factory_gasses)
         self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -105,19 +114,18 @@ class MainWindow(QDialog):
         self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl)
        
         # Connect timer for live feed
-        self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_eqpt_status)
 
-        self.file_browser = QFileDialog()
-
+    def init_figs(self):
         # This is the Canvas Widget that displays the `figure`
         # It takes the `figure` instance as a parameter to __init__
         # Initialize figure canvas and add to:
         self.figure = plt.figure(figsize=(8,8))
+        self.figure.tight_layout()
         self.canvas = FigureCanvas(self.figure)
         self.canvas2 = FigureCanvas(self.figure)
-        self.horizontalLayout_4.addWidget(self.canvas) # Study Overview
-        self.horizontalLayout_10.addWidget(self.canvas2)  # Experiment Design
+        self.verticalLayout_7.addWidget(self.canvas) # Study Overview
+        self.verticalLayout_8.addWidget(self.canvas2)  # Experiment Design
 
     def update_thread(self):
         # Set the time interval and start the timer
@@ -197,9 +205,7 @@ class MainWindow(QDialog):
         item = self.listWidget.currentItem()
         global update_flag
         if (item is not None) & update_flag:
-            print('expt updated')
             expt = item.data(Qt.UserRole)
-
             expt.expt_type = self.expt_types.currentText()
             expt.temp[0] = self.setTemp.value()
             expt.power[0] = self.setPower.value()
@@ -231,6 +237,7 @@ class MainWindow(QDialog):
         if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
             setattr(expt, expt.ind_var, list(np.arange(*sweep_vals)))
             expt.plot_sweep(self.figure)
+            self.figure.tight_layout()
         else:
             self.figure.clear()
         self.canvas.draw()
@@ -241,15 +248,7 @@ class MainWindow(QDialog):
     def init_manual_ctrl(self):
         
         self.tabWidget.setUpdatesEnabled(False)
-        # self.setTemp.setValue(expt.temp[0])
-        # self.setPower.setValue(expt.power[0])
-        # self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
-        # self.setSampleSize.setValue(expt.sample_set_size)
-        # self.setRampRate.setValue(expt.heat_rate)  # get from heater?
-        # self.setBuffer.setValue(99)
-        
         flow_dict = self.gas_controller.read_flows()
-        print(flow_dict)
         tot_flow = (flow_dict['mfc_A']['setpoint'] +
                     flow_dict['mfc_B']['setpoint'] +
                     flow_dict['mfc_C']['setpoint'])
@@ -270,7 +269,6 @@ class MainWindow(QDialog):
         
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment'''
-
         flow_dict = self.gas_controller.read_flows()
         
         self.current_power_1.display(self.laser_controller.get_output_power())
@@ -296,7 +294,6 @@ class MainWindow(QDialog):
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
-        print('eqpt should update')
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
                      self.manualGasCComp.value()]
@@ -317,7 +314,6 @@ class MainWindow(QDialog):
         #sample_rate = self.manualSampleRate.value()
         self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
-        print('eqpt should be updated')
         
     def update_ctrl_file(self):
         print('update ctrl file')
@@ -346,7 +342,7 @@ class MainWindow(QDialog):
     
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
-        self.shut_down() # add shutdown process when window closed    
+        #self.shut_down() # add shutdown process when window closed    
         
     def shut_down(self):
         print('Shutting Down Equipment')
@@ -393,9 +389,10 @@ def setup_style(app):
 # Main
 plt.close('all')
 update_flag = False
-peaksimple = open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+#peaksimple = open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 setup_style(app)
+window.update_thread()
 sys.exit(app.exec())
