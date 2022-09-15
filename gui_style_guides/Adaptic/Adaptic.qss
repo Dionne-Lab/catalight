@@ -330,7 +330,7 @@ QDoubleSpinBox,
 QDateTimeEdit
 {
 	background-color: #000000;
-	color: #000000;
+	color: #00ff00;
 	font-weight: bold;
 	border: 1px solid #333333;
 	padding : 4px;
@@ -435,7 +435,7 @@ QDateTimeEdit::up-arrow
 QLineEdit
 {
 	background-color: #000000;
-	color: #000000;
+	color: #00ff00;
 	font-weight: bold;
     border: 1px solid #333333;
 	padding: 4px;
@@ -756,13 +756,14 @@ QHeaderView::section::horizontal
 /*-----QTabWidget-----*/
 QTabBar::tab
 {
-	background-color: red;
-	color: red;
+	background-color: transparent;
+	color: #ffffff;
 	font-weight: bold;
-	width: 120px;
-	height: 12px;
+	width: 80px;
+	height: 9px;
 	
 }
+
 
 QTabBar::tab:disabled
 {
@@ -774,15 +775,12 @@ QTabBar::tab:disabled
 
 QTabWidget::pane 
 {
-	background-color: red;
-	color: red;
+	background-color: transparent;
+	color: #ffffff;
 	border: 1px groove #333333;
 
 }
-QTabWidget
-{
-	background-color:red;
-}
+
 
 QTabBar::tab:selected
 {
@@ -1248,7 +1246,4 @@ QStatusBar
 
 }
 
-#tabOverview
-{
-	background-color: red;
-}
+
