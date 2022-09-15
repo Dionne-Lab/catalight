@@ -5,6 +5,7 @@ Created on Sun Feb 20 18:45:10 2022
 @author: brile
 """
 import sys
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
@@ -361,22 +362,13 @@ class MainWindow(QDialog):
         # self.eqpt_list.shutdown()
         # dialogButton.button(QDialogButton.Accepted).unblock
 
-def check_state():
-    current_state = Thread.CurrentThread.GetApartmentState()
-    if current_state == ApartmentState.STA:
-        print('Current state: STA')
-    elif current_state == ApartmentState.MTA:
-        print('Current state: MTA')
+# def check_state():
+#     current_state = Thread.CurrentThread.GetApartmentState()
+#     if current_state == ApartmentState.STA:
+#         print('Current state: STA')
+#     elif current_state == ApartmentState.MTA:
+#         print('Current state: MTA')
 
-def app_thread():
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    window.update_thread()
-    sys.exit(app.exec())
-    #app.exec()
-    # print('does this get played')
-    #peaksimple.kill()  # I don't think this closes if theres an error
 
 def open_peaksimple(path_name):
     '''closes peaksimple if currently running,
@@ -389,18 +381,21 @@ def open_peaksimple(path_name):
     time.sleep(5)
     return process
 
+def setup_style(app):
+    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+    rel_path = r"gui_style_guides\Adaptic\Adaptic.qss"
+    abs_file_path = os.path.join(script_dir, rel_path)
+    file = open(abs_file_path,'r')
+    with file:
+        qss = file.read()
+        app.setStyleSheet(qss)
+
+# Main
 plt.close('all')
 update_flag = False
 peaksimple = open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
-# app_thread(peaksimple)
-app_thread()
-
-# check_state()
-# print('start thread')
-# thread = Thread(ThreadStart(app_thread))
-# print('set thread apartment STA')
-# check_state()
-# thread.SetApartmentState(ApartmentState.STA)
-# check_state()
-# thread.Start()
-# thread.Join()
+app = QApplication(sys.argv)
+window = MainWindow()
+window.show()
+setup_style(app)
+sys.exit(app.exec())
