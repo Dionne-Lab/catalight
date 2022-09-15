@@ -855,7 +855,7 @@
        <property name="geometry">
         <rect>
          <x>460</x>
-         <y>295</y>
+         <y>320</y>
          <width>251</width>
          <height>31</height>
         </rect>
@@ -871,7 +871,7 @@
        <property name="geometry">
         <rect>
          <x>460</x>
-         <y>275</y>
+         <y>300</y>
          <width>181</width>
          <height>19</height>
         </rect>
@@ -885,8 +885,8 @@
         <rect>
          <x>460</x>
          <y>25</y>
-         <width>226</width>
-         <height>240</height>
+         <width>241</width>
+         <height>251</height>
         </rect>
        </property>
        <property name="title">
@@ -896,9 +896,9 @@
         <property name="geometry">
          <rect>
           <x>6</x>
-          <y>15</y>
+          <y>28</y>
           <width>232</width>
-          <height>217</height>
+          <height>220</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1">
@@ -1015,139 +1015,189 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QLabel" name="label_38">
+       <property name="geometry">
+        <rect>
+         <x>820</x>
+         <y>530</y>
+         <width>211</width>
+         <height>91</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>gui_style_guides/drawing.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="tabLiveView">
       <attribute name="title">
        <string>Live View</string>
       </attribute>
-      <widget class="QWidget" name="layoutWidget_9">
+      <widget class="QLabel" name="label_37">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>30</y>
-         <width>234</width>
-         <height>245</height>
+         <x>810</x>
+         <y>520</y>
+         <width>211</width>
+         <height>91</height>
         </rect>
        </property>
-       <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
-        <item>
-         <widget class="QLabel" name="label_90">
-          <property name="text">
-           <string>Live Readout:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QFormLayout" name="formLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_91">
-            <property name="text">
-             <string>Current Temperature:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLCDNumber" name="current_temp_2"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_92">
-            <property name="text">
-             <string>Current Power:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLCDNumber" name="current_power_2"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QGridLayout" name="gridLayout_10">
-          <item row="3" column="1">
-           <widget class="QLCDNumber" name="current_gasC_comp_2"/>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_70">
-            <property name="text">
-             <string>Gas Type</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_71">
-            <property name="text">
-             <string>Composition</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_72">
-            <property name="text">
-             <string>Gas A</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_93">
-            <property name="text">
-             <string>Gas B</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_94">
-            <property name="text">
-             <string>Gas C</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLCDNumber" name="current_gasA_comp_2"/>
-          </item>
-          <item row="2" column="1">
-           <widget class="QLCDNumber" name="current_gasB_comp_2"/>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_95">
-            <property name="text">
-             <string>Output:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="1">
-           <widget class="QLCDNumber" name="current_gasD_flow_2"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="current_gasA_type_2">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2">
-           <widget class="QLabel" name="current_gasB_type_2">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QLabel" name="current_gasC_type_2">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="2">
-           <widget class="QLabel" name="label_96">
-            <property name="text">
-             <string>sccm</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>gui_style_guides/drawing.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>30</y>
+         <width>241</width>
+         <height>251</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Live Readout:</string>
+       </property>
+       <widget class="QWidget" name="layoutWidget_9">
+        <property name="geometry">
+         <rect>
+          <x>3</x>
+          <y>25</y>
+          <width>234</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
+         <item>
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_91">
+             <property name="text">
+              <string>Current Temperature:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLCDNumber" name="current_temp_2"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_92">
+             <property name="text">
+              <string>Current Power:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLCDNumber" name="current_power_2"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_10">
+           <item row="3" column="1">
+            <widget class="QLCDNumber" name="current_gasC_comp_2"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_70">
+             <property name="text">
+              <string>Gas Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_71">
+             <property name="text">
+              <string>Composition</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_72">
+             <property name="text">
+              <string>Gas A</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_93">
+             <property name="text">
+              <string>Gas B</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_94">
+             <property name="text">
+              <string>Gas C</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLCDNumber" name="current_gasA_comp_2"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLCDNumber" name="current_gasB_comp_2"/>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_95">
+             <property name="text">
+              <string>Output:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLCDNumber" name="current_gasD_flow_2"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLabel" name="current_gasA_type_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="current_gasB_type_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="current_gasC_type_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="label_96">
+             <property name="text">
+              <string>sccm</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </widget>
