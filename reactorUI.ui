@@ -90,7 +90,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -101,7 +101,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>373</width>
+         <width>361</width>
          <height>621</height>
         </rect>
        </property>
@@ -884,9 +884,9 @@
        <property name="geometry">
         <rect>
          <x>460</x>
-         <y>25</y>
+         <y>30</y>
          <width>241</width>
-         <height>251</height>
+         <height>260</height>
         </rect>
        </property>
        <property name="title">
@@ -896,7 +896,7 @@
         <property name="geometry">
          <rect>
           <x>6</x>
-          <y>28</y>
+          <y>30</y>
           <width>232</width>
           <height>220</height>
          </rect>
@@ -1070,7 +1070,7 @@
          <x>60</x>
          <y>30</y>
          <width>241</width>
-         <height>251</height>
+         <height>260</height>
         </rect>
        </property>
        <property name="title">
@@ -1080,7 +1080,7 @@
         <property name="geometry">
          <rect>
           <x>3</x>
-          <y>25</y>
+          <y>30</y>
           <width>234</width>
           <height>221</height>
          </rect>
