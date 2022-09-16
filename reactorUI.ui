@@ -657,7 +657,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_60">
             <property name="text">
-             <string>Temperature</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Temperature (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -678,7 +678,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="label_63">
             <property name="text">
-             <string>Power</string>
+             <string>Power (mW)</string>
             </property>
            </widget>
           </item>
@@ -886,7 +886,7 @@
          <x>460</x>
          <y>30</y>
          <width>241</width>
-         <height>260</height>
+         <height>211</height>
         </rect>
        </property>
        <property name="title">
@@ -898,7 +898,7 @@
           <x>6</x>
           <y>30</y>
           <width>232</width>
-          <height>220</height>
+          <height>161</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1">
@@ -982,7 +982,7 @@
            <item row="4" column="2">
             <widget class="QLabel" name="label_73">
              <property name="text">
-              <string>-</string>
+              <string>sccm</string>
              </property>
             </widget>
            </item>
@@ -1003,7 +1003,7 @@
            <item row="0" column="1">
             <widget class="QLabel" name="label_65">
              <property name="text">
-              <string>Flow</string>
+              <string>Flow (sccm)</string>
              </property>
             </widget>
            </item>
@@ -1121,7 +1121,7 @@
          <x>60</x>
          <y>30</y>
          <width>241</width>
-         <height>260</height>
+         <height>211</height>
         </rect>
        </property>
        <property name="title">
@@ -1133,7 +1133,7 @@
           <x>3</x>
           <y>30</y>
           <width>234</width>
-          <height>221</height>
+          <height>161</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
@@ -1187,7 +1187,7 @@
            <item row="0" column="1">
             <widget class="QLabel" name="label_71">
              <property name="text">
-              <string>Flow</string>
+              <string>Flow (sccm)</string>
              </property>
             </widget>
            </item>
