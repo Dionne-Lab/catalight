@@ -1028,7 +1028,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="QLabel" name="current_gasD_Flow_1">
+            <widget class="QLabel" name="current_gasD_flow_1">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -1236,7 +1236,7 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="QLabel" name="current_gasD_Flow_2">
+            <widget class="QLabel" name="current_gasD_flow_2">
              <property name="text">
               <string>TextLabel</string>
              </property>
