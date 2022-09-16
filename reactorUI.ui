@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1076</width>
-    <height>689</height>
+    <height>791</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -211,6 +211,16 @@
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7"/>
+      </widget>
+      <widget class="QTextBrowser" name="consoleOutput">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>640</y>
+         <width>1031</width>
+         <height>91</height>
+        </rect>
+       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tabExperimentDesign">
