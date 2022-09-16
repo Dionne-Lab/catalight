@@ -923,12 +923,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QLabel" name="current_power_1">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -948,6 +954,9 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="2">
@@ -955,12 +964,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="1" column="2">
             <widget class="QLabel" name="current_gasA_type_1">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1011,12 +1026,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="QLabel" name="current_gasB_comp_1">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1025,12 +1046,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="4" column="1">
             <widget class="QLabel" name="current_gasD_flow_1">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1042,8 +1069,8 @@
       <widget class="QLabel" name="label_38">
        <property name="geometry">
         <rect>
-         <x>820</x>
-         <y>530</y>
+         <x>810</x>
+         <y>520</y>
          <width>211</width>
          <height>91</height>
         </rect>
@@ -1131,12 +1158,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
             <widget class="QLabel" name="current_power_2">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -1154,7 +1187,7 @@
            <item row="0" column="1">
             <widget class="QLabel" name="label_71">
              <property name="text">
-              <string>Composition</string>
+              <string>Flow</string>
              </property>
             </widget>
            </item>
@@ -1191,12 +1224,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="2">
             <widget class="QLabel" name="current_gasB_type_2">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1205,12 +1244,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="4" column="2">
             <widget class="QLabel" name="label_96">
              <property name="text">
               <string>sccm</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1219,12 +1264,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="QLabel" name="current_gasB_comp_2">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -1233,12 +1284,18 @@
              <property name="text">
               <string>TextLabel</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
             </widget>
            </item>
            <item row="4" column="1">
             <widget class="QLabel" name="current_gasD_flow_2">
              <property name="text">
               <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
