@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>1076</width>
-    <height>687</height>
+    <height>689</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>gui_style_guides/icon.png</normaloff>gui_style_guides/icon.png</iconset>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_6">
    <item>
@@ -21,70 +25,6 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
-     </property>
-     <property name="palette">
-      <palette>
-       <active>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>8</green>
-           <blue>222</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="NoRole">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>252</red>
-           <green>5</green>
-           <blue>10</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </active>
-       <inactive>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>255</red>
-           <green>8</green>
-           <blue>222</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="NoRole">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>252</red>
-           <green>5</green>
-           <blue>10</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </inactive>
-       <disabled>
-        <colorrole role="WindowText">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>0</red>
-           <green>85</green>
-           <blue>127</blue>
-          </color>
-         </brush>
-        </colorrole>
-        <colorrole role="NoRole">
-         <brush brushstyle="SolidPattern">
-          <color alpha="255">
-           <red>252</red>
-           <green>5</green>
-           <blue>10</blue>
-          </color>
-         </brush>
-        </colorrole>
-       </disabled>
-      </palette>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -101,7 +41,7 @@
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>361</width>
+         <width>373</width>
          <height>621</height>
         </rect>
        </property>
@@ -897,8 +837,8 @@
          <rect>
           <x>6</x>
           <y>30</y>
-          <width>232</width>
-          <height>161</height>
+          <width>236</width>
+          <height>193</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1">
@@ -1132,8 +1072,8 @@
          <rect>
           <x>3</x>
           <y>30</y>
-          <width>234</width>
-          <height>161</height>
+          <width>236</width>
+          <height>193</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
