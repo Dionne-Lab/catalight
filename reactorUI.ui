@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1076</width>
-    <height>791</height>
+    <height>808</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <iconset>
     <normaloff>gui_style_guides/icon.png</normaloff>gui_style_guides/icon.png</iconset>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_9">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="sizePolicy">
@@ -211,16 +211,6 @@
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7"/>
-      </widget>
-      <widget class="QTextBrowser" name="consoleOutput">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>640</y>
-         <width>1031</width>
-         <height>91</height>
-        </rect>
-       </property>
       </widget>
      </widget>
      <widget class="QWidget" name="tabExperimentDesign">
@@ -1255,6 +1245,22 @@
        </widget>
       </widget>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="consoleOutput">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>110</height>
+      </size>
+     </property>
     </widget>
    </item>
   </layout>
