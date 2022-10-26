@@ -373,6 +373,7 @@ class Experiment:
         #plt.rcParams['figure.figsize'] = (6.5, 8)
         plt.rcParams['font.size'] = 14
         plt.rcParams['axes.labelsize'] = 18
+        plt.style.use('seaborn-dark')
 
         sweep_val = getattr(self, self.ind_var)
         selector = self.expt_list['Active Status']
@@ -426,9 +427,9 @@ class Experiment:
         ylim_max = 1.1*np.max(sweep_val)  # TODO what about gas comp
         ylim_min = 0.9*np.min(sweep_val)-0.05
         ax1.set_ylim([ylim_min, ylim_max])
-        ax2.plot(t_set[0:3], setpoint[0:3], '-o')
-        ax2.plot(t_sample[0:self.sample_set_size],
-                 sample_val[0:self.sample_set_size], 'x')
+        setpoint_plot = ax2.plot(t_set[0:3], setpoint[0:3], '-o')
+        sample_plot = ax2.plot(t_sample[0:self.sample_set_size],
+                               sample_val[0:self.sample_set_size], 'x')
         ylim_max = 1.1*np.max(sample_val[self.sample_set_size-1])  # TODO what about gas comp
         ylim_min = 0.9*np.max(sample_val[0])-0.05
         # ax2.set_ylim([ylim_min, ylim_max])
@@ -440,8 +441,12 @@ class Experiment:
                         top=False, bottom=False, left=False, right=False)
         plt.xlabel("time [min]")
         plt.ylabel(sweep_title + ' ['+units+']')
-        plt.tight_layout()
+        ax1.annotate('Experiment Overview', xy=(0.05, 0.95), xycoords='axes fraction')
+        ax2.legend(labels=['Setpoint', "GC Sample"],
+                    loc='lower right')
 
+        plt.tight_layout()
+        
         run_time = t_set[-1]  #TODO break this out into seperate func
         return (fig, ax1, ax2, run_time)
 

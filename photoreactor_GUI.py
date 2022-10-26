@@ -24,7 +24,8 @@ from equipment.harrick_watlow.heater_control import Heater
 from equipment.alicat_MFC.gas_control import Gas_System
 from equipment.alicat_MFC import gas_control
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import (Qt, QTimer, QDateTime, QThreadPool)
+from PyQt5.QtCore import (Qt, QTimer, QDateTime, QThreadPool, QObject, pyqtSignal)
+
 #from PyQt5 import QtWidgets
 #from System.Threading import Thread, ThreadStart, ApartmentState
 from threading import Thread
@@ -36,22 +37,36 @@ from PyQt5.QtWidgets import (
     QWidget,
     QListWidgetItem,
     QFileDialog,        
-    QDialogButtonBox)
+    QDialogButtonBox,
+    QAbstractItemView)
+from PyQt5.QtGui import QIcon, QTextCursor
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
         loadUi('reactorUI.ui', self)
-        
-        # Initilize equipment
+  
+        # Initilize GUI
+        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        # peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        # self.timer = QTimer(self)
         # self.initialize_equipment()
         # self.connect_study_overview()
         # self.connect_expt_design()
         # self.connect_manual_control()
         # self.init_figs()
         # self.file_browser = QFileDialog()
-        self.timer = QTimer(self)
+        # self.update_thread()
+        
+    def normalOutputWritten(self, text):
+        """Append text to the QTextEdit."""
+        # Maybe QTextEdit.append() works as well, but this is how I do it:
+        cursor = self.consoleOutput.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        cursor.insertText(text)
+        self.consoleOutput.setTextCursor(cursor)
+        self.consoleOutput.ensureCursorVisible()
         
     def connect_study_overview(self):
         # Connect Study Overview Tab Contents
@@ -59,6 +74,7 @@ class MainWindow(QDialog):
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
         self.listWidget.itemClicked.connect(self.display_expt)
+        self.listWidget.setDragDropMode(QAbstractItemView.InternalMove)
         self.findCalFile.clicked.connect(self.select_cal_file)
         self.findCtrlFile.clicked.connect(self.select_ctrl_file)
         
@@ -120,8 +136,7 @@ class MainWindow(QDialog):
         # This is the Canvas Widget that displays the `figure`
         # It takes the `figure` instance as a parameter to __init__
         # Initialize figure canvas and add to:
-        self.figure = plt.figure(figsize=(8,8))
-        self.figure.tight_layout()
+        self.figure = plt.figure(figsize=(12,8))
         self.canvas = FigureCanvas(self.figure)
         self.canvas2 = FigureCanvas(self.figure)
         self.verticalLayout_7.addWidget(self.canvas) # Study Overview
@@ -131,17 +146,8 @@ class MainWindow(QDialog):
         # Set the time interval and start the timer
         # I'm not sure this does anything....
         self.timer.start(500)
-    
-    def thread_starter(self):
-        #self.thread_manager.start(self.thread_test)
-        ctrl_thread = Thread(target=self.manual_ctrl_update)
-        ctrl_thread.start()
-        
-    def thread_test(self):
-        print('thread started')
-        
+                   
     def add_expt(self):
-        print('clicked!')
         item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
         expt = Experiment()
         item.setData(Qt.UserRole, expt)
@@ -271,25 +277,25 @@ class MainWindow(QDialog):
         '''This function updates the live view of the equipment'''
         flow_dict = self.gas_controller.read_flows()
         
-        self.current_power_1.display(self.laser_controller.get_output_power())
-        self.current_temp_1.display(self.heater.read_temp())
-        self.current_gasA_comp_1.display(flow_dict['mfc_A']['mass_flow'])
+        self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
+        self.current_temp_1.setText('%.2f' % self.heater.read_temp())
+        self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
         self.current_gasA_type_1.setText(flow_dict['mfc_A']['gas'])
-        self.current_gasB_comp_1.display(flow_dict['mfc_B']['mass_flow'])
+        self.current_gasB_comp_1.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
         self.current_gasB_type_1.setText(flow_dict['mfc_B']['gas'])
-        self.current_gasC_comp_1.display(flow_dict['mfc_C']['mass_flow'])
+        self.current_gasC_comp_1.setText('%.2f' % flow_dict['mfc_C']['mass_flow'])
         self.current_gasC_type_1.setText(flow_dict['mfc_C']['gas'])
-        self.current_gasD_flow_1.display(flow_dict['mfc_D']['mass_flow'])
+        self.current_gasD_flow_1.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
         
-        self.current_power_2.display(self.laser_controller.get_output_power())
-        self.current_temp_2.display(self.heater.read_temp())
-        self.current_gasA_comp_2.display(flow_dict['mfc_A']['mass_flow'])
+        self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
+        self.current_temp_2.setText('%.2f' % self.heater.read_temp())
+        self.current_gasA_comp_2.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
         self.current_gasA_type_2.setText(flow_dict['mfc_A']['gas'])
-        self.current_gasB_comp_2.display(flow_dict['mfc_B']['mass_flow'])
+        self.current_gasB_comp_2.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
         self.current_gasB_type_2.setText(flow_dict['mfc_B']['gas'])
-        self.current_gasC_comp_2.display(flow_dict['mfc_C']['mass_flow'])
+        self.current_gasC_comp_2.setText('%.2f' % flow_dict['mfc_C']['mass_flow'])
         self.current_gasC_type_2.setText(flow_dict['mfc_C']['gas'])
-        self.current_gasD_flow_1.display(flow_dict['mfc_D']['mass_flow'])
+        self.current_gasD_flow_1.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
         
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
@@ -315,25 +321,41 @@ class MainWindow(QDialog):
         self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
         
-    def update_ctrl_file(self):
-        print('update ctrl file')
-
     def select_ctrl_file(self):
-        print('clicked')
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
-        filePath = self.file_browser.getExistingDirectory(None, "Select Directory", options=options)
+        filePath = self.file_browser \
+                       .getOpenFileName(self, 'Select Control File', 
+                                        "C:\\Peak489Win10\\CONTROL_FILE",
+                                        "Control files (*.CON)")[0]
+        print(filePath)
         self.ctrl_path.setText(filePath)
-        print('step two')
+        self.gc_connector.ctrl_file = filePath
+        self.gc_connector.load_ctrl_file()
 
 
     def select_cal_file(self):
         print('clicked')
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
-        filePath = self.file_browser.getExistingDirectory(None, "Select Directory")
+        filePath = self.file_browser \
+                       .getOpenFileName(self, 'Select Control File', 
+                                        "C:\\Peak489Win10\\CONTROL_FILE",
+                                        "Control files (*.CON)")[0]
+        print(filePath)
         self.cal_path.setText(filePath)
-        
+    
+    def open_peaksimple(self, path_name):
+        '''closes peaksimple if currently running,
+            opens new edition with subprocess'''
+        for process in psutil.process_iter():
+            if 'Peak489Win10' in process.name():
+                process.kill()
+                time.sleep(5)
+        process = subprocess.Popen(path_name)
+        time.sleep(5)
+        return process
+    
     def initialize_equipment(self):
         self.gc_connector = GC_Connector()
         self.laser_controller = Diode_Laser()
@@ -365,21 +387,19 @@ class MainWindow(QDialog):
 #     elif current_state == ApartmentState.MTA:
 #         print('Current state: MTA')
 
+class EmittingStream(QObject):
+    '''
+    Using this to capture console print statements and broadcast within the GUI
+    https://stackoverflow.com/questions/8356336/how-to-capture-output-of-pythons-interpreter-and-show-in-a-text-widget
+    '''
+    textWritten = pyqtSignal(str)
 
-def open_peaksimple(path_name):
-    '''closes peaksimple if currently running,
-        opens new edition with subprocess'''
-    for process in psutil.process_iter():
-        if 'Peak489Win10' in process.name():
-            process.kill()
-            time.sleep(5)
-    process = subprocess.Popen(path_name)
-    time.sleep(5)
-    return process
+    def write(self, text):
+        self.textWritten.emit(str(text))
 
 def setup_style(app):
     script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-    rel_path = r"gui_style_guides\Adaptic\Adaptic.qss"
+    rel_path = r"gui_style_guides\Adaptic\Adaptic_v2.qss"
     abs_file_path = os.path.join(script_dir, rel_path)
     file = open(abs_file_path,'r')
     with file:
@@ -389,10 +409,8 @@ def setup_style(app):
 # Main
 plt.close('all')
 update_flag = False
-#peaksimple = open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
 app = QApplication(sys.argv)
 window = MainWindow()
 window.show()
 setup_style(app)
-window.update_thread()
 sys.exit(app.exec())

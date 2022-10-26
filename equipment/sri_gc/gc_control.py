@@ -41,16 +41,15 @@ class GC_Connector():
         self.ctrl_file = ctrl_file
         print('Loading', ctrl_file)
         self.load_ctrl_file()
-        self.sample_set_size = 4 #default value, can change in main .py script per experiment
-
-        # Sample rate is read only
-        self._sample_rate = 0
-        self.read_ctrl_file()
+        self.sample_set_size = 4 # default value, can change in main .py script per experiment
+        self._sample_rate = 0  # Sample rate is read only
+        self.read_ctrl_file()  # Reads loaded ctrl file and upates sample rate
         print('Connected!')
 
     sample_rate = property(lambda self: self._sample_rate)
 
     def update_ctrl_file(self, data_file_path):
+        '''Writes over the currently loaded ctrl file to update the save path'''
         # TODO add channel 2 to this
         with open(self.ctrl_file, 'r+') as ctrl_file:
             new_ctrl_file = []
@@ -93,11 +92,12 @@ class GC_Connector():
         self.load_ctrl_file()
     
     def load_ctrl_file(self):
+        '''Loads a new ctrl file to the GC based on .ctrl_file atr'''
+        print('Loading Control File...')
         for attempt in range(0, 3):
             try:
                 self.peaksimple.LoadControlFile(self.ctrl_file)
-                if attempt > 0:
-                    print('Successful!')
+                print('Successful!')
                 break
             except Peaksimple.ConnectionWriteFailedException:
                 print('Write error. Retrying...')
@@ -120,7 +120,7 @@ class GC_Connector():
     
     def read_ctrl_file(self):
         '''
-        Reads loaded control file and updates run time
+        Reads loaded control file and updates sample rate attribute
 
         Returns
         -------
