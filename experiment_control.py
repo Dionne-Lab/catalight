@@ -73,8 +73,8 @@ class Experiment:
         self._power = [0.0]
         self._tot_flow = [0.0]  # This can't be larger than 50
         # Every row should add to one
-        self._gas_comp = [[0.0, 50.0, 0.0]]
-        self._gas_type = ['C2H2', 'Ar', 'H2']
+        self._gas_comp = [[0.0, 50.0, 0.0, 0.0]]
+        self._gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
 
         # Returns todays date as YYYYMMDD by default
         self._date = date.today().strftime('%Y%m%d')
@@ -114,7 +114,7 @@ class Experiment:
 
             if not isinstance(value, list):
                 raise AttributeError(attr+' must be list')
-            elif (attr == '_tot_flow') & (np.max(value) > 50):
+            elif (attr == '_tot_flow') & (np.max(value) > 350):
                 raise AttributeError('Total flow must be <= 50')
             elif (attr == '_gas_comp'):
                 for composition in value:
@@ -201,6 +201,7 @@ class Experiment:
                 'Gas 1 type = ' + self.gas_type[0],
                 'Gas 2 type = ' + self.gas_type[1],
                 'Gas 3 type = ' + self.gas_type[2],
+                'Gas 4 type = ' + self.gas_type[3],
                 'Gas Composition [' + self.expt_list['Units'][2] +
                 '] = ' + str(self.gas_comp),
                 'Total Flow [' + self.expt_list['Units'][3] +
@@ -464,7 +465,7 @@ class Experiment:
         self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
-        self._gas_control.set_gasD(self.gas_type, self.gas_comp[0])
+        self._gas_control.set_gasE(self.gas_type, self.gas_comp[0])
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
@@ -479,7 +480,7 @@ class Experiment:
             # Compare Boolean
             units = (self.expt_list['Units']
                      [self.expt_list['Active Status']].to_string(index=False))
-            
+
             ## This sets path for data storage according to expt type
             if self._ind_var == 'gas_comp':  # merge gas_comp into name
                 step_str = '_'.join(
@@ -507,18 +508,18 @@ class Experiment:
                 print(np.array(self.gas_comp)*step)
                 self._gas_control.print_flows()
             # Stability Test conditions set in initial conditions
-            
+
             ## This segment times when to start GC and prints status
-            print('Waiting for steady state: ' 
+            print('Waiting for steady state: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             t1 = time.time()
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()
-            t_passed = round(t2-t1)  # GC can take a while to respond            
+            t_passed = round(t2-t1)  # GC can take a while to respond
             for i in range(t_steady_state*60-t_passed):
                 time.sleep(1) # Break sleep in bits so keyboard interupt works
 
-            print('Starting Collection: ' 
+            print('Starting Collection: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             print('Starting Temp = ', self._heater.read_temp(), ' C')
             self._gc_control.peaksimple.SetRunning(1, True)
@@ -530,14 +531,15 @@ class Experiment:
                   + time.strftime("%H:%M:%S", time.localtime()))
             time.sleep(t_buffer*60)
             print('Ending = ', self._heater.read_temp(), ' C')
-            
-            print('Step Finished: ' 
+
+            print('Step Finished: '
                   + time.strftime("%H:%M:%S", time.localtime()))
-            
+
         print('Finished ' + self.expt_type + self.expt_name)
 
 if __name__ == "__main__":
     # This is just a demo which runs when you run this class file as the main script
+    # as of 20221026 this demo will not run because an extra mfc was added to setup
     plt.close('all')
     # main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
     #             "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")

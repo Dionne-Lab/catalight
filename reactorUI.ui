@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1096</width>
-    <height>808</height>
+    <height>852</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -223,7 +223,7 @@
          <x>10</x>
          <y>10</y>
          <width>361</width>
-         <height>619</height>
+         <height>651</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -484,66 +484,6 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>Gas Type</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>Gas A</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="setGasAComp">
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="2">
-             <widget class="QComboBox" name="setGasAType"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_13">
-              <property name="text">
-               <string>Gas B</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="setGasBComp">
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="maximum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="singleStep">
-               <double>0.010000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="2">
-             <widget class="QComboBox" name="setGasBType"/>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_14">
-              <property name="text">
-               <string>Gas C</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="setGasCComp">
               <property name="alignment">
@@ -560,6 +500,83 @@
             <item row="3" column="2">
              <widget class="QComboBox" name="setGasCType"/>
             </item>
+            <item row="1" column="1">
+             <widget class="QDoubleSpinBox" name="setGasAComp">
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="setGasBComp">
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="maximum">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_13">
+              <property name="text">
+               <string>Gas B</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>Gas Type</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Gas A</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QComboBox" name="setGasAType"/>
+            </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="setGasBType"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Gas C</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Gas D</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QDoubleSpinBox" name="setGasDComp">
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QComboBox" name="setGasDType"/>
+            </item>
            </layout>
           </item>
          </layout>
@@ -572,7 +589,7 @@
          <x>390</x>
          <y>10</y>
          <width>661</width>
-         <height>621</height>
+         <height>651</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8"/>
@@ -588,7 +605,7 @@
          <x>80</x>
          <y>30</y>
          <width>321</width>
-         <height>361</height>
+         <height>411</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="manualControlLayout">
@@ -682,26 +699,6 @@
         </item>
         <item>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_56">
-            <property name="text">
-             <string>Gas Type</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_57">
-            <property name="text">
-             <string>Gas A</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="manualGasAType"/>
-          </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_58">
             <property name="text">
@@ -747,11 +744,48 @@
             </property>
            </widget>
           </item>
+          <item row="3" column="2">
+           <widget class="QComboBox" name="manualGasCType"/>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_56">
+            <property name="text">
+             <string>Gas Type</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_57">
+            <property name="text">
+             <string>Gas A</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="manualGasAType"/>
+          </item>
           <item row="2" column="2">
            <widget class="QComboBox" name="manualGasBType"/>
           </item>
-          <item row="3" column="2">
-           <widget class="QComboBox" name="manualGasCType"/>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Gas D</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QDoubleSpinBox" name="manualGasDComp">
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QComboBox" name="manualGasDType"/>
           </item>
          </layout>
         </item>
@@ -826,7 +860,7 @@
          <x>460</x>
          <y>30</y>
          <width>241</width>
-         <height>211</height>
+         <height>241</height>
         </rect>
        </property>
        <property name="title">
@@ -838,7 +872,7 @@
           <x>6</x>
           <y>30</y>
           <width>236</width>
-          <height>161</height>
+          <height>193</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1">
@@ -882,25 +916,8 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_8">
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_53">
-             <property name="text">
-              <string>Output:</string>
-             </property>
-            </widget>
-           </item>
            <item row="3" column="2">
             <widget class="QLabel" name="current_gasC_type_1">
-             <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QLabel" name="current_gasB_type_1">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -919,10 +936,17 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="label_73">
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_53">
              <property name="text">
-              <string>sccm</string>
+              <string>Output:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_67">
+             <property name="text">
+              <string>Gas A</string>
              </property>
             </widget>
            </item>
@@ -933,31 +957,20 @@
              </property>
             </widget>
            </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="current_gasE_flow_1">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_69">
              <property name="text">
               <string>Gas C</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_65">
-             <property name="text">
-              <string>Flow (sccm)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_66">
-             <property name="text">
-              <string>Gas Type</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_67">
-             <property name="text">
-              <string>Gas A</string>
              </property>
             </widget>
            </item>
@@ -971,13 +984,20 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="current_gasB_comp_1">
+           <item row="2" column="2">
+            <widget class="QLabel" name="current_gasB_type_1">
              <property name="text">
               <string>TextLabel</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_65">
+             <property name="text">
+              <string>Flow (sccm)</string>
              </property>
             </widget>
            </item>
@@ -991,8 +1011,49 @@
              </property>
             </widget>
            </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_66">
+             <property name="text">
+              <string>Gas Type</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="current_gasB_comp_1">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLabel" name="label_73">
+             <property name="text">
+              <string>sccm</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_21">
+             <property name="text">
+              <string>Gas D</string>
+             </property>
+            </widget>
+           </item>
            <item row="4" column="1">
-            <widget class="QLabel" name="current_gasD_flow_1">
+            <widget class="QLabel" name="current_gasD_comp_1">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="current_gasD_type_1">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -1061,7 +1122,7 @@
          <x>60</x>
          <y>30</y>
          <width>241</width>
-         <height>211</height>
+         <height>241</height>
         </rect>
        </property>
        <property name="title">
@@ -1073,7 +1134,7 @@
           <x>3</x>
           <y>30</y>
           <width>236</width>
-          <height>161</height>
+          <height>193</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
@@ -1117,45 +1178,10 @@
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_10">
-           <item row="0" column="2">
-            <widget class="QLabel" name="label_70">
-             <property name="text">
-              <string>Gas Type</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_71">
-             <property name="text">
-              <string>Flow (sccm)</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_72">
              <property name="text">
               <string>Gas A</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_93">
-             <property name="text">
-              <string>Gas B</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="label_94">
-             <property name="text">
-              <string>Gas C</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="label_95">
-             <property name="text">
-              <string>Output:</string>
              </property>
             </widget>
            </item>
@@ -1166,6 +1192,40 @@
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_93">
+             <property name="text">
+              <string>Gas B</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QLabel" name="label_96">
+             <property name="text">
+              <string>sccm</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="current_gasA_comp_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_94">
+             <property name="text">
+              <string>Gas C</string>
              </property>
             </widget>
            </item>
@@ -1189,28 +1249,29 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="2">
-            <widget class="QLabel" name="label_96">
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_95">
              <property name="text">
-              <string>sccm</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <string>Output:</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="current_gasA_comp_2">
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_70">
              <property name="text">
-              <string>TextLabel</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <string>Gas Type</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QLabel" name="current_gasB_comp_2">
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_71">
+             <property name="text">
+              <string>Flow (sccm)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="current_gasE_flow_2">
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -1229,8 +1290,35 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="current_gasB_comp_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_22">
+             <property name="text">
+              <string>Gas D</string>
+             </property>
+            </widget>
+           </item>
            <item row="4" column="1">
-            <widget class="QLabel" name="current_gasD_flow_2">
+            <widget class="QLabel" name="current_gasD_comp_2">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="current_gasD_type_2">
              <property name="text">
               <string>TextLabel</string>
              </property>

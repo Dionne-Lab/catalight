@@ -35,7 +35,7 @@ from PyQt5.QtWidgets import (
     QDialog,
     QWidget,
     QListWidgetItem,
-    QFileDialog,        
+    QFileDialog,
     QDialogButtonBox)
 
 # Subclass QMainWindow to customize your application's main window
@@ -43,7 +43,7 @@ class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
         loadUi('reactorUI.ui', self)
-        
+
         # Initilize equipment
         # self.initialize_equipment()
         # self.connect_study_overview()
@@ -52,7 +52,7 @@ class MainWindow(QDialog):
         # self.init_figs()
         # self.file_browser = QFileDialog()
         self.timer = QTimer(self)
-        
+
     def connect_study_overview(self):
         # Connect Study Overview Tab Contents
         self.setWindowTitle("BruceJr")
@@ -61,7 +61,7 @@ class MainWindow(QDialog):
         self.listWidget.itemClicked.connect(self.display_expt)
         self.findCalFile.clicked.connect(self.select_cal_file)
         self.findCtrlFile.clicked.connect(self.select_ctrl_file)
-        
+
     def connect_expt_design(self):
         # Connect Experiment Design Tab Contents
         self.expt_types.currentIndexChanged.connect(self.update_expt)
@@ -78,6 +78,8 @@ class MainWindow(QDialog):
         self.setGasBType.currentIndexChanged.connect(self.update_expt)
         self.setGasCComp.valueChanged.connect(self.update_expt)
         self.setGasCType.currentIndexChanged.connect(self.update_expt)
+        self.setGasDComp.valueChanged.connect(self.update_expt)
+        self.setGasDType.currentIndexChanged.connect(self.update_expt)
         # lineEdit.editingFinished() good one
         self.IndVar_start.valueChanged.connect(self.update_expt)
         self.IndVar_stop.valueChanged.connect(self.update_expt)
@@ -85,12 +87,14 @@ class MainWindow(QDialog):
         self.setGasAType.insertItems(0, gas_control.factory_gasses)
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
-        
+        self.setGasDType.insertItems(0, gas_control.factory_gasses)
+
     def connect_manual_control(self):
         # Connect Manual Control
         self.manualGasAType.insertItems(0, gas_control.factory_gasses)
         self.manualGasBType.insertItems(0, gas_control.factory_gasses)
         self.manualGasCType.insertItems(0, gas_control.factory_gasses)
+        self.manualGasDType.insertItems(0, gas_control.factory_gasses)
         self.init_manual_ctrl()
         # self.manualTemp.value()
         # self.manualBuffer.value()
@@ -101,18 +105,20 @@ class MainWindow(QDialog):
         # self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
         # self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
         # self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasDComp.valueChanged.connect(self.manual_ctrl_update)
         # self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
         # self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
         # self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasDType.currentIndexChanged.connect(self.manual_ctrl_update)
         # self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
-        
+
         #ctrl_thread = Thread(target=self.manual_ctrl_update)
         #ctrl_thread = Thread(target=self.thread_test)
         #self.thread_manager = QThreadPool()
         #self.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.thread_starter)
         self.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.manual_ctrl_update)
         self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl)
-       
+
         # Connect timer for live feed
         self.timer.timeout.connect(self.update_eqpt_status)
 
@@ -131,15 +137,15 @@ class MainWindow(QDialog):
         # Set the time interval and start the timer
         # I'm not sure this does anything....
         self.timer.start(500)
-    
+
     def thread_starter(self):
         #self.thread_manager.start(self.thread_test)
         ctrl_thread = Thread(target=self.manual_ctrl_update)
         ctrl_thread.start()
-        
+
     def thread_test(self):
         print('thread started')
-        
+
     def add_expt(self):
         print('clicked!')
         item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
@@ -188,6 +194,8 @@ class MainWindow(QDialog):
         self.setGasBType.setCurrentText(expt.gas_type[1])
         self.setGasCComp.setValue(expt.gas_comp[0][2])
         self.setGasCType.setCurrentText(expt.gas_type[2])
+        self.setGasDComp.setValue(expt.gas_comp[0][3])
+        self.setGasDType.setCurrentText(expt.gas_type[3])
         self.update_plot(expt)
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
@@ -221,6 +229,8 @@ class MainWindow(QDialog):
             expt.gas_type[1] = self.setGasBType.currentText()
             expt.gas_comp[0][2] = self.setGasCComp.value()
             expt.gas_type[2] = self.setGasCType.currentText()
+            expt.gas_comp[0][3] = self.setGasDComp.value()
+            expt.gas_type[3] = self.setGasDType.currentText()
 
             expt._update_expt_name()
             item.setText(expt.expt_type+expt.expt_name)
@@ -230,7 +240,7 @@ class MainWindow(QDialog):
             self.update_plot(expt)
 
     def update_plot(self, expt):
-        
+
         sweep_vals = [self.IndVar_start.value(),
                       self.IndVar_stop.value(),
                       self.IndVar_step.value()]
@@ -244,20 +254,23 @@ class MainWindow(QDialog):
         self.canvas.show()
         self.canvas2.draw()
         self.canvas2.show()
-    
+
     def init_manual_ctrl(self):
-        
+
         self.tabWidget.setUpdatesEnabled(False)
         flow_dict = self.gas_controller.read_flows()
         tot_flow = (flow_dict['mfc_A']['setpoint'] +
                     flow_dict['mfc_B']['setpoint'] +
-                    flow_dict['mfc_C']['setpoint'])
+                    flow_dict['mfc_C']['setpoint'] +
+                    flow_dict['mfc_D']['setpoint'])
         self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
         self.manualGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
         self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
         self.manualGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
         self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
         self.manualGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
+        self.manualGasCComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
+        self.manualGasCType.setCurrentText(flow_dict['mfc_D']['gas'])
         self.manualFlow.setValue(tot_flow)
         self.manualTemp.setValue(self.heater.read_setpoint())
         self.manualRamp.setValue(self.heater.ramp_rate)
@@ -266,11 +279,11 @@ class MainWindow(QDialog):
         self.manualSampleSize.setValue(self.gc_connector.sample_set_size)
         #self.manualBuffer.setValue()
         self.tabWidget.setUpdatesEnabled(True)
-        
+
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment'''
         flow_dict = self.gas_controller.read_flows()
-        
+
         self.current_power_1.display(self.laser_controller.get_output_power())
         self.current_temp_1.display(self.heater.read_temp())
         self.current_gasA_comp_1.display(flow_dict['mfc_A']['mass_flow'])
@@ -279,8 +292,10 @@ class MainWindow(QDialog):
         self.current_gasB_type_1.setText(flow_dict['mfc_B']['gas'])
         self.current_gasC_comp_1.display(flow_dict['mfc_C']['mass_flow'])
         self.current_gasC_type_1.setText(flow_dict['mfc_C']['gas'])
-        self.current_gasD_flow_1.display(flow_dict['mfc_D']['mass_flow'])
-        
+        self.current_gasD_comp_1.display(flow_dict['mfc_D']['mass_flow'])
+        self.current_gasD_type_1.setText(flow_dict['mfc_D']['gas'])
+        self.current_gasE_flow_1.display(flow_dict['mfc_E']['mass_flow'])
+
         self.current_power_2.display(self.laser_controller.get_output_power())
         self.current_temp_2.display(self.heater.read_temp())
         self.current_gasA_comp_2.display(flow_dict['mfc_A']['mass_flow'])
@@ -289,17 +304,21 @@ class MainWindow(QDialog):
         self.current_gasB_type_2.setText(flow_dict['mfc_B']['gas'])
         self.current_gasC_comp_2.display(flow_dict['mfc_C']['mass_flow'])
         self.current_gasC_type_2.setText(flow_dict['mfc_C']['gas'])
-        self.current_gasD_flow_1.display(flow_dict['mfc_D']['mass_flow'])
-        
+        self.current_gasD_comp_2.display(flow_dict['mfc_D']['mass_flow'])
+        self.current_gasD_type_2.setText(flow_dict['mfc_D']['gas'])
+        self.current_gasE_flow_1.display(flow_dict['mfc_E']['mass_flow'])
+
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
-                     self.manualGasCComp.value()]
+                     self.manualGasCComp.value(),
+                     self.manualGasDComp.value()]
         gas_list = [self.manualGasAType.currentText(),
                     self.manualGasBType.currentText(),
-                    self.manualGasCType.currentText()]
+                    self.manualGasCType.currentText(),
+                    self.manualGasDType.currentText()]
         tot_flow = self.manualFlow.value()
         self.gas_controller.set_gasses(gas_list)
         self.progressBar.setValue(10)
@@ -314,7 +333,7 @@ class MainWindow(QDialog):
         #sample_rate = self.manualSampleRate.value()
         self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
-        
+
     def update_ctrl_file(self):
         print('update ctrl file')
 
@@ -333,23 +352,23 @@ class MainWindow(QDialog):
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser.getExistingDirectory(None, "Select Directory")
         self.cal_path.setText(filePath)
-        
+
     def initialize_equipment(self):
         self.gc_connector = GC_Connector()
         self.laser_controller = Diode_Laser()
         self.gas_controller = Gas_System()
         self.heater = Heater()
-    
+
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
-        #self.shut_down() # add shutdown process when window closed    
-        
+        #self.shut_down() # add shutdown process when window closed
+
     def shut_down(self):
         print('Shutting Down Equipment')
         self.laser_controller.shut_down()
         self.heater.shut_down()
         self.gas_controller.shut_down()
-    
+
     #def start_study(self):
         '''something like this'''
         # dialogButton.button(QDialogButton.Accepted).block
