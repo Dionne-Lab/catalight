@@ -35,11 +35,11 @@ volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
 
 # def speak(phrase):
-    
+
 #     # Make sure volume is turned up
 #     volume_control.SetMute(0, None) # Unmutes and sets Vol in dB -0.0 is 100%
 #     volume_control.SetMasterVolumeLevel(-2.0, None)
-   
+
 #     voice_control.setProperty('volume', 1.0)
 #     voice_control.say(phrase)
 #     voice_control.runAndWait()
@@ -115,13 +115,13 @@ class Diode_Laser():
         print('ramp time = ', ramp_time)
         print(setpoints)
         for I in setpoints:
-            # Ramps the current slowly        
+            # Ramps the current slowly
             Vout = I/self._k_mod  # (V) Voltage output set point
             if P_set == 0:
                 Vout = 0
                 # Convert to 16bit
                 Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
-        
+
                 # Send signal to DAQ Board
                 ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
                 Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
@@ -130,7 +130,7 @@ class Diode_Laser():
                 break
             # Convert to 16bit
             Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
-    
+
             # Send signal to DAQ Board
             ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
             time.sleep(60/refresh_rate)  # wait
@@ -139,7 +139,7 @@ class Diode_Laser():
         self.print_output()
         print('Set Point = ' + str(P_set))
         print(time.ctime())
-       
+
 
     def get_output_current(self):
         '''returns the current measured by DAQ'''
@@ -151,22 +151,22 @@ class Diode_Laser():
         V = Vin_eng_units_value
         I = round(V*self._k_mod, 3)
         return(abs(I))
-    
+
     def get_output_power(self):
-        '''returns the calculates output power from 
+        '''returns the calculates output power from
         current measured and saved calibration'''
         m = self._calibration[0]
         b = self._calibration[1]
         I = self.get_output_current()
         P = round(I*m+b, 3)
         return(P)
-        
+
     def print_output(self):
         '''prints the output current and power to console'''
         I = self.get_output_current()
         P = self.get_output_power()
         print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
-        
+
     def shut_down(self):
         '''Sets power of laser to 0'''
         Vout = 0  # (V) Voltage output set point
@@ -253,6 +253,6 @@ if __name__ == "__main__":
     laser_controller = Diode_Laser()
     laser_controller.time_warning(0.5/60)
     laser_controller.set_power(1)
-    time.sleep(10)
-    laser_controller.set_power(0)
-    laser_controller.shut_down()
+    # time.sleep(10)
+    # laser_controller.set_power(0)
+    # laser_controller.shut_down()
