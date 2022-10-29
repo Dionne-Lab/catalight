@@ -40,9 +40,7 @@ from PyQt5.QtWidgets import (
     QDialogButtonBox,
     QAbstractItemView)
 
-from PyQt5.QtGui import QIcon, QTextCursor,
-    QFileDialog,
-    QDialogButtonBox)
+from PyQt5.QtGui import (QIcon, QTextCursor)
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QDialog):
@@ -52,17 +50,17 @@ class MainWindow(QDialog):
   
         # Initilize GUI
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
-        # peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
-        # self.timer = QTimer(self)
+        #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        self.timer = QTimer(self)
 
         # Initilize equipment
-        # self.initialize_equipment()
-        # self.connect_study_overview()
-        # self.connect_expt_design()
-        # self.connect_manual_control()
-        # self.init_figs()
-        # self.file_browser = QFileDialog()
-        # self.update_thread()
+        self.initialize_equipment()
+        self.connect_study_overview()
+        self.connect_expt_design()
+        self.connect_manual_control()
+        self.init_figs()
+        self.file_browser = QFileDialog()
+        self.update_thread()
         
     def normalOutputWritten(self, text):
         """Append text to the QTextEdit."""
@@ -124,15 +122,15 @@ class MainWindow(QDialog):
         # self.manualRamp.value()
         # self.manualSampleRate.value()
         # self.manualSampleSize.value()
-        # self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
-        # self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
-        # self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
-        # self.manualGasDComp.valueChanged.connect(self.manual_ctrl_update)
-        # self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
-        # self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
-        # self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
-        # self.manualGasDType.currentIndexChanged.connect(self.manual_ctrl_update)
-        # self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasDComp.valueChanged.connect(self.manual_ctrl_update)
+        self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualGasDType.currentIndexChanged.connect(self.manual_ctrl_update)
+        self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
 
         #ctrl_thread = Thread(target=self.manual_ctrl_update)
         #ctrl_thread = Thread(target=self.thread_test)
@@ -284,14 +282,21 @@ class MainWindow(QDialog):
                     flow_dict['mfc_B']['setpoint'] +
                     flow_dict['mfc_C']['setpoint'] +
                     flow_dict['mfc_D']['setpoint'])
-        self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
+        if tot_flow == 0:
+            self.manualGasAComp.setValue(0)
+            self.manualGasBComp.setValue(0)
+            self.manualGasCComp.setValue(0)
+            self.manualGasDComp.setValue(0)
+        else:
+           self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
+           self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
+           self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
+           self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
+           
         self.manualGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
-        self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
         self.manualGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
-        self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
         self.manualGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
-        self.manualGasCComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
-        self.manualGasCType.setCurrentText(flow_dict['mfc_D']['gas'])
+        self.manualGasDType.setCurrentText(flow_dict['mfc_D']['gas'])
         self.manualFlow.setValue(tot_flow)
         self.manualTemp.setValue(self.heater.read_setpoint())
         self.manualRamp.setValue(self.heater.ramp_rate)
