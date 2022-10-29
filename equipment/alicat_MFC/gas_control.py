@@ -19,11 +19,11 @@ factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
 
 class Gas_System:
     def __init__(self):
-        self.mfc_A = FlowController(port='COM8', address='A')
+        self.mfc_A = FlowController(port='COM6', address='A')
         self.mfc_B = FlowController(port='COM9', address='B')
-        self.mfc_C = FlowController(port='COM6', address='C')
-        self.mfc_D = FlowController(port='COM6', address='D')
-        self.mfc_E = FlowMeter(port='COM7', address='E')
+        self.mfc_C = FlowController(port='COM8', address='C')
+        self.mfc_D = FlowController(port='COM10', address='D')
+        self.mfc_E = FlowMeter(port='COM11', address='E')
 
     def set_gasses(self, gas_list):
         self.mfc_A.set_gas(gas_list[0])
@@ -51,7 +51,7 @@ class Gas_System:
         None.
 
         '''
-        if sum(comp_list) != 1:
+        if (sum(comp_list) != 1) and (sum(comp_list) != 0):                
             raise AttributeError('Gas comp. must be list of list == 1')
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
         self.mfc_B.set_flow_rate(float(comp_list[1]*tot_flow))
@@ -186,3 +186,9 @@ class Gas_System:
         fig = ax1.get_figure()
         fig.savefig(os.path.join(path, 'flow_test.svg'), format='svg')
         output.to_csv(os.path.join(path, 'flow_test.csv'))
+
+if __name__ == "__main__":
+    gas_controller = Gas_System()
+    comp_list = [.25, .25, .25, .25]
+    tot_flow = 0
+    gas_controller.set_flows(comp_list, tot_flow)
