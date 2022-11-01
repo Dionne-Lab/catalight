@@ -103,7 +103,7 @@ def analyze_cal_data(Expt1, calDF, figsize=(11, 6.5), force_zero=True):
     for chem_num in range(len(calchemIDs)):
         chemical = calchemIDs[chem_num]
 
-        ind_results = results[:, chem_num, :]
+        ind_results = results[:, chem_num+1, :] #+1 offsets from timestamps in row 0
         ind_results = ind_results[~np.isnan(ind_results)]
         ax1 = subplots1.ravel()[chem_num]
         ax1.plot(ind_results/1000, 'o', label=chemical)
