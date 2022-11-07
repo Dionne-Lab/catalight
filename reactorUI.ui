@@ -1603,7 +1603,7 @@
          <string>New Laser</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="eqpt_ReconnectBut">
         <property name="geometry">
          <rect>
           <x>20</x>
