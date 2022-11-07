@@ -97,13 +97,11 @@ class Diode_Laser():
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
         #TODO put check on max power
-        print('about to speak')
         voice_control.setProperty('volume', 1.0)
         voice_control.say('Warning: Setting power to' + str(P_set) + 'milliwatts')
         voice_control.runAndWait()
         voice_control.stop()
         #speak('Warning: Setting power to' + str(P_set) + 'milliwatts')
-        print('finished voice thing')
         m = self._calibration[0]
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
@@ -174,7 +172,7 @@ class Diode_Laser():
         Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
         # Send signal to DAQ Board
         ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-        print('Finished')
+        print('Finished')    
 
     def update_calibration(self, slope, intercept):
         '''takes in new calibration data and updates calibration file,
@@ -252,7 +250,7 @@ class Diode_Laser():
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
     laser_controller.time_warning(0.5/60)
-    laser_controller.set_power(1)
+    laser_controller.set_power(0)
     # time.sleep(10)
     # laser_controller.set_power(0)
     # laser_controller.shut_down()

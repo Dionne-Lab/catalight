@@ -122,6 +122,16 @@ class GC_Connector():
                     continue
                 else: 
                     print('Cannot Connect :(')
+                    
+    def disconnect(self, max_tries=1):
+        '''Tries to connect to peak simple max_tries times'''
+        try:
+            self.peaksimple.Disconnect()
+            print('Disconnected!')
+           
+        except Exception as e:
+            print(e)
+        
     
     def read_ctrl_file(self):
         '''

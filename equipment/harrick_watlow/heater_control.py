@@ -55,6 +55,11 @@ class Heater:
     def shut_down(self):
         '''Sets heater to 0 F'''
         self.controller.write(0)
+        
+    def disconnect(self):
+        '''set heat off and closes connection'''
+        self.shut_down()
+        self.controller.close()
 
     def ramp(self, T2, T1=None, temp_units='C'):
         '''
@@ -139,7 +144,7 @@ class Heater:
 if __name__ == "__main__":
     save_path = r"C:\temp control\20210214_heater_test"
     heater = Heater()
-    heater.ramp(30)
+    heater.ramp(20)
     # time.sleep(300)
     # for rate in np.arange(5, 31, 5):
     #     heater.ramp_rate = rate

@@ -189,6 +189,6 @@ class Gas_System:
 
 if __name__ == "__main__":
     gas_controller = Gas_System()
-    comp_list = [.25, .25, .25, .25]
-    tot_flow = 0
+    comp_list = [0, 1, 0, 0]
+    tot_flow = 1
     gas_controller.set_flows(comp_list, tot_flow)
