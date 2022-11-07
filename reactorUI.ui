@@ -30,7 +30,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -223,7 +223,7 @@
          <x>10</x>
          <y>10</y>
          <width>361</width>
-         <height>651</height>
+         <height>660</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_10">
@@ -605,7 +605,7 @@
          <x>80</x>
          <y>30</y>
          <width>321</width>
-         <height>411</height>
+         <height>444</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="manualControlLayout">
@@ -829,7 +829,7 @@
        <property name="geometry">
         <rect>
          <x>460</x>
-         <y>320</y>
+         <y>370</y>
          <width>251</width>
          <height>31</height>
         </rect>
@@ -845,7 +845,7 @@
        <property name="geometry">
         <rect>
          <x>460</x>
-         <y>300</y>
+         <y>340</y>
          <width>181</width>
          <height>19</height>
         </rect>
@@ -859,8 +859,8 @@
         <rect>
          <x>460</x>
          <y>30</y>
-         <width>241</width>
-         <height>241</height>
+         <width>281</width>
+         <height>271</height>
         </rect>
        </property>
        <property name="title">
@@ -869,10 +869,10 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>6</x>
+          <x>10</x>
           <y>30</y>
-          <width>236</width>
-          <height>193</height>
+          <width>261</width>
+          <height>221</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1">
@@ -1121,8 +1121,8 @@
         <rect>
          <x>60</x>
          <y>30</y>
-         <width>241</width>
-         <height>241</height>
+         <width>281</width>
+         <height>271</height>
         </rect>
        </property>
        <property name="title">
@@ -1131,10 +1131,10 @@
        <widget class="QWidget" name="layoutWidget_9">
         <property name="geometry">
          <rect>
-          <x>3</x>
+          <x>10</x>
           <y>30</y>
-          <width>236</width>
-          <height>193</height>
+          <width>261</width>
+          <height>221</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1_2">
@@ -1332,6 +1332,165 @@
         </layout>
        </widget>
       </widget>
+      <widget class="QGroupBox" name="groupBox_4">
+       <property name="geometry">
+        <rect>
+         <x>390</x>
+         <y>30</y>
+         <width>281</width>
+         <height>271</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Equipment Status:</string>
+       </property>
+       <widget class="QLabel" name="label_25">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>180</y>
+          <width>141</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Thorlabs Diode</string>
+        </property>
+       </widget>
+       <widget class="LedIndicator" name="heater_Status" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>80</y>
+          <width>21</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:black</string>
+        </property>
+       </widget>
+       <widget class="LedIndicator" name="gas_Status" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>130</y>
+          <width>21</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:black</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_23">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>30</y>
+          <width>161</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Gas Chomatograph</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_24">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>80</y>
+          <width>141</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Heater</string>
+        </property>
+       </widget>
+       <widget class="LedIndicator" name="diode_Status" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>180</y>
+          <width>21</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:black</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_26">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>130</y>
+          <width>141</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Gas Flow System</string>
+        </property>
+       </widget>
+       <widget class="LedIndicator" name="gc_Status" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>30</y>
+          <width>21</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:black</string>
+        </property>
+       </widget>
+       <widget class="LedIndicator" name="widget_4" native="true">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>230</y>
+          <width>21</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:black</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_27">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>230</y>
+          <width>141</width>
+          <height>19</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>New Laser</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>330</y>
+         <width>112</width>
+         <height>34</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>PushButton</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </item>
@@ -1353,6 +1512,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LedIndicator</class>
+   <extends>QWidget</extends>
+   <header>LedIndicatorWidget</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
