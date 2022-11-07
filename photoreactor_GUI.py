@@ -122,15 +122,15 @@ class MainWindow(QDialog):
         # self.manualRamp.value()
         # self.manualSampleRate.value()
         # self.manualSampleSize.value()
-        self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasDComp.valueChanged.connect(self.manual_ctrl_update)
-        self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualGasDType.currentIndexChanged.connect(self.manual_ctrl_update)
-        self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasAComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasBComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasCComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasDComp.valueChanged.connect(self.manual_ctrl_update)
+        # self.manualGasAType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasBType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasCType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualGasDType.currentIndexChanged.connect(self.manual_ctrl_update)
+        # self.manualFlow.valueChanged.connect(self.manual_ctrl_update)
 
         #ctrl_thread = Thread(target=self.manual_ctrl_update)
         #ctrl_thread = Thread(target=self.thread_test)
@@ -337,6 +337,9 @@ class MainWindow(QDialog):
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
+        #TODO this needs to update the gas on mfce somewhere
+        # TODO add pressure readout for mfcs
+        # TODO add emergency stop
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
                      self.manualGasCComp.value(),
