@@ -27,11 +27,12 @@ if __name__ == "__main__":
     ###########################################################################
     # Calibration Location Info:
     # Format [ChemID, slope, intercept, start, end]
-    calibration_path = ("/Volumes/GoogleDrive/Shared drives/Ensemble Photoreactor/Reactor Baseline Experiments/GC Calibration/calib_202012/HayD_FID_Sophia_RawCounts.csv")
+    # calibration_path = ("/Volumes/GoogleDrive/Shared drives/Ensemble Photoreactor/Reactor Baseline Experiments/GC Calibration/calib_202012/HayD_FID_Sophia_RawCounts.csv")
+    calibration_path = ("G:/Shared drives/Ensemble Photoreactor/Reactor Baseline Experiments/GC Calibration/calib_202012/HayD_FID_Sophia_RawCounts.csv")
 
     # Sample Location Info:
-    # main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220203calibration_273K_0.0mW_50sccm"
-    main_dir = r"/Users/ccarlin/Documents/calibration/20220418calibration_273K_0.0mW_50sccm"
+    main_dir = r"C:\Users\brile\Documents\Temp Files\Calibration_dummy\20220203calibration_273K_0.0mW_50sccm"
+    # main_dir = r"/Users/ccarlin/Documents/calibration/20220418calibration_273K_0.0mW_50sccm"
 
     # Main Script
     ###########################################################################
