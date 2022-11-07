@@ -340,6 +340,7 @@ class MainWindow(QDialog):
         #TODO this needs to update the gas on mfce somewhere
         # TODO add pressure readout for mfcs
         # TODO add emergency stop
+        # Adjust limits in GUI
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
                      self.manualGasCComp.value(),
