@@ -201,7 +201,6 @@ class MainWindow(QDialog):
 
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment'''
-        print('should update eqpt status')
         if self.diode_Status.isChecked():
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
@@ -420,7 +419,6 @@ class MainWindow(QDialog):
 
         # Connect timer for live feed
         self.timer.timeout.connect(self.update_eqpt_status)
-        print('manual ctrl connected')
 
     def init_figs(self): # Initialize figure canvas and add to:
         # This is the Canvas Widget that displays the `figure`
@@ -436,6 +434,8 @@ class MainWindow(QDialog):
         #self.shut_down() # add shutdown process when window closed
 
     def shut_down(self):
+        '''runs shutdown method on each connected piece of equipment.
+        normally this just sets to zero'''
         print('Shutting Down Equipment')
         if self.gas_Status.isChecked():
             self.gas_controller.shut_down()
@@ -446,8 +446,18 @@ class MainWindow(QDialog):
         if self.diode_Status.isChecked(): 
             self.laser_controller.shut_down()
 
+    def disconnect(self):
+        '''first runs shutdown sequence (normally sets all to zero)
+        then disconnects which should sever digital connection too'''
+        self.shut_down()
+        if self.gas_Status.isChecked():
+            self.gas_controller.disconnect()
+
+        if self.heater_Status.isChecked():  
+            self.heater.disconnect()
+
         if self.gc_Status.isChecked(): 
-            print('gc would shutdown')
+           self.gc_connector.disconnect()
 
     #def start_study(self):
         '''something like this'''

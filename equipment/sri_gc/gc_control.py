@@ -122,6 +122,7 @@ class GC_Connector():
                     continue
                 else: 
                     print('Cannot Connect :(')
+                    raise Peaksimple.ConnectionFailedException
                     
     def disconnect(self, max_tries=1):
         '''Tries to connect to peak simple max_tries times'''
