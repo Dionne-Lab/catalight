@@ -44,7 +44,6 @@ class GC_Connector():
         self.sample_set_size = 4 # default value, can change in main .py script per experiment
         self._sample_rate = 0  # Sample rate is read only
         self.read_ctrl_file()  # Reads loaded ctrl file and upates sample rate
-        print('Connected!')
 
     sample_rate = property(lambda self: self._sample_rate)
 
@@ -103,20 +102,26 @@ class GC_Connector():
                 print('Write error. Retrying...')
                 time.sleep(1)
                 continue
+            except Peaksimple.NoConnectionException:
+                print('Write Error: GC Not Connected')
+                break
         time.sleep(5)  # I think peaksimple is cranky when rushed
     
-    def connect(self):
-        '''Tries to connect to peak simple 5 times'''
-        for attempt in range(0, 5):
+    def connect(self, max_tries=1):
+        '''Tries to connect to peak simple max_tries times'''
+        
+        for attempt in range(1, max_tries+1):
             try:
                 self.peaksimple.Connect()
                 print('Connected!')
                 break
             except Peaksimple.ConnectionFailedException:
-                print('Connection error. Retrying...')
-                time.sleep(1)
-                continue
-            print('Cannot Connect :(')
+                if attempt < max_tries:
+                    print('Connection error. Retrying...')
+                    time.sleep(1)
+                    continue
+                else: 
+                    print('Cannot Connect :(')
     
     def read_ctrl_file(self):
         '''
