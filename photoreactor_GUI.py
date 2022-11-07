@@ -28,7 +28,7 @@ from PyQt5.QtCore import (Qt, QTimer, QDateTime, QThreadPool, QObject, pyqtSigna
 
 #from PyQt5 import QtWidgets
 #from System.Threading import Thread, ThreadStart, ApartmentState
-from threading import Thread
+#from threading import Thread
 from PyQt5.QtWidgets import (
     QPushButton,
     QLabel,
@@ -36,7 +36,7 @@ from PyQt5.QtWidgets import (
     QDialog,
     QWidget,
     QListWidgetItem,
-    QFileDialog,        
+    QFileDialog,
     QDialogButtonBox,
     QAbstractItemView)
 
@@ -47,21 +47,29 @@ class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
         loadUi('reactorUI.ui', self)
-  
+
         # Initilize GUI
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
-        #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        # #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
         self.timer = QTimer(self)
+        self.gc_Status.setChecked(True)
+        self.heater_Status.setChecked(1)
+        self.gas_Status.setChecked(False)
+        self.diode_Status.setChecked(0)
+        self.pushButton.clicked.connect(lambda: self.onPressButton())
 
-        # Initilize equipment
-        self.initialize_equipment()
-        self.connect_study_overview()
-        self.connect_expt_design()
-        self.connect_manual_control()
-        self.init_figs()
-        self.file_browser = QFileDialog()
-        self.update_thread()
-        
+    def onPressButton(self):
+        self.gc_Status.setChecked(not self.gc_Status.isChecked())
+
+        # # Initilize equipment
+        # self.initialize_equipment()
+        # self.connect_study_overview()
+        # self.connect_expt_design()
+        # self.connect_manual_control()
+        # self.init_figs()
+        # self.file_browser = QFileDialog()
+        # self.update_thread()
+
     def normalOutputWritten(self, text):
         """Append text to the QTextEdit."""
         # Maybe QTextEdit.append() works as well, but this is how I do it:
@@ -156,7 +164,7 @@ class MainWindow(QDialog):
         # Set the time interval and start the timer
         # I'm not sure this does anything....
         self.timer.start(500)
-                   
+
 
     def thread_starter(self):
         #self.thread_manager.start(self.thread_test)
@@ -292,7 +300,7 @@ class MainWindow(QDialog):
            self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
            self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
            self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
-           
+
         self.manualGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
         self.manualGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
         self.manualGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
@@ -309,7 +317,7 @@ class MainWindow(QDialog):
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment'''
         flow_dict = self.gas_controller.read_flows()
-        
+
         self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
         self.current_temp_1.setText('%.2f' % self.heater.read_temp())
         self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
@@ -321,7 +329,7 @@ class MainWindow(QDialog):
         self.current_gasD_comp_1.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
         self.current_gasD_type_1.setText(flow_dict['mfc_D']['gas'])
         self.current_gasE_flow_1.setText('%.2f' % flow_dict['mfc_E']['mass_flow'])
-        
+
         self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
         self.current_temp_2.setText('%.2f' % self.heater.read_temp())
         self.current_gasA_comp_2.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
@@ -371,7 +379,7 @@ class MainWindow(QDialog):
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser \
-                       .getOpenFileName(self, 'Select Control File', 
+                       .getOpenFileName(self, 'Select Control File',
                                         "C:\\Peak489Win10\\CONTROL_FILE",
                                         "Control files (*.CON)")[0]
         print(filePath)
@@ -385,12 +393,12 @@ class MainWindow(QDialog):
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser \
-                       .getOpenFileName(self, 'Select Control File', 
+                       .getOpenFileName(self, 'Select Control File',
                                         "C:\\Peak489Win10\\CONTROL_FILE",
                                         "Control files (*.CON)")[0]
         print(filePath)
         self.cal_path.setText(filePath)
-    
+
     def open_peaksimple(self, path_name):
         '''closes peaksimple if currently running,
             opens new edition with subprocess'''
@@ -403,10 +411,26 @@ class MainWindow(QDialog):
         return process
 
     def initialize_equipment(self):
-        self.gc_connector = GC_Connector()
-        self.laser_controller = Diode_Laser()
-        self.gas_controller = Gas_System()
-        self.heater = Heater()
+        try:
+            self.gc_connector = GC_Connector()
+            self.gc_Status.setChecked(1)
+        except:
+            self.gc_Status.setChecked(0)
+        try:
+            self.gas_controller = Gas_System()
+            self.gas_Status.setChecked(1)
+        except:
+            self.gas_Status.setChecked(0)
+        try:
+            self.heater = Heater()
+            self.heater_Status.setChecked(1)
+        except:
+            self.heater_Status.setChecked(0)
+        try:
+            self.laser_controller = Diode_Laser()
+            self.diode_Status.setChecked(1)
+        except:
+            self.diode_Status.setChecked(0)
 
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
