@@ -1464,7 +1464,7 @@
          <x>490</x>
          <y>30</y>
          <width>281</width>
-         <height>271</height>
+         <height>321</height>
         </rect>
        </property>
        <property name="title">
@@ -1601,6 +1601,19 @@
         </property>
         <property name="text">
          <string>New Laser</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>270</y>
+          <width>241</width>
+          <height>34</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Reconnect</string>
         </property>
        </widget>
       </widget>
