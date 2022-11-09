@@ -12,8 +12,18 @@ def listitem_clicked(clickedItem):
     chrom = clickedItem.text()
     path = os.path.join(folderpath, chrom)
     data = GCData(path, basecorrect = False)
-    graphWidget.setTitle(chrom, color="k", size="18pt")
+    datacorr = GCData(path, basecorrect = True)
+    num = runnumlist.index(chrom)
+    graphWidget.setTitle("run "+str(num)+": "+chrom, color="k", size="18pt")
     data_line.setData(data.time, data.signal)
+
+def btnstate(b):
+    if b.isChecked() == True:
+        pen = pg.mkPen(color=(0, 153, 51), width=2)
+        graphWidget.plot(datacorr.time, datacorr.signal, pen=pen)
+    else:
+        print("not checked")
+
 
 # make widget, label window, define layout
 app = QtWidgets.QApplication(sys.argv)
@@ -27,9 +37,11 @@ folderpath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Folder')
 # populate list with all asc in selected folder
 # LOOK HERE! This is where you can specify what kind of files you want plotted
 listWidget = QtWidgets.QListWidget()
-for filename in os.listdir(folderpath):
+runnumlist = []
+for filename in sorted(os.listdir(folderpath)):
     if filename.endswith(".ASC"):
         if "FID" in filename:
+            runnumlist.append(filename)
             listWidget.addItem(filename)
 layout.addWidget(listWidget)
 chrom = listWidget.item(0).text() # make the first file in the list appear as the plot upon opnening
@@ -38,6 +50,7 @@ listWidget.currentItemChanged.connect(listitem_clicked) # update which plot show
 #data we're pulling
 path = os.path.join(folderpath, chrom)
 data = GCData(path, basecorrect=False)
+datacorr = GCData(path, basecorrect = True)
 
 # make graph widget
 graphWidget = pg.PlotWidget()
@@ -62,6 +75,9 @@ graphWidget.getAxis('bottom').setTextPen('k')
 # add graph to layout
 layout.addWidget(graphWidget)
 
+bc_box = QtWidgets.QCheckBox("baseline correction?")
+bc_box.toggled.connect(lambda:btnstate(bc_box))
+layout.addWidget(bc_box)
 # put layout in the window
 window.setLayout(layout)
 window.show()
