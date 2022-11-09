@@ -7,20 +7,36 @@ import os
 from gcdata import GCData
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
+# function which updates graph based on highlighted list item
+def listitem_clicked(clickedItem):
+    chrom = clickedItem.text()
+    path = os.path.join(folderpath, chrom)
+    data = GCData(path, basecorrect = False)
+    graphWidget.setTitle(chrom, color="k", size="18pt")
+    data_line.setData(data.time, data.signal)
+
+# make widget, label window, define layout
 app = QtWidgets.QApplication(sys.argv)
 window = QtWidgets.QWidget()
 window.setWindowTitle("Look Briley I did it")
 layout = QtWidgets.QVBoxLayout()
 
-forward = QtWidgets.QPushButton("onward!")
-layout.addWidget(forward)
+# have user select data folder
+folderpath = QtWidgets.QFileDialog.getExistingDirectory(None, 'Select Folder')
 
-forward.clicked.connect(forward_clicked)
+# populate list with all asc in selected folder
+# LOOK HERE! This is where you can specify what kind of files you want plotted
+listWidget = QtWidgets.QListWidget()
+for filename in os.listdir(folderpath):
+    if filename.endswith(".ASC"):
+        if "FID" in filename:
+            listWidget.addItem(filename)
+layout.addWidget(listWidget)
+chrom = listWidget.item(0).text() # make the first file in the list appear as the plot upon opnening
+listWidget.currentItemChanged.connect(listitem_clicked) # update which plot shows up to be whichever is highlighted
 
-#directory path
-directory = "/Users/ccarlin/Documents/calibration/20220418calibration_273K_0.0mW_50sccm/Data/1 1.0CalGas_0.0Ar_0.0H2ppm"
-chrom = "20201219_calibration1000ppm_FID04.ASC"
-path = os.path.join(directory, chrom)
+#data we're pulling
+path = os.path.join(folderpath, chrom)
 data = GCData(path, basecorrect=False)
 
 # make graph widget
@@ -43,12 +59,10 @@ graphWidget.plotItem.getAxis('top').setPen(pen)
 graphWidget.getAxis('left').setTextPen('k')
 graphWidget.getAxis('bottom').setTextPen('k')
 
-
+# add graph to layout
 layout.addWidget(graphWidget)
 
-
+# put layout in the window
 window.setLayout(layout)
 window.show()
-
-
 sys.exit(app.exec_())
