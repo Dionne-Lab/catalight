@@ -66,7 +66,7 @@ pen1 = pg.mkPen(color=(0, 102, 255), width=2)
 data_line = graphWidget.plot(data.time, data.signal, pen=pen1, name = "raw")
 styles = {'color':'r', 'font-size':'18px'}
 graphWidget.setLabel('left', 'Counts', **styles)
-graphWidget.setLabel('bottom', 'Time (s)', **styles)
+graphWidget.setLabel('bottom', 'Time (min)', **styles)
 pen = pg.mkPen(color=(0, 0, 0), width=2)
 graphWidget.plotItem.getAxis('left').setPen(pen)
 graphWidget.plotItem.getAxis('bottom').setPen(pen)
