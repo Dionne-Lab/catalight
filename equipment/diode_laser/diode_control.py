@@ -82,8 +82,8 @@ class Diode_Laser():
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
         self.read_calibration()
-        #self.set_power(0)
-        self.P_set = '10'
+        self.set_power(0)
+
 
     # Read Only Attributes
     I_max = property(lambda self: self._I_max)
@@ -251,23 +251,29 @@ class Diode_Laser():
                           + str(I_set) + 'milliamps')
         voice_control.runAndWait()
 
-    def start_logger(self, save_path=None):
-        if save_path is None:
+    def start_logger(self, log_frequency=0.1, save_path=None):
+        '''starts the data log function to record the laser set point at 
+        log_frequency intervals (seconds). Takes an optional arugment of the 
+        desired save path. If none is entered the log gets saved in the driver
+        directory. auto increments file name'''
+        if save_path is None: # if savepath is unspecified, saves in cwd
             save_path = os.path.join(os.getcwd(),
                                      dt.date.today().strftime('%Y%m%d')+'laser_log.txt')
-        while os.path.isfile(save_path):
+        while os.path.isfile(save_path): # checks if log w/ default name exists
             m = 1
             save_path = save_path.removesuffix('.txt')
-            if re.findall(r'\d+$', save_path):
+            if re.findall(r'\d+$', save_path): # checks if save_path has number at end
                 m += int(re.findall(r'\d+$', save_path)[-1])
+            # append number and .txt to filename, then check if name still exists
             save_path = re.split(r'\d+$',save_path)[0]+str(m)
             save_path = save_path+'.txt'
 
-        self.save_path = save_path
-        self.timer = RepeatTimer(0.1, self.log_power)
+        self.save_path = save_path # assign local pathname to class attribute
+        self.timer = RepeatTimer(log_frequency, self.log_power) # create update thread
         self.timer.start()
 
     def log_power(self):
+        '''appends the date at current power setpoint to the outputlog'''
         with open(self.save_path, 'a') as output_log:
             output_log.write(str(dt.datetime.now())+', '+self.P_set+'\n')
 
