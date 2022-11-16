@@ -447,7 +447,7 @@ class Experiment:
                     loc='lower right')
 
         plt.tight_layout()
-        
+
         run_time = t_set[-1]  #TODO break this out into seperate func
         return (fig, ax1, ax2, run_time)
 
@@ -470,7 +470,6 @@ class Experiment:
         self._laser_control.set_power(self.power[0])
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
-        self._gas_control.set_gasE(self.gas_type, self.gas_comp[0])
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size

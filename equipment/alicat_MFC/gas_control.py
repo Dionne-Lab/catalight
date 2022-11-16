@@ -51,12 +51,13 @@ class Gas_System:
         None.
 
         '''
-        if (sum(comp_list) != 1) and (sum(comp_list) != 0):                
+        if (sum(comp_list) != 1) and (sum(comp_list) != 0):
             raise AttributeError('Gas comp. must be list of list == 1')
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
         self.mfc_B.set_flow_rate(float(comp_list[1]*tot_flow))
         self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
         self.mfc_D.set_flow_rate(float(comp_list[3]*tot_flow))
+        self.set_gasE()
 
     def set_gasE(self, gas_list, comp_list):
         # convert to percents, make dict, drop zero values
