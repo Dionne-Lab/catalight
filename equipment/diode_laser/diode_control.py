@@ -9,12 +9,14 @@ from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER
 from mcculw import ul
 from mcculw.device_info import DaqDeviceInfo
-from datetime import date
+from PyQt5.QtCore import (QTimer)
+import datetime as dt
 import numpy as np
 import time
 import re
 import os
 import pyttsx3
+from threading import Thread, Timer
 
 
 # Sets path when file is imported
@@ -80,7 +82,8 @@ class Diode_Laser():
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
         self.read_calibration()
-        self.set_power(0)
+        #self.set_power(0)
+        self.P_set = '10'
 
     # Read Only Attributes
     I_max = property(lambda self: self._I_max)
@@ -102,6 +105,7 @@ class Diode_Laser():
         voice_control.runAndWait()
         voice_control.stop()
         #speak('Warning: Setting power to' + str(P_set) + 'milliwatts')
+        self.P_set = str(P_set)
         m = self._calibration[0]
         b = self._calibration[1]
         I_set = (P_set-b)/m  # (mA) Based on calibration
@@ -172,7 +176,7 @@ class Diode_Laser():
         Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
         # Send signal to DAQ Board
         ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-        print('Finished')    
+        print('Finished')
 
     def update_calibration(self, slope, intercept):
         '''takes in new calibration data and updates calibration file,
@@ -187,7 +191,7 @@ class Diode_Laser():
                 elif re.search('b = ', line):
                     line = ('b = ' + str(intercept) + ' \n')
                 elif re.search('date = ', line):
-                    line = ('date = ' + date.today().strftime('%Y-%m-%d') + '\n')
+                    line = ('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
 
                 new_cal_file += line
 
@@ -247,10 +251,39 @@ class Diode_Laser():
                           + str(I_set) + 'milliamps')
         voice_control.runAndWait()
 
+    def start_logger(self, save_path=None):
+        if save_path is None:
+            save_path = os.path.join(os.getcwd(),
+                                     dt.date.today().strftime('%Y%m%d')+'laser_log.txt')
+        while os.path.isfile(save_path):
+            m = 1
+            save_path = save_path.removesuffix('.txt')
+            if re.findall(r'\d+$', save_path):
+                m += int(re.findall(r'\d+$', save_path)[-1])
+            save_path = re.split(r'\d+$',save_path)[0]+str(m)
+            save_path = save_path+'.txt'
+
+        self.save_path = save_path
+        self.timer = RepeatTimer(0.1, self.log_power)
+        self.timer.start()
+
+    def log_power(self):
+        with open(self.save_path, 'a') as output_log:
+            output_log.write(str(dt.datetime.now())+', '+self.P_set+'\n')
+
+
+class RepeatTimer(Timer):
+    def run(self):
+        while not self.finished.wait(self.interval):
+            self.function(*self.args, **self.kwargs)
+
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
-    laser_controller.time_warning(0.5/60)
-    laser_controller.set_power(0)
+    laser_controller.start_logger()
+    time.sleep(3)
+    laser_controller.timer.cancel()
+    # laser_controller.time_warning(round(0.5/60))
+    # laser_controller.set_power(0)
     # time.sleep(10)
     # laser_controller.set_power(0)
     # laser_controller.shut_down()

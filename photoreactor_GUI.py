@@ -62,7 +62,6 @@ class MainWindow(QDialog):
         self.update_thread()
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         # self.file_browser = QFileDialog()
-        # self.update_thread()
 
     def normalOutputWritten(self, text):
         """Append console ouput to the QTextEdit."""
@@ -72,7 +71,7 @@ class MainWindow(QDialog):
         cursor.insertText(text)
         self.consoleOutput.setTextCursor(cursor)
         self.consoleOutput.ensureCursorVisible()
-        self.timer = QTimer(self)
+        #self.timer = QTimer(self)
 
 
 
@@ -95,7 +94,7 @@ class MainWindow(QDialog):
         item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
         expt = Experiment()
         item.setData(Qt.UserRole, expt)
-        
+
 
     def delete_expt(self):
         '''deletes currently selected item from listWidget'''
@@ -205,12 +204,12 @@ class MainWindow(QDialog):
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
 
-        if self.heater_Status.isChecked():         
+        if self.heater_Status.isChecked():
             self.current_temp_1.setText('%.2f' % self.heater.read_temp())
             self.current_temp_2.setText('%.2f' % self.heater.read_temp())
 
         if self.gas_Status.isChecked():
-            flow_dict = self.gas_controller.read_flows()        
+            flow_dict = self.gas_controller.read_flows()
             self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
             self.current_gasA_type_1.setText(flow_dict['mfc_A']['gas'])
             self.current_gasB_comp_1.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
@@ -220,7 +219,7 @@ class MainWindow(QDialog):
             self.current_gasD_comp_1.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
             self.current_gasD_type_1.setText(flow_dict['mfc_D']['gas'])
             self.current_gasE_flow_1.setText('%.2f' % flow_dict['mfc_E']['mass_flow'])
-    
+
             self.current_gasA_comp_2.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
             self.current_gasA_type_2.setText(flow_dict['mfc_A']['gas'])
             self.current_gasB_comp_2.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
@@ -247,18 +246,18 @@ class MainWindow(QDialog):
                     self.manualGasCType.currentText(),
                     self.manualGasDType.currentText()]
         tot_flow = self.manualFlow.value()
-        
+
         if self.gas_Status.isChecked():
             self.gas_controller.set_gasses(gas_list)
             self.progressBar.setValue(10)
             self.gas_controller.set_flows(comp_list, tot_flow)
         self.progressBar.setValue(20)
         buffer = self.manualBuffer.value()
-        
+
         if self.diode_Status.isChecked():
             self.laser_controller.set_power(self.manualPower.value())
         self.progressBar.setValue(40)
-        
+
         if self.heater_Status.isChecked():
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
@@ -369,7 +368,7 @@ class MainWindow(QDialog):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         self.setGasDType.insertItems(0, gas_control.factory_gasses)
-        
+
     def init_manual_ctrl_tab(self): # Initialize Manual Control Tab
         self.tabWidget.setUpdatesEnabled(False) # Block Signals during update
         # Initialize Values for gas controller
@@ -389,7 +388,7 @@ class MainWindow(QDialog):
                self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
                self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
                self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
-            
+
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
             self.manualGasCType.insertItems(0, gas_control.factory_gasses)
@@ -412,7 +411,7 @@ class MainWindow(QDialog):
             self.manualSampleSize.setValue(self.gc_connector.sample_set_size)
             #self.manualBuffer.setValue()
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
-        
+
     def connect_manual_ctrl(self): # Connect Manual Control
         self.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.manual_ctrl_update)
         self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl_tab)
@@ -440,10 +439,10 @@ class MainWindow(QDialog):
         if self.gas_Status.isChecked():
             self.gas_controller.shut_down()
 
-        if self.heater_Status.isChecked():  
+        if self.heater_Status.isChecked():
             self.heater.shut_down()
-            
-        if self.diode_Status.isChecked(): 
+
+        if self.diode_Status.isChecked():
             self.laser_controller.shut_down()
 
     def disconnect(self):
@@ -453,10 +452,10 @@ class MainWindow(QDialog):
         if self.gas_Status.isChecked():
             self.gas_controller.disconnect()
 
-        if self.heater_Status.isChecked():  
+        if self.heater_Status.isChecked():
             self.heater.disconnect()
 
-        if self.gc_Status.isChecked(): 
+        if self.gc_Status.isChecked():
            self.gc_connector.disconnect()
 
     #def start_study(self):
