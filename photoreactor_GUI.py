@@ -96,12 +96,18 @@ class MainWindow(QDialog):
         expt = Experiment()
         item.setData(Qt.UserRole, expt)
         
-
     def delete_expt(self):
         '''deletes currently selected item from listWidget'''
         item = self.listWidget.currentItem()
         self.listWidget.takeItem(self.listWidget.row(item))
 
+    def reset_eqpt(self):
+        '''disconnects from equipment and attempts to reconnect'''
+        print('Resetting Equipment Connections')
+        self.disconnect()
+        self.init_equipment()
+        self.init_manual_ctrl_tab()
+        
     def display_expt(self):
         '''Updates GUI when new expt is selected in listWidget'''
         self.tabWidget.setUpdatesEnabled(False)
@@ -212,24 +218,34 @@ class MainWindow(QDialog):
         if self.gas_Status.isChecked():
             flow_dict = self.gas_controller.read_flows()        
             self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
+            self.current_gasA_pressure_1.setText('%.2f' % flow_dict['mfc_A']['pressure'])
             self.current_gasA_type_1.setText(flow_dict['mfc_A']['gas'])
             self.current_gasB_comp_1.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
+            self.current_gasB_pressure_1.setText('%.2f' % flow_dict['mfc_B']['pressure'])
             self.current_gasB_type_1.setText(flow_dict['mfc_B']['gas'])
             self.current_gasC_comp_1.setText('%.2f' % flow_dict['mfc_C']['mass_flow'])
+            self.current_gasC_pressure_1.setText('%.2f' % flow_dict['mfc_C']['pressure'])
             self.current_gasC_type_1.setText(flow_dict['mfc_C']['gas'])
             self.current_gasD_comp_1.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
+            self.current_gasD_pressure_1.setText('%.2f' % flow_dict['mfc_D']['pressure'])
             self.current_gasD_type_1.setText(flow_dict['mfc_D']['gas'])
             self.current_gasE_flow_1.setText('%.2f' % flow_dict['mfc_E']['mass_flow'])
+            self.current_gasE_pressure_1.setText('%.2f' % flow_dict['mfc_E']['pressure'])
     
             self.current_gasA_comp_2.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
+            self.current_gasA_pressure_2.setText('%.2f' % flow_dict['mfc_A']['pressure'])
             self.current_gasA_type_2.setText(flow_dict['mfc_A']['gas'])
             self.current_gasB_comp_2.setText('%.2f' % flow_dict['mfc_B']['mass_flow'])
+            self.current_gasB_pressure_2.setText('%.2f' % flow_dict['mfc_B']['pressure'])
             self.current_gasB_type_2.setText(flow_dict['mfc_B']['gas'])
             self.current_gasC_comp_2.setText('%.2f' % flow_dict['mfc_C']['mass_flow'])
+            self.current_gasC_pressure_2.setText('%.2f' % flow_dict['mfc_C']['pressure'])
             self.current_gasC_type_2.setText(flow_dict['mfc_C']['gas'])
             self.current_gasD_comp_2.setText('%.2f' % flow_dict['mfc_D']['mass_flow'])
+            self.current_gasD_pressure_2.setText('%.2f' % flow_dict['mfc_D']['pressure'])
             self.current_gasD_type_2.setText(flow_dict['mfc_D']['gas'])
             self.current_gasE_flow_2.setText('%.2f' % flow_dict['mfc_E']['mass_flow'])
+            self.current_gasE_pressure_2.setText('%.2f' % flow_dict['mfc_E']['pressure'])
 
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
@@ -416,7 +432,7 @@ class MainWindow(QDialog):
     def connect_manual_ctrl(self): # Connect Manual Control
         self.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.manual_ctrl_update)
         self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl_tab)
-
+        self.eqpt_ReconnectBut.clicked.connect(self.reset_eqpt)
         # Connect timer for live feed
         self.timer.timeout.connect(self.update_eqpt_status)
 
@@ -431,7 +447,7 @@ class MainWindow(QDialog):
 
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
-        #self.shut_down() # add shutdown process when window closed
+        self.disconnect() # add shutdown process when window closed
 
     def shut_down(self):
         '''runs shutdown method on each connected piece of equipment.
