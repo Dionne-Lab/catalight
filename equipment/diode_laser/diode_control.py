@@ -9,7 +9,6 @@ from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER
 from mcculw import ul
 from mcculw.device_info import DaqDeviceInfo
-from PyQt5.QtCore import (QTimer)
 import datetime as dt
 import numpy as np
 import time
@@ -252,8 +251,8 @@ class Diode_Laser():
         voice_control.runAndWait()
 
     def start_logger(self, log_frequency=0.1, save_path=None):
-        '''starts the data log function to record the laser set point at 
-        log_frequency intervals (seconds). Takes an optional arugment of the 
+        '''starts the data log function to record the laser set point at
+        log_frequency intervals (seconds). Takes an optional arugment of the
         desired save path. If none is entered the log gets saved in the driver
         directory. auto increments file name'''
         if save_path is None: # if savepath is unspecified, saves in cwd
@@ -285,9 +284,9 @@ class RepeatTimer(Timer):
 
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
-    laser_controller.start_logger()
-    time.sleep(3)
-    laser_controller.timer.cancel()
+    # laser_controller.start_logger()
+    # time.sleep(3)
+    # laser_controller.timer.cancel()
     # laser_controller.time_warning(round(0.5/60))
     # laser_controller.set_power(0)
     # time.sleep(10)

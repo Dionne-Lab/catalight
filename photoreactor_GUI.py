@@ -4,25 +4,27 @@ Created on Sun Feb 20 18:45:10 2022
 
 @author: brile
 """
+from equipment.diode_laser.diode_control import Diode_Laser
+from equipment.sri_gc.gc_control import GC_Connector
+from equipment.harrick_watlow.heater_control import Heater
+from equipment.alicat_MFC.gas_control import Gas_System
+from equipment.alicat_MFC import gas_control
+from experiment_control import Experiment
+
 import sys
 import os
 import numpy as np
+import psutil
+import subprocess
+import time
+
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-import psutil
-import subprocess
-import time
 
-from experiment_control import Experiment
-from equipment.sri_gc.gc_control import GC_Connector
-from equipment.diode_laser.diode_control import Diode_Laser
-from equipment.harrick_watlow.heater_control import Heater
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.alicat_MFC import gas_control
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import (Qt, QTimer, QDateTime, QThreadPool, QObject, pyqtSignal)
 
@@ -81,13 +83,13 @@ class MainWindow(QDialog):
         self.timer.start(500)
 
 
-    def thread_starter(self):
-        #self.thread_manager.start(self.thread_test)
-        ctrl_thread = Thread(target=self.manual_ctrl_update)
-        ctrl_thread.start()
+    # def thread_starter(self):
+    #     #self.thread_manager.start(self.thread_test)
+    #     ctrl_thread = Thread(target=self.manual_ctrl_update)
+    #     ctrl_thread.start()
 
-    def thread_test(self):
-        print('thread started')
+    # def thread_test(self):
+    #     print('thread started')
 
     def add_expt(self):
         '''Creates a new experiment object and adds it to GUI'''
@@ -159,10 +161,14 @@ class MainWindow(QDialog):
         None.
 
         '''
+        # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
         global update_flag
+
+        # If there is data in listWidget item and now in the middle of updating
         if (item is not None) & update_flag:
-            expt = item.data(Qt.UserRole)
+            expt = item.data(Qt.UserRole) # pull listWidgetItem data out
+            # set the attributes of expt object based on GUI entries
             expt.expt_type = self.expt_types.currentText()
             expt.temp[0] = self.setTemp.value()
             expt.power[0] = self.setPower.value()
@@ -181,12 +187,23 @@ class MainWindow(QDialog):
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
 
-            expt._update_expt_name()
-            item.setText(expt.expt_type+expt.expt_name)
+            expt._update_expt_name() # autoname experiment
+            item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
+
+            # pull units based on expt class definitions, label in GUI
             units = (expt.expt_list['Units']
                      [expt.expt_list['Active Status']].to_string(index=False))
             self.label_IndVar.setText(expt.ind_var+' ['+units+']')
+
+            self.update_ind_var_grid(expt)
             self.update_plot(expt)
+
+    def update_ind_var_grid(self, expt):
+            if expt.expt_type == 'comp_sweep':
+                self.gridLayout_9.addWidget(QPushButton('button'), 2, 0)
+                self.gridLayout_9.addWidget(QPushButton('button'), 2, 4)
+            else:
+                print('not comp sweep')
 
     def update_plot(self, expt):
         '''Updates the plots in GUI when experiment is changed'''
@@ -249,8 +266,6 @@ class MainWindow(QDialog):
     def manual_ctrl_update(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
-        # TODO this needs to update the gas on mfce somewhere
-        # TODO add pressure readout for mfcs
         # TODO add emergency stop
         # Adjust limits in GUI
         comp_list = [self.manualGasAComp.value(),
