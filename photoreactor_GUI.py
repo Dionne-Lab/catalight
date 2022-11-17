@@ -34,6 +34,8 @@ from PyQt5.QtCore import (Qt, QTimer, QDateTime, QThreadPool, QObject, pyqtSigna
 from PyQt5.QtWidgets import (
     QPushButton,
     QLabel,
+    QDoubleSpinBox,
+    QComboBox,
     QApplication,
     QDialog,
     QWidget,
@@ -63,7 +65,7 @@ class MainWindow(QDialog):
         self.init_figs()
         self.update_thread()
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
-        # self.file_browser = QFileDialog()
+        self.file_browser = QFileDialog()
 
     def normalOutputWritten(self, text):
         """Append console ouput to the QTextEdit."""
@@ -164,7 +166,7 @@ class MainWindow(QDialog):
         # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
         global update_flag
-
+        print('update expt')
         # If there is data in listWidget item and now in the middle of updating
         if (item is not None) & update_flag:
             expt = item.data(Qt.UserRole) # pull listWidgetItem data out
@@ -199,11 +201,44 @@ class MainWindow(QDialog):
             self.update_plot(expt)
 
     def update_ind_var_grid(self, expt):
+            print('update ind var')
             if expt.expt_type == 'comp_sweep':
-                self.gridLayout_9.addWidget(QPushButton('button'), 2, 0)
-                self.gridLayout_9.addWidget(QPushButton('button'), 2, 4)
+                for i in range(len(self.button_list)):
+                    for j in range(len(self.button_list[0])):
+                        item = self.gridLayout_9.itemAtPosition(i, j)
+                        if item is not None:
+                            widget = item.widget()
+                            print('should delete')
+                            self.gridLayout_9.removeWidget(widget)
+                            widget.setHidden(True)
+                        self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
+                        self.button_list[i][j].setHidden(False)
             else:
-                print('not comp sweep')
+                print('not comp_sweep')
+                for i in range(self.gridLayout_9.rowCount()):
+                    for j in range(self.gridLayout_9.columnCount()):
+                        print('i=%i, j=%i is outside bounds' % (i, j))
+                        item = self.gridLayout_9.itemAtPosition(i, j)
+                        if item is not None:
+
+                            widget = item.widget()
+                            print('should delete')
+                            self.gridLayout_9.removeWidget(widget)
+                            widget.setHidden(True)
+
+                self.gridLayout_9.addWidget(self.label_78, 0, 0)
+                self.gridLayout_9.addWidget(self.label_79, 0, 1)
+                self.gridLayout_9.addWidget(self.label_80, 0, 2)
+                self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
+                self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
+                self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
+                self.label_78.setHidden(False)
+                self.label_79.setHidden(False)
+                self.label_80.setHidden(False)
+                self.IndVar_start.setHidden(False)
+                self.IndVar_stop.setHidden(False)
+                self.IndVar_step.setHidden(False)
+            self.gridLayout_9.update()
 
     def update_plot(self, expt):
         '''Updates the plots in GUI when experiment is changed'''
@@ -303,16 +338,19 @@ class MainWindow(QDialog):
         print('update ctrl file')
 
     def select_ctrl_file(self):
-        options = self.file_browser.Options()
-        options |= self.file_browser.DontUseNativeDialog
-        filePath = self.file_browser \
-                       .getOpenFileName(self, 'Select Control File',
-                                        "C:\\Peak489Win10\\CONTROL_FILE",
-                                        "Control files (*.CON)")[0]
-        print(filePath)
-        self.ctrl_path.setText(filePath)
-        self.gc_connector.ctrl_file = filePath
-        self.gc_connector.load_ctrl_file()
+        '''Prompts user to selectrr GC control file if gc is connected'''
+        if self.gc_Status.isChecked():
+            options = self.file_browser.Options()
+            options |= self.file_browser.DontUseNativeDialog
+            filePath = self.file_browser \
+                           .getOpenFileName(self, 'Select Control File',
+                                            "C:\\Peak489Win10\\CONTROL_FILE",
+                                            "Control files (*.CON)")[0]
+            print(filePath)
+            self.ctrl_path.setText(filePath)
+            self.gc_connector.ctrl_file = filePath
+            self.gc_connector.load_ctrl_file()
+        else: print('GC Not Connected')
 
 
     def select_cal_file(self):
@@ -365,6 +403,7 @@ class MainWindow(QDialog):
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
+        self.butStart.clicked.connect(self.start_study)
         self.listWidget.itemClicked.connect(self.display_expt)
         self.listWidget.setDragDropMode(QAbstractItemView.InternalMove)
         self.findCalFile.clicked.connect(self.select_cal_file)
@@ -399,6 +438,27 @@ class MainWindow(QDialog):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         self.setGasDType.insertItems(0, gas_control.factory_gasses)
+
+        # create initial list of buttons to be added into grid layout when
+        # comp sweep is selected
+        self.button_list = []
+        self.button_list.append([])
+        self.button_list[0].append(QLabel('-'))
+        self.button_list[0].append(QLabel('Multiplier'))
+        self.button_list[0].append(QLabel('Status'))
+        self.button_list[0].append(QLabel('Start'))
+        self.button_list[0].append(QLabel('Stop'))
+        self.button_list[0].append(QLabel('Step'))
+        for i in range(1, 5):
+            self.button_list.append([])
+            self.button_list[i].append(QLabel(('Gas %i' % i)))
+            self.button_list[i].append(QDoubleSpinBox())
+            self.button_list[i].append(QComboBox())
+            self.button_list[i].append(QDoubleSpinBox())
+            self.button_list[i].append(QDoubleSpinBox())
+            self.button_list[i].append(QDoubleSpinBox())
+
+
 
     def init_manual_ctrl_tab(self): # Initialize Manual Control Tab
         self.tabWidget.setUpdatesEnabled(False) # Block Signals during update
@@ -489,13 +549,19 @@ class MainWindow(QDialog):
         if self.gc_Status.isChecked():
            self.gc_connector.disconnect()
 
-    #def start_study(self):
+    def start_study(self):
         '''something like this'''
-        # dialogButton.button(QDialogButton.Accepted).block
-        # for expt in expt_list:
-        #     expt.run()
-        # self.eqpt_list.shutdown()
-        # dialogButton.button(QDialogButton.Accepted).unblock
+        expt_list = [self.listWidget.item(x).data(Qt.UserRole)
+                     for x in range(self.listWidget.count())]
+        # eqpt_list = [self.gc_connector, self.laser_controller,
+        #              self.gas_controller, self.heater]
+        self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(False) #block manual control
+        for expt in expt_list:
+            # expt.update_eqpt_list(eqpt_list)
+            print(expt.expt_name)
+            #expt.run()
+        self.shut_down()
+        self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(True)
 
 # def check_state():
 #     current_state = Thread.CurrentThread.GetApartmentState()
