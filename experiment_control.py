@@ -90,15 +90,7 @@ class Experiment:
         self.heat_rate = 15
 
         if eqpt_list is not False:
-            # eqpt_list needs to be tuple
-            self._gc_control = eqpt_list[0]
-            self._laser_control = eqpt_list[1]
-            self._gas_control = eqpt_list[2]
-            self._heater = eqpt_list[3]
-
-            # Import sample rate from connected control file, make non-public
-            self._sample_rate = self._gc_control.sample_rate
-            self._heater.ramp_rate = self.heat_rate
+            self.update_eqpt_list(eqpt_list)
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
@@ -450,6 +442,22 @@ class Experiment:
 
         run_time = t_set[-1]  #TODO break this out into seperate func
         return (fig, ax1, ax2, run_time)
+
+    def update_eqpt_list(self, eqpt_list):
+        '''takes eqpt_list as tuple in format
+        (gc controller, laser controller, gas controler, heater)
+        and assigns each component to experiment object
+        updates sample rate by given value in gc_control and updates heater
+        ramp rate by the rate specified in experiment object'''
+        # eqpt_list needs to be tuple
+        self._gc_control = eqpt_list[0]
+        self._laser_control = eqpt_list[1]
+        self._gas_control = eqpt_list[2]
+        self._heater = eqpt_list[3]
+
+        # Import sample rate from connected control file, make non-public
+        self._sample_rate = self._gc_control.sample_rate
+        self._heater.ramp_rate = self.heat_rate
 
     def set_initial_conditions(self):
         self.update_date()
