@@ -202,7 +202,9 @@ class MainWindow(QDialog):
 
     def update_ind_var_grid(self, expt):
             print('update ind var')
-            if expt.expt_type == 'comp_sweep':
+
+            if ((expt.expt_type == 'comp_sweep')
+                & (self.gridLayout_9.columnCount() < 4)):
                 for i in range(len(self.button_list)):
                     for j in range(len(self.button_list[0])):
                         item = self.gridLayout_9.itemAtPosition(i, j)
@@ -213,7 +215,8 @@ class MainWindow(QDialog):
                             widget.setHidden(True)
                         self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
                         self.button_list[i][j].setHidden(False)
-            else:
+            elif ((expt.expt_type != 'comp_sweep')
+                  & (self.gridLayout_9.columnCount() > 3)):
                 print('not comp_sweep')
                 for i in range(self.gridLayout_9.rowCount()):
                     for j in range(self.gridLayout_9.columnCount()):
@@ -246,7 +249,8 @@ class MainWindow(QDialog):
                       self.IndVar_stop.value(),
                       self.IndVar_step.value()]
         if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
-            setattr(expt, expt.ind_var, list(np.arange(*sweep_vals)))
+            setattr(expt, expt.ind_var,
+                    list(np.arange(sweep_vals[0], sweep_vals[1]+1, sweep_vals[2])))
             expt.plot_sweep(self.figure)
             self.figure.tight_layout()
         else:
