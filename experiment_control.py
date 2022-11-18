@@ -374,9 +374,10 @@ class Experiment:
                        [selector].to_string(index=False))
         units = self.expt_list['Units'][selector].to_string(index=False)
 
+        # t_batch is the times for gc collection within one step
         t_batch = list(t_steady_state
                        + self.sample_rate*np.arange(0, self.sample_set_size))
-        setpoint0 = [0]*np.size(sweep_val[0])
+        setpoint0 = [0]*np.size(sweep_val[0]) # setpoint0 is 0 or list of zeros for gasses
         if self.expt_type == 'temp_sweep':
             if units == 'K':
                 setpoint0 = 293
@@ -384,9 +385,10 @@ class Experiment:
                 setpoint0 = 20
 
             delta_T = np.diff(sweep_val)
+            # sets time to change temps based on heat_rate
             t_trans = np.append((sweep_val[0]-setpoint0), delta_T)/self.heat_rate
         else:
-            t_trans = np.array([0]*len(sweep_val))
+            t_trans = np.array([0]*len(sweep_val)) # 0 min transition time
 
         # Define the values for the first step condition
         # These two define time and value setting of reactor
@@ -399,10 +401,14 @@ class Experiment:
 
         # Loop through remaining setpoints
         for step_num in range(1, len(sweep_val)):
+            # new sample times: start at last sample, add t_buffer, add new batch
             t_sample = np.append(t_sample,
                                  t_sample[-1]+t_buffer+t_batch)
             sample_val = np.concatenate((sample_val, np.tile(sweep_val[step_num],
                                                              (self.sample_set_size, 1))))
+            # add two points to t_set:
+            # 1) last set point time + transition time
+            # 2) last set point + time of last gc run + buffer
             t_set = np.append(t_set, [t_set[-1] + t_trans[step_num],
                                       t_set[-1] + t_batch[-1] + t_buffer])
             setpoint = np.concatenate(
