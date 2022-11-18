@@ -158,13 +158,13 @@ class GC_Connector():
 if __name__ == "__main__":
     print(dir_path)
     gc1 = GC_Connector()
-    data_path = 'C:\\Peak489Win10\\GCDATA\\20220118_CodeTest'
-    # gc1.sample_set_size = 2
-    # gc1.update_ctrl_file(data_path)
-    # gc1.peaksimple.SetRunning(1, True)
-    # time.sleep(10)
-    # for n in range(0, 21):
-    #     print(gc1.peaksimple.IsRunning(1))
-    #     # IsRunning returns false inbetween runs
-    #     time.sleep(60)
-    # print('Finished')
+    data_path = 'C:\\Peak489Win10\\GCDATA\\20221117_CodeTest'
+    gc1.sample_set_size = 2
+    gc1.update_ctrl_file(data_path)
+    gc1.peaksimple.SetRunning(1, True)
+    time.sleep(10)
+    for n in range(0, 31):
+        print(time.ctime(), '---', gc1.peaksimple.IsRunning(1))
+        # IsRunning returns false inbetween runs. Returns True during run
+        time.sleep(60)
+    print('Finished')
