@@ -8,11 +8,42 @@ import scipy.ndimage as nd
 
 
 class GCData:
+    """
+    A class for processing/analyzing gas chromatographer data from an ASCII file.
 
+    Attributes
+    ----------
+    filepath (str) : filepath where data is stored (.ASC file)
+    timestamp (float) : time since the epoch in seconds
+    rawdata (pandas dataframe) : contains time and signal values from GC run
+    time (numpy array) : np array version of time axis from rawdata (in minutes)
+    signal (numpy array) : np array version of time axis from rawdata. If basecorrect=True it will be baseline
+        corrected using baseline_correct()
+    apex_ind (numppy array) : indices of all peaks identified by apex_inds()
+    numpeaks (int) : length of apex_ind
+    lind (numpy array) : indices of leftmost bound for integration for each peak identified
+    rind (numpy array) : indices of rightmost bound for integration for each peak identified
+
+    Methods
+    -------
+    getrawdata() : called on instantiation to convert asc to pandas array, returns timestamp and rawdata
+    baseline_correction() : modifies signal to be corrected using a tophat baseline correction
+    apex_inds() : scipy.signal.find_peaks to find peaks in signal, returns apex_ind
+    integration_inds(tol=0.5) : finds the bounds of integration, returns lind and rind
+    integrate_peak() : integrates peak trapezoidally in units of seconds*signalintensity, returns counts
+    get_concentrations(calDF) : returns a Pandas series of chemical concentrations, requires dataframe
+        of chem IDs from calibration file
+    plot_integration() : plots the chromatogram with the peaks, left, and right indices indicated
+    get_run_number() : get run number from end of filename
+    convert_to_ppm(calDF, counts, chemID) : returns counts in ppm based on calibration dataframe and ID of chemical
+
+    """
     def __init__(self, filepath, basecorrect=False):
         # set basecorrect to True if you want correction, default is false
-        """initialize the class with the attributes filename and data
-        (which has been read from ASCII and is a pandas dataframe)"""
+        """
+        initialize the class with the attributes filename and data
+        (which has been read from ASCII and is a pandas dataframe)
+        """
         self.filepath = filepath
         self.timestamp, self.rawdata = self.getrawdata()
         self.time = np.asarray(self.rawdata['Time']) # in minutes
@@ -25,8 +56,15 @@ class GCData:
         self.lind, self.rind = self.integration_inds()
 
     def getrawdata(self):  # reads data from ASCII, returns pandas dataframe
-        """Uses Matthias Richter's example code (translated from Matlab)
-        to read GC .ASC files, returns pandas dataframe"""
+        """
+        Uses Matthias Richter's example code (translated from Matlab)
+        to read GC .ASC files
+
+        Returns
+        -------
+        pandas dataframe containing time (min) and signal (arb units)
+        """
+
         with open(self.filepath, 'r') as f:
             # Skip first 18 lines
             for i in range(18):
@@ -66,8 +104,15 @@ class GCData:
     ##############################################################################
 
     def baseline_correction(self):
-        """replaces signal with a signal with background subtraction
-        using tophat filter (based on PyMassSpec/pyms/TopHat.py)"""
+        """
+        replaces signal with a signal with background subtraction
+        using tophat filter, based on PyMassSpec/pyms/TopHat.py
+
+        Returns
+        -------
+        Numpy array of GC signal with baseline corrected
+        """
+
         self.signal = np.asarray(self.rawdata['Signal'])
         struct_elm_frac = 0.1  # default struct element as frac of tot num points
         struct_pts = int(round(self.signal.size * struct_elm_frac))
@@ -78,22 +123,29 @@ class GCData:
         return signal_basesub
 
     def apex_inds(self):
-        """uses scipy.signal.find_peaks to find peaks in signal,
-        returns a numpy array with all peak indices (NOT times)"""
+        """
+        Uses scipy.signal.find_peaks to find peaks in signal
+
+        Returns
+        -------
+        Numpy array with all peak locations (as integer indices NOT times)
+        """
+
         apex_ind, _ = scisig.find_peaks(self.signal, prominence=4)
         return apex_ind
 
-    def integration_inds(self, tol=0.5):
+    def integration_inds(self):
         """
-        calculate the area under the peak with edge values determined by:
-        1. the change in signal is less than 0.5%
-            of the previous signal point (with averaging); or
-        2. the added intensity starts increasing
-            (i.e. when the ion is common to co-eluting compounds)
+        Calculates the area under each peak listed in apex_ind with edge values determined
+        by _half_index_search
 
-        adapted from pyMS function peak_sum_area by Andrew Isaac and Sean O'Callaghan
-        https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py
+        Returns
+        -------
+        Numpy arrays in the same (time) order as the apex_ind array with the location (index)
+        of the left and right points for integration
+
         """
+
         lind = np.zeros(len(self.apex_ind))
         rind = np.zeros(len(self.apex_ind))
         k = 0
@@ -103,15 +155,35 @@ class GCData:
             lhs = self.signal[:apex+1]
             # reverse list so that working forward works toward the left
             flhs = np.flip(lhs)
-            lind[k] = apex - self.half_index_search(flhs)
+            lind[k] = apex - self._half_index_search(flhs)
             rhs = self.signal[apex-1:]
-            rind[k] = apex + self.half_index_search(rhs)
+            rind[k] = apex + self._half_index_search(rhs)
             k += 1
 
         return lind.astype(int), rind.astype(int)
 
     @staticmethod
-    def half_index_search(dat, tol=0.5):
+    def _half_index_search(dat, tol=0.5):
+        """
+        Support function for integration_inds to search for integration bounds, determined where:
+        1. the change in signal is less than 0.5%
+            of the previous signal point (with averaging); or
+        2. the added intensity starts increasing
+            (i.e. when the ion is common to co-eluting compounds)
+
+        adapted from pyMS function peak_sum_area by Andrew Isaac and Sean O'Callaghan
+        https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py
+
+        Parameters
+        ----------
+        tol: double(?), optional
+            When change in sum is less than tol percent of the current area, summing stops
+
+        Returns
+        -------
+        Integer index of the integration bound
+        """
+
         # convert from percent, not sure why it should also be halved
         tol = tol/200.0
         # number of points to sum new area across (increasing value increases smoothing)
@@ -136,8 +208,10 @@ class GCData:
         return index
 
     def integrate_peak(self):
-        """ This finds the area under the peak using a trapezoidal method
-        for each peak identified and using the bounds from integration_inds """
+        """
+        Finds the area under the peak using a trapezoidal method
+        for each peak identified and using the bounds from integration_inds
+        """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
             counts[i] = np.trapz(self.signal[self.lind[i]:self.rind[i]], x=60*self.time[self.lind[i]:self.rind[i]])
@@ -146,8 +220,21 @@ class GCData:
         return np.around(counts)
 
     def get_concentrations(self, calDF):
-        """returns a Pandas series of chemical concentrations
-        in the same order as the calibration file"""
+        """
+        Returns a Pandas series of chemical concentrations
+        in the same order as the calibration file
+
+        Parameters
+        ----------
+        calDF: Pandas DataFrame
+            Calibration values by chemical ID
+
+        Returns
+        -------
+       Array of concentrations for each peak in apex_ind, given in ppm
+
+        """
+
         self.integration_inds()
         # Creates empty series where index are ChemIDs from Cal file
         conc = pd.Series(0.0, index=['timestamp', *calDF.index.to_list()])
@@ -173,12 +260,16 @@ class GCData:
         if (conc==0).all():  # Checks if all concentrations are zero
             print('Warning: Zero Molecules Detected')
 
-        return (conc)
+        return conc
 
     # Plotting functions
     ##############################################################################
 
     def plot_integration(self):
+        """
+        Plots the chromatogram with the peaks, left, and right indices indicated
+        """
+
         plt.close('all')
         # Plotting Things Unique to Matplotlib
         plt.rcParams.update({'font.size': 14})
@@ -210,15 +301,38 @@ class GCData:
     ##############################################################################
 
     def get_run_number(self):
-        """returns run number based on filename"""
+        """
+        Determine run number from filename
+
+        Returns
+        -------
+        Integer run number extracted filename
+
+        """
+
         filename = os.path.basename(self.filepath)
         parts = filename.split('_')
         run_number = int(parts[-1][-2:].lstrip("0"))
         return run_number
 
     def convert_to_ppm(self,calDF, counts, chemID):
-        """This function assumes you have imported the calibration data as a
-        global variable called CalDF. Turns integrated raw counts into real concentration."""
+        """
+        Convert integrated raw counts into ppm based on calibration data
+
+        Parameters
+        ----------
+        calDF: Pandas DataFrame
+            Calibration values by chemical ID
+        counts: double(?)
+            Raw integrated counts determined by integrate_peaks()
+        chemID: **** THIS MIGHT BE WRONG **** str
+            Contains name of chemical from calDF to be converted to ppm
+
+        Returns
+        ------
+        Counts for a single peak converted into ppm based on calDF
+        """
+
         #This function assumes you have imported the calibration data as a global variable called CalDF
         [m, b] = (calDF.loc[chemID, ['slope', 'intercept']]) # Pull Cal data for given chemical
         y = m * counts + b # Simple Calibration equation will need to edit if calibration isn't linear
