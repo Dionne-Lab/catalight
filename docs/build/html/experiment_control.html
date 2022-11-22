@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>experiment_control module &mdash; photoreactor 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> photoreactor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">experiment_control module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#experiment_control.Experiment"><code class="docutils literal notranslate"><span class="pre">Experiment</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.temp"><code class="docutils literal notranslate"><span class="pre">Experiment.temp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.power"><code class="docutils literal notranslate"><span class="pre">Experiment.power</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.tot_flow"><code class="docutils literal notranslate"><span class="pre">Experiment.tot_flow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.gas_comp"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_comp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.gas_type"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.date"><code class="docutils literal notranslate"><span class="pre">Experiment.date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.expt_type"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.sample_name"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.ind_var"><code class="docutils literal notranslate"><span class="pre">Experiment.ind_var</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.expt_name"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.results_path"><code class="docutils literal notranslate"><span class="pre">Experiment.results_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.data_path"><code class="docutils literal notranslate"><span class="pre">Experiment.data_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.create_dirs"><code class="docutils literal notranslate"><span class="pre">Experiment.create_dirs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Experiment.data_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Experiment.date</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.expt_list"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_list</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_comp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">Experiment.ind_var</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.plot_sweep"><code class="docutils literal notranslate"><span class="pre">Experiment.plot_sweep()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">Experiment.power</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.read_expt_log"><code class="docutils literal notranslate"><span class="pre">Experiment.read_expt_log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">Experiment.results_path</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.run_experiment"><code class="docutils literal notranslate"><span class="pre">Experiment.run_experiment()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.sample_rate"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_rate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.set_initial_conditions"><code class="docutils literal notranslate"><span class="pre">Experiment.set_initial_conditions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">Experiment.temp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">Experiment.tot_flow</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.update_date"><code class="docutils literal notranslate"><span class="pre">Experiment.update_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.update_eqpt_list"><code class="docutils literal notranslate"><span class="pre">Experiment.update_eqpt_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.update_expt_log"><code class="docutils literal notranslate"><span class="pre">Experiment.update_expt_log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experiment_control.Experiment.update_save_paths"><code class="docutils literal notranslate"><span class="pre">Experiment.update_save_paths()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">photoreactor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>experiment_control module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/experiment_control.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-experiment_control">
+<span id="experiment-control-module"></span><h1>experiment_control module<a class="headerlink" href="#module-experiment_control" title="Permalink to this heading">¶</a></h1>
+<p>Created on Tue Dec 21 08:30:33 2021
+This is the experiment class file. Ultimately, this class will be capable of:
+self.create_dirs : make directories for raw data and results
+TODO matlab cases? switch?
+This File can likely get folded into gcdata.py to define experiment and data
+classes in the same module in the future
+&#64;author: Briley Bourgeois</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="experiment_control.Experiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">experiment_control.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object that contains all of the information necessary to run a
+particular experiment.
+expt_list : pandas data frame; defines possible experiment types</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.temp">
+<span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#experiment_control.Experiment.temp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; one element if constant or multiple for sweep</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.power">
+<span class="sig-name descname"><span class="pre">power</span></span><a class="headerlink" href="#experiment_control.Experiment.power" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; ‘’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.tot_flow">
+<span class="sig-name descname"><span class="pre">tot_flow</span></span><a class="headerlink" href="#experiment_control.Experiment.tot_flow" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; ‘’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.gas_comp">
+<span class="sig-name descname"><span class="pre">gas_comp</span></span><a class="headerlink" href="#experiment_control.Experiment.gas_comp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of list [[gas1, gas2, gas3],[…]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.gas_type">
+<span class="sig-name descname"><span class="pre">gas_type</span></span><a class="headerlink" href="#experiment_control.Experiment.gas_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#experiment_control.Experiment.date" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; update w/ method. For logging</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.expt_type">
+<span class="sig-name descname"><span class="pre">expt_type</span></span><a class="headerlink" href="#experiment_control.Experiment.expt_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; allowable sweep type. New additions need to be coded</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.sample_name">
+<span class="sig-name descname"><span class="pre">sample_name</span></span><a class="headerlink" href="#experiment_control.Experiment.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; non-public attr for logging</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.ind_var">
+<span class="sig-name descname"><span class="pre">ind_var</span></span><a class="headerlink" href="#experiment_control.Experiment.ind_var" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; non-public for internal use</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.expt_name">
+<span class="sig-name descname"><span class="pre">expt_name</span></span><a class="headerlink" href="#experiment_control.Experiment.expt_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; list fixed variables for expt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.results_path">
+<span class="sig-name descname"><span class="pre">results_path</span></span><a class="headerlink" href="#experiment_control.Experiment.results_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; save location for analysis, defined relative to log</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="experiment_control.Experiment.data_path">
+<span class="sig-name descname"><span class="pre">data_path</span></span><a class="headerlink" href="#experiment_control.Experiment.data_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; save location for raw data, defined relative to log</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.create_dirs">
+<span class="sig-name descname"><span class="pre">create_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.create_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a set of directories to store experimental data
+for a given experiment and the results of the analysis. Updates the
+experiment name based on current expt settings and creates/updates the
+experiment log file in the sample path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sample_path</strong> (<em>str</em>) – Input the path where the data should be stored (sample folder)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – Throws error if expt_type is undefined:</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_path</span></span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="experiment_control.Experiment.expt_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_list</span></span><a class="headerlink" href="#experiment_control.Experiment.expt_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_name</span></span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_type</span></span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_comp</span></span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_type</span></span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ind_var</span></span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.plot_sweep">
+<span class="sig-name descname"><span class="pre">plot_sweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_steady_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.plot_sweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">power</span></span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.read_expt_log">
+<span class="sig-name descname"><span class="pre">read_expt_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.read_expt_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads data from an existing log file and updates object parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>log_path</strong> (<em>str</em>) – string to the full file path of the log file (‘./expt_log.txt’).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results_path</span></span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.run_experiment">
+<span class="sig-name descname"><span class="pre">run_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_steady_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.run_experiment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id9">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_name</span></span><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="experiment_control.Experiment.sample_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_rate</span></span><a class="headerlink" href="#experiment_control.Experiment.sample_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.set_initial_conditions">
+<span class="sig-name descname"><span class="pre">set_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.set_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id10">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id11">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tot_flow</span></span><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.update_date">
+<span class="sig-name descname"><span class="pre">update_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.update_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.update_eqpt_list">
+<span class="sig-name descname"><span class="pre">update_eqpt_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.update_eqpt_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes eqpt_list as tuple in format
+(gc controller, laser controller, gas controler, heater)
+and assigns each component to experiment object
+updates sample rate by given value in gc_control and updates heater
+ramp rate by the rate specified in experiment object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.update_expt_log">
+<span class="sig-name descname"><span class="pre">update_expt_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expt_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.update_expt_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="experiment_control.Experiment.update_save_paths">
+<span class="sig-name descname"><span class="pre">update_save_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expt_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">should_exist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#experiment_control.Experiment.update_save_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates data/results paths for the object. Used when readin expt from
+log file or creating new expt data set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expt_path</strong> (<em>str</em>) – string to the full file path of the experiments dir.</p></li>
+<li><p><strong>should_exist</strong> (<em>Boolean</em><em>, </em><em>optional</em>) – If updating based on existing log file, set to true.
+The default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Gives error if should_exist=True and
+    no results/data directories exists,</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="intro.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Briley Bourgeois, Claire Carlin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

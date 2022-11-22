@@ -1,0 +1,647 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>data_analysis package &mdash; photoreactor 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> photoreactor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experiment_control.html">experiment_control module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">photoreactor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>data_analysis package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/data_analysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="data-analysis-package">
+<h1>data_analysis package<a class="headerlink" href="#data-analysis-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-data_analysis.Plotting_GUI">
+<span id="data-analysis-plotting-gui-module"></span><h2>data_analysis.Plotting_GUI module<a class="headerlink" href="#module-data_analysis.Plotting_GUI" title="Permalink to this heading">¶</a></h2>
+<p>Created on Thu Jun 23 19:03:12 2022</p>
+<p><a class="reference external" href="https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog">https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog</a>
+<a class="reference external" href="https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel">https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel</a></p>
+<p>&#64;author: brile</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.DirProxy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.Plotting_GUI.</span></span><span class="sig-name descname"><span class="pre">DirProxy</span></span><a class="headerlink" href="#data_analysis.Plotting_GUI.DirProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QSortFilterProxyModel</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.DirProxy.filterAcceptsRow">
+<span class="sig-name descname"><span class="pre">filterAcceptsRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QModelIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#data_analysis.Plotting_GUI.DirProxy.filterAcceptsRow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.DirProxy.hasChildren">
+<span class="sig-name descname"><span class="pre">hasChildren</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QModelIndex</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">QModelIndex()</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#data_analysis.Plotting_GUI.DirProxy.hasChildren" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.DirProxy.nameFilters">
+<span class="sig-name descname"><span class="pre">nameFilters</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#data_analysis.Plotting_GUI.DirProxy.nameFilters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.DirProxy.setNameFilters">
+<span class="sig-name descname"><span class="pre">setNameFilters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filters</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI.DirProxy.setNameFilters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.MyWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.Plotting_GUI.</span></span><span class="sig-name descname"><span class="pre">MyWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI.MyWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI.MyWindow.on_treeView_clicked">
+<span class="sig-name descname"><span class="pre">on_treeView_clicked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI.MyWindow.on_treeView_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data_analysis.Plotting_GUI_v2">
+<span id="data-analysis-plotting-gui-v2-module"></span><h2>data_analysis.Plotting_GUI_v2 module<a class="headerlink" href="#module-data_analysis.Plotting_GUI_v2" title="Permalink to this heading">¶</a></h2>
+<p>Created on Thu Jun 23 22:42:55 2022</p>
+<p>&#64;author: brile
+<a class="reference external" href="https://github.com/napari/magicgui/issues/9">https://github.com/napari/magicgui/issues/9</a>
+<a class="reference external" href="https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection">https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection</a>
+<a class="reference external" href="https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder">https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder</a>
+<a class="reference external" href="https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog">https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog</a>
+<a class="reference external" href="https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel">https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel</a>
+<a class="reference external" href="https://www.youtube.com/watch?v=dqg0L7Qw3ko">https://www.youtube.com/watch?v=dqg0L7Qw3ko</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyDelegate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.Plotting_GUI_v2.</span></span><span class="sig-name descname"><span class="pre">MyDelegate</span></span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyDelegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QItemDelegate</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyDelegate.createEditor">
+<span class="sig-name descname"><span class="pre">createEditor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QWidget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QStyleOptionViewItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QModelIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QWidget</span></span></span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyDelegate.createEditor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.Plotting_GUI_v2.</span></span><span class="sig-name descname"><span class="pre">MyWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyWindow.finished">
+<span class="sig-name descname"><span class="pre">finished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyWindow.finished" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyWindow.getParentPath">
+<span class="sig-name descname"><span class="pre">getParentPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyWindow.getParentPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.Plotting_GUI_v2.MyWindow.handleChooseDirectories">
+<span class="sig-name descname"><span class="pre">handleChooseDirectories</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.Plotting_GUI_v2.MyWindow.handleChooseDirectories" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="data-analysis-change-xdata-module">
+<h2>data_analysis.change_xdata module<a class="headerlink" href="#data-analysis-change-xdata-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="data-analysis-chromatogram-plotter-module">
+<h2>data_analysis.chromatogram_plotter module<a class="headerlink" href="#data-analysis-chromatogram-plotter-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-data_analysis.data_extractor">
+<span id="data-analysis-data-extractor-module"></span><h2>data_analysis.data_extractor module<a class="headerlink" href="#module-data_analysis.data_extractor" title="Permalink to this heading">¶</a></h2>
+<p>Created on Thu Jun 23 22:42:55 2022</p>
+<p>&#64;author: brile
+<a class="reference external" href="https://github.com/napari/magicgui/issues/9">https://github.com/napari/magicgui/issues/9</a>
+<a class="reference external" href="https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection">https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection</a>
+<a class="reference external" href="https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder">https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder</a>
+<a class="reference external" href="https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog">https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog</a>
+<a class="reference external" href="https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel">https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel</a>
+<a class="reference external" href="https://www.youtube.com/watch?v=dqg0L7Qw3ko">https://www.youtube.com/watch?v=dqg0L7Qw3ko</a>
+<a class="reference external" href="https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python">https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python</a></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.data_extractor.</span></span><span class="sig-name descname"><span class="pre">DataExtractor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.accept">
+<span class="sig-name descname"><span class="pre">accept</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.accept" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.getMatchingFiles">
+<span class="sig-name descname"><span class="pre">getMatchingFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expt_dirs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.getMatchingFiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.getParentPath">
+<span class="sig-name descname"><span class="pre">getParentPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.getParentPath" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.get_output">
+<span class="sig-name descname"><span class="pre">get_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.get_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.handleChooseDirectories">
+<span class="sig-name descname"><span class="pre">handleChooseDirectories</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starting_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.handleChooseDirectories" title="Permalink to this definition">¶</a></dt>
+<dd><p>we use this function instead of regular QFileDialog because
+this lets us select multiple folders</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.initLayout">
+<span class="sig-name descname"><span class="pre">initLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.initLayout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.populateTree">
+<span class="sig-name descname"><span class="pre">populateTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.populateTree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.DataExtractor.reject">
+<span class="sig-name descname"><span class="pre">reject</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.data_extractor.DataExtractor.reject" title="Permalink to this definition">¶</a></dt>
+<dd><p>restarts init at picking starting directory</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.MyDelegate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.data_extractor.</span></span><span class="sig-name descname"><span class="pre">MyDelegate</span></span><a class="headerlink" href="#data_analysis.data_extractor.MyDelegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QItemDelegate</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.data_extractor.MyDelegate.createEditor">
+<span class="sig-name descname"><span class="pre">createEditor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QWidget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QStyleOptionViewItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QModelIndex</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">QWidget</span></span></span><a class="headerlink" href="#data_analysis.data_extractor.MyDelegate.createEditor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data_analysis.edit_pickled_fig">
+<span id="data-analysis-edit-pickled-fig-module"></span><h2>data_analysis.edit_pickled_fig module<a class="headerlink" href="#module-data_analysis.edit_pickled_fig" title="Permalink to this heading">¶</a></h2>
+<p>Created on Tue Jul  5 10:53:29 2022</p>
+<p>&#64;author: brile</p>
+</section>
+<section id="data-analysis-gc-analysis-module">
+<h2>data_analysis.gc_analysis module<a class="headerlink" href="#data-analysis-gc-analysis-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-data_analysis.gcdata">
+<span id="data-analysis-gcdata-module"></span><h2>data_analysis.gcdata module<a class="headerlink" href="#module-data_analysis.gcdata" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data_analysis.gcdata.</span></span><span class="sig-name descname"><span class="pre">GCData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basecorrect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for processing/analyzing gas chromatographer data from an ASCII file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.filepath" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>filepath where data is stored (.ASC file)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>time since the epoch in seconds</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.rawdata">
+<span class="sig-name descname"><span class="pre">rawdata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pandas</span> <span class="pre">dataframe</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.rawdata" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>contains time and signal values from GC run</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.time">
+<span class="sig-name descname"><span class="pre">time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy</span> <span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.time" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np array version of time axis from rawdata (in minutes)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.signal">
+<span class="sig-name descname"><span class="pre">signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy</span> <span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.signal" title="Permalink to this definition">¶</a></dt>
+<dd><p>corrected using baseline_correct()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np array version of time axis from rawdata. If basecorrect=True it will be baseline</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.apex_ind">
+<span class="sig-name descname"><span class="pre">apex_ind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numppy</span> <span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.apex_ind" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>indices of all peaks identified by apex_inds()</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.numpeaks">
+<span class="sig-name descname"><span class="pre">numpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.numpeaks" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>length of apex_ind</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.lind">
+<span class="sig-name descname"><span class="pre">lind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy</span> <span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.lind" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>indices of leftmost bound for integration for each peak identified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.rind">
+<span class="sig-name descname"><span class="pre">rind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numpy</span> <span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.rind" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>indices of rightmost bound for integration for each peak identified</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">getrawdata()</span> <span class="pre">:</span> <span class="pre">called</span> <span class="pre">on</span> <span class="pre">instantiation</span> <span class="pre">to</span> <span class="pre">convert</span> <span class="pre">asc</span> <span class="pre">to</span> <span class="pre">pandas</span> <span class="pre">array,</span> <span class="pre">returns</span> <span class="pre">timestamp</span> <span class="pre">and</span> <span class="pre">rawdata</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">baseline_correction()</span> <span class="pre">:</span> <span class="pre">modifies</span> <span class="pre">signal</span> <span class="pre">to</span> <span class="pre">be</span> <span class="pre">corrected</span> <span class="pre">using</span> <span class="pre">a</span> <span class="pre">tophat</span> <span class="pre">baseline</span> <span class="pre">correction</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">apex_inds()</span> <span class="pre">:</span> <span class="pre">scipy.signal.find_peaks</span> <span class="pre">to</span> <span class="pre">find</span> <span class="pre">peaks</span> <span class="pre">in</span> <span class="pre">signal,</span> <span class="pre">returns</span> <span class="pre">apex_ind</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">integration_inds(tol=0.5)</span> <span class="pre">:</span> <span class="pre">finds</span> <span class="pre">the</span> <span class="pre">bounds</span> <span class="pre">of</span> <span class="pre">integration,</span> <span class="pre">returns</span> <span class="pre">lind</span> <span class="pre">and</span> <span class="pre">rind</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">integrate_peak()</span> <span class="pre">:</span> <span class="pre">integrates</span> <span class="pre">peak</span> <span class="pre">trapezoidally</span> <span class="pre">in</span> <span class="pre">units</span> <span class="pre">of</span> <span class="pre">seconds*signalintensity,</span> <span class="pre">returns</span> <span class="pre">counts</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_concentrations(calDF)</span> <span class="pre">:</span> <span class="pre">returns</span> <span class="pre">a</span> <span class="pre">Pandas</span> <span class="pre">series</span> <span class="pre">of</span> <span class="pre">chemical</span> <span class="pre">concentrations,</span> <span class="pre">requires</span> <span class="pre">dataframe</span></span></dt>
+<dd><p>of chem IDs from calibration file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_integration()</span> <span class="pre">:</span> <span class="pre">plots</span> <span class="pre">the</span> <span class="pre">chromatogram</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">peaks,</span> <span class="pre">left,</span> <span class="pre">and</span> <span class="pre">right</span> <span class="pre">indices</span> <span class="pre">indicated</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_run_number()</span> <span class="pre">:</span> <span class="pre">get</span> <span class="pre">run</span> <span class="pre">number</span> <span class="pre">from</span> <span class="pre">end</span> <span class="pre">of</span> <span class="pre">filename</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">convert_to_ppm(calDF,</span> <span class="pre">counts,</span> <span class="pre">chemID)</span> <span class="pre">:</span> <span class="pre">returns</span> <span class="pre">counts</span> <span class="pre">in</span> <span class="pre">ppm</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">calibration</span> <span class="pre">dataframe</span> <span class="pre">and</span> <span class="pre">ID</span> <span class="pre">of</span> <span class="pre">chemical</span></span></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.apex_inds">
+<span class="sig-name descname"><span class="pre">apex_inds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.apex_inds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses scipy.signal.find_peaks to find peaks in signal</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy array with all peak locations (as integer indices NOT times)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.baseline_correction">
+<span class="sig-name descname"><span class="pre">baseline_correction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.baseline_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>replaces signal with a signal with background subtraction
+using tophat filter, based on PyMassSpec/pyms/TopHat.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Numpy array of GC signal with baseline corrected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.convert_to_ppm">
+<span class="sig-name descname"><span class="pre">convert_to_ppm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calDF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chemID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.convert_to_ppm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert integrated raw counts into ppm based on calibration data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calDF</strong> (<em>Pandas DataFrame</em>) – Calibration values by chemical ID</p></li>
+<li><p><strong>counts</strong> (<em>double</em><em>(</em><em>?</em><em>)</em>) – Raw integrated counts determined by integrate_peaks()</p></li>
+<li><p><strong>chemID</strong> (<a href="#id1"><span class="problematic" id="id2">**</span></a>** THIS MIGHT BE WRONG <a href="#id3"><span class="problematic" id="id4">**</span></a>** str) – Contains name of chemical from calDF to be converted to ppm</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Counts for a single peak converted into ppm based on calDF</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.get_concentrations">
+<span class="sig-name descname"><span class="pre">get_concentrations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calDF</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.get_concentrations" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Returns a Pandas series of chemical concentrations
+in the same order as the calibration file</p>
+<dl class="simple">
+<dt>calDF: Pandas DataFrame</dt><dd><p>Calibration values by chemical ID</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Array of concentrations for each peak in apex_ind, given in ppm</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.get_run_number">
+<span class="sig-name descname"><span class="pre">get_run_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.get_run_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine run number from filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Integer run number extracted filename</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.getrawdata">
+<span class="sig-name descname"><span class="pre">getrawdata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.getrawdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses Matthias Richter’s example code (translated from Matlab)
+to read GC .ASC files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas dataframe containing time (min) and signal (arb units)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.integrate_peak">
+<span class="sig-name descname"><span class="pre">integrate_peak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.integrate_peak" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the area under the peak using a trapezoidal method
+for each peak identified and using the bounds from integration_inds</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.integration_inds">
+<span class="sig-name descname"><span class="pre">integration_inds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.integration_inds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the area under each peak listed in apex_ind with edge values determined
+by _half_index_search</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>Numpy arrays in the same (time) order as the apex_ind array with the location (index)</em></p></li>
+<li><p><em>of the left and right points for integration</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="data_analysis.gcdata.GCData.plot_integration">
+<span class="sig-name descname"><span class="pre">plot_integration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data_analysis.gcdata.GCData.plot_integration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the chromatogram with the peaks, left, and right indices indicated</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="data-analysis-make-calibration-files-module">
+<h2>data_analysis.make_calibration_files module<a class="headerlink" href="#data-analysis-make-calibration-files-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="data-analysis-multiplot-results-module">
+<h2>data_analysis.multiplot_results module<a class="headerlink" href="#data-analysis-multiplot-results-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="data-analysis-plot-pro-v1-module">
+<h2>data_analysis.plot_pro_v1 module<a class="headerlink" href="#data-analysis-plot-pro-v1-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="data-analysis-plot-series-module">
+<h2>data_analysis.plot_series module<a class="headerlink" href="#data-analysis-plot-series-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="data-analysis-run-calibration-module">
+<h2>data_analysis.run_calibration module<a class="headerlink" href="#data-analysis-run-calibration-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-data_analysis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-data_analysis" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Briley Bourgeois, Claire Carlin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
