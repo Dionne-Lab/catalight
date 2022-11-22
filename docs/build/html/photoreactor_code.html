@@ -1,0 +1,855 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>photoreactor_code namespace &mdash; photoreactor 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> photoreactor
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">photoreactor_code namespace</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-photoreactor_code.LedIndicatorWidget">photoreactor_code.LedIndicatorWidget module</a><ul>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator"><code class="docutils literal notranslate"><span class="pre">LedIndicator</span></code></a><ul>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.offColor1"><code class="docutils literal notranslate"><span class="pre">LedIndicator.offColor1</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.offColor2"><code class="docutils literal notranslate"><span class="pre">LedIndicator.offColor2</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.onColor1"><code class="docutils literal notranslate"><span class="pre">LedIndicator.onColor1</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.onColor2"><code class="docutils literal notranslate"><span class="pre">LedIndicator.onColor2</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.paintEvent"><code class="docutils literal notranslate"><span class="pre">LedIndicator.paintEvent()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.resizeEvent"><code class="docutils literal notranslate"><span class="pre">LedIndicator.resizeEvent()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.scaledSize"><code class="docutils literal notranslate"><span class="pre">LedIndicator.scaledSize</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-photoreactor_code.experiment_control">photoreactor_code.experiment_control module</a><ul>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment"><code class="docutils literal notranslate"><span class="pre">Experiment</span></code></a><ul>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.temp"><code class="docutils literal notranslate"><span class="pre">Experiment.temp</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.power"><code class="docutils literal notranslate"><span class="pre">Experiment.power</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.tot_flow"><code class="docutils literal notranslate"><span class="pre">Experiment.tot_flow</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.gas_comp"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_comp</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.gas_type"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_type</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.date"><code class="docutils literal notranslate"><span class="pre">Experiment.date</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.expt_type"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_type</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.sample_name"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_name</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.ind_var"><code class="docutils literal notranslate"><span class="pre">Experiment.ind_var</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.expt_name"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_name</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.results_path"><code class="docutils literal notranslate"><span class="pre">Experiment.results_path</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.data_path"><code class="docutils literal notranslate"><span class="pre">Experiment.data_path</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.create_dirs"><code class="docutils literal notranslate"><span class="pre">Experiment.create_dirs()</span></code></a></li>
+<li><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">Experiment.data_path</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Experiment.date</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.expt_list"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_list</span></code></a></li>
+<li><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_name</span></code></a></li>
+<li><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">Experiment.expt_type</span></code></a></li>
+<li><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_comp</span></code></a></li>
+<li><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">Experiment.gas_type</span></code></a></li>
+<li><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">Experiment.ind_var</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.plot_sweep"><code class="docutils literal notranslate"><span class="pre">Experiment.plot_sweep()</span></code></a></li>
+<li><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">Experiment.power</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.read_expt_log"><code class="docutils literal notranslate"><span class="pre">Experiment.read_expt_log()</span></code></a></li>
+<li><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">Experiment.results_path</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.run_experiment"><code class="docutils literal notranslate"><span class="pre">Experiment.run_experiment()</span></code></a></li>
+<li><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_name</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.sample_rate"><code class="docutils literal notranslate"><span class="pre">Experiment.sample_rate</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.set_initial_conditions"><code class="docutils literal notranslate"><span class="pre">Experiment.set_initial_conditions()</span></code></a></li>
+<li><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">Experiment.temp</span></code></a></li>
+<li><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">Experiment.tot_flow</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.update_date"><code class="docutils literal notranslate"><span class="pre">Experiment.update_date()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.update_eqpt_list"><code class="docutils literal notranslate"><span class="pre">Experiment.update_eqpt_list()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.update_expt_log"><code class="docutils literal notranslate"><span class="pre">Experiment.update_expt_log()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.experiment_control.Experiment.update_save_paths"><code class="docutils literal notranslate"><span class="pre">Experiment.update_save_paths()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#photoreactor-code-main-ctrl-file-module">photoreactor_code.main_ctrl_file module</a></li>
+<li><a class="reference internal" href="#photoreactor-code-main-ctrl-file-co2-module">photoreactor_code.main_ctrl_file_CO2 module</a></li>
+<li><a class="reference internal" href="#photoreactor-code-photoreactor-gui-module">photoreactor_code.photoreactor_GUI module</a></li>
+<li><a class="reference internal" href="#module-photoreactor_code.restructure_raw_files">photoreactor_code.restructure_raw_files module</a><ul>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.calc_powersweep"><code class="docutils literal notranslate"><span class="pre">calc_powersweep()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.calc_tempsweep"><code class="docutils literal notranslate"><span class="pre">calc_tempsweep()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.get_run_name"><code class="docutils literal notranslate"><span class="pre">get_run_name()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.get_run_number"><code class="docutils literal notranslate"><span class="pre">get_run_number()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.listfiles"><code class="docutils literal notranslate"><span class="pre">listfiles()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.plot_powersweep"><code class="docutils literal notranslate"><span class="pre">plot_powersweep()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.plot_tempsweep"><code class="docutils literal notranslate"><span class="pre">plot_tempsweep()</span></code></a></li>
+<li><a class="reference internal" href="#photoreactor_code.restructure_raw_files.restructure_data"><code class="docutils literal notranslate"><span class="pre">restructure_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">photoreactor</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>photoreactor_code namespace</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/photoreactor_code.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <section id="module-photoreactor_code">
+<span id="photoreactor-code-namespace"></span><h1>photoreactor_code namespace<a class="headerlink" href="#module-photoreactor_code" title="Permalink to this heading">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="photoreactor_code.archive.html">photoreactor_code.archive namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.archive.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.archive.html#photoreactor-code-archive-gc-analysis-v0-1-module">photoreactor_code.archive.GC_Analysis_v0_1 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.archive.html#photoreactor-code-archive-run-gc-analysis-module">photoreactor_code.archive.run_gc_analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.archive.html#photoreactor-code-archive-test-gc-analysis-module">photoreactor_code.archive.test_gc_analysis module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="photoreactor_code.data_analysis.html">photoreactor_code.data_analysis package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.IntegrationTesting.html">photoreactor_code.data_analysis.IntegrationTesting namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.IntegrationTesting.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.IntegrationTesting.html#photoreactor-code-data-analysis-integrationtesting-gc-integrationtest-v1-module">photoreactor_code.data_analysis.IntegrationTesting.GC_IntegrationTest_v1 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.IntegrationTesting.html#photoreactor-code-data-analysis-integrationtesting-plot-single-asc-module">photoreactor_code.data_analysis.IntegrationTesting.plot_single_asc module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis.Plotting_GUI">photoreactor_code.data_analysis.Plotting_GUI module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.DirProxy"><code class="docutils literal notranslate"><span class="pre">DirProxy</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.DirProxy.filterAcceptsRow"><code class="docutils literal notranslate"><span class="pre">DirProxy.filterAcceptsRow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.DirProxy.hasChildren"><code class="docutils literal notranslate"><span class="pre">DirProxy.hasChildren()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.DirProxy.nameFilters"><code class="docutils literal notranslate"><span class="pre">DirProxy.nameFilters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.DirProxy.setNameFilters"><code class="docutils literal notranslate"><span class="pre">DirProxy.setNameFilters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.MyWindow"><code class="docutils literal notranslate"><span class="pre">MyWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI.MyWindow.on_treeView_clicked"><code class="docutils literal notranslate"><span class="pre">MyWindow.on_treeView_clicked()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis.Plotting_GUI_v2">photoreactor_code.data_analysis.Plotting_GUI_v2 module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyDelegate"><code class="docutils literal notranslate"><span class="pre">MyDelegate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyDelegate.createEditor"><code class="docutils literal notranslate"><span class="pre">MyDelegate.createEditor()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyWindow"><code class="docutils literal notranslate"><span class="pre">MyWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyWindow.finished"><code class="docutils literal notranslate"><span class="pre">MyWindow.finished()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyWindow.getParentPath"><code class="docutils literal notranslate"><span class="pre">MyWindow.getParentPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.Plotting_GUI_v2.MyWindow.handleChooseDirectories"><code class="docutils literal notranslate"><span class="pre">MyWindow.handleChooseDirectories()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-change-xdata-module">photoreactor_code.data_analysis.change_xdata module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-chromatogram-plotter-module">photoreactor_code.data_analysis.chromatogram_plotter module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis.data_extractor">photoreactor_code.data_analysis.data_extractor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor"><code class="docutils literal notranslate"><span class="pre">DataExtractor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.accept"><code class="docutils literal notranslate"><span class="pre">DataExtractor.accept()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.getMatchingFiles"><code class="docutils literal notranslate"><span class="pre">DataExtractor.getMatchingFiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.getParentPath"><code class="docutils literal notranslate"><span class="pre">DataExtractor.getParentPath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.get_output"><code class="docutils literal notranslate"><span class="pre">DataExtractor.get_output()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.handleChooseDirectories"><code class="docutils literal notranslate"><span class="pre">DataExtractor.handleChooseDirectories()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.initLayout"><code class="docutils literal notranslate"><span class="pre">DataExtractor.initLayout()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.populateTree"><code class="docutils literal notranslate"><span class="pre">DataExtractor.populateTree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.DataExtractor.reject"><code class="docutils literal notranslate"><span class="pre">DataExtractor.reject()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.MyDelegate"><code class="docutils literal notranslate"><span class="pre">MyDelegate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.data_extractor.MyDelegate.createEditor"><code class="docutils literal notranslate"><span class="pre">MyDelegate.createEditor()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis.edit_pickled_fig">photoreactor_code.data_analysis.edit_pickled_fig module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-gc-analysis-module">photoreactor_code.data_analysis.gc_analysis module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis.gcdata">photoreactor_code.data_analysis.gcdata module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData"><code class="docutils literal notranslate"><span class="pre">GCData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.filepath"><code class="docutils literal notranslate"><span class="pre">GCData.filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.timestamp"><code class="docutils literal notranslate"><span class="pre">GCData.timestamp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.rawdata"><code class="docutils literal notranslate"><span class="pre">GCData.rawdata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.time"><code class="docutils literal notranslate"><span class="pre">GCData.time</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.signal"><code class="docutils literal notranslate"><span class="pre">GCData.signal</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.apex_ind"><code class="docutils literal notranslate"><span class="pre">GCData.apex_ind</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.numpeaks"><code class="docutils literal notranslate"><span class="pre">GCData.numpeaks</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.lind"><code class="docutils literal notranslate"><span class="pre">GCData.lind</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.rind"><code class="docutils literal notranslate"><span class="pre">GCData.rind</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.apex_inds"><code class="docutils literal notranslate"><span class="pre">GCData.apex_inds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.baseline_correction"><code class="docutils literal notranslate"><span class="pre">GCData.baseline_correction()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.convert_to_ppm"><code class="docutils literal notranslate"><span class="pre">GCData.convert_to_ppm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.get_concentrations"><code class="docutils literal notranslate"><span class="pre">GCData.get_concentrations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.get_run_number"><code class="docutils literal notranslate"><span class="pre">GCData.get_run_number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.getrawdata"><code class="docutils literal notranslate"><span class="pre">GCData.getrawdata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.integrate_peak"><code class="docutils literal notranslate"><span class="pre">GCData.integrate_peak()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.integration_inds"><code class="docutils literal notranslate"><span class="pre">GCData.integration_inds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor_code.data_analysis.gcdata.GCData.plot_integration"><code class="docutils literal notranslate"><span class="pre">GCData.plot_integration()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-make-calibration-files-module">photoreactor_code.data_analysis.make_calibration_files module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-multiplot-results-module">photoreactor_code.data_analysis.multiplot_results module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-plot-pro-v1-module">photoreactor_code.data_analysis.plot_pro_v1 module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-plot-series-module">photoreactor_code.data_analysis.plot_series module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#photoreactor-code-data-analysis-run-calibration-module">photoreactor_code.data_analysis.run_calibration module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.data_analysis.html#module-photoreactor_code.data_analysis">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="photoreactor_code.equipment.html">photoreactor_code.equipment namespace</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.equipment.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.equipment.alicat_MFC.html">photoreactor_code.equipment.alicat_MFC namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.alicat_MFC.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.alicat_MFC.html#photoreactor-code-equipment-alicat-mfc-connection-tester-module">photoreactor_code.equipment.alicat_MFC.connection_tester module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.alicat_MFC.html#photoreactor-code-equipment-alicat-mfc-gas-control-module">photoreactor_code.equipment.alicat_MFC.gas_control module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.equipment.diode_laser.html">photoreactor_code.equipment.diode_laser namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.diode_laser.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.diode_laser.html#photoreactor-code-equipment-diode-laser-brucejr-v1-module">photoreactor_code.equipment.diode_laser.BruceJr_v1 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.diode_laser.html#photoreactor-code-equipment-diode-laser-diode-control-module">photoreactor_code.equipment.diode_laser.diode_control module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.equipment.harrick_watlow.html">photoreactor_code.equipment.harrick_watlow namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.harrick_watlow.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.harrick_watlow.html#photoreactor-code-equipment-harrick-watlow-heater-control-module">photoreactor_code.equipment.harrick_watlow.heater_control module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.equipment.power_meter.html">photoreactor_code.equipment.power_meter namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.power_meter.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.power_meter.html#photoreactor-code-equipment-power-meter-demo-module">photoreactor_code.equipment.power_meter.demo module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.power_meter.html#photoreactor-code-equipment-power-meter-power-meter-ctrl-module">photoreactor_code.equipment.power_meter.power_meter_ctrl module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor_code.equipment.sri_gc.html">photoreactor_code.equipment.sri_gc namespace</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.sri_gc.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.sri_gc.html#photoreactor-code-equipment-sri-gc-gc-control-module">photoreactor_code.equipment.sri_gc.gc_control module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor_code.equipment.sri_gc.html#photoreactor-code-equipment-sri-gc-peaksimple-control-demo-module">photoreactor_code.equipment.sri_gc.peaksimple_control_demo module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.equipment.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="photoreactor_code.equipment.html#photoreactor-code-equipment-run-diode-calibration-module">photoreactor_code.equipment.run_diode_calibration module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-photoreactor_code.LedIndicatorWidget">
+<span id="photoreactor-code-ledindicatorwidget-module"></span><h2>photoreactor_code.LedIndicatorWidget module<a class="headerlink" href="#module-photoreactor_code.LedIndicatorWidget" title="Permalink to this heading">¶</a></h2>
+<p>Created on Sun Nov  6 19:44:20 2022</p>
+<p>&#64;author: brile</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photoreactor_code.LedIndicatorWidget.</span></span><span class="sig-name descname"><span class="pre">LedIndicator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QAbstractButton</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.offColor1">
+<span class="sig-name descname"><span class="pre">offColor1</span></span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.offColor1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.offColor2">
+<span class="sig-name descname"><span class="pre">offColor2</span></span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.offColor2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.onColor1">
+<span class="sig-name descname"><span class="pre">onColor1</span></span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.onColor1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.onColor2">
+<span class="sig-name descname"><span class="pre">onColor2</span></span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.onColor2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.paintEvent">
+<span class="sig-name descname"><span class="pre">paintEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QPaintEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.paintEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.resizeEvent">
+<span class="sig-name descname"><span class="pre">resizeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QResizeEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.resizeEvent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.LedIndicatorWidget.LedIndicator.scaledSize">
+<span class="sig-name descname"><span class="pre">scaledSize</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000.0</span></em><a class="headerlink" href="#photoreactor_code.LedIndicatorWidget.LedIndicator.scaledSize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-photoreactor_code.experiment_control">
+<span id="photoreactor-code-experiment-control-module"></span><h2>photoreactor_code.experiment_control module<a class="headerlink" href="#module-photoreactor_code.experiment_control" title="Permalink to this heading">¶</a></h2>
+<p>Created on Tue Dec 21 08:30:33 2021
+This is the experiment class file. Ultimately, this class will be capable of:
+self.create_dirs : make directories for raw data and results
+TODO matlab cases? switch?
+This File can likely get folded into gcdata.py to define experiment and data
+classes in the same module in the future
+&#64;author: Briley Bourgeois</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photoreactor_code.experiment_control.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An object that contains all of the information necessary to run a
+particular experiment.
+expt_list : pandas data frame; defines possible experiment types</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.temp">
+<span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.temp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; one element if constant or multiple for sweep</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.power">
+<span class="sig-name descname"><span class="pre">power</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.power" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; ‘’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.tot_flow">
+<span class="sig-name descname"><span class="pre">tot_flow</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.tot_flow" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of floats; ‘’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.gas_comp">
+<span class="sig-name descname"><span class="pre">gas_comp</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.gas_comp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of list [[gas1, gas2, gas3],[…]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.gas_type">
+<span class="sig-name descname"><span class="pre">gas_type</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.gas_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of strings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.date">
+<span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.date" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; update w/ method. For logging</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.expt_type">
+<span class="sig-name descname"><span class="pre">expt_type</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.expt_type" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; allowable sweep type. New additions need to be coded</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.sample_name">
+<span class="sig-name descname"><span class="pre">sample_name</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.sample_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; non-public attr for logging</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.ind_var">
+<span class="sig-name descname"><span class="pre">ind_var</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.ind_var" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; non-public for internal use</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.expt_name">
+<span class="sig-name descname"><span class="pre">expt_name</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.expt_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; list fixed variables for expt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.results_path">
+<span class="sig-name descname"><span class="pre">results_path</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.results_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; save location for analysis, defined relative to log</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.data_path">
+<span class="sig-name descname"><span class="pre">data_path</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.data_path" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str; save location for raw data, defined relative to log</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.create_dirs">
+<span class="sig-name descname"><span class="pre">create_dirs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.create_dirs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a set of directories to store experimental data
+for a given experiment and the results of the analysis. Updates the
+experiment name based on current expt settings and creates/updates the
+experiment log file in the sample path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sample_path</strong> (<em>str</em>) – Input the path where the data should be stored (sample folder)</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>AttributeError</strong> – Throws error if expt_type is undefined:</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_path</span></span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.expt_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_list</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.expt_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_name</span></span><a class="headerlink" href="#id2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_type</span></span><a class="headerlink" href="#id3" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_comp</span></span><a class="headerlink" href="#id4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_type</span></span><a class="headerlink" href="#id5" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ind_var</span></span><a class="headerlink" href="#id6" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.plot_sweep">
+<span class="sig-name descname"><span class="pre">plot_sweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_steady_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.plot_sweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">power</span></span><a class="headerlink" href="#id7" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.read_expt_log">
+<span class="sig-name descname"><span class="pre">read_expt_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.read_expt_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads data from an existing log file and updates object parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>log_path</strong> (<em>str</em>) – string to the full file path of the log file (‘./expt_log.txt’).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results_path</span></span><a class="headerlink" href="#id8" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.run_experiment">
+<span class="sig-name descname"><span class="pre">run_experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_steady_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.run_experiment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id9">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_name</span></span><a class="headerlink" href="#id9" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.sample_rate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_rate</span></span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.sample_rate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.set_initial_conditions">
+<span class="sig-name descname"><span class="pre">set_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.set_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id10">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#id10" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id11">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tot_flow</span></span><a class="headerlink" href="#id11" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.update_date">
+<span class="sig-name descname"><span class="pre">update_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.update_date" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.update_eqpt_list">
+<span class="sig-name descname"><span class="pre">update_eqpt_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.update_eqpt_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes eqpt_list as tuple in format
+(gc controller, laser controller, gas controler, heater)
+and assigns each component to experiment object
+updates sample rate by given value in gc_control and updates heater
+ramp rate by the rate specified in experiment object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.update_expt_log">
+<span class="sig-name descname"><span class="pre">update_expt_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expt_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.update_expt_log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor_code.experiment_control.Experiment.update_save_paths">
+<span class="sig-name descname"><span class="pre">update_save_paths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expt_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">should_exist</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.experiment_control.Experiment.update_save_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates data/results paths for the object. Used when readin expt from
+log file or creating new expt data set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expt_path</strong> (<em>str</em>) – string to the full file path of the experiments dir.</p></li>
+<li><p><strong>should_exist</strong> (<em>Boolean</em><em>, </em><em>optional</em>) – If updating based on existing log file, set to true.
+The default is True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Gives error if should_exist=True and
+    no results/data directories exists,</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="photoreactor-code-main-ctrl-file-module">
+<h2>photoreactor_code.main_ctrl_file module<a class="headerlink" href="#photoreactor-code-main-ctrl-file-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="photoreactor-code-main-ctrl-file-co2-module">
+<h2>photoreactor_code.main_ctrl_file_CO2 module<a class="headerlink" href="#photoreactor-code-main-ctrl-file-co2-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="photoreactor-code-photoreactor-gui-module">
+<h2>photoreactor_code.photoreactor_GUI module<a class="headerlink" href="#photoreactor-code-photoreactor-gui-module" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-photoreactor_code.restructure_raw_files">
+<span id="photoreactor-code-restructure-raw-files-module"></span><h2>photoreactor_code.restructure_raw_files module<a class="headerlink" href="#module-photoreactor_code.restructure_raw_files" title="Permalink to this heading">¶</a></h2>
+<p>Created on Wed Dec 22 14:20:44 2021
+The code is meant to restructure the data hierarchy of raw data from GC runs
+prior to the development of the photoreactor GUI. Input information about a set
+of files (an experiment) and output reorganized data in the new format (ready for analysis)
+TODO: show the user the produced experiment profile first, then ask to proceed
+TODO: code an exception in the event that a file path is &gt;260 characters
+Known Bugs: if file path is &gt;260 characters, os.renames will give an error
+that sounds like the issue is a missing file
+&#64;author: brile</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.calc_powersweep">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">calc_powersweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">P2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_P</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_set_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ramp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.calc_powersweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.calc_tempsweep">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">calc_tempsweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T1_K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T2_K</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_set_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_buffer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_ramp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.calc_tempsweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.get_run_name">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">get_run_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.get_run_name" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>filename for data set. can have extension</em><em> or </em><em>not.</em>) – </p></li>
+<li><p><strong>ok.</strong> (<em>'.' in filename should be</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>run_name</strong> (<em>str containing filename without appended number or extension</em>)</p></li>
+<li><p><em>returns False if filename doesn’t contain FID or TCD</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.get_run_number">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">get_run_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.get_run_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns run number based on filename</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.listfiles">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">listfiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.listfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the .ASC files for FID data in the specified path.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.plot_powersweep">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">plot_powersweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_sweep</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.plot_powersweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.plot_tempsweep">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">plot_tempsweep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Temp_starts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Temp_ends</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Temps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.plot_tempsweep" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="photoreactor_code.restructure_raw_files.restructure_data">
+<span class="sig-prename descclassname"><span class="pre">photoreactor_code.restructure_raw_files.</span></span><span class="sig-name descname"><span class="pre">restructure_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Expt1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_set_size</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor_code.restructure_raw_files.restructure_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calling this function will sort unorganized data in sample_path into a data
+hierarchy ready for analysis by GUI’s analysis script</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sample_path</strong> (<em>Path to original experiment data. this should be a folder</em>) – </p></li>
+<li><p><strong>sorted</strong> (<em>with unorganized raw data ready to be</em>) – </p></li>
+<li><p><strong>Expt1</strong> (<em>experiment object for the given run atleast containing sweep values</em>) – </p></li>
+<li><p><strong>sample_set_size</strong> (<em>number</em><em> of </em><em>samples that were collected at each sweep value</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Briley Bourgeois, Claire Carlin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

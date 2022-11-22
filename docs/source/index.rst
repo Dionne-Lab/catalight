@@ -5,10 +5,14 @@
 
 Welcome to photoreactor's documentation!
 ========================================
+Here I am, documenting things.
 
-.. toctree::
+.. autosummary::
+   :toctree::
    :maxdepth: 2
    :caption: Contents:
+
+   modules
 
    intro
    experiment_control

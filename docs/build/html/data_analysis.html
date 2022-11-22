@@ -83,13 +83,93 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="experiment_control.html">experiment_control module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">data_analysis package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-data_analysis.Plotting_GUI">data_analysis.Plotting_GUI module</a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.DirProxy"><code class="docutils literal notranslate"><span class="pre">DirProxy</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.DirProxy.filterAcceptsRow"><code class="docutils literal notranslate"><span class="pre">DirProxy.filterAcceptsRow()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.DirProxy.hasChildren"><code class="docutils literal notranslate"><span class="pre">DirProxy.hasChildren()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.DirProxy.nameFilters"><code class="docutils literal notranslate"><span class="pre">DirProxy.nameFilters</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.DirProxy.setNameFilters"><code class="docutils literal notranslate"><span class="pre">DirProxy.setNameFilters()</span></code></a></li>
 </ul>
-
+</li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.MyWindow"><code class="docutils literal notranslate"><span class="pre">MyWindow</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI.MyWindow.on_treeView_clicked"><code class="docutils literal notranslate"><span class="pre">MyWindow.on_treeView_clicked()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-data_analysis.Plotting_GUI_v2">data_analysis.Plotting_GUI_v2 module</a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyDelegate"><code class="docutils literal notranslate"><span class="pre">MyDelegate</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyDelegate.createEditor"><code class="docutils literal notranslate"><span class="pre">MyDelegate.createEditor()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyWindow"><code class="docutils literal notranslate"><span class="pre">MyWindow</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyWindow.finished"><code class="docutils literal notranslate"><span class="pre">MyWindow.finished()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyWindow.getParentPath"><code class="docutils literal notranslate"><span class="pre">MyWindow.getParentPath()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.Plotting_GUI_v2.MyWindow.handleChooseDirectories"><code class="docutils literal notranslate"><span class="pre">MyWindow.handleChooseDirectories()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-analysis-change-xdata-module">data_analysis.change_xdata module</a></li>
+<li><a class="reference internal" href="#data-analysis-chromatogram-plotter-module">data_analysis.chromatogram_plotter module</a></li>
+<li><a class="reference internal" href="#module-data_analysis.data_extractor">data_analysis.data_extractor module</a><ul>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor"><code class="docutils literal notranslate"><span class="pre">DataExtractor</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.accept"><code class="docutils literal notranslate"><span class="pre">DataExtractor.accept()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.getMatchingFiles"><code class="docutils literal notranslate"><span class="pre">DataExtractor.getMatchingFiles()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.getParentPath"><code class="docutils literal notranslate"><span class="pre">DataExtractor.getParentPath()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.get_output"><code class="docutils literal notranslate"><span class="pre">DataExtractor.get_output()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.handleChooseDirectories"><code class="docutils literal notranslate"><span class="pre">DataExtractor.handleChooseDirectories()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.initLayout"><code class="docutils literal notranslate"><span class="pre">DataExtractor.initLayout()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.populateTree"><code class="docutils literal notranslate"><span class="pre">DataExtractor.populateTree()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.DataExtractor.reject"><code class="docutils literal notranslate"><span class="pre">DataExtractor.reject()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data_analysis.data_extractor.MyDelegate"><code class="docutils literal notranslate"><span class="pre">MyDelegate</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.data_extractor.MyDelegate.createEditor"><code class="docutils literal notranslate"><span class="pre">MyDelegate.createEditor()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-data_analysis.edit_pickled_fig">data_analysis.edit_pickled_fig module</a></li>
+<li><a class="reference internal" href="#data-analysis-gc-analysis-module">data_analysis.gc_analysis module</a></li>
+<li><a class="reference internal" href="#module-data_analysis.gcdata">data_analysis.gcdata module</a><ul>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData"><code class="docutils literal notranslate"><span class="pre">GCData</span></code></a><ul>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.filepath"><code class="docutils literal notranslate"><span class="pre">GCData.filepath</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.timestamp"><code class="docutils literal notranslate"><span class="pre">GCData.timestamp</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.rawdata"><code class="docutils literal notranslate"><span class="pre">GCData.rawdata</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.time"><code class="docutils literal notranslate"><span class="pre">GCData.time</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.signal"><code class="docutils literal notranslate"><span class="pre">GCData.signal</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.apex_ind"><code class="docutils literal notranslate"><span class="pre">GCData.apex_ind</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.numpeaks"><code class="docutils literal notranslate"><span class="pre">GCData.numpeaks</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.lind"><code class="docutils literal notranslate"><span class="pre">GCData.lind</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.rind"><code class="docutils literal notranslate"><span class="pre">GCData.rind</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.apex_inds"><code class="docutils literal notranslate"><span class="pre">GCData.apex_inds()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.baseline_correction"><code class="docutils literal notranslate"><span class="pre">GCData.baseline_correction()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.convert_to_ppm"><code class="docutils literal notranslate"><span class="pre">GCData.convert_to_ppm()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.get_concentrations"><code class="docutils literal notranslate"><span class="pre">GCData.get_concentrations()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.get_run_number"><code class="docutils literal notranslate"><span class="pre">GCData.get_run_number()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.getrawdata"><code class="docutils literal notranslate"><span class="pre">GCData.getrawdata()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.integrate_peak"><code class="docutils literal notranslate"><span class="pre">GCData.integrate_peak()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.integration_inds"><code class="docutils literal notranslate"><span class="pre">GCData.integration_inds()</span></code></a></li>
+<li><a class="reference internal" href="#data_analysis.gcdata.GCData.plot_integration"><code class="docutils literal notranslate"><span class="pre">GCData.plot_integration()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-analysis-make-calibration-files-module">data_analysis.make_calibration_files module</a></li>
+<li><a class="reference internal" href="#data-analysis-multiplot-results-module">data_analysis.multiplot_results module</a></li>
+<li><a class="reference internal" href="#data-analysis-plot-pro-v1-module">data_analysis.plot_pro_v1 module</a></li>
+<li><a class="reference internal" href="#data-analysis-plot-series-module">data_analysis.plot_series module</a></li>
+<li><a class="reference internal" href="#data-analysis-run-calibration-module">data_analysis.run_calibration module</a></li>
+<li><a class="reference internal" href="#module-data_analysis">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
             
           
         </div>
