@@ -86,8 +86,6 @@ class Experiment:
         self._data_path = 'Undefined'
 
         self.sample_set_size = 4
-        self.t_buffer = 5
-        self.t_steady_state = 15
         self._sample_rate = 10
         self.heat_rate = 15
 
@@ -355,7 +353,7 @@ class Experiment:
 
         self.update_expt_log(expt_path)
 
-    def plot_sweep(self, fig=None):
+    def plot_sweep(self, fig=None, t_steady_state=15, t_buffer=5):
         # plot the sweep parameter vs time
         # have to get the sample run time from GC
         # Some Plot Defaults
@@ -377,7 +375,7 @@ class Experiment:
         units = self.expt_list['Units'][selector].to_string(index=False)
 
         # t_batch is the times for gc collection within one step
-        t_batch = list(self.t_steady_state
+        t_batch = list(t_steady_state
                        + self.sample_rate*np.arange(0, self.sample_set_size))
         setpoint0 = [0]*np.size(sweep_val[0]) # setpoint0 is 0 or list of zeros for gasses
         if self.expt_type == 'temp_sweep':
@@ -394,7 +392,7 @@ class Experiment:
 
         # Define the values for the first step condition
         # These two define time and value setting of reactor
-        t_set = np.array([0, t_trans[0], t_batch[-1]+self.t_buffer])
+        t_set = np.array([0, t_trans[0], t_batch[-1]+t_buffer])
         setpoint = np.vstack((setpoint0, sweep_val[0], sweep_val[0]))
         # These two define time and value GC collects data
         t_sample = np.array(t_batch)
@@ -405,14 +403,14 @@ class Experiment:
         for step_num in range(1, len(sweep_val)):
             # new sample times: start at last sample, add t_buffer, add new batch
             t_sample = np.append(t_sample,
-                                 t_sample[-1]+self.t_buffer+t_batch)
+                                 t_sample[-1]+t_buffer+t_batch)
             sample_val = np.concatenate((sample_val, np.tile(sweep_val[step_num],
                                                              (self.sample_set_size, 1))))
             # add two points to t_set:
             # 1) last set point time + transition time
             # 2) last set point + time of last gc run + buffer
             t_set = np.append(t_set, [t_set[-1] + t_trans[step_num],
-                                      t_set[-1] + t_batch[-1] + self.t_buffer])
+                                      t_set[-1] + t_batch[-1] + t_buffer])
             setpoint = np.concatenate(
                 (setpoint, np.tile(sweep_val[step_num], (2, 1))))
 
@@ -434,7 +432,7 @@ class Experiment:
         ylim_max = 1.1*np.max(sample_val[self.sample_set_size-1])  # TODO what about gas comp
         ylim_min = 0.9*np.max(sample_val[0])-0.05
         # ax2.set_ylim([ylim_min, ylim_max])
-        ax2.set_xlim([t_set[0]-5, t_set[2]+self.t_buffer+5])
+        ax2.set_xlim([t_set[0]-5, t_set[2]+t_buffer+5])
 
         fig.add_subplot(111, frameon=False)
         # hide tick and tick label of the big axis
@@ -490,7 +488,7 @@ class Experiment:
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
 
-    def run_experiment(self):
+    def run_experiment(self, t_steady_state = 15, t_buffer=5):
         print('Starting ' + self.expt_type + self.expt_name)
         self.set_initial_conditions()
         step_num = 1
@@ -536,7 +534,7 @@ class Experiment:
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()
             t_passed = round(t2-t1)  # GC can take a while to respond
-            for i in range(self.t_steady_state*60-t_passed):
+            for i in range(t_steady_state*60-t_passed):
                 time.sleep(1) # Break sleep in bits so keyboard interupt works
 
             print('Starting Collection: '
@@ -550,7 +548,7 @@ class Experiment:
 
             print('Finished Collecting: '
                   + time.strftime("%H:%M:%S", time.localtime()))
-            time.sleep(self.t_buffer*60)
+            time.sleep(t_buffer*60)
             print('Ending = ', self._heater.read_temp(), ' C')
 
             print('Step Finished: '
