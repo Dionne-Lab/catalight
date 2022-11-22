@@ -139,7 +139,7 @@ class MainWindow(QDialog):
         self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
         self.setSampleSize.setValue(expt.sample_set_size)
         self.setRampRate.setValue(expt.heat_rate)  # get from heater?
-        self.setBuffer.setValue(99)
+        self.setBuffer.setValue(expt.t_buffer)
 
         self.setGasAComp.setValue(expt.gas_comp[0][0])
         self.setGasAType.setCurrentText(expt.gas_type[0])
@@ -178,7 +178,7 @@ class MainWindow(QDialog):
             expt.sample_rate = self.setSampleRate.value()  # This needs to have a min set by ctrl file
             expt.sample_set_size = self.setSampleSize.value()
             expt.heat_rate = self.setRampRate.value()  # get from heater?
-            # self.setBuffer.value(99)
+            expt.t_buffer = self.setBuffer.value()
 
             expt.gas_comp[0][0] = self.setGasAComp.value()
             expt.gas_type[0] = self.setGasAType.currentText()
@@ -248,7 +248,7 @@ class MainWindow(QDialog):
         sweep_vals = [self.IndVar_start.value(),
                       self.IndVar_stop.value(),
                       self.IndVar_step.value()]
-        if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0):
+        if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0) & (expt.expt_type != 'stability_test'):
             setattr(expt, expt.ind_var,
                     list(np.arange(sweep_vals[0], sweep_vals[1]+1, sweep_vals[2])))
             expt.plot_sweep(self.figure)
@@ -425,7 +425,7 @@ class MainWindow(QDialog):
         self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
         self.setSampleSize.valueChanged.connect(self.update_expt)
         self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
-        # self.setBuffer.valueChanged.connect(self.update_expt)
+        self.setBuffer.valueChanged.connect(self.update_expt)
         self.setGasAComp.valueChanged.connect(self.update_expt)
         self.setGasAType.currentIndexChanged.connect(self.update_expt)
         self.setGasBComp.valueChanged.connect(self.update_expt)
@@ -557,13 +557,13 @@ class MainWindow(QDialog):
         '''something like this'''
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
-        # eqpt_list = [self.gc_connector, self.laser_controller,
-        #              self.gas_controller, self.heater]
+        eqpt_list = [self.gc_connector, self.laser_controller,
+                      self.gas_controller, self.heater]
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(False) #block manual control
         for expt in expt_list:
-            # expt.update_eqpt_list(eqpt_list)
+            expt.update_eqpt_list(eqpt_list)
             print(expt.expt_name)
-            #expt.run()
+            expt.run_experiment()
         self.shut_down()
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(True)
 
