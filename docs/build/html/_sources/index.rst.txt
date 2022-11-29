@@ -12,8 +12,6 @@ Here I am, documenting things.
    :maxdepth: 2
    :caption: Contents:
 
-   modules
-
    intro
    experiment_control
    examples
