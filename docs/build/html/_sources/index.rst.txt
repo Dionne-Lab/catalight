@@ -7,15 +7,14 @@ Welcome to photoreactor's documentation!
 ========================================
 Here I am, documenting things.
 
-.. autosummary::
-   :toctree::
+.. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    intro
    experiment_control
    examples
-   data_analysis/gcdata
+   data_analysis
 
 
 Indices and tables

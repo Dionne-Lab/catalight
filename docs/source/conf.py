@@ -17,11 +17,11 @@ release = '0.0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc', 'sphinx.ext.autosummary']
-
-#autosummary_generate = True
+extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc']
 
 templates_path = ['_templates']
+source_suffix = '.rst'
+master_doc = 'index'
 exclude_patterns = []
 
 
