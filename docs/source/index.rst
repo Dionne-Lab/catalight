@@ -5,11 +5,16 @@
 
 Welcome to photoreactor's documentation!
 ========================================
+Here I am, documenting things.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   intro
+   experiment_control
+   examples
+   data_analysis
 
 
 Indices and tables
