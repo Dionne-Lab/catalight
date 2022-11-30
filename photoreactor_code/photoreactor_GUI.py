@@ -342,7 +342,7 @@ class MainWindow(QDialog):
         print('update ctrl file')
 
     def select_ctrl_file(self):
-        '''Prompts user to selectrr GC control file if gc is connected'''
+        '''Prompts user to selector GC control file if gc is connected'''
         if self.gc_Status.isChecked():
             options = self.file_browser.Options()
             options |= self.file_browser.DontUseNativeDialog
@@ -560,10 +560,19 @@ class MainWindow(QDialog):
         eqpt_list = [self.gc_connector, self.laser_controller,
                       self.gas_controller, self.heater]
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(False) #block manual control
+        sample_name = (self.sample_name.text()
+                       + str(self.sample_mass.value()))
+        main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
+        os.makedirs(main_fol, exist_ok=True)
+
         for expt in expt_list:
-            expt.update_eqpt_list(eqpt_list)
+
+            expt.sample_name = sample_name
+            expt.create_dirs(main_fol)
+            #expt.update_eqpt_list(eqpt_list)
             print(expt.expt_name)
-            expt.run_experiment()
+            print(expt.sample_name)
+            #expt.run_experiment()
         self.shut_down()
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(True)
 

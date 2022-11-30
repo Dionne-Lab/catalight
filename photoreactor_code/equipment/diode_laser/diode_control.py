@@ -22,17 +22,17 @@ from threading import Thread, Timer
 package_dir = os.path.dirname(os.path.abspath(__file__))
 calibration_path = os.path.join(package_dir, 'diode_calibration.txt')
 
-# Initiate a voice control object to send alert messages
-voice_control = pyttsx3.init()
-voice_control.setProperty('volume', 1.0)
-rate = voice_control.getProperty('rate')
-voice_control.setProperty('rate', rate + 1)
+# # Initiate a voice control object to send alert messages
+# voice_control = pyttsx3.init()
+# voice_control.setProperty('volume', 1.0)
+# rate = voice_control.getProperty('rate')
+# voice_control.setProperty('rate', rate + 1)
 
 
-# This is some code I took off the internet to get control over the speakers
-devices = AudioUtilities.GetSpeakers()
-interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-volume_control = cast(interface, POINTER(IAudioEndpointVolume))
+# # This is some code I took off the internet to get control over the speakers
+# devices = AudioUtilities.GetSpeakers()
+# interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+# volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
 
 # def speak(phrase):
@@ -81,6 +81,19 @@ class Diode_Laser():
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
         self.read_calibration()
+
+        # Initiate a voice control object to send alert messages
+        self.voice_control = pyttsx3.init()
+        self.voice_control.setProperty('volume', 1.0)
+        rate = self.voice_control.getProperty('rate')
+        self.voice_control.setProperty('rate', rate + 1)
+
+
+        # This is some code I took off the internet to get control over the speakers
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
+
         self.set_power(0)
 
 
@@ -99,47 +112,51 @@ class Diode_Laser():
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
         #TODO put check on max power
-        voice_control.setProperty('volume', 1.0)
-        voice_control.say('Warning: Setting power to' + str(P_set) + 'milliwatts')
-        voice_control.runAndWait()
-        voice_control.stop()
+        self.voice_control.setProperty('volume', 1.0)
+        #TODO can i make this try to be int
+        self.voice_control.say('Warning: Setting power to %6.2f milliwatts' % P_set)
+        self.voice_control.runAndWait()
+        self.voice_control.stop()
         #speak('Warning: Setting power to' + str(P_set) + 'milliwatts')
-        self.P_set = str(P_set)
-        m = self._calibration[0]
-        b = self._calibration[1]
-        I_set = (P_set-b)/m  # (mA) Based on calibration
+        I_set = self.P_to_I(P_set)  # (mA) Based on calibration
         I_start = self.get_output_current()
+        # TODO can i round this to 0 if negative?
+        P_start = self.I_to_P(I_start)
+        if P_start < 0: I_start = self.P_to_I(0)
         refresh_rate = 20  # 1/min
-        ramp_time = (I_set - I_start)/650  # min - reaches max in 2 min
+        ramp_time = (I_set - I_start)/650  # [min] - spans 1300mA in 2 min
         setpoints = np.linspace(I_start, I_set, abs(int(ramp_time*refresh_rate)))
-        setpoints = np.append(setpoints, I_set)
-        print('ramp time = ', ramp_time)
-        print(setpoints)
+        if P_set != 0: print('ramp time = %6.4f minutes' % ramp_time)
+
         for I in setpoints:
             # Ramps the current slowly
             Vout = I/self._k_mod  # (V) Voltage output set point
             if P_set == 0:
                 Vout = 0
                 # Convert to 16bit
-                Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+                #Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
                 # Send signal to DAQ Board
-                ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+                #ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
                 Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
                 Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                                       self._ai_range, Vin_value)
                 break
             # Convert to 16bit
-            Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+            #Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
             # Send signal to DAQ Board
-            ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+            #ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
             time.sleep(60/refresh_rate)  # wait
-            print(I)
+            self.P_set = self.I_to_P(I)
+            print('Set Point = %7.2f mW / %7.2f mA' % (self.P_set, I))
 
+
+        self.P_set = P_set
+        print('\n', time.ctime())
         self.print_output()
-        print('Set Point = ' + str(P_set))
-        print(time.ctime())
+        print('Set Point = %7.2f mW / %7.2f mA \n' % (self.P_set, I_set))
+
 
 
     def get_output_current(self):
@@ -154,19 +171,61 @@ class Diode_Laser():
         return(abs(I))
 
     def get_output_power(self):
-        '''returns the calculates output power from
-        current measured and saved calibration'''
-        m = self._calibration[0]
-        b = self._calibration[1]
+        """
+        Returns the calculated output power from
+        current measured and saved calibration
+
+        Returns
+        -------
+        P : Power [mW] rounded to 3 decimal points
+
+        """
         I = self.get_output_current()
-        P = round(I*m+b, 3)
+        P = round(self.I_to_P(I), 3)
         return(P)
 
     def print_output(self):
         '''prints the output current and power to console'''
         I = self.get_output_current()
         P = self.get_output_power()
-        print('Laser output = ' + str(I) + ' mA / ' + str(P) + ' mW')
+        print('Measured Laser output = %7.2f mW / %7.2f mA' % (P, I))
+
+    def I_to_P(self, I):
+        """
+        converts a current to power based on read calibration
+
+        Parameters
+        ----------
+        I : current you'd like to convert [mA]
+
+        Returns
+        -------
+        P : Power [mW]
+
+        """
+        m = self._calibration[0]
+        b = self._calibration[1]
+        P = I*m+b
+        return(P)
+
+    def P_to_I(self, P):
+        """
+        converts a power to current based on read calibration
+
+        Parameters
+        ----------
+        P : Power you'd like to convert [mW]
+
+        Returns
+        -------
+        I : current [mA]
+
+        """
+        m = self._calibration[0]
+        b = self._calibration[1]
+        I = (P-b)/m  # (mA) Based on calibration
+        return(I)
+
 
     def shut_down(self):
         '''Sets power of laser to 0'''
@@ -213,7 +272,7 @@ class Diode_Laser():
                     print('Last laser calibration was:')
                     print(line)
             print(
-                f'Power = {self._calibration[0]}*Current + {self._calibration[1]}')
+                f'Power = {self._calibration[0]}*Current + {self._calibration[1]}\n')
 
     def time_warning(self, time_left):
         '''Enter time in minutes until activation of laser,
@@ -221,10 +280,10 @@ class Diode_Laser():
         # Consider upgrading this to use asyncio or threading.Timer and have
         # the code put out 5 4 3 2 1 minute warnings on a seperate thread
         # Unmutes and sets Vol in dB -0.0 is 100%
-        volume_control.SetMute(0, None)
-        voice_control.say(
+        self.volume_control.SetMute(0, None)
+        self.voice_control.say(
             f'Warning: Diode laser will automatically engage in {time_left} minutes')
-        voice_control.runAndWait()
+        self.voice_control.runAndWait()
 
     def set_current(self, I_set):
         '''Sets current output of controller. Use this only when running
@@ -244,11 +303,10 @@ class Diode_Laser():
         self.print_output()
         print(time.ctime())
         # Unmutes and sets Vol in dB -0.0 is 100%
-        volume_control.SetMute(0, None)
-        volume_control.SetMasterVolumeLevel(-2.0, None)
-        voice_control.say('Warning: Setting current to'
-                          + str(I_set) + 'milliamps')
-        voice_control.runAndWait()
+        self.volume_control.SetMute(0, None)
+        self.volume_control.SetMasterVolumeLevel(-2.0, None)
+        self.voice_control.say('Warning: Setting current to %6.2f milliamps' % I_set)
+        self.voice_control.runAndWait()
 
     def start_logger(self, log_frequency=0.1, save_path=None):
         '''starts the data log function to record the laser set point at
@@ -274,7 +332,8 @@ class Diode_Laser():
     def log_power(self):
         '''appends the date at current power setpoint to the outputlog'''
         with open(self.save_path, 'a') as output_log:
-            output_log.write(str(dt.datetime.now())+', '+self.P_set+'\n')
+            entry = ('%s, %6.2f \n' % (dt.datetime.now(), self.P_set))
+            output_log.write(entry)
 
 
 class RepeatTimer(Timer):
@@ -284,9 +343,10 @@ class RepeatTimer(Timer):
 
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
-    # laser_controller.start_logger()
-    # time.sleep(3)
-    # laser_controller.timer.cancel()
+    laser_controller.start_logger()
+    laser_controller.set_power(200)
+    time.sleep(3)
+    laser_controller.timer.cancel()
     # laser_controller.time_warning(round(0.5/60))
     # laser_controller.set_power(0)
     # time.sleep(10)

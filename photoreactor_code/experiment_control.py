@@ -21,10 +21,10 @@ class Experiment:
     '''
     An object that contains all of the information necessary to run a
     particular experiment.
+    expt_list : pandas data frame; defines possible experiment types
 
     Attributes
     ----------
-        expt_list : pandas data frame; defines possible experiment types
         temp : list of floats; one element if constant or multiple for sweep
         power : list of floats; ''
         tot_flow : list of floats; ''
