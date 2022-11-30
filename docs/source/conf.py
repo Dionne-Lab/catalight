@@ -1,6 +1,9 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../../photoreactor_code/'))
+sys.path.insert(0, os.path.abspath('../../photoreactor_code/data_analysis/'))
+sys.path.insert(0, os.path.abspath('../..'))
+print(sys.path)
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -22,9 +25,10 @@ extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-exclude_patterns = []
+exclude_patterns = ['photoreactor_code/data_analysis/IntegrationTesting.rst']
 
-
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

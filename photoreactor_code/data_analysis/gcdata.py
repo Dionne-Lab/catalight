@@ -231,7 +231,7 @@ class GCData:
 
         Returns
         -------
-       Array of concentrations for each peak in apex_ind, given in ppm
+        Array of concentrations for each peak in apex_ind, given in ppm
 
         """
 

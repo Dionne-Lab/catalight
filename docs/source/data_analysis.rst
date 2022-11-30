@@ -1,9 +1,7 @@
-data\_analysis package
+Data Analysis
 ======================
 
-Submodules
-----------
-data\_analysis.gc\_analysis module
+data\_analysis.gc_analysis
 ----------------------------------
 
 .. automodule:: data_analysis.gc_analysis
@@ -11,7 +9,7 @@ data\_analysis.gc\_analysis module
    :undoc-members:
    :show-inheritance:
 
-data\_analysis.gcdata module
+data\_analysis.gcdata
 ----------------------------
 
 .. automodule:: data_analysis.gcdata
