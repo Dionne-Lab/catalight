@@ -61,7 +61,7 @@ class MainWindow(QDialog):
         self.connect_manual_ctrl()
         self.init_figs()
 
-        self.timer.start(500) # timer connected to update in init_manual_ctrl
+        #self.timer.start(500) # timer connected to update in init_manual_ctrl
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
 
@@ -462,6 +462,7 @@ class MainWindow(QDialog):
             self.current_temp_2.setText('%.2f' % self.heater.read_temp())
 
         if self.gas_Status.isChecked():
+            print(self.gas_controller.mfc_A.connection)
             flow_dict = self.gas_controller.read_flows()
             self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
             self.current_gasA_pressure_1.setText('%.2f' % flow_dict['mfc_A']['pressure'])

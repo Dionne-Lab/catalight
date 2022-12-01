@@ -13,10 +13,10 @@ from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
 
 class MFC_Holder():
     def __init__(self):
-        self.mfc_A = FlowController(port='COM6', address='A')
+        self.mfc = FlowController(port='COM6', address='A')
         self.threadpool = QThreadPool()
         self.manual_ctrl_thread = Worker(self.ping_mfc)
-        self.run_study_thread.setAutoDelete(False)
+        self.manual_ctrl_thread.setAutoDelete(False)
 
     def ping_mfc(self):
         print('inside thread')
