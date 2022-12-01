@@ -61,7 +61,7 @@ class MainWindow(QDialog):
         self.connect_manual_ctrl()
         self.init_figs()
 
-        #self.timer.start(500) # timer connected to update in init_manual_ctrl
+        self.timer.start(500) # timer connected to update in init_manual_ctrl
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
 
