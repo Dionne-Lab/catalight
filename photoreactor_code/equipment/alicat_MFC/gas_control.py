@@ -24,12 +24,18 @@ class Gas_System:
         self.mfc_C = FlowController(port='COM8', address='C')
         self.mfc_D = FlowController(port='COM10', address='D')
         self.mfc_E = FlowMeter(port='COM11', address='E')
+        self.is_busy = False
 
     def set_gasses(self, gas_list):
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         self.mfc_A.set_gas(gas_list[0])
         self.mfc_B.set_gas(gas_list[1])
         self.mfc_C.set_gas(gas_list[2])
         self.mfc_D.set_gas(gas_list[3])
+        self.is_busy = False
 
     def set_flows(self, comp_list, tot_flow):
         '''
@@ -51,6 +57,10 @@ class Gas_System:
         None.
 
         '''
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         if (sum(comp_list) != 1) and (sum(comp_list) != 0):
             raise AttributeError('Gas comp. must be list of list == 1')
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
@@ -58,8 +68,14 @@ class Gas_System:
         self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
         self.mfc_D.set_flow_rate(float(comp_list[3]*tot_flow))
         self.set_gasE(comp_list)
+        self.is_busy = False
 
     def set_gasE(self, comp_list):
+
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         gas_list = []
         for mfc in [self.mfc_A, self.mfc_B, self.mfc_C, self.mfc_D]:
             gas_list.append(mfc.get()['gas'])
@@ -76,10 +92,15 @@ class Gas_System:
             self.mfc_E.set_gas(236)
         else:  # If only one gas, sets that as output
             self.mfc_E.set_gas(list(gas_dict)[0])
+        self.is_busy = False
 
 
     def print_flows(self):
         '''prints mass flow rates and gas type for each MFC to console'''
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         print('MFC A = ' + str(self.mfc_A.get()['mass_flow'])
               + self.mfc_A.get()['gas'])
         print('MFC B = ' + str(self.mfc_B.get()['mass_flow'])
@@ -90,6 +111,7 @@ class Gas_System:
               + self.mfc_D.get()['gas'])
         print('MFC E = ' + str(self.mfc_E.get()['mass_flow'])
               + self.mfc_E.get()['gas'])
+        self.is_busy = False
 
     def print_details(self):
         '''
@@ -99,11 +121,16 @@ class Gas_System:
         None.
 
         '''
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         print(self.mfc_A.get())
         print(self.mfc_B.get())
         print(self.mfc_C.get())
         print(self.mfc_D.get())
         print(self.mfc_E.get())
+        self.is_busy = False
 
     def read_flows(self):
         '''
@@ -112,31 +139,45 @@ class Gas_System:
         -------
         Nested Dictionary
         '''
+        while self.is_busy():
+            time.sleep(0)
 
+        self.is_busy = True
         flow_dict = {'mfc_A': self.mfc_A.get(),
                      'mfc_B': self.mfc_B.get(),
                      'mfc_C': self.mfc_C.get(),
                      'mfc_D': self.mfc_D.get(),
                      'mfc_E': self.mfc_E.get()}
+        self.is_busy = False
         return(flow_dict)
 
     def shut_down(self):
         '''Sets MFC with Ar or N2 running to 1 sccm and others to 0'''
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C, self.mfc_D]
         for mfc in mfc_list:
             if mfc.get()['gas'] in ['Ar', 'N2']:
                 mfc.set_flow_rate(1.0)
             else:
                 mfc.set_flow_rate(0.0)
+        self.is_busy = False
 
     def disconnect(self):
         '''Sets MFC with Ar/N2 to 1sccm, others to 0, and closes connections'''
+        while self.is_busy():
+            time.sleep(0)
+
+        self.is_busy = True
         self.shut_down()
         self.mfc_A.close()
         self.mfc_B.close()
         self.mfc_C.close()
         self.mfc_D.close()
         self.mfc_E.close()
+        self.is_busy = False
         del self
 
     def set_calibration_gas(self, mfc, calDF, fill_gas='Ar'):
