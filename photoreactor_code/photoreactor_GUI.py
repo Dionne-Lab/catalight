@@ -43,6 +43,14 @@ class MainWindow(QDialog):
         # #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
+        # Pass the function to execute
+        # Any other args, kwargs are passed to the run function
+        self.run_study_thread = Worker(self.start_study)
+        self.eqpt_status_thread = Worker(self.update_eqpt_status)
+        self.manual_ctrl_thread = Worker(self.manual_ctrl_eqpt)
+        self.run_study_thread.setAutoDelete(False)
+        self.eqpt_status_thread.setAutoDelete(False)
+        self.manual_ctrl_thread.setAutoDelete(False)
         # TODO : Timer has weird definition in tab init
 
         # Initilize equipment
@@ -56,6 +64,7 @@ class MainWindow(QDialog):
         self.timer.start(500) # timer connected to update in init_manual_ctrl
         sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
+
 
     def normalOutputWritten(self, text):
         """Append console ouput to the QTextEdit."""
@@ -80,10 +89,11 @@ class MainWindow(QDialog):
 
     def start_study(self):
         '''something like this'''
+        # TODO shutdown all clickable things except a shutdown button
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
-        eqpt_list = [self.gc_connector, self.laser_controller,
-                      self.gas_controller, self.heater]
+        # eqpt_list = [self.gc_connector, self.laser_controller,
+        #               self.gas_controller, self.heater]
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(False) #block manual control
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
@@ -100,12 +110,6 @@ class MainWindow(QDialog):
             #expt.run_experiment()
         self.shut_down()
         self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(True)
-
-    # Pass the function to execute
-    worker = Worker(self.execute_this_fn) # Any other args, kwargs are passed to the run function
-
-    # Execute
-    self.threadpool.start(worker)
 
     def select_ctrl_file(self):
         '''Prompts user to selector GC control file if gc is connected'''
@@ -169,7 +173,7 @@ class MainWindow(QDialog):
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
-        self.butStart.clicked.connect(self.start_study)
+        self.butStart.clicked.connect(lambda: self.threadpool.start(self.run_study_thread))
         self.listWidget.itemClicked.connect(self.display_expt)
         self.listWidget.setDragDropMode(QAbstractItemView.InternalMove)
         self.findCalFile.clicked.connect(self.select_cal_file)
@@ -268,11 +272,14 @@ class MainWindow(QDialog):
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
 
     def connect_manual_ctrl(self): # Connect Manual Control
-        self.buttonBox.button(QDialogButtonBox.Apply).clicked.connect(self.manual_ctrl_eqpt)
+        self.buttonBox.button(QDialogButtonBox.Apply) \
+            .clicked.connect(lambda:
+                             self.threadpool.start(self.manual_ctrl_thread))
         self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl_tab)
         self.eqpt_ReconnectBut.clicked.connect(self.reset_eqpt)
         # Connect timer for live feed
-        self.timer.timeout.connect(self.update_eqpt_status)
+        self.timer.timeout \
+            .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
 
     def init_figs(self): # Initialize figure canvas and add to:
         # This is the Canvas Widget that displays the `figure`
@@ -431,6 +438,17 @@ class MainWindow(QDialog):
         self.canvas.show()
         self.canvas2.draw()
         self.canvas2.show()
+
+    # def eqpt_status_thread(self):
+    #     '''create instance of task QRunnable and send to threadpool'''
+    #     run_study_task = Worker(self.start_study)
+    #     eqpt_status_task = Worker(self.update_eqpt_status)
+    #     manual_ctrl_task = Worker(self.manual_ctrl_eqpt)
+    #     self.threadpool.start(self.manual_ctrl_thread))
+
+    #     # Connect timer for live feed
+    #     self.threadpool.start(self.eqpt_status_thread))
+    #     self.threadpool.start(self.run_study_thread)
 
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment in both the
