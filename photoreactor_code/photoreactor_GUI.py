@@ -462,7 +462,6 @@ class MainWindow(QDialog):
             self.current_temp_2.setText('%.2f' % self.heater.read_temp())
 
         if self.gas_Status.isChecked():
-            print(self.gas_controller.mfc_A.connection)
             flow_dict = self.gas_controller.read_flows()
             self.current_gasA_comp_1.setText('%.2f' % flow_dict['mfc_A']['mass_flow'])
             self.current_gasA_pressure_1.setText('%.2f' % flow_dict['mfc_A']['pressure'])
