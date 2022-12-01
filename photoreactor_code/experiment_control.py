@@ -109,7 +109,7 @@ class Experiment:
             if not isinstance(value, list):
                 raise AttributeError(attr+' must be list')
             elif (attr == '_tot_flow') & (np.max(value) > 350):
-                raise AttributeError('Total flow must be <= 50')
+                raise AttributeError('Total flow must be <= 350')
             elif (attr == '_gas_comp'):
                 for composition in value:
                     if sum(composition) != 1:

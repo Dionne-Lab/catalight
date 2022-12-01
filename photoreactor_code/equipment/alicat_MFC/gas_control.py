@@ -27,7 +27,7 @@ class Gas_System:
         self.is_busy = False
 
     def set_gasses(self, gas_list):
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -57,7 +57,7 @@ class Gas_System:
         None.
 
         '''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -72,7 +72,7 @@ class Gas_System:
 
     def set_gasE(self, comp_list):
 
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -97,7 +97,7 @@ class Gas_System:
 
     def print_flows(self):
         '''prints mass flow rates and gas type for each MFC to console'''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -121,7 +121,7 @@ class Gas_System:
         None.
 
         '''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -139,7 +139,7 @@ class Gas_System:
         -------
         Nested Dictionary
         '''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -153,7 +153,7 @@ class Gas_System:
 
     def shut_down(self):
         '''Sets MFC with Ar or N2 running to 1 sccm and others to 0'''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
@@ -167,7 +167,7 @@ class Gas_System:
 
     def disconnect(self):
         '''Sets MFC with Ar/N2 to 1sccm, others to 0, and closes connections'''
-        while self.is_busy():
+        while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
