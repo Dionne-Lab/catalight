@@ -36,30 +36,47 @@ class Heater:
         print('Current temperature = ' + str(self.read_temp()) + ' C')
         print('Current setpoint = ' + str(self.read_setpoint()) + ' C')
         self.ramp_rate = 15  # C/min
+        self.is_busy = False
         # TODO put check on heat rate
 
     def read_temp(self, temp_units='C'):
         '''returns current controller temp in defined units (default = C)'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         temp = self.controller.read()['data']
+        self.is_busy = False
         if temp_units.upper() != 'F':
             temp = convert_temp('F', temp_units, temp)
         return round(temp, 3)
 
     def read_setpoint(self, temp_units='C'):
         '''returns current controller setpoint in defined units (default=C)'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         setpoint = self.controller.readSetpoint()['data']
+        self.is_busy = False
         if temp_units.upper() != 'F':
             setpoint = convert_temp('F', temp_units, setpoint)
         return round(setpoint, 3)
 
     def shut_down(self):
         '''Sets heater to 0 F'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         self.controller.write(0)
-        
+        self.is_busy = False
+
     def disconnect(self):
         '''set heat off and closes connection'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         self.shut_down()
         self.controller.close()
+        self.is_busy = False
 
     def ramp(self, T2, T1=None, temp_units='C'):
         '''
@@ -93,7 +110,11 @@ class Heater:
 
         for temp in setpoints:
             temp = convert_temp('C', 'F', temp)  # Change units to F
+            while self.is_busy:
+                time.sleep(0)
+            self.is_busy = True
             self.controller.write(temp)  # write to controller
+            self.is_busy = False
             time.sleep(60/refresh_rate)  # wait
 
         print('Soak Temp = ' + str(self.read_temp()))
