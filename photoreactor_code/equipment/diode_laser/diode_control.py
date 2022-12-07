@@ -76,7 +76,7 @@ class Diode_Laser():
         if self._ai_info.is_supported:
             self._ai_range = self._ai_info.supported_ranges[0]
         else:
-            print('Warning: Output not supported by DAQ')
+            print('Warning: Input not supported by DAQ')
 
         # Initialize equipment
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
@@ -94,7 +94,8 @@ class Diode_Laser():
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
-
+        print('made it to set power line')
+        print('self.is_busy = ', self.is_busy)
         self.set_power(0)
 
 
@@ -112,9 +113,7 @@ class Diode_Laser():
         The necessary current is sent based on a externally performed
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
-        while self.is_busy:
-            time.sleep(0)
-        self.is_busy = True
+
         #TODO put check on max power
         self.voice_control.setProperty('volume', 1.0)
         #TODO can i make this try to be int
@@ -133,35 +132,40 @@ class Diode_Laser():
         setpoints = np.append(setpoints, I_set)
         if P_set != 0: print('ramp time = %6.4f minutes' % ramp_time)
 
+        print('going into setpoint loop')
+
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+
         for I in setpoints:
             # Ramps the current slowly
             Vout = I/self._k_mod  # (V) Voltage output set point
-            if P_set == 0:
+            if (P_set == 0) and self._ao_info.is_supported:
                 Vout = 0
                 # Convert to 16bit
                 Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
-
                 # Send signal to DAQ Board
                 ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-                Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
-                Vin_eng_units_value = ul.to_eng_units(self.board_num,
-                                                      self._ai_range, Vin_value)
                 break
-            # Convert to 16bit
-            Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
-            # Send signal to DAQ Board
-            ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
-            time.sleep(60/refresh_rate)  # wait
-            self.P_set = self.I_to_P(I)
-            print('Set Point = %7.2f mW / %7.2f mA' % (self.P_set, I))
+            elif (P_set != 0) and self._ao_info.is_supported:
+                # Convert to 16bit
+                Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+                # Send signal to DAQ Board
+                ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+                time.sleep(60/refresh_rate)  # wait
+                self.P_set = self.I_to_P(I)
+                print('Set Point = %7.2f mW / %7.2f mA' % (self.P_set, I))
 
+            else: print('DAQ Write Not Supported')
 
+        self.is_busy = False
         self.P_set = P_set
         print('\n', time.ctime())
         self.print_output()
         print('Set Point = %7.2f mW / %7.2f mA \n' % (self.P_set, I_set))
-        self.is_busy = False
+
 
 
     def get_output_current(self):
@@ -169,13 +173,19 @@ class Diode_Laser():
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
-        # Get input value into DAQ
-        Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
-        Vin_eng_units_value = ul.to_eng_units(self.board_num,
-                                              self._ai_range, Vin_value)
-        # Convert to relevant output numbers
-        V = Vin_eng_units_value
-        I = round(V*self._k_mod, 3)
+
+        if self._ai_info.is_supported:
+            # Get input value into DAQ
+            Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
+            Vin_eng_units_value = ul.to_eng_units(self.board_num,
+                                                  self._ai_range, Vin_value)
+            # Convert to relevant output numbers
+            V = Vin_eng_units_value
+            I = round(V*self._k_mod, 3)
+        else:
+            print('DAQ Read Not Supported')
+            I = 0
+
         self.is_busy = False
         return(abs(I))
 
@@ -360,7 +370,7 @@ class RepeatTimer(Timer):
 
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
-    laser_controller.start_logger()
+    #laser_controller.start_logger()
     # laser_controller.set_power(200)
     # time.sleep(3)
     # laser_controller.timer.cancel()
