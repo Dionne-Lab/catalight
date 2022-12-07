@@ -126,6 +126,7 @@ class Diode_Laser():
         refresh_rate = 20  # 1/min
         ramp_time = (I_set - I_start)/650  # [min] - spans 1300mA in 2 min
         setpoints = np.linspace(I_start, I_set, abs(int(ramp_time*refresh_rate)))
+        setpoints = np.append(setpoints, I_set)
         if P_set != 0: print('ramp time = %6.4f minutes' % ramp_time)
 
         for I in setpoints:
@@ -134,19 +135,19 @@ class Diode_Laser():
             if P_set == 0:
                 Vout = 0
                 # Convert to 16bit
-                #Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+                Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
                 # Send signal to DAQ Board
-                #ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+                ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
                 Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
                 Vin_eng_units_value = ul.to_eng_units(self.board_num,
                                                       self._ai_range, Vin_value)
                 break
             # Convert to 16bit
-            #Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
+            Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
 
             # Send signal to DAQ Board
-            #ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+            ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
             time.sleep(60/refresh_rate)  # wait
             self.P_set = self.I_to_P(I)
             print('Set Point = %7.2f mW / %7.2f mA' % (self.P_set, I))
@@ -344,9 +345,9 @@ class RepeatTimer(Timer):
 if __name__ == "__main__":
     laser_controller = Diode_Laser()
     laser_controller.start_logger()
-    laser_controller.set_power(200)
-    time.sleep(3)
-    laser_controller.timer.cancel()
+    # laser_controller.set_power(200)
+    # time.sleep(3)
+    # laser_controller.timer.cancel()
     # laser_controller.time_warning(round(0.5/60))
     # laser_controller.set_power(0)
     # time.sleep(10)
