@@ -52,6 +52,7 @@ class Diode_Laser():
     def __init__(self):
 
         # Set public attr
+        self.is_busy = False
         self.board_num = 0
         self.memhandle = None
         self.channel = 0
@@ -111,6 +112,9 @@ class Diode_Laser():
         The necessary current is sent based on a externally performed
         calibration. Outputs read power, set point, and time to console.
         reads warning messages when changing power'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         #TODO put check on max power
         self.voice_control.setProperty('volume', 1.0)
         #TODO can i make this try to be int
@@ -157,11 +161,14 @@ class Diode_Laser():
         print('\n', time.ctime())
         self.print_output()
         print('Set Point = %7.2f mW / %7.2f mA \n' % (self.P_set, I_set))
-
+        self.is_busy = False
 
 
     def get_output_current(self):
         '''returns the current measured by DAQ'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         # Get input value into DAQ
         Vin_value = ul.a_in(self.board_num, self.channel, self._ai_range)
         Vin_eng_units_value = ul.to_eng_units(self.board_num,
@@ -169,6 +176,7 @@ class Diode_Laser():
         # Convert to relevant output numbers
         V = Vin_eng_units_value
         I = round(V*self._k_mod, 3)
+        self.is_busy = False
         return(abs(I))
 
     def get_output_power(self):
@@ -230,11 +238,15 @@ class Diode_Laser():
 
     def shut_down(self):
         '''Sets power of laser to 0'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         Vout = 0  # (V) Voltage output set point
         # Convert to 16bit
         Vout_value = ul.from_eng_units(self.board_num, self._ao_range, Vout)
         # Send signal to DAQ Board
         ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
+        self.is_busy = False
         print('Finished')
 
     def update_calibration(self, slope, intercept):
@@ -289,6 +301,9 @@ class Diode_Laser():
     def set_current(self, I_set):
         '''Sets current output of controller. Use this only when running
         calibration reads warning messages when changing power'''
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         Vout = I_set/self._k_mod  # (V) Voltage output set point
         print(I_set)
         print(Vout)
@@ -308,6 +323,7 @@ class Diode_Laser():
         self.volume_control.SetMasterVolumeLevel(-2.0, None)
         self.voice_control.say('Warning: Setting current to %6.2f milliamps' % I_set)
         self.voice_control.runAndWait()
+        self.is_busy = False
 
     def start_logger(self, log_frequency=0.1, save_path=None):
         '''starts the data log function to record the laser set point at
