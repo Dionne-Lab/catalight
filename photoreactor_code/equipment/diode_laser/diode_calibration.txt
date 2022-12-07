@@ -1,8 +1,8 @@
 # This is a calibration file for the diode laser. eventually this should probably be replaced with a csv
 
-m = 1.1616140883906194 
-b = -188.78926430652507 
+m = 0.8373076638023628 
+b = -135.76953735230924 
 
-date = 2022-09-29
+date = 2022-12-01
 
 
