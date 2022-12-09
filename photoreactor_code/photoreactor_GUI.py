@@ -165,7 +165,10 @@ class MainWindow(QDialog):
             self.heater_Status.setChecked(0)
         try:
             self.laser_controller = Diode_Laser()
-            self.diode_Status.setChecked(1)
+            # Check if output is supported by DAQ
+            if self.laser_controller._ao_info.is_supported:    
+                self.diode_Status.setChecked(1)
+            else: self.diode_Status.setChecked(0)
         except:
             self.diode_Status.setChecked(0)
 
