@@ -28,8 +28,8 @@ from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
                           QRunnable, pyqtSlot, pyqtSignal)
 
 from PyQt5.QtWidgets import (QLabel, QDoubleSpinBox, QComboBox, QApplication,
-                             QDialog, QListWidgetItem, QFileDialog,
-                             QDialogButtonBox, QAbstractItemView)
+                             QDialog, QListWidgetItem, QFileDialog, QSpinBox,
+                             QDialogButtonBox, QAbstractItemView, QPushButton)
 
 from PyQt5.QtGui import QTextCursor
 
@@ -60,10 +60,12 @@ class MainWindow(QDialog):
         self.init_manual_ctrl_tab()
         self.connect_manual_ctrl()
         self.init_figs()
+        self.set_form_limits()
 
         self.timer.start(500) # timer connected to update in init_manual_ctrl
-        #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
+        self.emergencyStop.clicked.connect(self.emergency_stop)
 
 
     def normalOutputWritten(self, text):
@@ -89,12 +91,11 @@ class MainWindow(QDialog):
 
     def start_study(self):
         '''something like this'''
-        # TODO shutdown all clickable things except a shutdown button
+        self.toggle_controls(True)
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
         # eqpt_list = [self.gc_connector, self.laser_controller,
         #               self.gas_controller, self.heater]
-        self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(False) #block manual control
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
         main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
@@ -109,7 +110,7 @@ class MainWindow(QDialog):
             print(expt.sample_name)
             #expt.run_experiment()
         self.shut_down()
-        self.buttonBox.button(QDialogButtonBox.Apply).setEnabled(True)
+        self.toggle_controls(False)
 
     def select_ctrl_file(self):
         '''Prompts user to selector GC control file if gc is connected'''
@@ -166,7 +167,7 @@ class MainWindow(QDialog):
         try:
             self.laser_controller = Diode_Laser()
             # Check if output is supported by DAQ
-            if self.laser_controller._ao_info.is_supported:    
+            if self.laser_controller._ao_info.is_supported:
                 self.diode_Status.setChecked(1)
             else: self.diode_Status.setChecked(0)
         except:
@@ -293,7 +294,7 @@ class MainWindow(QDialog):
         self.canvas2 = FigureCanvas(self.figure)
         self.verticalLayout_7.addWidget(self.canvas) # Study Overview
         self.verticalLayout_8.addWidget(self.canvas2)  # Experiment Design
-        
+
     def set_form_limits(self):
         if self.gc_Status.isChecked():
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
@@ -537,6 +538,19 @@ class MainWindow(QDialog):
             self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
 
+    def toggle_controls(self, value):
+
+        group = [*self.findChildren(QDialogButtonBox),
+                 *self.findChildren(QDoubleSpinBox),
+                 *self.findChildren(QPushButton),
+                 *self.findChildren(QComboBox),
+                 *self.findChildren(QSpinBox)]
+
+        for item in group:
+            print(item.objectName())
+            item.setDisabled(value)
+
+
     def open_peaksimple(self, path_name):
         '''closes peaksimple if currently running,
             opens new edition with subprocess'''
@@ -560,7 +574,7 @@ class MainWindow(QDialog):
         self.shut_down()
         if self.gas_Status.isChecked():
             self.gas_controller.disconnect()
-        
+
         if self.heater_Status.isChecked():
             self.heater.disconnect()
 
@@ -579,6 +593,15 @@ class MainWindow(QDialog):
 
         if self.diode_Status.isChecked():
             self.laser_controller.shut_down()
+
+    def emergency_stop(self):
+        self.timer.stop()
+        self.timer.disconnect()
+        #self.threadpool.clear()
+        self.threadpool.cancel()
+        #self.threadpool.disconnect()
+        self.disconnect()
+
 
 class EmittingStream(QObject):
     '''

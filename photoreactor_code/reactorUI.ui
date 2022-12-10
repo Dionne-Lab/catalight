@@ -30,7 +30,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -872,7 +872,7 @@
           <x>20</x>
           <y>30</y>
           <width>349</width>
-          <height>243</height>
+          <height>249</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLiveReadout1" stretch="1,3">
@@ -1788,20 +1788,35 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextBrowser" name="consoleOutput">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>110</height>
-      </size>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QTextBrowser" name="consoleOutput">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>110</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="emergencyStop">
+       <property name="styleSheet">
+        <string notr="true">background-color: red; border-width: 2 px; border-style: outset</string>
+       </property>
+       <property name="text">
+        <string>Emergency
+Stop</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
