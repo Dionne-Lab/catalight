@@ -94,8 +94,6 @@ class Diode_Laser():
         devices = AudioUtilities.GetSpeakers()
         interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
-        print('made it to set power line')
-        print('self.is_busy = ', self.is_busy)
         self.set_power(0)
 
 

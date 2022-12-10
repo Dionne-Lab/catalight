@@ -353,7 +353,6 @@ class MainWindow(QDialog):
         # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
         global update_flag
-        print('update expt')
         # If there is data in listWidget item and now in the middle of updating
         if (item is not None) & update_flag:
             expt = item.data(Qt.UserRole) # pull listWidgetItem data out
@@ -447,27 +446,20 @@ class MainWindow(QDialog):
         self.canvas2.draw()
         self.canvas2.show()
 
-    # def eqpt_status_thread(self):
-    #     '''create instance of task QRunnable and send to threadpool'''
-    #     run_study_task = Worker(self.start_study)
-    #     eqpt_status_task = Worker(self.update_eqpt_status)
-    #     manual_ctrl_task = Worker(self.manual_ctrl_eqpt)
-    #     self.threadpool.start(self.manual_ctrl_thread))
-
-    #     # Connect timer for live feed
-    #     self.threadpool.start(self.eqpt_status_thread))
-    #     self.threadpool.start(self.run_study_thread)
-
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment in both the
         manual control (1) and the live view (2) tabs'''
         if self.diode_Status.isChecked():
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
+            self.current_power_setpoint1.setText('%.2f' % self.laser_controller.P_set)
+            self.current_power_setpoint2.setText('%.2f' % self.laser_controller.P_set)
 
         if self.heater_Status.isChecked():
             self.current_temp_1.setText('%.2f' % self.heater.read_temp())
             self.current_temp_2.setText('%.2f' % self.heater.read_temp())
+            self.current_temp_setpoint1.setText('%.2f' % self.heater.read_setpoint())
+            self.current_temp_setpoint2.setText('%.2f' % self.heater.read_setpoint())
 
         if self.gas_Status.isChecked():
             flow_dict = self.gas_controller.read_flows()
@@ -524,12 +516,20 @@ class MainWindow(QDialog):
         buffer = self.manualBuffer.value()
 
         if self.diode_Status.isChecked():
+            self.current_power_setpoint1.setStyleSheet('Color: Red')
+            self.current_power_setpoint2.setStyleSheet('Color: Red')
             self.laser_controller.set_power(self.manualPower.value())
+            self.current_power_setpoint1.setStyleSheet('Color: White')
+            self.current_power_setpoint2.setStyleSheet('Color: White')
         self.progressBar.setValue(40)
 
         if self.heater_Status.isChecked():
+            self.current_temp_setpoint1.setStyleSheet('Color: Red')
+            self.current_temp_setpoint2.setStyleSheet('Color: Red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
+            self.current_temp_setpoint1.setStyleSheet('Color: White')
+            self.current_temp_setpoint2.setStyleSheet('Color: White')
         self.progressBar.setValue(80)
 
         if self.gc_Status.isChecked():
@@ -550,7 +550,6 @@ class MainWindow(QDialog):
 
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
-        print('closing')
         self.timer.stop()
         self.timer.disconnect()
         self.disconnect() # add shutdown process when window closed
