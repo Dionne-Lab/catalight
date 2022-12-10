@@ -257,7 +257,6 @@ class Diode_Laser():
         # Send signal to DAQ Board
         ul.a_out(self.board_num, 0, self._ao_range, Vout_value)
         self.is_busy = False
-        print('Finished')
 
     def update_calibration(self, slope, intercept):
         '''takes in new calibration data and updates calibration file,

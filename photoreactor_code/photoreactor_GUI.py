@@ -62,7 +62,7 @@ class MainWindow(QDialog):
         self.init_figs()
 
         self.timer.start(500) # timer connected to update in init_manual_ctrl
-        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
 
 
@@ -295,7 +295,7 @@ class MainWindow(QDialog):
         self.verticalLayout_8.addWidget(self.canvas2)  # Experiment Design
         
     def set_form_limits(self):
-        if self.gc_Status.isChecked:
+        if self.gc_Status.isChecked():
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
     ## Updating Tabs/Objects:
@@ -550,6 +550,9 @@ class MainWindow(QDialog):
 
     def closeEvent(self, *args, **kwargs):
         super(QDialog, self).closeEvent(*args, **kwargs)
+        print('closing')
+        self.timer.stop()
+        self.timer.disconnect()
         self.disconnect() # add shutdown process when window closed
 
     def disconnect(self):
@@ -558,7 +561,7 @@ class MainWindow(QDialog):
         self.shut_down()
         if self.gas_Status.isChecked():
             self.gas_controller.disconnect()
-
+        
         if self.heater_Status.isChecked():
             self.heater.disconnect()
 

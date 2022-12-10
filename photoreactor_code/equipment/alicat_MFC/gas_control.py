@@ -168,11 +168,10 @@ class Gas_System:
 
     def disconnect(self):
         '''Sets MFC with Ar/N2 to 1sccm, others to 0, and closes connections'''
+        self.shut_down()
         while self.is_busy:
             time.sleep(0)
-
         self.is_busy = True
-        self.shut_down()
         self.mfc_A.close()
         self.mfc_B.close()
         self.mfc_C.close()

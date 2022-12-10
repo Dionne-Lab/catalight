@@ -71,10 +71,10 @@ class Heater:
 
     def disconnect(self):
         '''set heat off and closes connection'''
+        self.shut_down()
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
-        self.shut_down()
         self.controller.close()
         self.is_busy = False
 
