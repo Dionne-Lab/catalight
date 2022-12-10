@@ -538,7 +538,7 @@ class Experiment:
             print('Waiting for steady state: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             t1 = time.time()
-            while self._gc_control.peaksimple.IsRunning(1):
+            while self._gc_control.is_running():
                 time.sleep(10) # Don't update ctrl file while running
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()

@@ -40,7 +40,7 @@ class MainWindow(QDialog):
         loadUi('reactorUI.ui', self)
 
         # Initilize GUI
-        # #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -94,8 +94,8 @@ class MainWindow(QDialog):
         self.toggle_controls(True)
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
-        # eqpt_list = [self.gc_connector, self.laser_controller,
-        #               self.gas_controller, self.heater]
+        eqpt_list = [self.gc_connector, self.laser_controller,
+                      self.gas_controller, self.heater]
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
         main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
@@ -105,10 +105,10 @@ class MainWindow(QDialog):
 
             expt.sample_name = sample_name
             expt.create_dirs(main_fol)
-            #expt.update_eqpt_list(eqpt_list)
+            expt.update_eqpt_list(eqpt_list)
             print(expt.expt_name)
             print(expt.sample_name)
-            #expt.run_experiment()
+            expt.run_experiment()
         self.shut_down()
         self.toggle_controls(False)
 
@@ -125,6 +125,7 @@ class MainWindow(QDialog):
             self.ctrl_path.setText(filePath)
             self.gc_connector.ctrl_file = filePath
             self.gc_connector.load_ctrl_file()
+            self.set_form_limits()
         else: print('GC Not Connected')
 
     def select_cal_file(self):
@@ -144,6 +145,7 @@ class MainWindow(QDialog):
         self.disconnect()
         self.init_equipment()
         self.init_manual_ctrl_tab()
+        self.set_form_limits()
 
     ## Initializing Tabs:
     def init_equipment(self):
@@ -388,47 +390,45 @@ class MainWindow(QDialog):
             self.update_plot(expt)
 
     def update_ind_var_grid(self, expt):
-            print('update ind var')
+        if ((expt.expt_type == 'comp_sweep')
+            & (self.gridLayout_9.columnCount() < 4)):
+            for i in range(len(self.button_list)):
+                for j in range(len(self.button_list[0])):
+                    item = self.gridLayout_9.itemAtPosition(i, j)
+                    if item is not None:
+                        widget = item.widget()
+                        print('should delete')
+                        self.gridLayout_9.removeWidget(widget)
+                        widget.setHidden(True)
+                    self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
+                    self.button_list[i][j].setHidden(False)
+        elif ((expt.expt_type != 'comp_sweep')
+              & (self.gridLayout_9.columnCount() > 3)):
+            print('not comp_sweep')
+            for i in range(self.gridLayout_9.rowCount()):
+                for j in range(self.gridLayout_9.columnCount()):
+                    print('i=%i, j=%i is outside bounds' % (i, j))
+                    item = self.gridLayout_9.itemAtPosition(i, j)
+                    if item is not None:
 
-            if ((expt.expt_type == 'comp_sweep')
-                & (self.gridLayout_9.columnCount() < 4)):
-                for i in range(len(self.button_list)):
-                    for j in range(len(self.button_list[0])):
-                        item = self.gridLayout_9.itemAtPosition(i, j)
-                        if item is not None:
-                            widget = item.widget()
-                            print('should delete')
-                            self.gridLayout_9.removeWidget(widget)
-                            widget.setHidden(True)
-                        self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
-                        self.button_list[i][j].setHidden(False)
-            elif ((expt.expt_type != 'comp_sweep')
-                  & (self.gridLayout_9.columnCount() > 3)):
-                print('not comp_sweep')
-                for i in range(self.gridLayout_9.rowCount()):
-                    for j in range(self.gridLayout_9.columnCount()):
-                        print('i=%i, j=%i is outside bounds' % (i, j))
-                        item = self.gridLayout_9.itemAtPosition(i, j)
-                        if item is not None:
+                        widget = item.widget()
+                        print('should delete')
+                        self.gridLayout_9.removeWidget(widget)
+                        widget.setHidden(True)
 
-                            widget = item.widget()
-                            print('should delete')
-                            self.gridLayout_9.removeWidget(widget)
-                            widget.setHidden(True)
-
-                self.gridLayout_9.addWidget(self.label_78, 0, 0)
-                self.gridLayout_9.addWidget(self.label_79, 0, 1)
-                self.gridLayout_9.addWidget(self.label_80, 0, 2)
-                self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
-                self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
-                self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
-                self.label_78.setHidden(False)
-                self.label_79.setHidden(False)
-                self.label_80.setHidden(False)
-                self.IndVar_start.setHidden(False)
-                self.IndVar_stop.setHidden(False)
-                self.IndVar_step.setHidden(False)
-            self.gridLayout_9.update()
+            self.gridLayout_9.addWidget(self.label_78, 0, 0)
+            self.gridLayout_9.addWidget(self.label_79, 0, 1)
+            self.gridLayout_9.addWidget(self.label_80, 0, 2)
+            self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
+            self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
+            self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
+            self.label_78.setHidden(False)
+            self.label_79.setHidden(False)
+            self.label_80.setHidden(False)
+            self.IndVar_start.setHidden(False)
+            self.IndVar_stop.setHidden(False)
+            self.IndVar_step.setHidden(False)
+        self.gridLayout_9.update()
 
     def update_plot(self, expt):
         '''Updates the plots in GUI when experiment is changed'''
@@ -547,7 +547,6 @@ class MainWindow(QDialog):
                  *self.findChildren(QSpinBox)]
 
         for item in group:
-            print(item.objectName())
             item.setDisabled(value)
 
 

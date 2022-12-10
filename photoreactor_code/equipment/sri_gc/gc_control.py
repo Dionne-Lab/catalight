@@ -145,6 +145,23 @@ class GC_Connector():
             self._min_sample_rate = (run_time+post_time)/1000
             self.sample_rate = self.min_sample_rate
             
+    def is_running(self, max_tries=3):
+        '''Tries to connect to peak simple max_tries times'''
+        
+        for attempt in range(1, max_tries+1):
+            try:
+                result = self.peaksimple.Is_Running(1)
+                return result
+                break
+            except Exception as e:
+                print(e)
+                if attempt < max_tries:
+                    print('Retrying...')
+                    time.sleep(1)
+                    continue
+                else:
+                    print('Cannot Resolve')
+                    raise e
     
     def connect(self, max_tries=1):
         '''Tries to connect to peak simple max_tries times'''
