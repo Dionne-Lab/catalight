@@ -152,11 +152,11 @@ class Experiment:
     def sample_rate(self):
         return self._sample_rate
     @sample_rate.setter
-    def sample_rate(self, sample_rate):
+    def sample_rate(self, value):
         if hasattr(self, '_gc_control'):
             print('Cannot update sample rate when connected to GC')
         else:
-            self._sample_rate = sample_rate
+            self._sample_rate = value
 
     @property
     def expt_type(self):
@@ -463,8 +463,13 @@ class Experiment:
         self._gas_control = eqpt_list[2]
         self._heater = eqpt_list[3]
 
-        # Import sample rate from connected control file, make non-public
-        self._sample_rate = self._gc_control.sample_rate
+        if self.sample_rate >= self._gc_control.min_sample_rate:
+            # try to set sample rate to that defined by expt
+            self._gc_control.sample_rate = self.sample_rate
+        else:
+            # If that failed, _gc_control.sample_rate will be set to min defined by
+            # ctrl file. This line makes sure gc and expt match
+            self._sample_rate = self._gc_control.sample_rate
         self._heater.ramp_rate = self.heat_rate
 
     def set_initial_conditions(self):
@@ -546,7 +551,7 @@ class Experiment:
             print('Starting Temp = ', self._heater.read_temp(), ' C')
             self._gc_control.peaksimple.SetRunning(1, True)
             #t_collect ends on last gc pull
-            t_collect = self._gc_control.sample_rate*self.sample_set_size-1*60
+            t_collect = self.sample_rate*self.sample_set_size-1*60
             for i in range(int(t_collect)):
                 time.sleep(1)
 

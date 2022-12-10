@@ -40,16 +40,30 @@ class GC_Connector():
         self.connect()
         self.ctrl_file = ctrl_file
         print('Loading', ctrl_file)
-        self.load_ctrl_file()
+        self.load_ctrl_file()  # Sends ctrl file to GC, updates object w/ new data
         self.sample_set_size = 4 # default value, can change in main .py script per experiment
-        self._sample_rate = 0  # Sample rate is read only
-        self.read_ctrl_file()  # Reads loaded ctrl file and upates sample rate
+        self._sample_rate = self.min_sample_rate
 
-    sample_rate = property(lambda self: self._sample_rate)
+    # Makes min_sample_rate read only
+    min_sample_rate = property(lambda self: self._min_sample_rate)
+    
+    # Setting sample rate changes when connected to GC
+    @property
+    def sample_rate(self):
+        return self._sample_rate
+    
+    @sample_rate.setter
+    def sample_rate(self, value):
+        if value >= self._min_sample_rate:
+            self._sample_rate = value
+        else:
+            print('Minimum Sample Rate = %5.2f' % self.min_sample_rate)
+            print('Sample rate set to minimum')
+            self._sample_rate = self.min_sample_rate
+
 
     def update_ctrl_file(self, data_file_path):
         '''Writes over the currently loaded ctrl file to update the save path'''
-        # TODO add channel 2 to this
         with open(self.ctrl_file, 'r+') as ctrl_file:
             new_ctrl_file = []
             for line in ctrl_file:  # read values after '=' line by line
@@ -106,6 +120,31 @@ class GC_Connector():
                 print('Write Error: GC Not Connected')
                 break
         time.sleep(5)  # I think peaksimple is cranky when rushed
+        self.read_ctrl_file()
+        
+        
+    def read_ctrl_file(self):
+        '''
+        Reads loaded control file and updates object with values from file
+        currently updates only min sample rate property
+
+        Returns
+        -------
+        None.
+
+        '''
+        with open(self.ctrl_file, 'r+') as ctrl_file:
+            for line in ctrl_file:  # read values after '=' line by line
+
+                if re.search('<CHANNEL 1 TIME>=', line):
+                    run_time = int(line.split('=')[-1].strip(' \n'))
+
+                elif re.search('<CHANNEL 1 POSTRUN CYCLE TIME>=', line):
+                    post_time = int(line.split('=')[-1].strip(' \n'))
+
+            self._min_sample_rate = (run_time+post_time)/1000
+            self.sample_rate = self.min_sample_rate
+            
     
     def connect(self, max_tries=1):
         '''Tries to connect to peak simple max_tries times'''
@@ -132,27 +171,6 @@ class GC_Connector():
            
         except Exception as e:
             print(e)
-        
-    
-    def read_ctrl_file(self):
-        '''
-        Reads loaded control file and updates sample rate attribute
-
-        Returns
-        -------
-        None.
-
-        '''
-        with open(self.ctrl_file, 'r+') as ctrl_file:
-            for line in ctrl_file:  # read values after '=' line by line
-
-                if re.search('<CHANNEL 1 TIME>=', line):
-                    run_time = int(line.split('=')[-1].strip(' \n'))
-
-                elif re.search('<CHANNEL 1 POSTRUN CYCLE TIME>=', line):
-                    post_time = int(line.split('=')[-1].strip(' \n'))
-
-            self._sample_rate = (run_time+post_time)/1000
 
 
 if __name__ == "__main__":

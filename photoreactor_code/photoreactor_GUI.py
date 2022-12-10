@@ -171,6 +171,7 @@ class MainWindow(QDialog):
             else: self.diode_Status.setChecked(0)
         except:
             self.diode_Status.setChecked(0)
+        self.set_form_limits()
 
     def init_study_tab(self): # Connect Study Overview Tab Contents
         self.setWindowTitle("BruceJr")
@@ -292,6 +293,10 @@ class MainWindow(QDialog):
         self.canvas2 = FigureCanvas(self.figure)
         self.verticalLayout_7.addWidget(self.canvas) # Study Overview
         self.verticalLayout_8.addWidget(self.canvas2)  # Experiment Design
+        
+    def set_form_limits(self):
+        if self.gc_Status.isChecked:
+            self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
     ## Updating Tabs/Objects:
     def display_expt(self):
