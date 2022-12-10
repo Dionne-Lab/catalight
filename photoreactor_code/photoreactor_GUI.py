@@ -595,12 +595,14 @@ class MainWindow(QDialog):
             self.laser_controller.shut_down()
 
     def emergency_stop(self):
-        self.timer.stop()
-        self.timer.disconnect()
+        
         #self.threadpool.clear()
-        self.threadpool.cancel()
+        #self.threadpool.cancel()
+        self.threadpool.cancel(self.run_study_thread)
+        self.threadpool.cancel(self.manual_ctrl_thread)
         #self.threadpool.disconnect()
-        self.disconnect()
+        self.shut_down()
+        
 
 
 class EmittingStream(QObject):
