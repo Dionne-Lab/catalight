@@ -199,6 +199,7 @@ class MainWindow(QMainWindow):
         self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
         self.setSampleSize.valueChanged.connect(self.update_expt)
         self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
+        self.setTSteady.valueChanged.connect(self.update_expt)
         self.setBuffer.valueChanged.connect(self.update_expt)
         self.setGasAComp.valueChanged.connect(self.update_expt)
         self.setGasAType.currentIndexChanged.connect(self.update_expt)
@@ -254,7 +255,7 @@ class MainWindow(QMainWindow):
                self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
                self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
                self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
-               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
+               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)      
 
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -273,12 +274,33 @@ class MainWindow(QMainWindow):
         if self.diode_Status.isChecked():  # Initialize Values for Laser
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
-        if self.gc_Status.isChecked():  # Initialize Values for GC
-            self.manualSampleRate.setValue(self.gc_connector.sample_rate)
-            self.manualSampleSize.setValue(self.gc_connector.sample_set_size)
-            #self.manualBuffer.setValue()
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
+        
+    def sum_spinboxes(self, spinboxes, qlabel):
+        '''take list of spinboxes, get values, write sum to qlabel'''
+        values = self.values_from_spinboxes(spinboxes)
+        self.qlabel.setText('%.2f' % sum(values))
+    
+    def values_from_spinboxes(self, spinboxes):
+        '''
+        give list of spinboxes, return list of values
 
+        Parameters
+        ----------
+        spinboxes : list
+            list of spinboxes you'd like to get values from
+
+        Returns
+        -------
+        gas_comp : list
+            list of the values from the spinboxes supplied
+
+        '''
+        values = []
+        for entry in spinboxes:
+            values.append(entry.value())
+        return values
+    
     def connect_manual_ctrl(self): # Connect Manual Control
         self.buttonBox.button(QDialogButtonBox.Apply) \
             .clicked.connect(lambda:
@@ -288,6 +310,14 @@ class MainWindow(QMainWindow):
         # Connect timer for live feed
         self.timer.timeout \
             .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
+        
+        gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
+                         self.manualGasCComp, self.manualGasDComp]
+        func = lambda: self.sum_spinboxes(gas_spinboxes, self.designCompSum)
+        self.manualGasAComp.valueChanged.connect(func)
+        self.manualGasBComp.valueChanged.connect(func)
+        self.manualGasCComp.valueChanged.connect(func)
+        self.manualGasDComp.valueChanged.connect(func)
 
     def init_figs(self): # Initialize figure canvas and add to:
         # This is the Canvas Widget that displays the `figure`
@@ -332,7 +362,7 @@ class MainWindow(QMainWindow):
         self.setSampleSize.setValue(expt.sample_set_size)
         self.setRampRate.setValue(expt.heat_rate)  # get from heater?
         self.setBuffer.setValue(expt.t_buffer)
-
+        self.setTSteady.setValue(expt.t_steady_state)
         self.setGasAComp.setValue(expt.gas_comp[0][0])
         self.setGasAType.setCurrentText(expt.gas_type[0])
         self.setGasBComp.setValue(expt.gas_comp[0][1])
@@ -342,6 +372,8 @@ class MainWindow(QMainWindow):
         self.setGasDComp.setValue(expt.gas_comp[0][3])
         self.setGasDType.setCurrentText(expt.gas_type[3])
         self.update_plot(expt)
+        comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+        self.designCompSum.setValue(comp_total) 
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
 
@@ -369,7 +401,7 @@ class MainWindow(QMainWindow):
             expt.sample_set_size = self.setSampleSize.value()
             expt.heat_rate = self.setRampRate.value()  # get from heater?
             expt.t_buffer = self.setBuffer.value()
-
+            expt.t_steady_state = self.setTSteady.value()
             expt.gas_comp[0][0] = self.setGasAComp.value()
             expt.gas_type[0] = self.setGasAType.currentText()
             expt.gas_comp[0][1] = self.setGasBComp.value()
@@ -378,6 +410,8 @@ class MainWindow(QMainWindow):
             expt.gas_type[2] = self.setGasCType.currentText()
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
+            comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+            self.designCompSum.setValue(comp_total) 
 
             expt._update_expt_name() # autoname experiment
             item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
@@ -389,7 +423,7 @@ class MainWindow(QMainWindow):
 
             self.update_ind_var_grid(expt)
             self.update_plot(expt)
-
+            
     def update_ind_var_grid(self, expt):
         if ((expt.expt_type == 'comp_sweep')
             & (self.gridLayout_9.columnCount() < 4)):
@@ -498,7 +532,6 @@ class MainWindow(QMainWindow):
     def manual_ctrl_eqpt(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
-        # TODO add emergency stop
         # Adjust limits in GUI
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
@@ -512,10 +545,9 @@ class MainWindow(QMainWindow):
 
         if self.gas_Status.isChecked():
             self.gas_controller.set_gasses(gas_list)
-            self.progressBar.setValue(10)
+            self.progressBar.setValue(25)
             self.gas_controller.set_flows(comp_list, tot_flow)
-        self.progressBar.setValue(20)
-        buffer = self.manualBuffer.value()
+        self.progressBar.setValue(50)
 
         if self.diode_Status.isChecked():
             self.current_power_setpoint1.setStyleSheet('Color: Red')
@@ -523,7 +555,7 @@ class MainWindow(QMainWindow):
             self.laser_controller.set_power(self.manualPower.value())
             self.current_power_setpoint1.setStyleSheet('Color: White')
             self.current_power_setpoint2.setStyleSheet('Color: White')
-        self.progressBar.setValue(40)
+        self.progressBar.setValue(75)
 
         if self.heater_Status.isChecked():
             self.current_temp_setpoint1.setStyleSheet('Color: Red')
@@ -532,12 +564,8 @@ class MainWindow(QMainWindow):
             self.heater.ramp(self.manualTemp.value())
             self.current_temp_setpoint1.setStyleSheet('Color: White')
             self.current_temp_setpoint2.setStyleSheet('Color: White')
-        self.progressBar.setValue(80)
-
-        if self.gc_Status.isChecked():
-            #sample_rate = self.manualSampleRate.value()
-            self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
+
 
     def toggle_controls(self, value):
 
