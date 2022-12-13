@@ -30,7 +30,7 @@
       <bool>false</bool>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabOverview">
       <attribute name="title">
@@ -230,7 +230,7 @@
          <x>11</x>
          <y>11</y>
          <width>371</width>
-         <height>671</height>
+         <height>738</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -649,7 +649,7 @@
          <x>80</x>
          <y>30</y>
          <width>321</width>
-         <height>411</height>
+         <height>441</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="manualControlLayout" stretch="1,2,1">
