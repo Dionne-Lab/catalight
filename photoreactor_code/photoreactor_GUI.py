@@ -63,7 +63,7 @@ class MainWindow(QDialog):
         self.set_form_limits()
 
         self.timer.start(500) # timer connected to update in init_manual_ctrl
-        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
@@ -154,7 +154,8 @@ class MainWindow(QDialog):
         try:
             self.gc_connector = GC_Connector()
             self.gc_Status.setChecked(1)
-        except:
+        except Exception as e:
+            print(e)
             self.gc_Status.setChecked(0)
         try:
             self.gas_controller = Gas_System()
@@ -555,8 +556,11 @@ class MainWindow(QDialog):
             opens new edition with subprocess'''
         for process in psutil.process_iter():
             if 'Peak489Win10' in process.name():
-                process.kill()
+                #process.kill()
+                print('please close peaksimple and reconnect')
                 time.sleep(5)
+                return
+            
         process = subprocess.Popen(path_name)
         time.sleep(5)
         return process

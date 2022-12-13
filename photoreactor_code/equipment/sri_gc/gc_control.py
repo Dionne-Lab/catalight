@@ -38,12 +38,12 @@ class GC_Connector():
         print('Connecting to Peaksimple...')
         self.peaksimple = Peaksimple.PeaksimpleConnector()  # This class has all the functions
         self.connect()
+        self._sample_rate = 0 # Dummy value, reset when ctrl file loaded
         self.ctrl_file = ctrl_file
         print('Loading', ctrl_file)
         self.load_ctrl_file()  # Sends ctrl file to GC, updates object w/ new data
         self.sample_set_size = 4 # default value, can change in main .py script per experiment
-        self._sample_rate = self.min_sample_rate
-
+       
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
     
@@ -126,7 +126,8 @@ class GC_Connector():
     def read_ctrl_file(self):
         '''
         Reads loaded control file and updates object with values from file
-        currently updates only min sample rate property
+        currently updates only min sample rate property and updates sample rate
+        if it is higher than min
 
         Returns
         -------
@@ -143,14 +144,16 @@ class GC_Connector():
                     post_time = int(line.split('=')[-1].strip(' \n'))
 
             self._min_sample_rate = (run_time+post_time)/1000
-            self.sample_rate = self.min_sample_rate
+            
+            if self.sample_rate < self.min_sample_rate:
+                self.sample_rate = self.min_sample_rate
             
     def is_running(self, max_tries=3):
         '''Tries to connect to peak simple max_tries times'''
         
         for attempt in range(1, max_tries+1):
             try:
-                result = self.peaksimple.Is_Running(1)
+                result = self.peaksimple.IsRunning(1)
                 return result
                 break
             except Exception as e:

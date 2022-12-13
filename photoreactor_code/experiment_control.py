@@ -551,7 +551,12 @@ class Experiment:
             print('Starting Temp = ', self._heater.read_temp(), ' C')
             self._gc_control.peaksimple.SetRunning(1, True)
             #t_collect ends on last gc pull
-            t_collect = self.sample_rate*self.sample_set_size-1*60
+            t_collect = self.sample_rate*(self.sample_set_size-1)*60
+            print('''Debugging log
+                  sample_rate = %4.2f 
+                  sample set size = %i
+                  t_collect = %4.2f''' 
+                  % (self.sample_rate, self.sample_set_size, t_collect)) 
             for i in range(int(t_collect)):
                 time.sleep(1)
 
