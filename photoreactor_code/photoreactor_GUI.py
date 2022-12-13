@@ -217,6 +217,12 @@ class MainWindow(QMainWindow):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         self.setGasDType.insertItems(0, gas_control.factory_gasses)
+        if self.gas_Status.isChecked(): # sets gas type to last used
+            flow_dict = self.gas_controller.read_flows()
+            self.setGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
+            self.setGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
+            self.setGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
+            self.setGasDType.setCurrentText(flow_dict['mfc_D']['gas'])
 
         # create initial list of buttons to be added into grid layout when
         # comp sweep is selected
@@ -252,10 +258,10 @@ class MainWindow(QMainWindow):
                 self.manualGasCComp.setValue(0)
                 self.manualGasDComp.setValue(0)
             else:
-               self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
-               self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
-               self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
-               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)      
+               self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow*100)
+               self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow*100)
+               self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow*100)
+               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow*100)      
 
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -279,7 +285,7 @@ class MainWindow(QMainWindow):
     def sum_spinboxes(self, spinboxes, qlabel):
         '''take list of spinboxes, get values, write sum to qlabel'''
         values = self.values_from_spinboxes(spinboxes)
-        self.qlabel.setText('%.2f' % sum(values))
+        qlabel.setText('%.2f' % sum(values))
     
     def values_from_spinboxes(self, spinboxes):
         '''
@@ -313,7 +319,7 @@ class MainWindow(QMainWindow):
         
         gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
                          self.manualGasCComp, self.manualGasDComp]
-        func = lambda: self.sum_spinboxes(gas_spinboxes, self.designCompSum)
+        func = lambda: self.sum_spinboxes(gas_spinboxes, self.manualCompSum)
         self.manualGasAComp.valueChanged.connect(func)
         self.manualGasBComp.valueChanged.connect(func)
         self.manualGasCComp.valueChanged.connect(func)
