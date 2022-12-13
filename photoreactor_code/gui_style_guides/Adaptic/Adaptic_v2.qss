@@ -30,6 +30,14 @@ QDialog
 
 }
 
+QMainWindow
+{
+	background-color: qlineargradient(spread:repeat, x1:1, y1:0, x2:1, y2:1, stop:0 rgba(102, 115, 140, 255),stop:1 rgba(56, 63, 77, 255));
+	color: #ffffff;
+	border-color: #051a39;
+
+}
+
 /*-----QLabel-----*/
 QLabel
 {

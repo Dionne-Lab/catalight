@@ -72,7 +72,7 @@ Stop</string>
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tabOverview">
      <attribute name="title">
@@ -272,7 +272,7 @@ Stop</string>
         <x>11</x>
         <y>10</y>
         <width>371</width>
-        <height>651</height>
+        <height>720</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
