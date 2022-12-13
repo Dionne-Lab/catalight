@@ -28,16 +28,16 @@ from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
                           QRunnable, pyqtSlot, pyqtSignal)
 
 from PyQt5.QtWidgets import (QLabel, QDoubleSpinBox, QComboBox, QApplication,
-                             QDialog, QListWidgetItem, QFileDialog, QSpinBox,
+                             QMainWindow, QListWidgetItem, QFileDialog, QSpinBox,
                              QDialogButtonBox, QAbstractItemView, QPushButton)
 
 from PyQt5.QtGui import QTextCursor
 
 # Subclass QMainWindow to customize your application's main window
-class MainWindow(QDialog):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        loadUi('reactorUI.ui', self)
+        loadUi('reactorUI_mainwindow.ui', self)
 
         # Initilize GUI
         # #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
@@ -563,7 +563,7 @@ class MainWindow(QDialog):
         return process
 
     def closeEvent(self, *args, **kwargs):
-        super(QDialog, self).closeEvent(*args, **kwargs)
+        super(QMainWindow, self).closeEvent(*args, **kwargs)
         self.timer.stop()
         self.timer.disconnect()
         self.disconnect() # add shutdown process when window closed
