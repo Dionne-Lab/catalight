@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1090</width>
-    <height>882</height>
+    <height>867</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@ Stop</string>
      <bool>false</bool>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tabOverview">
      <attribute name="title">
@@ -84,7 +84,7 @@ Stop</string>
         <x>390</x>
         <y>10</y>
         <width>661</width>
-        <height>651</height>
+        <height>661</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7"/>
@@ -95,7 +95,7 @@ Stop</string>
         <x>11</x>
         <y>11</y>
         <width>371</width>
-        <height>651</height>
+        <height>661</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -261,7 +261,7 @@ Stop</string>
         <x>390</x>
         <y>10</y>
         <width>661</width>
-        <height>651</height>
+        <height>661</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8"/>
@@ -272,7 +272,7 @@ Stop</string>
         <x>11</x>
         <y>10</y>
         <width>371</width>
-        <height>720</height>
+        <height>661</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -676,6 +676,13 @@ Stop</string>
            </property>
           </widget>
          </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_39">
+           <property name="text">
+            <string>%</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -896,6 +903,13 @@ Stop</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLabel" name="label_40">
+           <property name="text">
+            <string>%</string>
            </property>
           </widget>
          </item>
@@ -1905,7 +1919,7 @@ Stop</string>
      <x>0</x>
      <y>0</y>
      <width>1090</width>
-     <height>31</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
