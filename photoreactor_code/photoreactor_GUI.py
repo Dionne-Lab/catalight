@@ -379,7 +379,7 @@ class MainWindow(QMainWindow):
         self.setGasDType.setCurrentText(expt.gas_type[3])
         self.update_plot(expt)
         comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
-        self.designCompSum.setValue(comp_total) 
+        self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
 
@@ -417,7 +417,7 @@ class MainWindow(QMainWindow):
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
             comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
-            self.designCompSum.setValue(comp_total) 
+            self.designCompSum.setText('%.2f' % comp_total) 
 
             expt._update_expt_name() # autoname experiment
             item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
