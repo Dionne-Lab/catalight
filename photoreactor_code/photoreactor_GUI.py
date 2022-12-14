@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         loadUi('reactorUI_mainwindow.ui', self)
 
         # Initilize GUI
-        # #peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
         self.set_form_limits()
 
         self.timer.start(500) # timer connected to update in init_manual_ctrl
-        sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
@@ -95,8 +95,8 @@ class MainWindow(QMainWindow):
         self.toggle_controls(True)
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
-        # eqpt_list = [self.gc_connector, self.laser_controller,
-        #               self.gas_controller, self.heater]
+        eqpt_list = [self.gc_connector, self.laser_controller,
+                      self.gas_controller, self.heater]
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
         main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
@@ -106,10 +106,10 @@ class MainWindow(QMainWindow):
 
             expt.sample_name = sample_name
             expt.create_dirs(main_fol)
-            #expt.update_eqpt_list(eqpt_list)
+            expt.update_eqpt_list(eqpt_list)
             print(expt.expt_name)
             print(expt.sample_name)
-            #expt.run_experiment()
+            expt.run_experiment()
         self.shut_down()
         self.toggle_controls(False)
 
@@ -126,6 +126,7 @@ class MainWindow(QMainWindow):
             self.ctrl_path.setText(filePath)
             self.gc_connector.ctrl_file = filePath
             self.gc_connector.load_ctrl_file()
+            self.set_form_limits()
         else: print('GC Not Connected')
 
     def select_cal_file(self):
@@ -145,6 +146,7 @@ class MainWindow(QMainWindow):
         self.disconnect()
         self.init_equipment()
         self.init_manual_ctrl_tab()
+        self.set_form_limits()
 
     ## Initializing Tabs:
     def init_equipment(self):
@@ -153,7 +155,8 @@ class MainWindow(QMainWindow):
         try:
             self.gc_connector = GC_Connector()
             self.gc_Status.setChecked(1)
-        except:
+        except Exception as e:
+            print(e)
             self.gc_Status.setChecked(0)
         try:
             self.gas_controller = Gas_System()
@@ -197,6 +200,7 @@ class MainWindow(QMainWindow):
         self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
         self.setSampleSize.valueChanged.connect(self.update_expt)
         self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
+        self.setTSteady.valueChanged.connect(self.update_expt)
         self.setBuffer.valueChanged.connect(self.update_expt)
         self.setGasAComp.valueChanged.connect(self.update_expt)
         self.setGasAType.currentIndexChanged.connect(self.update_expt)
@@ -214,6 +218,12 @@ class MainWindow(QMainWindow):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         self.setGasDType.insertItems(0, gas_control.factory_gasses)
+        if self.gas_Status.isChecked(): # sets gas type to last used
+            flow_dict = self.gas_controller.read_flows()
+            self.setGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
+            self.setGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
+            self.setGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
+            self.setGasDType.setCurrentText(flow_dict['mfc_D']['gas'])
 
         # create initial list of buttons to be added into grid layout when
         # comp sweep is selected
@@ -249,10 +259,10 @@ class MainWindow(QMainWindow):
                 self.manualGasCComp.setValue(0)
                 self.manualGasDComp.setValue(0)
             else:
-               self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow)
-               self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow)
-               self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow)
-               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow)
+               self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow*100)
+               self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow*100)
+               self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow*100)
+               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow*100)      
 
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -271,12 +281,33 @@ class MainWindow(QMainWindow):
         if self.diode_Status.isChecked():  # Initialize Values for Laser
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
-        if self.gc_Status.isChecked():  # Initialize Values for GC
-            self.manualSampleRate.setValue(self.gc_connector.sample_rate)
-            self.manualSampleSize.setValue(self.gc_connector.sample_set_size)
-            #self.manualBuffer.setValue()
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
+        
+    def sum_spinboxes(self, spinboxes, qlabel):
+        '''take list of spinboxes, get values, write sum to qlabel'''
+        values = self.values_from_spinboxes(spinboxes)
+        qlabel.setText('%.2f' % sum(values))
+    
+    def values_from_spinboxes(self, spinboxes):
+        '''
+        give list of spinboxes, return list of values
 
+        Parameters
+        ----------
+        spinboxes : list
+            list of spinboxes you'd like to get values from
+
+        Returns
+        -------
+        gas_comp : list
+            list of the values from the spinboxes supplied
+
+        '''
+        values = []
+        for entry in spinboxes:
+            values.append(entry.value())
+        return values
+    
     def connect_manual_ctrl(self): # Connect Manual Control
         self.buttonBox.button(QDialogButtonBox.Apply) \
             .clicked.connect(lambda:
@@ -286,6 +317,14 @@ class MainWindow(QMainWindow):
         # Connect timer for live feed
         self.timer.timeout \
             .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
+        
+        gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
+                         self.manualGasCComp, self.manualGasDComp]
+        func = lambda: self.sum_spinboxes(gas_spinboxes, self.manualCompSum)
+        self.manualGasAComp.valueChanged.connect(func)
+        self.manualGasBComp.valueChanged.connect(func)
+        self.manualGasCComp.valueChanged.connect(func)
+        self.manualGasDComp.valueChanged.connect(func)
 
     def init_figs(self): # Initialize figure canvas:
 
@@ -331,7 +370,7 @@ class MainWindow(QMainWindow):
         self.setSampleSize.setValue(expt.sample_set_size)
         self.setRampRate.setValue(expt.heat_rate)  # get from heater?
         self.setBuffer.setValue(expt.t_buffer)
-
+        self.setTSteady.setValue(expt.t_steady_state)
         self.setGasAComp.setValue(expt.gas_comp[0][0])
         self.setGasAType.setCurrentText(expt.gas_type[0])
         self.setGasBComp.setValue(expt.gas_comp[0][1])
@@ -341,6 +380,8 @@ class MainWindow(QMainWindow):
         self.setGasDComp.setValue(expt.gas_comp[0][3])
         self.setGasDType.setCurrentText(expt.gas_type[3])
         self.update_plot(expt)
+        comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+        self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
 
@@ -368,7 +409,7 @@ class MainWindow(QMainWindow):
             expt.sample_set_size = self.setSampleSize.value()
             expt.heat_rate = self.setRampRate.value()  # get from heater?
             expt.t_buffer = self.setBuffer.value()
-
+            expt.t_steady_state = self.setTSteady.value()
             expt.gas_comp[0][0] = self.setGasAComp.value()
             expt.gas_type[0] = self.setGasAType.currentText()
             expt.gas_comp[0][1] = self.setGasBComp.value()
@@ -377,6 +418,8 @@ class MainWindow(QMainWindow):
             expt.gas_type[2] = self.setGasCType.currentText()
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
+            comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+            self.designCompSum.setText('%.2f' % comp_total) 
 
             expt._update_expt_name() # autoname experiment
             item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
@@ -388,49 +431,47 @@ class MainWindow(QMainWindow):
 
             self.update_ind_var_grid(expt)
             self.update_plot(expt)
-
+            
     def update_ind_var_grid(self, expt):
-            print('update ind var')
+        if ((expt.expt_type == 'comp_sweep')
+            & (self.gridLayout_9.columnCount() < 4)):
+            for i in range(len(self.button_list)):
+                for j in range(len(self.button_list[0])):
+                    item = self.gridLayout_9.itemAtPosition(i, j)
+                    if item is not None:
+                        widget = item.widget()
+                        print('should delete')
+                        self.gridLayout_9.removeWidget(widget)
+                        widget.setHidden(True)
+                    self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
+                    self.button_list[i][j].setHidden(False)
+        elif ((expt.expt_type != 'comp_sweep')
+              & (self.gridLayout_9.columnCount() > 3)):
+            print('not comp_sweep')
+            for i in range(self.gridLayout_9.rowCount()):
+                for j in range(self.gridLayout_9.columnCount()):
+                    print('i=%i, j=%i is outside bounds' % (i, j))
+                    item = self.gridLayout_9.itemAtPosition(i, j)
+                    if item is not None:
 
-            if ((expt.expt_type == 'comp_sweep')
-                & (self.gridLayout_9.columnCount() < 4)):
-                for i in range(len(self.button_list)):
-                    for j in range(len(self.button_list[0])):
-                        item = self.gridLayout_9.itemAtPosition(i, j)
-                        if item is not None:
-                            widget = item.widget()
-                            print('should delete')
-                            self.gridLayout_9.removeWidget(widget)
-                            widget.setHidden(True)
-                        self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
-                        self.button_list[i][j].setHidden(False)
-            elif ((expt.expt_type != 'comp_sweep')
-                  & (self.gridLayout_9.columnCount() > 3)):
-                print('not comp_sweep')
-                for i in range(self.gridLayout_9.rowCount()):
-                    for j in range(self.gridLayout_9.columnCount()):
-                        print('i=%i, j=%i is outside bounds' % (i, j))
-                        item = self.gridLayout_9.itemAtPosition(i, j)
-                        if item is not None:
+                        widget = item.widget()
+                        print('should delete')
+                        self.gridLayout_9.removeWidget(widget)
+                        widget.setHidden(True)
 
-                            widget = item.widget()
-                            print('should delete')
-                            self.gridLayout_9.removeWidget(widget)
-                            widget.setHidden(True)
-
-                self.gridLayout_9.addWidget(self.label_78, 0, 0)
-                self.gridLayout_9.addWidget(self.label_79, 0, 1)
-                self.gridLayout_9.addWidget(self.label_80, 0, 2)
-                self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
-                self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
-                self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
-                self.label_78.setHidden(False)
-                self.label_79.setHidden(False)
-                self.label_80.setHidden(False)
-                self.IndVar_start.setHidden(False)
-                self.IndVar_stop.setHidden(False)
-                self.IndVar_step.setHidden(False)
-            self.gridLayout_9.update()
+            self.gridLayout_9.addWidget(self.label_78, 0, 0)
+            self.gridLayout_9.addWidget(self.label_79, 0, 1)
+            self.gridLayout_9.addWidget(self.label_80, 0, 2)
+            self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
+            self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
+            self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
+            self.label_78.setHidden(False)
+            self.label_79.setHidden(False)
+            self.label_80.setHidden(False)
+            self.IndVar_start.setHidden(False)
+            self.IndVar_stop.setHidden(False)
+            self.IndVar_step.setHidden(False)
+        self.gridLayout_9.update()
 
     def update_plot(self, expt):
         '''Updates the plots in GUI when experiment is changed'''
@@ -500,7 +541,6 @@ class MainWindow(QMainWindow):
     def manual_ctrl_eqpt(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
-        # TODO add emergency stop
         # Adjust limits in GUI
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
@@ -514,10 +554,9 @@ class MainWindow(QMainWindow):
 
         if self.gas_Status.isChecked():
             self.gas_controller.set_gasses(gas_list)
-            self.progressBar.setValue(10)
+            self.progressBar.setValue(25)
             self.gas_controller.set_flows(comp_list, tot_flow)
-        self.progressBar.setValue(20)
-        buffer = self.manualBuffer.value()
+        self.progressBar.setValue(50)
 
         if self.diode_Status.isChecked():
             self.current_power_setpoint1.setStyleSheet('Color: Red')
@@ -525,7 +564,7 @@ class MainWindow(QMainWindow):
             self.laser_controller.set_power(self.manualPower.value())
             self.current_power_setpoint1.setStyleSheet('Color: White')
             self.current_power_setpoint2.setStyleSheet('Color: White')
-        self.progressBar.setValue(40)
+        self.progressBar.setValue(75)
 
         if self.heater_Status.isChecked():
             self.current_temp_setpoint1.setStyleSheet('Color: Red')
@@ -534,12 +573,8 @@ class MainWindow(QMainWindow):
             self.heater.ramp(self.manualTemp.value())
             self.current_temp_setpoint1.setStyleSheet('Color: White')
             self.current_temp_setpoint2.setStyleSheet('Color: White')
-        self.progressBar.setValue(80)
-
-        if self.gc_Status.isChecked():
-            #sample_rate = self.manualSampleRate.value()
-            self.gc_connector.sample_set_size = self.manualSampleSize.value()
         self.progressBar.setValue(100)
+
 
     def toggle_controls(self, value):
 
@@ -550,7 +585,6 @@ class MainWindow(QMainWindow):
                  *self.findChildren(QSpinBox)]
 
         for item in group:
-            print(item.objectName())
             item.setDisabled(value)
 
 
@@ -559,8 +593,11 @@ class MainWindow(QMainWindow):
             opens new edition with subprocess'''
         for process in psutil.process_iter():
             if 'Peak489Win10' in process.name():
-                process.kill()
+                #process.kill()
+                print('please close peaksimple and reconnect')
                 time.sleep(5)
+                return
+            
         process = subprocess.Popen(path_name)
         time.sleep(5)
         return process
@@ -598,12 +635,14 @@ class MainWindow(QMainWindow):
             self.laser_controller.shut_down()
 
     def emergency_stop(self):
-        self.timer.stop()
-        self.timer.disconnect()
+        
         #self.threadpool.clear()
-        self.threadpool.cancel()
+        #self.threadpool.cancel()
+        self.threadpool.cancel(self.run_study_thread)
+        self.threadpool.cancel(self.manual_ctrl_thread)
         #self.threadpool.disconnect()
-        self.disconnect()
+        self.shut_down()
+        
 
 
 class EmittingStream(QObject):

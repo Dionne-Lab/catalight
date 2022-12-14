@@ -57,12 +57,11 @@ class Gas_System:
         None.
 
         '''
+        comp_list = self.check_comp_total(comp_list)
         while self.is_busy:
             time.sleep(0)
-
-        self.is_busy = True
-        if (sum(comp_list) != 1) and (sum(comp_list) != 0):
-            raise AttributeError('Gas comp. must be list of list == 1')
+            
+        self.is_busy = True            
         self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
         self.mfc_B.set_flow_rate(float(comp_list[1]*tot_flow))
         self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
@@ -72,7 +71,9 @@ class Gas_System:
         self.set_gasE(comp_list)
 
     def set_gasE(self, comp_list):
-
+        
+        comp_list = self.check_comp_total(comp_list)
+        
         while self.is_busy:
             time.sleep(0)
 
@@ -94,7 +95,15 @@ class Gas_System:
         else:  # If only one gas, sets that as output
             self.mfc_E.set_gas(list(gas_dict)[0])
         self.is_busy = False
-
+    
+    def check_comp_total(self, comp_list):
+        if sum(comp_list) == 100: # convert % to fraction
+            comp_list[:] = [x/100 for x in comp_list]
+            
+        if (sum(comp_list) != 1) and (sum(comp_list) != 0):
+            raise AttributeError('Gas comp. must be list of list == 1')
+        
+        return comp_list
 
     def print_flows(self):
         '''prints mass flow rates and gas type for each MFC to console'''
