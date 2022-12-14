@@ -40,7 +40,7 @@ class Gas_System:
     def set_flows(self, comp_list, tot_flow):
         '''
         sets the flow rate of all mfc based on a desired total flow
-        and the desired gas composition
+        and the desired gas composition. also call set_gasE
         TODO: add limit for tot_flow for each MFC
         Parameters
         ----------
@@ -50,7 +50,7 @@ class Gas_System:
         Raises
         ------
         AttributeError
-            if gas comp doesn't sum to one
+            if gas comp doesn't sum to 1 or 100
 
         Returns
         -------

@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
@@ -286,14 +287,15 @@ class MainWindow(QMainWindow):
         self.timer.timeout \
             .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
 
-    def init_figs(self): # Initialize figure canvas and add to:
-        # This is the Canvas Widget that displays the `figure`
-        # It takes the `figure` instance as a parameter to __init__
-        self.figure = plt.figure(figsize=(12,8))
-        self.canvas = FigureCanvas(self.figure)
-        self.canvas2 = FigureCanvas(self.figure)
-        self.verticalLayout_7.addWidget(self.canvas) # Study Overview
-        self.verticalLayout_8.addWidget(self.canvas2)  # Experiment Design
+    def init_figs(self): # Initialize figure canvas:
+
+        self.figure = plt.figure() # Create New figure to share
+        self.plotWidgetStudy.canvas.figure = self.figure # Reset fig in canvases
+        self.plotWidgetDesign.canvas.figure = self.figure
+        # Add navigation bar beneath each figure widget
+        self.verticalLayoutStudyFig.addWidget(NavigationToolbar(self.plotWidgetStudy.canvas, self))
+        self.verticalLayoutDesignFig.addWidget(NavigationToolbar(self.plotWidgetDesign.canvas, self))
+
 
     def set_form_limits(self):
         if self.gc_Status.isChecked():
@@ -442,10 +444,11 @@ class MainWindow(QMainWindow):
             self.figure.tight_layout()
         else:
             self.figure.clear()
-        self.canvas.draw()
-        self.canvas.show()
-        self.canvas2.draw()
-        self.canvas2.show()
+
+        self.plotWidgetStudy.canvas.draw()
+        self.plotWidgetStudy.canvas.show()
+        self.plotWidgetDesign.canvas.draw()
+        self.plotWidgetDesign.canvas.show()
 
     def update_eqpt_status(self):
         '''This function updates the live view of the equipment in both the
