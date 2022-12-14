@@ -96,7 +96,7 @@ class Gas_System:
             self.mfc_E.set_gas(list(gas_dict)[0])
         self.is_busy = False
     
-    def check_comp_total(comp_list):
+    def check_comp_total(self, comp_list):
         if sum(comp_list) == 100: # convert % to fraction
             comp_list[:] = [x/100 for x in comp_list]
             

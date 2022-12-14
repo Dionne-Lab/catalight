@@ -154,7 +154,17 @@ class Experiment:
     @sample_rate.setter
     def sample_rate(self, value):
         if hasattr(self, '_gc_control'):
-            print('Cannot update sample rate when connected to GC')
+            if value >= self._gc_control.min_sample_rate:
+                # try to set sample rate to that defined by expt
+                self._sample_rate = value
+                self._gc_control.sample_rate = self.sample_rate
+            else:
+                # If that failed, _gc_control.sample_rate will be set to min defined by
+                # ctrl file. This line makes sure gc and expt match
+                self._sample_rate = self._gc_control.sample_rate
+                print('Error: Input Sample Rate is Lower Than GC Minimum')
+                print('Sample rate set to: %.2f' % self._gc_control.sample_rate)
+            
         else:
             self._sample_rate = value
 
@@ -543,7 +553,7 @@ class Experiment:
             self._gc_control.update_ctrl_file(path)
             t2 = time.time()
             t_passed = round(t2-t1)  # GC can take a while to respond
-            for i in range(self.t_steady_state*60-t_passed):
+            for i in range(int(self.t_steady_state*60-t_passed)):
                 time.sleep(1) # Break sleep in bits so keyboard interupt works
 
             print('Starting Collection: '
@@ -552,11 +562,7 @@ class Experiment:
             self._gc_control.peaksimple.SetRunning(1, True)
             #t_collect ends on last gc pull
             t_collect = self.sample_rate*(self.sample_set_size-1)*60
-            print('''Debugging log
-                  sample_rate = %4.2f 
-                  sample set size = %i
-                  t_collect = %4.2f''' 
-                  % (self.sample_rate, self.sample_set_size, t_collect)) 
+ 
             for i in range(int(t_collect)):
                 time.sleep(1)
 
