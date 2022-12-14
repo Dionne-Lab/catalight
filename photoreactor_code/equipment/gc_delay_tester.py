@@ -7,9 +7,8 @@ Created on Tue Dec 13 14:32:19 2022
 import os
 import time
 from datetime import date
-from equipment.sri_gc.gc_control import GC_Connector
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.alicat_MFC import gas_control
+from sri_gc.gc_control import GC_Connector
+from alicat_MFC.gas_control import Gas_System
 
 
 ## User Inputs:
@@ -41,7 +40,7 @@ for tot_flow in flows:
         gc.update_ctrl_file(filepath) # Changes save path
         gas_control.set_flows(comp_list_on, tot_flow) # Flow Target Gas
 
-        for second in int(delay*60):
+        for second in range(int(delay*60)):
             time.sleep(1) # 1 second at a time so script can be stopped
 
         # Turn on gc and pause a minute to be safe
@@ -51,5 +50,5 @@ for tot_flow in flows:
         gas_control.set_flows(comp_list_off, 50) # Clear out line
 
         # Wait until gc collection is done
-        for second in int((gc.sample_rate-1)*60):
+        for second in range(int((gc.sample_rate-1)*60)):
             time.sleep(1) # 1 second at a time so script can be stopped
