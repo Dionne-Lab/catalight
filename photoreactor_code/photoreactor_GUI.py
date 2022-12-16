@@ -559,20 +559,22 @@ class MainWindow(QMainWindow):
         self.progressBar.setValue(50)
 
         if self.diode_Status.isChecked():
-            self.current_power_setpoint1.setStyleSheet('Color: Red')
-            self.current_power_setpoint2.setStyleSheet('Color: Red')
+            #self.current_power_setpoint1.setStyleSheet('Color: Red')
+            #self.current_power_setpoint2.setStyleSheet('Color: Red')
             self.laser_controller.set_power(self.manualPower.value())
-            self.current_power_setpoint1.setStyleSheet('Color: White')
-            self.current_power_setpoint2.setStyleSheet('Color: White')
+            #self.current_power_setpoint1.setStyleSheet('Color: White')
+            #self.current_power_setpoint2.setStyleSheet('Color: White')
         self.progressBar.setValue(75)
-
+        print('before heater')
         if self.heater_Status.isChecked():
-            self.current_temp_setpoint1.setStyleSheet('Color: Red')
-            self.current_temp_setpoint2.setStyleSheet('Color: Red')
+            print('inside heater')
+            #self.current_temp_setpoint1.setStyleSheet('Color: Red')
+            #self.current_temp_setpoint2.setStyleSheet('Color: Red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
-            self.current_temp_setpoint1.setStyleSheet('Color: White')
-            self.current_temp_setpoint2.setStyleSheet('Color: White')
+            #self.current_temp_setpoint1.setStyleSheet('Color: White')
+            #self.current_temp_setpoint2.setStyleSheet('Color: White')
+        print('after heater')
         self.progressBar.setValue(100)
 
 
