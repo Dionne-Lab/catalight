@@ -64,7 +64,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabOverview">
        <property name="sizePolicy">
@@ -1127,6 +1127,9 @@
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
+              <property name="maximum">
+               <double>450.000000000000000</double>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -1333,6 +1336,9 @@
              <widget class="QDoubleSpinBox" name="manualFlow">
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="maximum">
+               <double>350.000000000000000</double>
               </property>
              </widget>
             </item>

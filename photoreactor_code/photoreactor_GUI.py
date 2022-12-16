@@ -262,7 +262,7 @@ class MainWindow(QMainWindow):
                self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow*100)
                self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow*100)
                self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow*100)
-               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow*100)      
+               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow*100)
 
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -282,12 +282,12 @@ class MainWindow(QMainWindow):
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
-        
+
     def sum_spinboxes(self, spinboxes, qlabel):
         '''take list of spinboxes, get values, write sum to qlabel'''
         values = self.values_from_spinboxes(spinboxes)
         qlabel.setText('%.2f' % sum(values))
-    
+
     def values_from_spinboxes(self, spinboxes):
         '''
         give list of spinboxes, return list of values
@@ -307,7 +307,7 @@ class MainWindow(QMainWindow):
         for entry in spinboxes:
             values.append(entry.value())
         return values
-    
+
     def connect_manual_ctrl(self): # Connect Manual Control
         self.buttonBox.button(QDialogButtonBox.Apply) \
             .clicked.connect(lambda:
@@ -317,7 +317,7 @@ class MainWindow(QMainWindow):
         # Connect timer for live feed
         self.timer.timeout \
             .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
-        
+
         gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
                          self.manualGasCComp, self.manualGasDComp]
         func = lambda: self.sum_spinboxes(gas_spinboxes, self.manualCompSum)
@@ -339,6 +339,12 @@ class MainWindow(QMainWindow):
     def set_form_limits(self):
         if self.gc_Status.isChecked():
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
+
+        if self.heater_Status.isChecked():
+            self.manualTemp.setMaximum(450)
+
+        if self.gas_Status.isChecked():
+            self.manualFlow.setMaximum(350)
 
     ## Updating Tabs/Objects:
     def display_expt(self):
@@ -419,7 +425,7 @@ class MainWindow(QMainWindow):
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
             comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
-            self.designCompSum.setText('%.2f' % comp_total) 
+            self.designCompSum.setText('%.2f' % comp_total)
 
             expt._update_expt_name() # autoname experiment
             item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
@@ -431,7 +437,7 @@ class MainWindow(QMainWindow):
 
             self.update_ind_var_grid(expt)
             self.update_plot(expt)
-            
+
     def update_ind_var_grid(self, expt):
         if ((expt.expt_type == 'comp_sweep')
             & (self.gridLayout_9.columnCount() < 4)):
@@ -597,7 +603,7 @@ class MainWindow(QMainWindow):
                 print('please close peaksimple and reconnect')
                 time.sleep(5)
                 return
-            
+
         process = subprocess.Popen(path_name)
         time.sleep(5)
         return process
@@ -635,14 +641,14 @@ class MainWindow(QMainWindow):
             self.laser_controller.shut_down()
 
     def emergency_stop(self):
-        
+
         #self.threadpool.clear()
         #self.threadpool.cancel()
         self.threadpool.cancel(self.run_study_thread)
         self.threadpool.cancel(self.manual_ctrl_thread)
         #self.threadpool.disconnect()
         self.shut_down()
-        
+
 
 
 class EmittingStream(QObject):
