@@ -22,32 +22,6 @@ from threading import Thread, Timer
 package_dir = os.path.dirname(os.path.abspath(__file__))
 calibration_path = os.path.join(package_dir, 'diode_calibration.txt')
 
-# # Initiate a voice control object to send alert messages
-# voice_control = pyttsx3.init()
-# voice_control.setProperty('volume', 1.0)
-# rate = voice_control.getProperty('rate')
-# voice_control.setProperty('rate', rate + 1)
-
-
-# # This is some code I took off the internet to get control over the speakers
-# devices = AudioUtilities.GetSpeakers()
-# interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-# volume_control = cast(interface, POINTER(IAudioEndpointVolume))
-
-
-# def speak(phrase):
-
-#     # Make sure volume is turned up
-#     volume_control.SetMute(0, None) # Unmutes and sets Vol in dB -0.0 is 100%
-#     volume_control.SetMasterVolumeLevel(-2.0, None)
-
-#     voice_control.setProperty('volume', 1.0)
-#     voice_control.say(phrase)
-#     voice_control.runAndWait()
-#     voice_control.stop()
-#     del(voice_control) # Delete because controller bugs on 2nd call
-#     voice_control = pyttsx3.init() #init controller
-
 class Diode_Laser():
     def __init__(self):
 
