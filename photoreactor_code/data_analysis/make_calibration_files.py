@@ -1,3 +1,11 @@
+'''
+This script was initially used to generate a "dummy" calibration experiment
+using data collected before calibration expeirments were automated. Use this
+script if you have calibration data that is not organized in the appropriate
+data structure. This will create expt log file and data layout. then copy paste
+calibration data into appropriate folders.
+'''
+
 import sys
 sys.path.append("..")
 import experiment_control

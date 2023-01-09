@@ -165,7 +165,8 @@ class GCData:
     @staticmethod
     def _half_index_search(dat, tol=0.5):
         """
-        Support function for integration_inds to search for integration bounds, determined where:
+        Support function for integration_inds to search for integration bounds,
+        determined where:
         1. the change in signal is less than 0.5%
             of the previous signal point (with averaging); or
         2. the added intensity starts increasing

@@ -4,35 +4,34 @@ Created on Sun Feb 20 18:45:10 2022
 
 @author: brile
 """
-from equipment.diode_laser.diode_control import Diode_Laser
-from equipment.sri_gc.gc_control import GC_Connector
-from equipment.harrick_watlow.heater_control import Heater
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.alicat_MFC import gas_control
 from experiment_control import Experiment
+from equipment.alicat_MFC import gas_control
+from equipment.sri_gc.gc_control import GC_Connector
+from equipment.alicat_MFC.gas_control import Gas_System
+from equipment.harrick_watlow.heater_control import Heater
+from equipment.diode_laser.diode_control import Diode_Laser
 
-import sys
 import os
-import numpy as np
+import sys
+import time
 import psutil
 import subprocess
-import time
+import numpy as np
 
-import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Qt5Agg')
+import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 
 from PyQt5.uic import loadUi
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
                           QRunnable, pyqtSlot, pyqtSignal)
 
 from PyQt5.QtWidgets import (QLabel, QDoubleSpinBox, QComboBox, QApplication,
                              QMainWindow, QListWidgetItem, QFileDialog, QSpinBox,
                              QDialogButtonBox, QAbstractItemView, QPushButton)
-
-from PyQt5.QtGui import QTextCursor
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -41,7 +40,11 @@ class MainWindow(QMainWindow):
         loadUi('reactorUI_mainwindow.ui', self)
 
         # Initilize GUI
-        peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        try:
+            peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+        except FileNotFoundError:
+            print('Peaksimple.exe not found')
+
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -235,11 +238,12 @@ class MainWindow(QMainWindow):
         self.button_list[0].append(QLabel('Start'))
         self.button_list[0].append(QLabel('Stop'))
         self.button_list[0].append(QLabel('Step'))
+        combobox_options = ['Fixed','Fill', 'Ind. Variable', 'Multiple']
         for i in range(1, 5):
             self.button_list.append([])
             self.button_list[i].append(QLabel(('Gas %i' % i)))
             self.button_list[i].append(QDoubleSpinBox())
-            self.button_list[i].append(QComboBox())
+            self.button_list[i].append(QComboBox(combobox_options))
             self.button_list[i].append(QDoubleSpinBox())
             self.button_list[i].append(QDoubleSpinBox())
             self.button_list[i].append(QDoubleSpinBox())

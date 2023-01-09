@@ -5,7 +5,7 @@ Created on Thu Feb  3 09:25:10 2022
 @author: brile
 """
 import pandas as pd
-import gc_analysis
+import analysis_tools
 import os
 import pdb
 import sys
@@ -41,11 +41,11 @@ if __name__ == "__main__":
     # import all calibration data
     calDF = pd.read_csv(
         calibration_path, delimiter=',', index_col='Chem ID')
-    Expt1 = Experiment()  # Initialize experiment obj
-    Expt1.read_expt_log(log_path)  # Read expt parameters from log
-    Expt1.update_save_paths(os.path.dirname(log_path))  # update file paths
+    expt = Experiment()  # Initialize experiment obj
+    expt.read_expt_log(log_path)  # Read expt parameters from log
+    expt.update_save_paths(os.path.dirname(log_path))  # update file paths
     # pdb.set_trace()
-    subplots1, subplots2 = gc_analysis.analyze_cal_data(Expt1, calDF)
+    subplots1, subplots2 = analysis_tools.analyze_cal_data(expt, calDF)
 # Standard figsize
 # 1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
 # 1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);

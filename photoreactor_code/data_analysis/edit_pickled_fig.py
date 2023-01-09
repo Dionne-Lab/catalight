@@ -7,7 +7,7 @@ Created on Tue Jul  5 10:53:29 2022
 import sys
 import pickle
 import matplotlib.pyplot as plt
-from PyQt5.QtWidgets import QFileDialog, QApplication, QWidget
+from PyQt5.QtWidgets import QFileDialog
 
 
 if __name__ == "__main__":
