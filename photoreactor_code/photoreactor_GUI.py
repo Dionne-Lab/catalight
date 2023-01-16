@@ -73,6 +73,7 @@ class MainWindow(QMainWindow):
         #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
+        self.toggle_controls(True)
 
 
     def normalOutputWritten(self, text):
@@ -619,8 +620,9 @@ class MainWindow(QMainWindow):
                 and not os.path.isfile(self.cal_path.text())):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setText('Warning: You must enter appropriate calibration'
+                msg.setText('Warning: You must enter appropriate calibration '
                             'data file path on overview tab to run calibration!!!')
+                msg.setWindowTitle('Calibration Data Path Warning')
                 msg.exec()
 
 
@@ -735,7 +737,7 @@ class MainWindow(QMainWindow):
     def manual_ctrl_eqpt(self):
         '''updates the setpoint of all equipment based on the current manual
         control values entered in the GUI'''
-        # Adjust limits in GUI
+        self.toggle_controls(True)
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
                      self.manualGasCComp.value(),
@@ -768,15 +770,16 @@ class MainWindow(QMainWindow):
             self.current_temp_setpoint1.setStyleSheet('Color: White')
             self.current_temp_setpoint2.setStyleSheet('Color: White')
         self.progressBar.setValue(100)
-
+        self.toggle_controls(False)
 
     def toggle_controls(self, value):
-
-        group = [*self.findChildren(QDialogButtonBox),
-                 *self.findChildren(QDoubleSpinBox),
-                 *self.findChildren(QPushButton),
-                 *self.findChildren(QComboBox),
-                 *self.findChildren(QSpinBox)]
+        '''True disables all widgets in tabWidget (not emergency stop)
+        Fals enables all'''
+        group = [*self.tabWidget.findChildren(QDialogButtonBox),
+                 *self.tabWidget.findChildren(QDoubleSpinBox),
+                 *self.tabWidget.findChildren(QPushButton),
+                 *self.tabWidget.findChildren(QComboBox),
+                 *self.tabWidget.findChildren(QSpinBox)]
 
         for item in group:
             item.setDisabled(value)
