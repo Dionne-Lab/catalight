@@ -15,7 +15,10 @@ Here I am, documenting things.
    experiment_control
    examples
    data_analysis
-
+   photoreactor_code
+   photoreactor_GUI
+   main_ctrl_file
+   
 
 Indices and tables
 ==================

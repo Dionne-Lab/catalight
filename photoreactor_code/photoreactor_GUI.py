@@ -4,12 +4,13 @@ Created on Sun Feb 20 18:45:10 2022
 
 @author: brile
 """
-from experiment_control import Experiment
-from equipment.alicat_MFC import gas_control
-from equipment.sri_gc.gc_control import GC_Connector
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.harrick_watlow.heater_control import Heater
 from equipment.diode_laser.diode_control import Diode_Laser
+from equipment.harrick_watlow.heater_control import Heater
+from equipment.alicat_MFC.gas_control import Gas_System
+from equipment.sri_gc.gc_control import GC_Connector
+from equipment.alicat_MFC import gas_control
+from experiment_control import Experiment
+from alicat import FlowController
 
 import os
 import sys
@@ -17,6 +18,7 @@ import time
 import psutil
 import subprocess
 import numpy as np
+import pandas as pd
 
 import matplotlib
 matplotlib.use('Qt5Agg')
@@ -31,7 +33,8 @@ from PyQt5.QtCore import (Qt, QTimer, QThreadPool, QObject,
 
 from PyQt5.QtWidgets import (QLabel, QDoubleSpinBox, QComboBox, QApplication,
                              QMainWindow, QListWidgetItem, QFileDialog, QSpinBox,
-                             QDialogButtonBox, QAbstractItemView, QPushButton)
+                             QDialogButtonBox, QAbstractItemView, QPushButton,
+                             QMessageBox)
 
 # Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
@@ -94,7 +97,9 @@ class MainWindow(QMainWindow):
         self.listWidget.takeItem(self.listWidget.row(item))
 
     def start_study(self):
-        '''something like this'''
+        '''Takes experiment objects in listWidget, assigns eqpt, generates
+        experiment name and save path, then call expt.run_experiment().
+        Shuts down at end.'''
         self.toggle_controls(True)
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
@@ -133,7 +138,9 @@ class MainWindow(QMainWindow):
         else: print('GC Not Connected')
 
     def select_cal_file(self):
-        print('clicked')
+        '''Prompts user to select calibration file
+        is gas system is connected, runs "set_calibration()" method on each mfc
+        Adds 'CalGas' option to mfc gas type drop downs'''
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser \
@@ -142,9 +149,24 @@ class MainWindow(QMainWindow):
                                         "Control files (*.CON)")[0]
         print(filePath)
         self.cal_path.setText(filePath)
+        calDF = pd.read_csv(filePath, delimiter=',', index_col='Chem ID')
+        if self.gas_Status.isChecked():
+            attribute_list = vars(self.gas_controller)
+            for key in attribute_list:
+                if isinstance(attribute_list[key], FlowController):
+                    self.gas_controller.set_calibration(calDF, fill_gas='Ar')
+
+            self.setGasAType.insertItems(0, 'CalGas')
+            self.setGasBType.insertItems(0, 'CalGas')
+            self.setGasCType.insertItems(0, 'CalGas')
+            self.setGasDType.insertItems(0, 'CalGas')
+            self.manualGasAType.insertItems(0, 'CalGas')
+            self.manualGasBType.insertItems(0, 'CalGas')
+            self.manualGasCType.insertItems(0, 'CalGas')
+            self.manualGasDType.insertItems(0, 'CalGas')
 
     def reset_eqpt(self):
-        '''disconnects from equipment and attempts to reconnect'''
+        '''Disconnects from equipment and attempts to reconnect'''
         print('Resetting Equipment Connections')
         self.disconnect()
         self.init_equipment()
@@ -153,6 +175,9 @@ class MainWindow(QMainWindow):
 
     ## Initializing Tabs:
     def init_equipment(self):
+        '''Tries to connect to each piece of equipment, adjusts
+        (object)_status.setChecked if successful.
+        Calls set_form_limits() at end'''
         ## Initialize Equipment
         # Try to connect to each device, mark indicator off on failed connect
         try:
@@ -181,7 +206,9 @@ class MainWindow(QMainWindow):
             self.diode_Status.setChecked(0)
         self.set_form_limits()
 
-    def init_study_tab(self): # Connect Study Overview Tab Contents
+    def init_study_tab(self):
+        '''Connect Study Overview Tab Contents (signals/slots)'''
+
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
@@ -191,7 +218,11 @@ class MainWindow(QMainWindow):
         self.findCalFile.clicked.connect(self.select_cal_file)
         self.findCtrlFile.clicked.connect(self.select_ctrl_file)
 
-    def init_design_tab(self): # Connect Experiment Design Tab Contents
+    def init_design_tab(self):
+        '''Connect Experiment Design Tab Contents (signals/slots).
+        On first call, populates expt_type drop down on GUI.
+        Insert possible gasses to combo boxes.
+        Initializes widgets used for defining comp_sweep experiments.'''
         self.expt_types.currentIndexChanged.connect(self.update_expt)
         # On first run, this should populate expt drop down on GUI
         if self.expt_types.count() < len(Experiment().expt_list['Expt Name']):
@@ -228,27 +259,36 @@ class MainWindow(QMainWindow):
             self.setGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
             self.setGasDType.setCurrentText(flow_dict['mfc_D']['gas'])
 
+        self.default_grid_widgets = [[self.label_78, self.label_79, self.label_80],
+                                     [self.IndVar_start, self.IndVar_stop, self.IndVar_step]]
+
         # create initial list of buttons to be added into grid layout when
         # comp sweep is selected
-        self.button_list = []
-        self.button_list.append([])
-        self.button_list[0].append(QLabel('-'))
-        self.button_list[0].append(QLabel('Multiplier'))
-        self.button_list[0].append(QLabel('Status'))
-        self.button_list[0].append(QLabel('Start'))
-        self.button_list[0].append(QLabel('Stop'))
-        self.button_list[0].append(QLabel('Step'))
-        combobox_options = ['Fixed','Fill', 'Ind. Variable', 'Multiple']
-        for i in range(1, 5):
-            self.button_list.append([])
-            self.button_list[i].append(QLabel(('Gas %i' % i)))
-            self.button_list[i].append(QDoubleSpinBox())
-            self.button_list[i].append(QComboBox(combobox_options))
-            self.button_list[i].append(QDoubleSpinBox())
-            self.button_list[i].append(QDoubleSpinBox())
-            self.button_list[i].append(QDoubleSpinBox())
+        self.comp_sweep_widgets = [[QLabel('-'), QLabel('Multiplier'),
+                                    QLabel('Status'), QLabel('Start'),
+                                    QLabel('Stop'), QLabel('Step')]]
 
-    def init_manual_ctrl_tab(self): # Initialize Manual Control Tab
+        combobox_options = ['-', 'Fixed','Fill', 'Ind. Variable', 'Multiple']
+        for i in range(1, 5):
+            self.comp_sweep_widgets.append([QLabel(('Gas %i' % i)),
+                                            QDoubleSpinBox(),
+                                            QComboBox(),
+                                            QDoubleSpinBox(),
+                                            QDoubleSpinBox(),
+                                            QDoubleSpinBox()])
+
+            # Add drop down items to combo box that was just added to list
+            self.comp_sweep_widgets[i][2].addItems(combobox_options)
+            self.comp_sweep_widgets[i][2].currentIndexChanged.connect(self.update_expt)
+            for j in [1, 3, 4, 5]:
+                self.comp_sweep_widgets[i][j].valueChanged.connect(self.update_expt)
+                self.comp_sweep_widgets[i][j].setMaximum(100)
+
+
+    def init_manual_ctrl_tab(self):
+        '''Initialize Manual Control Tab
+        Blocks tabWidget updates, puts intial values in manual tab widgets.
+        Insert possible gasses to combo boxes'''
         self.tabWidget.setUpdatesEnabled(False) # Block Signals during update
         # Initialize Values for gas controller
         if self.gas_Status.isChecked():
@@ -312,7 +352,9 @@ class MainWindow(QMainWindow):
             values.append(entry.value())
         return values
 
-    def connect_manual_ctrl(self): # Connect Manual Control
+    def connect_manual_ctrl(self):
+        '''Connect Manual Control (signals/slots)
+        Connects to eqpt status and manual ctrl threads'''
         self.buttonBox.button(QDialogButtonBox.Apply) \
             .clicked.connect(lambda:
                              self.threadpool.start(self.manual_ctrl_thread))
@@ -330,7 +372,9 @@ class MainWindow(QMainWindow):
         self.manualGasCComp.valueChanged.connect(func)
         self.manualGasDComp.valueChanged.connect(func)
 
-    def init_figs(self): # Initialize figure canvas:
+    def init_figs(self):
+        '''Initialize figure canvas:
+            creates figure objects, adds to gui, adds navigation bar'''
 
         self.figure = plt.figure() # Create New figure to share
         self.plotWidgetStudy.canvas.figure = self.figure # Reset fig in canvases
@@ -341,6 +385,9 @@ class MainWindow(QMainWindow):
 
 
     def set_form_limits(self):
+        '''Use this function to set widget min/max values. These can either be
+        pulled from eqpt objects to have equipment specific limits, or hard
+        coded. Alternativly, many limits are set using QtDesigner'''
         if self.gc_Status.isChecked():
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
@@ -352,7 +399,7 @@ class MainWindow(QMainWindow):
 
     ## Updating Tabs/Objects:
     def display_expt(self):
-        '''Updates GUI when new expt is selected in listWidget'''
+        '''Updates GUI display when new expt is selected in listWidget'''
         self.tabWidget.setUpdatesEnabled(False)
         global update_flag
         update_flag = False
@@ -363,14 +410,28 @@ class MainWindow(QMainWindow):
 
         if expt.ind_var != 'Undefined':
             values = getattr(expt, expt.ind_var)
-            if len(values) > 1:
+            has_data = len(values) > 1
+            if has_data and (expt.expt_type in ['comp_sweep', 'calibration']):
+
+                for i in range(1, len(self.comp_sweep_widgets)):
+                    # display only version of composition values
+                    self.comp_sweep_widgets[i][1].setValue(0)
+                    self.comp_sweep_widgets[i][2].setCurrentText('-')
+                    self.comp_sweep_widgets[i][3].setValue(min(values[i]))
+                    self.comp_sweep_widgets[i][4].setValue(max(values[i]))
+                    self.comp_sweep_widgets[i][5].setValue(values[i][1]-values[i][0])
+
+            elif has_data:
                 self.IndVar_start.setValue(np.min(values))
                 self.IndVar_stop.setValue(np.max(values))
-                self.IndVar_step.setValue(np.diff(values)[0])
+                self.IndVar_step.setValue(values[1]-values[0])
+            self.update_plot(expt)
+
         else:
             self.IndVar_start.setValue(0)
             self.IndVar_stop.setValue(0)
             self.IndVar_step.setValue(0)
+            self.update_plot()
 
         self.setTemp.setValue(expt.temp[0])
         self.setPower.setValue(expt.power[0])
@@ -389,7 +450,7 @@ class MainWindow(QMainWindow):
         self.setGasCType.setCurrentText(expt.gas_type[2])
         self.setGasDComp.setValue(expt.gas_comp[0][3])
         self.setGasDType.setCurrentText(expt.gas_type[3])
-        self.update_plot(expt)
+        self.update_ind_var_grid()
         comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
         self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
@@ -398,7 +459,8 @@ class MainWindow(QMainWindow):
     def update_expt(self):
         '''
         populates the attributes of currently selected experiment with the values
-        displayed in GUI
+        displayed in GUI. If valid independent variable is set, updates plot.
+        Clears plot for invalid experiment.
 
         Returns
         -------
@@ -439,60 +501,182 @@ class MainWindow(QMainWindow):
                      [expt.expt_list['Active Status']].to_string(index=False))
             self.label_IndVar.setText(expt.ind_var+' ['+units+']')
 
-            self.update_ind_var_grid(expt)
-            self.update_plot(expt)
+            self.update_ind_var_grid() # why is this here??
+            self.update_ind_var(expt)  # Checks for logical values before plot
+            #self.update_plot(expt)
 
-    def update_ind_var_grid(self, expt):
-        if ((expt.expt_type == 'comp_sweep')
-            & (self.gridLayout_9.columnCount() < 4)):
-            for i in range(len(self.button_list)):
-                for j in range(len(self.button_list[0])):
-                    item = self.gridLayout_9.itemAtPosition(i, j)
-                    if item is not None:
-                        widget = item.widget()
-                        print('should delete')
-                        self.gridLayout_9.removeWidget(widget)
-                        widget.setHidden(True)
-                    self.gridLayout_9.addWidget(self.button_list[i][j], i, j)
-                    self.button_list[i][j].setHidden(False)
-        elif ((expt.expt_type != 'comp_sweep')
-              & (self.gridLayout_9.columnCount() > 3)):
-            print('not comp_sweep')
+    def update_ind_var(self, expt):
+        '''Checks for valid independent variable and updates the experiment
+        object accordingly. Returns if invalid variable is supplied'''
+        # only actually updates ind var if number check out
+        if expt.expt_type in ['comp_sweep', 'calibration']:
+            widget_grid = self.comp_sweep_widgets
+            row_types = ['null'] # first row of grid is QLabel
+            num_rows = len(widget_grid)
+            comp_list = [[]]*(num_rows-1) # preallocate comp_list size
+
+            for i in range(1, num_rows): # sweep rows of grid
+                # ['null', combobox1, combobox2, etc]
+                row_types.append(widget_grid[i][2].currentText())
+
+            # Cases to Reject!!
+            if '-' in row_types:
+                return
+            if ((row_types.count('Fill') != 1)
+                or (row_types.count('Ind. Variable') != 1)):
+                self.update_plot()
+                return
+
+            row_types = np.array(row_types) # to allow np.where()
+
+            # This should execute 0 or 1 times if TODO double updating blocked
+            for i in np.where(row_types=='Ind. Variable')[0].tolist():
+                ind_var_row = int(np.where(row_types=='Ind. Variable')[0])
+
+                # This block determines if sensible values are in ind_var
+                start = widget_grid[ind_var_row][3].value()
+                stop = widget_grid[ind_var_row][4].value()+1
+                step = widget_grid[ind_var_row][5].value()
+                if (stop>start) and (step>0):
+                    ind_var = np.arange(start, stop, step)
+                else:
+                    return(False)
+
+                ind_var = ind_var/100 # convert from % to frac
+                comp_list[ind_var_row-1] = ind_var.tolist()
+
+                #fill_vals = np.ones(len(ind_var)) # Fill values = 1 (100%)
+                fill_vals = 1 - ind_var
+
+            for i in np.where(row_types=='Multiple')[0].tolist():
+                comp_vals = ind_var*widget_grid[i][1].value()
+                comp_list[i-1] = comp_vals.tolist()
+                fill_vals = fill_vals - comp_vals
+
+            for i in np.where(row_types=='Fixed')[0].tolist():
+                comp_vals = np.ones(len(ind_var)) * widget_grid[i][3].value()
+                comp_vals = comp_vals/100 # convert from % to frac
+                comp_list[i-1] = comp_vals.tolist()
+                fill_vals = fill_vals - comp_vals
+
+            for i in np.where(row_types=='Fill')[0].tolist():
+                comp_list[i-1] = fill_vals.tolist()
+
+            if (fill_vals<0).any():
+                self.update_plot() # Clears plot
+                return # Cancels update
+
+            comp_list = np.array(comp_list).T # Transpose comp_list
+            comp_list = comp_list.tolist() # return to list of lists
+            setattr(expt, expt.ind_var, comp_list)
+
+        elif ((self.IndVar_stop.value() > self.IndVar_start.value())
+              & (self.IndVar_step.value() > 0)
+              & (expt.expt_type != 'stability_test')):
+            setattr(expt, expt.ind_var,
+                    list(np.arange(self.IndVar_start.value(),
+                                   self.IndVar_stop.value()+1,
+                                   self.IndVar_step.value())))
+        else:
+            self.update_plot() # clear plot
+            return # reject update
+        self.update_plot(expt) # if either if statement was true
+
+
+
+    def update_ind_var_grid(self):
+        '''Chooses the correct widgets to display based on the experiment type
+        currently selected in the GUI.'''
+        def clear_grid():
+            # Remove and hide currently present widgets
             for i in range(self.gridLayout_9.rowCount()):
                 for j in range(self.gridLayout_9.columnCount()):
-                    print('i=%i, j=%i is outside bounds' % (i, j))
                     item = self.gridLayout_9.itemAtPosition(i, j)
                     if item is not None:
-
                         widget = item.widget()
-                        print('should delete')
                         self.gridLayout_9.removeWidget(widget)
                         widget.setHidden(True)
 
-            self.gridLayout_9.addWidget(self.label_78, 0, 0)
-            self.gridLayout_9.addWidget(self.label_79, 0, 1)
-            self.gridLayout_9.addWidget(self.label_80, 0, 2)
-            self.gridLayout_9.addWidget(self.IndVar_start, 1, 0)
-            self.gridLayout_9.addWidget(self.IndVar_stop, 1, 1)
-            self.gridLayout_9.addWidget(self.IndVar_step, 1, 2)
-            self.label_78.setHidden(False)
-            self.label_79.setHidden(False)
-            self.label_80.setHidden(False)
-            self.IndVar_start.setHidden(False)
-            self.IndVar_stop.setHidden(False)
-            self.IndVar_step.setHidden(False)
+        item = self.listWidget.currentItem()
+        global update_flag
+        # If there is data in listWidget item and now in the middle of updating
+        if (item is not None) & update_flag:
+            expt = item.data(Qt.UserRole) # pull listWidgetItem data out
+        else: return
+
+        # if comp sweep and grid isn't set up for it
+        if ((expt.expt_type in ['comp_sweep', 'calibration'])
+            & (self.comp_sweep_widgets[0][0].isHidden())):
+
+            clear_grid()
+            # Add comp sweep specific widgets to layout
+            for i in range(len(self.comp_sweep_widgets)): # sweep items to add
+                for j in range(len(self.comp_sweep_widgets[0])):
+                    self.gridLayout_9.addWidget(self.comp_sweep_widgets[i][j], i, j)
+                    self.comp_sweep_widgets[i][j].setHidden(False)
+
+            if (expt.expt_type == 'calibration'
+                and not os.path.isfile(self.cal_path.text())):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setText('Warning: You must enter appropriate calibration'
+                            'data file path on overview tab to run calibration!!!')
+                msg.exec()
+
+
+        # if not comp sweep but grid is still set up
+        elif ((expt.expt_type != 'comp_sweep')
+              & (self.default_grid_widgets[0][0].isHidden())):
+
+            clear_grid()
+            # Add default widgets to layout
+            for i in range(len(self.default_grid_widgets)): # sweep items to add
+                for j in range(len(self.default_grid_widgets[0])):
+                    self.gridLayout_9.addWidget(self.default_grid_widgets[i][j], i, j)
+                    self.default_grid_widgets[i][j].setHidden(False)
+
+        # update active elements if comp_sweep is set up
+        if ((expt.expt_type == 'comp_sweep')
+            & (self.default_grid_widgets[0][0].isHidden())):
+
+            for i in range(1, len(self.comp_sweep_widgets)): # sweep rows of grid
+
+                if self.comp_sweep_widgets[i][2].currentText() == 'Fill':
+                    selection_rule = [False, False, False, False]
+
+                elif self.comp_sweep_widgets[i][2].currentText() == 'Fixed':
+                    selection_rule = [False, True, False, False]
+
+                elif self.comp_sweep_widgets[i][2].currentText() == 'Multiple':
+                    selection_rule = [True, False, False, False]
+
+                elif self.comp_sweep_widgets[i][2].currentText() == 'Ind. Variable':
+                    selection_rule = [False, True, True, True]
+
+                else: # This is likely currentText == '-'
+                    selection_rule = [False, False, False, False]
+                    self.comp_sweep_widgets[i][1].setValue(0)
+                    self.comp_sweep_widgets[i][3].setValue(0)
+                    self.comp_sweep_widgets[i][4].setValue(0)
+                    self.comp_sweep_widgets[i][5].setValue(0)
+
+                # Disable widgets based on selection rules
+                self.comp_sweep_widgets[i][1].setEnabled(selection_rule[0])
+                self.comp_sweep_widgets[i][3].setEnabled(selection_rule[1])
+                self.comp_sweep_widgets[i][4].setEnabled(selection_rule[2])
+                self.comp_sweep_widgets[i][5].setEnabled(selection_rule[3])
+
         self.gridLayout_9.update()
 
-    def update_plot(self, expt):
+    def update_plot(self, expt=None):
         '''Updates the plots in GUI when experiment is changed'''
-        sweep_vals = [self.IndVar_start.value(),
-                      self.IndVar_stop.value(),
-                      self.IndVar_step.value()]
-        if (sweep_vals[1] > sweep_vals[0]) & (sweep_vals[2] > 0) & (expt.expt_type != 'stability_test'):
-            setattr(expt, expt.ind_var,
-                    list(np.arange(sweep_vals[0], sweep_vals[1]+1, sweep_vals[2])))
+
+        if not expt:
+            self.figure.clear()
+        elif expt.ind_var:
             expt.plot_sweep(self.figure)
             self.figure.tight_layout()
+
         else:
             self.figure.clear()
 
@@ -696,7 +880,7 @@ class Worker(QRunnable):
 
 def setup_style(app):
     script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-    rel_path = r"gui_style_guides\Adaptic\Adaptic_v2.qss"
+    rel_path = r"gui_style_guides\Adaptic\Adaptic_v3.qss"
     abs_file_path = os.path.join(script_dir, rel_path)
     file = open(abs_file_path,'r')
     with file:

@@ -112,7 +112,8 @@ class Experiment:
                 raise AttributeError('Total flow must be <= 350')
             elif (attr == '_gas_comp'):
                 for composition in value:
-                    if sum(composition) != 1:
+                    if round(sum(composition), 6) != 1:
+                        print(sum(composition))
                         raise AttributeError(
                             'Gas comp. must be list of list == 1')
             setattr(self, attr, value)
@@ -164,7 +165,7 @@ class Experiment:
                 self._sample_rate = self._gc_control.sample_rate
                 print('Error: Input Sample Rate is Lower Than GC Minimum')
                 print('Sample rate set to: %.2f' % self._gc_control.sample_rate)
-            
+
         else:
             self._sample_rate = value
 
@@ -435,13 +436,13 @@ class Experiment:
 
         ax1.plot(t_set, setpoint, '-o')
         ax1.plot(t_sample, sample_val, 'x')
-        ylim_max = 1.1*np.max(sweep_val)  # TODO what about gas comp
+        ylim_max = 1.1*np.max(sweep_val)
         ylim_min = 0.9*np.min(sweep_val)-0.05
         ax1.set_ylim([ylim_min, ylim_max])
         setpoint_plot = ax2.plot(t_set[0:3], setpoint[0:3], '-o')
         sample_plot = ax2.plot(t_sample[0:self.sample_set_size],
                                sample_val[0:self.sample_set_size], 'x')
-        ylim_max = 1.1*np.max(sample_val[self.sample_set_size-1])  # TODO what about gas comp
+        ylim_max = 1.1*np.max(sample_val[self.sample_set_size-1])
         ylim_min = 0.9*np.max(sample_val[0])-0.05
         # ax2.set_ylim([ylim_min, ylim_max])
         ax2.set_xlim([t_set[0]-5, t_set[2]+self.t_buffer+5])
@@ -453,8 +454,11 @@ class Experiment:
         plt.xlabel("time [min]")
         plt.ylabel(sweep_title + ' ['+units+']')
         ax1.annotate('Experiment Overview', xy=(0.05, 0.95), xycoords='axes fraction')
-        ax2.legend(labels=['Setpoint', "GC Sample"],
-                    loc='lower right')
+        line_names = ['Setpoint', "GC Sample"]
+        if self.expt_type in ['comp_sweep', 'calibration']:
+            line_names = self.gas_type+["GC Sample"]
+
+        ax2.legend(labels=line_names, loc='lower right')
 
         plt.tight_layout()
 
@@ -562,7 +566,7 @@ class Experiment:
             self._gc_control.peaksimple.SetRunning(1, True)
             #t_collect ends on last gc pull
             t_collect = self.sample_rate*(self.sample_set_size-1)*60
- 
+
             for i in range(int(t_collect)):
                 time.sleep(1)
 

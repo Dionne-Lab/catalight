@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1097</width>
+    <width>988</width>
     <height>861</height>
    </rect>
   </property>
@@ -25,6 +25,11 @@
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
      <property name="autoFillBackground">
       <bool>false</bool>
@@ -47,7 +52,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7"/>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>11</x>
@@ -224,7 +229,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8"/>
       </widget>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
          <x>11</x>
