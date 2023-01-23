@@ -52,3 +52,4 @@ for tot_flow in flows:
         # Wait until gc collection is done
         for second in range(int((gc.sample_rate-1)*60)):
             time.sleep(1) # 1 second at a time so script can be stopped
+gas_control.disconnect()

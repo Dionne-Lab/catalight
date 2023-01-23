@@ -28,7 +28,7 @@ for current in range(150, 800, 35):
             avg = np.average(power_readings)
             error = std/avg*100
 
-    print('Power Reading = %.2f +/- %.2f' % (avg, std))    
+    print('Power Reading = %.2f +/- %.2f\n' % (avg, std))    
     data.loc[current] = [avg, std]
 x_data, y_data, y_err = (data.index, data['Power'], data['error'])
 ax1 = data.plot(y=['Power'], ylabel='Power (mW)', xlabel='Current (mA)', yerr=y_err)
