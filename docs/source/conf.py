@@ -1,8 +1,7 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../photoreactor_code/'))
-sys.path.insert(0, os.path.abspath('../../photoreactor_code/data_analysis/'))
-sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath(os.path.join('..','..')))
+
 print(sys.path)
 # Configuration file for the Sphinx documentation builder.
 #
@@ -25,7 +24,7 @@ extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc']
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-exclude_patterns = ['photoreactor_code/data_analysis/IntegrationTesting.rst']
+exclude_patterns = ['photoreactor/data_analysis/IntegrationTesting.rst']
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True

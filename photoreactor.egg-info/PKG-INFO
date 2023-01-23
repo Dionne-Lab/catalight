@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: photoreactor
+Version: 0.0.1
+Summary: A small example package
+Author-email: Briley Bourgeois <bbourge6@stanford.edu>, Claire Carlin <cccarlin@stanford.edu>
+Project-URL: Homepage, https://github.com/Dionne-Lab/photoreactor
+Project-URL: Bug Tracker, https://github.com/Dionne-Lab/photoreactor/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+To be edited... we need a readme
