@@ -17,7 +17,7 @@ gas_list = ['C2H4', 'C2H2', 'H2', 'Ar']
 sample_set_size = 1
 delay_times = [5, 15, 25, 35, 45, 55] # In minutes
 flows = [5, 25, 50]
-comp_list_on = ([0,1,0,0])
+comp_list_on = ([0,0.05,0,0.95])
 comp_list_off = ([0,0,0,1])
 
 
