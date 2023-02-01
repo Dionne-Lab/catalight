@@ -3,23 +3,12 @@
 import os
 import pickle
 import re
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from gcdata import GCData
-
-# getting the name of the directory where the this file is present.
-current = os.path.dirname(os.path.realpath(__file__))
-
-# Getting the parent directory name where the current directory is present.
-parent = os.path.dirname(current)
-
-# adding the parent directory to the sys.path.
-sys.path.append(parent)
-
-from experiment_control import Experiment
+from photoreactor.data_analysis.gcdata import GCData
+from photoreactor.equipment.experiment_control import Experiment
 
 # Helper functions
 ##############################################################################
@@ -27,7 +16,7 @@ from experiment_control import Experiment
 
 def list_data_files(folder_path, target):
     """
-    Returns the .ASC files for FID data in the specified path.
+    Return the .ASC files for FID data in the specified path.
 
     Parameters
     ----------

@@ -1,8 +1,12 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Feb 20 18:45:10 2022
+Graphical User Interface Module.
 
-@author: brile
+Imports a GUI design created using QT Designer. Connects signals/slots and
+adds additional functionality.
+
+Created on Sun Feb 20 18:45:10 2022.
+
+@author: Briley Bourgeois
 """
 import os
 import subprocess
@@ -14,17 +18,14 @@ import numpy as np
 import pandas as pd
 import psutil
 from alicat import FlowController
-from equipment.alicat_MFC import gas_control
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.diode_laser.diode_control import Diode_Laser
-from equipment.harrick_watlow.heater_control import Heater
-from equipment.sri_gc.gc_control import GC_Connector
-from experiment_control import Experiment
+from photoreactor.equipment.alicat_MFC import gas_control
+from photoreactor.equipment.alicat_MFC.gas_control import Gas_System
+from photoreactor.equipment.diode_laser.diode_control import Diode_Laser
+from photoreactor.equipment.harrick_watlow.heater_control import Heater
+from photoreactor.equipment.sri_gc.gc_control import GC_Connector
+from photoreactor.equipment.experiment_control import Experiment
 
-matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_qt5agg import \
-    FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import \
     NavigationToolbar2QT as NavigationToolbar
 from PyQt5.QtCore import (QObject, QRunnable, Qt, QThreadPool, QTimer,
@@ -35,13 +36,15 @@ from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QComboBox,
                              QLabel, QListWidgetItem, QMainWindow, QMessageBox,
                              QPushButton, QSpinBox)
 from PyQt5.uic import loadUi
+matplotlib.use('Qt5Agg')
 
 
-# Subclass QMainWindow to customize your application's main window
 class MainWindow(QMainWindow):
+    """Subclass QMainWindow to customize your application's main window."""
+
     def __init__(self):
         super().__init__()
-        loadUi('.\gui_components\\reactorUI.ui', self)
+        loadUi(r'.\gui_components\\reactorUI.ui', self)
 
         # Initilize GUI
         try:
@@ -70,11 +73,10 @@ class MainWindow(QMainWindow):
         self.init_figs()
         self.set_form_limits()
 
-        self.timer.start(500) # timer connected to update in init_manual_ctrl
-        #sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
+        self.timer.start(500)  # timer connected to update in init_manual_ctrl
+        # sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
-
 
     def normalOutputWritten(self, text):
         """Append console ouput to the QTextEdit."""
@@ -85,30 +87,35 @@ class MainWindow(QMainWindow):
         self.consoleOutput.setTextCursor(cursor)
         self.consoleOutput.ensureCursorVisible()
 
-    ## Button Definitions:
+    # Button Definitions:
+    # -------------------
     def add_expt(self):
-        '''Creates a new experiment object and adds it to GUI'''
+        """Create a new experiment object and add it to GUI."""
         item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
         expt = Experiment()
         item.setData(Qt.UserRole, expt)
 
     def delete_expt(self):
-        '''deletes currently selected item from listWidget'''
+        """Delete currently selected item from listWidget."""
         item = self.listWidget.currentItem()
         self.listWidget.takeItem(self.listWidget.row(item))
 
     def start_study(self):
-        '''Takes experiment objects in listWidget, assigns eqpt, generates
+        """
+        Loop through experiment objects, update, and call .run_experiment().
+
+        Takes experiment objects in listWidget, assigns eqpt, generates
         experiment name and save path, then call expt.run_experiment().
-        Shuts down at end.'''
+        Shuts down at end.
+        """
         self.toggle_controls(True)
         expt_list = [self.listWidget.item(x).data(Qt.UserRole)
                      for x in range(self.listWidget.count())]
         eqpt_list = [self.gc_connector, self.laser_controller,
-                      self.gas_controller, self.heater]
+                     self.gas_controller, self.heater]
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
-        main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
+        main_fol = os.path.join(r'C:\Peak489Win10\GCDATA', sample_name)
         os.makedirs(main_fol, exist_ok=True)
 
         for expt in expt_list:
@@ -123,7 +130,7 @@ class MainWindow(QMainWindow):
         self.toggle_controls(False)
 
     def select_ctrl_file(self):
-        '''Prompts user to selector GC control file if gc is connected'''
+        """Prompt user to selector GC control file if gc is connected."""
         if self.gc_Status.isChecked():
             options = self.file_browser.Options()
             options |= self.file_browser.DontUseNativeDialog
@@ -136,12 +143,16 @@ class MainWindow(QMainWindow):
             self.gc_connector.ctrl_file = filePath
             self.gc_connector.load_ctrl_file()
             self.set_form_limits()
-        else: print('GC Not Connected')
+        else:
+            print('GC Not Connected')
 
     def select_cal_file(self):
-        '''Prompts user to select calibration file
-        is gas system is connected, runs "set_calibration()" method on each mfc
-        Adds 'CalGas' option to mfc gas type drop downs'''
+        """
+        Prompt user to select calibration file.
+
+        If gas system is connected, runs "set_calibration()" method on each mfc
+        Adds 'CalGas' option to mfc gas type drop downs
+        """
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser \
@@ -167,19 +178,24 @@ class MainWindow(QMainWindow):
             self.manualGasDType.insertItems(0, 'CalGas')
 
     def reset_eqpt(self):
-        '''Disconnects from equipment and attempts to reconnect'''
+        """Disconnects from equipment and attempts to reconnect."""
         print('Resetting Equipment Connections')
         self.disconnect()
         self.init_equipment()
         self.init_manual_ctrl_tab()
         self.set_form_limits()
 
-    ## Initializing Tabs:
+    # Initializing Tabs:
+    # ------------------
     def init_equipment(self):
-        '''Tries to connect to each piece of equipment, adjusts
-        (object)_status.setChecked if successful.
-        Calls set_form_limits() at end'''
-        ## Initialize Equipment
+        """
+        Try to connect to each piece of equipment.
+
+        Adjusts (object)_Status.setChecked if successful.
+        If Exception is thrown, setChecked(0) and print Exception
+        Calls set_form_limits() at end
+        """
+        # Initialize Equipment
         # Try to connect to each device, mark indicator off on failed connect
         try:
             self.gc_connector = GC_Connector()
@@ -190,26 +206,30 @@ class MainWindow(QMainWindow):
         try:
             self.gas_controller = Gas_System()
             self.gas_Status.setChecked(1)
-        except:
+        except Exception as e:
+            print(e)
             self.gas_Status.setChecked(0)
         try:
             self.heater = Heater()
             self.heater_Status.setChecked(1)
-        except:
+        except Exception as e:
+            print(e)
             self.heater_Status.setChecked(0)
         try:
             self.laser_controller = Diode_Laser()
             # Check if output is supported by DAQ
             if self.laser_controller._ao_info.is_supported:
                 self.diode_Status.setChecked(1)
-            else: self.diode_Status.setChecked(0)
-        except:
+            else:
+                self.diode_Status.setChecked(0)
+        except Exception as e:
+            print(e)
             self.diode_Status.setChecked(0)
+
         self.set_form_limits()
 
     def init_study_tab(self):
-        '''Connect Study Overview Tab Contents (signals/slots)'''
-
+        """Connect Study Overview Tab Contents (signals/slots)."""
         self.setWindowTitle("BruceJr")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
@@ -220,10 +240,13 @@ class MainWindow(QMainWindow):
         self.findCtrlFile.clicked.connect(self.select_ctrl_file)
 
     def init_design_tab(self):
-        '''Connect Experiment Design Tab Contents (signals/slots).
+        """
+        Connect Experiment Design Tab Contents (signals/slots).
+
         On first call, populates expt_type drop down on GUI.
         Insert possible gasses to combo boxes.
-        Initializes widgets used for defining comp_sweep experiments.'''
+        Initializes widgets used for defining comp_sweep experiments.
+        """
         self.expt_types.currentIndexChanged.connect(self.update_expt)
         # On first run, this should populate expt drop down on GUI
         if self.expt_types.count() < len(Experiment().expt_list['Expt Name']):
@@ -253,7 +276,7 @@ class MainWindow(QMainWindow):
         self.setGasBType.insertItems(0, gas_control.factory_gasses)
         self.setGasCType.insertItems(0, gas_control.factory_gasses)
         self.setGasDType.insertItems(0, gas_control.factory_gasses)
-        if self.gas_Status.isChecked(): # sets gas type to last used
+        if self.gas_Status.isChecked():  # sets gas type to last used
             flow_dict = self.gas_controller.read_flows()
             self.setGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
             self.setGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
@@ -269,7 +292,7 @@ class MainWindow(QMainWindow):
                                     QLabel('Status'), QLabel('Start'),
                                     QLabel('Stop'), QLabel('Step')]]
 
-        combobox_options = ['-', 'Fixed','Fill', 'Ind. Variable', 'Multiple']
+        combobox_options = ['-', 'Fixed', 'Fill', 'Ind. Variable', 'Multiple']
         for i in range(1, 5):
             self.comp_sweep_widgets.append([QLabel(('Gas %i' % i)),
                                             QDoubleSpinBox(),
@@ -285,29 +308,31 @@ class MainWindow(QMainWindow):
                 self.comp_sweep_widgets[i][j].valueChanged.connect(self.update_expt)
                 self.comp_sweep_widgets[i][j].setMaximum(100)
 
-
     def init_manual_ctrl_tab(self):
-        '''Initialize Manual Control Tab
+        """
+        Initialize Manual Control Tab.
+
         Blocks tabWidget updates, puts intial values in manual tab widgets.
-        Insert possible gasses to combo boxes'''
-        self.tabWidget.setUpdatesEnabled(False) # Block Signals during update
+        Insert possible gasses to combo boxes
+        """
+        self.tabWidget.setUpdatesEnabled(False)  # Block Signals during update
         # Initialize Values for gas controller
         if self.gas_Status.isChecked():
             flow_dict = self.gas_controller.read_flows()
-            tot_flow = (flow_dict['mfc_A']['setpoint'] +
-                        flow_dict['mfc_B']['setpoint'] +
-                        flow_dict['mfc_C']['setpoint'] +
-                        flow_dict['mfc_D']['setpoint'])
+            tot_flow = (flow_dict['mfc_A']['setpoint']
+                        + flow_dict['mfc_B']['setpoint']
+                        + flow_dict['mfc_C']['setpoint']
+                        + flow_dict['mfc_D']['setpoint'])
             if tot_flow == 0:
                 self.manualGasAComp.setValue(0)
                 self.manualGasBComp.setValue(0)
                 self.manualGasCComp.setValue(0)
                 self.manualGasDComp.setValue(0)
             else:
-               self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint']/tot_flow*100)
-               self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint']/tot_flow*100)
-               self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint']/tot_flow*100)
-               self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint']/tot_flow*100)
+                self.manualGasAComp.setValue(flow_dict['mfc_A']['setpoint'] / tot_flow * 100)
+                self.manualGasBComp.setValue(flow_dict['mfc_B']['setpoint'] / tot_flow * 100)
+                self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint'] / tot_flow * 100)
+                self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint'] / tot_flow * 100)
 
             self.manualGasAType.insertItems(0, gas_control.factory_gasses)
             self.manualGasBType.insertItems(0, gas_control.factory_gasses)
@@ -329,13 +354,27 @@ class MainWindow(QMainWindow):
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
 
     def sum_spinboxes(self, spinboxes, qlabel):
-        '''take list of spinboxes, get values, write sum to qlabel'''
+        """
+        Take list of spinboxes, get values, write sum to qlabel.
+
+        Parameters
+        ----------
+        spinboxes : list of QSpinBoxes
+            spinboxes to sum
+        qlabel : QLabel
+            qlabel to write to
+
+        Returns
+        -------
+        None.
+
+        """
         values = self.values_from_spinboxes(spinboxes)
         qlabel.setText('%.2f' % sum(values))
 
     def values_from_spinboxes(self, spinboxes):
-        '''
-        give list of spinboxes, return list of values
+        """
+        Give list of spinboxes, return list of values.
 
         Parameters
         ----------
@@ -347,48 +386,67 @@ class MainWindow(QMainWindow):
         gas_comp : list
             list of the values from the spinboxes supplied
 
-        '''
+        """
         values = []
         for entry in spinboxes:
             values.append(entry.value())
         return values
 
     def connect_manual_ctrl(self):
-        '''Connect Manual Control (signals/slots)
-        Connects to eqpt status and manual ctrl threads'''
-        self.buttonBox.button(QDialogButtonBox.Apply) \
-            .clicked.connect(lambda:
-                             self.threadpool.start(self.manual_ctrl_thread))
-        self.buttonBox.button(QDialogButtonBox.Reset).clicked.connect(self.init_manual_ctrl_tab)
+        """
+        Connect Manual Control (signals/slots).
+
+        Connect to eqpt status and manual ctrl threads
+        """
+        # Connect buttons in manual ctrl tab
+        self.buttonBox.button(QDialogButtonBox.Apply).clicked \
+            .connect(lambda: self.threadpool.start(self.manual_ctrl_thread))
+
+        self.buttonBox.button(QDialogButtonBox.Reset).clicked \
+            .connect(self.init_manual_ctrl_tab)
+
         self.eqpt_ReconnectBut.clicked.connect(self.reset_eqpt)
+
         # Connect timer for live feed
         self.timer.timeout \
             .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
 
+        # Redefine function and arguments for brevity.
         gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
                          self.manualGasCComp, self.manualGasDComp]
-        func = lambda: self.sum_spinboxes(gas_spinboxes, self.manualCompSum)
-        self.manualGasAComp.valueChanged.connect(func)
-        self.manualGasBComp.valueChanged.connect(func)
-        self.manualGasCComp.valueChanged.connect(func)
-        self.manualGasDComp.valueChanged.connect(func)
+        func = self.sum_spinboxes
+        args = (gas_spinboxes, self.manualCompSum)
+
+        # Connect with lambda functions so arguments can be passed.
+        self.manualGasAComp.valueChanged.connect(lambda: func(*args))
+        self.manualGasBComp.valueChanged.connect(lambda: func(*args))
+        self.manualGasCComp.valueChanged.connect(lambda: func(*args))
+        self.manualGasDComp.valueChanged.connect(lambda: func(*args))
 
     def init_figs(self):
-        '''Initialize figure canvas:
-            creates figure objects, adds to gui, adds navigation bar'''
+        """
+        Initialize figure canvas.
 
-        self.figure = plt.figure() # Create New figure to share
-        self.plotWidgetStudy.canvas.figure = self.figure # Reset fig in canvases
+        Creates figure objects, adds to gui, adds navigation bar
+        """
+        # Create New figure to share
+        self.figure = plt.figure()
+        # Reset fig in canvases
+        self.plotWidgetStudy.canvas.figure = self.figure
         self.plotWidgetDesign.canvas.figure = self.figure
         # Add navigation bar beneath each figure widget
         self.verticalLayoutStudyFig.addWidget(NavigationToolbar(self.plotWidgetStudy.canvas, self))
         self.verticalLayoutDesignFig.addWidget(NavigationToolbar(self.plotWidgetDesign.canvas, self))
 
-
     def set_form_limits(self):
-        '''Use this function to set widget min/max values. These can either be
+        """
+        Update the limits of widgets within the GUI.
+
+        Use this function to set widget min/max values. These can either be
         pulled from eqpt objects to have equipment specific limits, or hard
-        coded. Alternativly, many limits are set using QtDesigner'''
+        coded. Alternativly, many limits are set using QtDesigner
+        Users are encourage to edit this for specific equipment setups.
+        """
         if self.gc_Status.isChecked():
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
@@ -398,9 +456,10 @@ class MainWindow(QMainWindow):
         if self.gas_Status.isChecked():
             self.manualFlow.setMaximum(350)
 
-    ## Updating Tabs/Objects:
+    # Updating Tabs/Objects:
+    # ----------------------
     def display_expt(self):
-        '''Updates GUI display when new expt is selected in listWidget'''
+        """Update GUI display when new expt is selected in listWidget."""
         self.tabWidget.setUpdatesEnabled(False)
         global update_flag
         update_flag = False
@@ -420,12 +479,12 @@ class MainWindow(QMainWindow):
                     self.comp_sweep_widgets[i][2].setCurrentText('-')
                     self.comp_sweep_widgets[i][3].setValue(min(values[i]))
                     self.comp_sweep_widgets[i][4].setValue(max(values[i]))
-                    self.comp_sweep_widgets[i][5].setValue(values[i][1]-values[i][0])
+                    self.comp_sweep_widgets[i][5].setValue(values[i][1] - values[i][0])
 
             elif has_data:
                 self.IndVar_start.setValue(np.min(values))
                 self.IndVar_stop.setValue(np.max(values))
-                self.IndVar_step.setValue(values[1]-values[0])
+                self.IndVar_step.setValue(values[1] - values[0])
             self.update_plot(expt)
 
         else:
@@ -452,27 +511,25 @@ class MainWindow(QMainWindow):
         self.setGasDComp.setValue(expt.gas_comp[0][3])
         self.setGasDType.setCurrentText(expt.gas_type[3])
         self.update_ind_var_grid()
-        comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+        comp_total = sum(expt.gas_comp[0])  # Calculate gas comp total
         self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
         update_flag = True
 
     def update_expt(self):
-        '''
-        populates the attributes of currently selected experiment with the values
-        displayed in GUI. If valid independent variable is set, updates plot.
-        Clears plot for invalid experiment.
+        """
+        Update Experiment object with GUI values.
 
-        Returns
-        -------
-        None.
-        '''
+        Populates the attributes of currently selected experiment with the
+        values displayed in GUI. If valid independent variable is set, updates
+        plot. Clears plot for invalid experiment.
+        """
         # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
         global update_flag
         # If there is data in listWidget item and now in the middle of updating
         if (item is not None) & update_flag:
-            expt = item.data(Qt.UserRole) # pull listWidgetItem data out
+            expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
             # set the attributes of expt object based on GUI entries
             expt.expt_type = self.expt_types.currentText()
             expt.temp[0] = self.setTemp.value()
@@ -491,103 +548,114 @@ class MainWindow(QMainWindow):
             expt.gas_type[2] = self.setGasCType.currentText()
             expt.gas_comp[0][3] = self.setGasDComp.value()
             expt.gas_type[3] = self.setGasDType.currentText()
-            comp_total = sum(expt.gas_comp[0]) # Calculate gas comp total
+            comp_total = sum(expt.gas_comp[0])  # Calculate gas comp total
             self.designCompSum.setText('%.2f' % comp_total)
 
-            expt._update_expt_name() # autoname experiment
-            item.setText(expt.expt_type+expt.expt_name) # add name to listWidget
+            expt._update_expt_name()  # autoname experiment
+            item.setText(expt.expt_type + expt.expt_name)  # add name to listWidget
 
             # pull units based on expt class definitions, label in GUI
             units = (expt.expt_list['Units']
                      [expt.expt_list['Active Status']].to_string(index=False))
-            self.label_IndVar.setText(expt.ind_var+' ['+units+']')
+            self.label_IndVar.setText(expt.ind_var + ' [' + units + ']')
 
-            self.update_ind_var_grid() # why is this here??
+            self.update_ind_var_grid()  # why is this here??
             self.update_ind_var(expt)  # Checks for logical values before plot
-            #self.update_plot(expt)
+            # self.update_plot(expt)
 
     def update_ind_var(self, expt):
-        '''Checks for valid independent variable and updates the experiment
-        object accordingly. Returns if invalid variable is supplied'''
+        """
+        Update independent variable if applicable.
+
+        Checks for valid independent variable and updates the experiment
+        object accordingly. Returns if invalid variable is supplied
+
+        Parameters
+        ----------
+            expt : photoreactor.Experiment
+                Experiment object containing the expt_type to be analyzed
+        """
         # only actually updates ind var if number check out
         if expt.expt_type in ['comp_sweep', 'calibration']:
             widget_grid = self.comp_sweep_widgets
-            row_types = ['null'] # first row of grid is QLabel
+            row_types = ['null']  # first row of grid is QLabel
             num_rows = len(widget_grid)
-            comp_list = [[]]*(num_rows-1) # preallocate comp_list size
+            comp_list = [[]] * (num_rows - 1)  # preallocate comp_list size
 
-            for i in range(1, num_rows): # sweep rows of grid
+            for i in range(1, num_rows):  # sweep rows of grid
                 # ['null', combobox1, combobox2, etc]
                 row_types.append(widget_grid[i][2].currentText())
 
             # Cases to Reject!!
             if '-' in row_types:
                 return
-            if ((row_types.count('Fill') != 1)
-                or (row_types.count('Ind. Variable') != 1)):
+            if (row_types.count('Fill') != 1) or \
+               (row_types.count('Ind. Variable') != 1):
                 self.update_plot()
                 return
 
-            row_types = np.array(row_types) # to allow np.where()
+            row_types = np.array(row_types)  # to allow np.where()
 
             # This should execute 0 or 1 times if TODO double updating blocked
-            for i in np.where(row_types=='Ind. Variable')[0].tolist():
-                ind_var_row = int(np.where(row_types=='Ind. Variable')[0])
+            for i in np.where(row_types == 'Ind. Variable')[0].tolist():
+                ind_var_row = int(np.where(row_types == 'Ind. Variable')[0])
 
                 # This block determines if sensible values are in ind_var
                 start = widget_grid[ind_var_row][3].value()
-                stop = widget_grid[ind_var_row][4].value()+1
+                stop = widget_grid[ind_var_row][4].value() + 1
                 step = widget_grid[ind_var_row][5].value()
-                if (stop>start) and (step>0):
+                if (stop > start) and (step > 0):
                     ind_var = np.arange(start, stop, step)
                 else:
                     return(False)
 
-                ind_var = ind_var/100 # convert from % to frac
-                comp_list[ind_var_row-1] = ind_var.tolist()
+                ind_var = ind_var / 100  # convert from % to frac
+                comp_list[ind_var_row - 1] = ind_var.tolist()
 
-                #fill_vals = np.ones(len(ind_var)) # Fill values = 1 (100%)
+                # fill_vals = np.ones(len(ind_var)) # Fill values = 1 (100%)
                 fill_vals = 1 - ind_var
 
-            for i in np.where(row_types=='Multiple')[0].tolist():
-                comp_vals = ind_var*widget_grid[i][1].value()
-                comp_list[i-1] = comp_vals.tolist()
+            for i in np.where(row_types == 'Multiple')[0].tolist():
+                comp_vals = ind_var * widget_grid[i][1].value()
+                comp_list[i - 1] = comp_vals.tolist()
                 fill_vals = fill_vals - comp_vals
 
-            for i in np.where(row_types=='Fixed')[0].tolist():
+            for i in np.where(row_types == 'Fixed')[0].tolist():
                 comp_vals = np.ones(len(ind_var)) * widget_grid[i][3].value()
-                comp_vals = comp_vals/100 # convert from % to frac
-                comp_list[i-1] = comp_vals.tolist()
+                comp_vals = comp_vals / 100  # convert from % to frac
+                comp_list[i - 1] = comp_vals.tolist()
                 fill_vals = fill_vals - comp_vals
 
-            for i in np.where(row_types=='Fill')[0].tolist():
-                comp_list[i-1] = fill_vals.tolist()
+            for i in np.where(row_types == 'Fill')[0].tolist():
+                comp_list[i - 1] = fill_vals.tolist()
 
-            if (fill_vals<0).any():
-                self.update_plot() # Clears plot
-                return # Cancels update
+            if (fill_vals < 0).any():
+                self.update_plot()  # Clears plot
+                return  # Cancels update
 
-            comp_list = np.array(comp_list).T # Transpose comp_list
-            comp_list = comp_list.tolist() # return to list of lists
+            comp_list = np.array(comp_list).T  # Transpose comp_list
+            comp_list = comp_list.tolist()  # return to list of lists
             setattr(expt, expt.ind_var, comp_list)
 
-        elif ((self.IndVar_stop.value() > self.IndVar_start.value())
-              & (self.IndVar_step.value() > 0)
-              & (expt.expt_type != 'stability_test')):
+        elif (self.IndVar_stop.value() > self.IndVar_start.value()) and \
+             (self.IndVar_step.value() > 0) and \
+             (expt.expt_type != 'stability_test'):
             setattr(expt, expt.ind_var,
                     list(np.arange(self.IndVar_start.value(),
-                                   self.IndVar_stop.value()+1,
+                                   self.IndVar_stop.value() + 1,
                                    self.IndVar_step.value())))
         else:
-            self.update_plot() # clear plot
-            return # reject update
-        self.update_plot(expt) # if either if statement was true
-
-
+            self.update_plot()  # clear plot
+            return  # reject update
+        self.update_plot(expt)  # if either if statement was true
 
     def update_ind_var_grid(self):
-        '''Chooses the correct widgets to display based on the experiment type
-        currently selected in the GUI.'''
+        """
+        Update widgets in independent variable grid.
+
+        Chooses the correct widgets to display based on the experiment type
+        currently selected in the GUI.
+        """
         def clear_grid():
             # Remove and hide currently present widgets
             for i in range(self.gridLayout_9.rowCount()):
@@ -602,22 +670,23 @@ class MainWindow(QMainWindow):
         global update_flag
         # If there is data in listWidget item and now in the middle of updating
         if (item is not None) & update_flag:
-            expt = item.data(Qt.UserRole) # pull listWidgetItem data out
-        else: return
+            expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
+        else:
+            return
 
         # if comp sweep and grid isn't set up for it
-        if ((expt.expt_type in ['comp_sweep', 'calibration'])
-            & (self.comp_sweep_widgets[0][0].isHidden())):
+        if (expt.expt_type in ['comp_sweep', 'calibration']) and \
+           (self.comp_sweep_widgets[0][0].isHidden()):
 
             clear_grid()
             # Add comp sweep specific widgets to layout
-            for i in range(len(self.comp_sweep_widgets)): # sweep items to add
+            for i in range(len(self.comp_sweep_widgets)):  # sweep items to add
                 for j in range(len(self.comp_sweep_widgets[0])):
                     self.gridLayout_9.addWidget(self.comp_sweep_widgets[i][j], i, j)
                     self.comp_sweep_widgets[i][j].setHidden(False)
 
-            if (expt.expt_type == 'calibration'
-                and not os.path.isfile(self.cal_path.text())):
+            if (expt.expt_type == 'calibration') and \
+               (not os.path.isfile(self.cal_path.text())):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setText('Warning: You must enter appropriate calibration '
@@ -625,23 +694,24 @@ class MainWindow(QMainWindow):
                 msg.setWindowTitle('Calibration Data Path Warning')
                 msg.exec()
 
-
         # if not comp sweep but grid is still set up
-        elif ((expt.expt_type != 'comp_sweep')
-              & (self.default_grid_widgets[0][0].isHidden())):
+        elif (expt.expt_type != 'comp_sweep') and \
+             (self.default_grid_widgets[0][0].isHidden()):
 
             clear_grid()
-            # Add default widgets to layout
-            for i in range(len(self.default_grid_widgets)): # sweep items to add
+            # Add default widgets to layout, sweep items to add
+            for i in range(len(self.default_grid_widgets)):
                 for j in range(len(self.default_grid_widgets[0])):
-                    self.gridLayout_9.addWidget(self.default_grid_widgets[i][j], i, j)
+                    widget = self.default_grid_widgets[i][j]
+                    self.gridLayout_9.addWidget(widget, i, j)
                     self.default_grid_widgets[i][j].setHidden(False)
 
         # update active elements if comp_sweep is set up
-        if ((expt.expt_type == 'comp_sweep')
-            & (self.default_grid_widgets[0][0].isHidden())):
+        if (expt.expt_type == 'comp_sweep') and \
+           (self.default_grid_widgets[0][0].isHidden()):
 
-            for i in range(1, len(self.comp_sweep_widgets)): # sweep rows of grid
+            # sweep rows of grid
+            for i in range(1, len(self.comp_sweep_widgets)):
 
                 if self.comp_sweep_widgets[i][2].currentText() == 'Fill':
                     selection_rule = [False, False, False, False]
@@ -655,7 +725,7 @@ class MainWindow(QMainWindow):
                 elif self.comp_sweep_widgets[i][2].currentText() == 'Ind. Variable':
                     selection_rule = [False, True, True, True]
 
-                else: # This is likely currentText == '-'
+                else:  # This is likely currentText == '-'
                     selection_rule = [False, False, False, False]
                     self.comp_sweep_widgets[i][1].setValue(0)
                     self.comp_sweep_widgets[i][3].setValue(0)
@@ -671,8 +741,15 @@ class MainWindow(QMainWindow):
         self.gridLayout_9.update()
 
     def update_plot(self, expt=None):
-        '''Updates the plots in GUI when experiment is changed'''
+        """
+        Update the plots in GUI when experiment is changed.
 
+        Parameters
+        ----------
+        expt : photoreactor.Experiment, optional
+            Updates plot with contents of experiment if supplied.
+            Scrubs plot if expt=None. The default is None.
+        """
         if not expt:
             self.figure.clear()
         elif expt.ind_var:
@@ -688,8 +765,12 @@ class MainWindow(QMainWindow):
         self.plotWidgetDesign.canvas.show()
 
     def update_eqpt_status(self):
-        '''This function updates the live view of the equipment in both the
-        manual control (1) and the live view (2) tabs'''
+        """
+        Update the equipment live view.
+
+        This function updates the live view of the equipment in both the
+        manual control (1) and the live view (2) tabs
+        """
         if self.diode_Status.isChecked():
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
@@ -735,8 +816,12 @@ class MainWindow(QMainWindow):
             self.current_gasE_pressure_2.setText('%.2f' % flow_dict['mfc_E']['pressure'])
 
     def manual_ctrl_eqpt(self):
-        '''updates the setpoint of all equipment based on the current manual
-        control values entered in the GUI'''
+        """
+        Update setpoint of equipment.
+
+        Updates the setpoint of all equipment based on the current manual
+        control values entered in the GUI
+        """
         self.toggle_controls(True)
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
@@ -755,28 +840,36 @@ class MainWindow(QMainWindow):
         self.progressBar.setValue(50)
 
         if self.diode_Status.isChecked():
-            #self.current_power_setpoint1.setStyleSheet('Color: Red')
-            #self.current_power_setpoint2.setStyleSheet('Color: Red')
+            # TODO: I was trying to change color of changing variable, but
+            # ran into some bug with this implementation.
+            # self.current_power_setpoint1.setStyleSheet('Color: Red')
+            # self.current_power_setpoint2.setStyleSheet('Color: Red')
             self.laser_controller.set_power(self.manualPower.value())
-            #self.current_power_setpoint1.setStyleSheet('Color: White')
-            #self.current_power_setpoint2.setStyleSheet('Color: White')
+            # self.current_power_setpoint1.setStyleSheet('Color: White')
+            # self.current_power_setpoint2.setStyleSheet('Color: White')
         self.progressBar.setValue(75)
-        print('before heater')
+
         if self.heater_Status.isChecked():
-            print('inside heater')
-            #self.current_temp_setpoint1.setStyleSheet('Color: Red')
-            #self.current_temp_setpoint2.setStyleSheet('Color: Red')
+            # self.current_temp_setpoint1.setStyleSheet('Color: Red')
+            # self.current_temp_setpoint2.setStyleSheet('Color: Red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
-            #self.current_temp_setpoint1.setStyleSheet('Color: White')
-            #self.current_temp_setpoint2.setStyleSheet('Color: White')
-        print('after heater')
+            # self.current_temp_setpoint1.setStyleSheet('Color: White')
+            # self.current_temp_setpoint2.setStyleSheet('Color: White')
+
         self.progressBar.setValue(100)
         self.toggle_controls(False)
 
     def toggle_controls(self, value):
-        '''True disables all widgets in tabWidget (not emergency stop)
-        Fals enables all'''
+        """
+        Toggle status of widgets in tabWidget.
+
+        Parameters
+        ----------
+        value : bool
+            True disables all widgets in tabWidget (not emergency stop)
+            False enables all
+        """
         group = [*self.tabWidget.findChildren(QDialogButtonBox),
                  *self.tabWidget.findChildren(QDoubleSpinBox),
                  *self.tabWidget.findChildren(QPushButton),
@@ -786,13 +879,28 @@ class MainWindow(QMainWindow):
         for item in group:
             item.setDisabled(value)
 
-
     def open_peaksimple(self, path_name):
-        '''closes peaksimple if currently running,
-            opens new edition with subprocess'''
+        """
+        Use subprocess package to open peaksimple instance.
+
+        Checks for running version of peaksimple first. Prints warning and
+        returns if peaksimple is running. Using process.kill() doesn't give
+        expected results. Peaksimple API gives error when trying to reconnect
+        if you don't close the window manually. Still searching for solution.
+
+        Parameters
+        ----------
+        path_name : str
+            full path to PeakSimple executable
+
+        Returns
+        -------
+        process : subprocess.process
+            returns a process object for peaksimple instance
+        """
         for process in psutil.process_iter():
             if 'Peak489Win10' in process.name():
-                #process.kill()
+                # process.kill()
                 print('please close peaksimple and reconnect')
                 time.sleep(5)
                 return
@@ -802,14 +910,14 @@ class MainWindow(QMainWindow):
         return process
 
     def closeEvent(self, *args, **kwargs):
+        """Redefines shutdown process for window to close equipment."""
         super(QMainWindow, self).closeEvent(*args, **kwargs)
         self.timer.stop()
         self.timer.disconnect()
-        self.disconnect() # add shutdown process when window closed
+        self.disconnect()  # add shutdown process when window closed
 
     def disconnect(self):
-        '''first runs shutdown sequence (normally sets all to zero)
-        then disconnects which should sever digital connection too'''
+        """Run shutdown sequence then disconnect communications."""
         self.shut_down()
         if self.gas_Status.isChecked():
             self.gas_controller.disconnect()
@@ -818,11 +926,10 @@ class MainWindow(QMainWindow):
             self.heater.disconnect()
 
         if self.gc_Status.isChecked():
-           self.gc_connector.disconnect()
+            self.gc_connector.disconnect()
 
     def shut_down(self):
-        '''runs shutdown method on each connected piece of equipment.
-        normally this just sets to zero'''
+        """Run shutdown method on each connected piece of equipment."""
         print('Shutting Down Equipment')
         if self.gas_Status.isChecked():
             self.gas_controller.shut_down()
@@ -834,40 +941,55 @@ class MainWindow(QMainWindow):
             self.laser_controller.shut_down()
 
     def emergency_stop(self):
-
-        #self.threadpool.clear()
-        #self.threadpool.cancel()
+        """Cancel active threads, call self.shut_down()."""
+        # self.threadpool.clear()
+        # self.threadpool.cancel()
         self.threadpool.cancel(self.run_study_thread)
         self.threadpool.cancel(self.manual_ctrl_thread)
-        #self.threadpool.disconnect()
+        # self.threadpool.disconnect()
         self.shut_down()
 
 
-
 class EmittingStream(QObject):
-    '''
-    Using this to capture console print statements and broadcast within the GUI
-    https://stackoverflow.com/questions/8356336/how-to-capture-output-of-pythons-interpreter-and-show-in-a-text-widget
-    '''
+    """
+    Capture console print statements and broadcast within the GUI.
+
+    See:
+    (https://stackoverflow.com/questions/8356336/
+    how-to-capture-output-of-pythons-interpreter-and-show-in-a-text-widget)
+    """
+
     textWritten = pyqtSignal(str)
 
     def write(self, text):
+        """Send captured text."""
         self.textWritten.emit(str(text))
 
+
 class Worker(QRunnable):
-    '''
-    Worker thread
+    """
+    Worker thread.
 
-    Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
+    Inherits from QRunnable to handle
+    worker thread setup, signals and wrap-up.
 
-    :param callback: The function callback to run on this worker thread. Supplied args and
-                     kwargs will be passed through to the runner.
-    :type callback: function
-    :param args: Arguments to pass to the callback function
-    :param kwargs: Keywords to pass to the callback function
-    See: https://www.pythonguis.com/tutorials/multithreading-pyqt-applications-qthreadpool/
+    Parameters
+    ----------
+    callback : function
+        The function callback to run on this worker thread. Supplied args and
+        kwargs will be passed through to the runner.
 
-    '''
+    args:
+        Arguments to pass to the callback function
+    kwargs:
+        Keywords to pass to the callback function
+
+    References
+    ----------
+    [1] (https://www.pythonguis.com/tutorials/
+         multithreading-pyqt-applications-qthreadpool/)
+
+    """
 
     def __init__(self, fn, *args, **kwargs):
         super(Worker, self).__init__()
@@ -878,25 +1000,27 @@ class Worker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        '''
-        Initialise the runner function with passed args, kwargs.
-        '''
+        """Initialise the runner function with passed args, kwargs."""
         self.fn(*self.args, **self.kwargs)
 
+
 def setup_style(app):
-    script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+    """Pull in the .qss sheet for GUI style."""
+    script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
     rel_path = r"gui_components\style_guide\Adaptic\Adaptic_v3.qss"
     abs_file_path = os.path.join(script_dir, rel_path)
-    file = open(abs_file_path,'r')
+    file = open(abs_file_path, 'r')
     with file:
         qss = file.read()
         app.setStyleSheet(qss)
 
-# Main
-plt.close('all')
-update_flag = False
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-setup_style(app)
-sys.exit(app.exec())
+
+if __name__ == "__main__":
+    # Main
+    plt.close('all')
+    update_flag = False
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    setup_style(app)
+    sys.exit(app.exec())

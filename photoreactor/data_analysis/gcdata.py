@@ -42,30 +42,6 @@ class GCData:
         indices of leftmost bound for integration for each peak identified
     rind : numpy array
         indices of rightmost bound for integration for each peak identified
-
-    Methods
-    -------
-    getrawdata()
-        called on instantiation to convert asc to pandas array,
-        returns timestamp and rawdata
-    baseline_correction()
-        modifies signal to be corrected using a tophat baseline correction
-    apex_inds()
-        scipy.signal.find_peaks to find peaks in signal, returns apex_ind
-    integration_inds(tol=0.5)
-        finds the bounds of integration, returns lind and rind
-    integrate_peak()
-        integrates peak trapezoidally in units of seconds*signalintensity,
-        returns counts
-    get_concentrations(calDF)
-        returns a Pandas series of chemical concentrations, requires dataframe
-        of chem IDs from calibration file
-    plot_integration()
-        plot the chromatogram with the peaks, left, and right indices indicated
-    get_run_number()
-        get run number from end of filename
-    convert_to_ppm(calDF, counts, chemID)
-        returns counts in ppm based on calibration dataframe and ID of chemical
     """
 
     def __init__(self, filepath, basecorrect=False):
@@ -132,9 +108,9 @@ class GCData:
                     next
                 else:
                     value = int(line.strip().split(',')[0])
-                    y.append(value/1000)  # Convert mV to V
+                    y.append(value / 1000)  # Convert mV to V
 
-            x = np.linspace(0, 1/rate/60*(size - 1), num=size).tolist()
+            x = np.linspace(0, 1 / rate / 60 * (size - 1), num=size).tolist()
             raw_data = pd.DataFrame({'Time': x, 'Signal': y})
             # GC_data includes timecode in order to be synced with EC data
             GC_data = (timestamp, raw_data)
@@ -178,15 +154,18 @@ class GCData:
 
     def integration_inds(self):
         """
-        Calculate the area under each peak listed in apex_ind.
+        Find bounds of integration for apexes.
 
-        Edge values determined by self._half_index_search
+        Edge values determined by self._half_index_search.
+        Output in the same (time) order as the apex_ind array with the location
+        (index) of the left and right points for integration
 
         Returns
         -------
-        Numpy arrays
-            in the same (time) order as the apex_ind array with the location
-            (index) of the left and right points for integration
+        left index : Numpy Array of int
+            Left bounds of integration.
+        right index : Numpy Array of int
+            Right bounds of integration.
 
         """
         lind = np.zeros(len(self.apex_ind))
@@ -195,11 +174,11 @@ class GCData:
 
         for apex in self.apex_ind:
             # select all of the data just past the apex
-            lhs = self.signal[:apex+1]
+            lhs = self.signal[:apex + 1]
             # reverse list so that working forward works toward the left
             flhs = np.flip(lhs)
             lind[k] = apex - self._half_index_search(flhs)
-            rhs = self.signal[apex-1:]
+            rhs = self.signal[apex - 1:]
             rind[k] = apex + self._half_index_search(rhs)
             k += 1
 
@@ -232,7 +211,7 @@ class GCData:
             index of the integration bound
         """
         # convert from percent, not sure why it should also be halved
-        tol = tol/200.0
+        tol = tol / 200.0
         # number of points to sum new area across
         # (increasing value increases smoothing)
         wide = 10
@@ -240,7 +219,7 @@ class GCData:
         limit = len(dat)
         index = 1
         # edge is average value of num of pts defined by wide (NOT an index)
-        edge = float(sum(dat[0:wide]))/wide
+        edge = float(sum(dat[0:wide])) / wide
         delta = sig - edge
         # make sure old_edge starts as larger than the current edge
         old_edge = 2 * edge
@@ -248,7 +227,7 @@ class GCData:
         while abs(delta) > sig * tol and edge < old_edge and index < limit:
             old_edge = edge
             sig = dat[index]
-            edge = float(sum(dat[index:index+wide]))/wide
+            edge = float(sum(dat[index:index + wide])) / wide
             delta = sig - edge
             index += 1
 
@@ -259,12 +238,18 @@ class GCData:
         """
         Find the area under the peak using a trapezoidal method.
 
-        Calculate for each peak identified using bounds from integration_inds
+        Calculate for each peak identified using bounds from integration_inds.
+        Integrates peak trapezoidally in units of seconds*signalintensity.
+
+        Returns
+        -------
+        counts : numpy.int32
+            counts rounded using np.around()
         """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
             counts[i] = np.trapz(self.signal[self.lind[i]:self.rind[i]],
-                                 x=60*self.time[self.lind[i]:self.rind[i]])
+                                 x=60 * self.time[self.lind[i]:self.rind[i]])
             if counts[i] == 0:
                 counts[i] = 1
         return np.around(counts)
@@ -286,10 +271,12 @@ class GCData:
         -------
         Pandas Series
             Concentrations for each peak in apex_ind, given in ppm
-        Todo
-        ----
+        Notes
+        -----
             Unknown peaks could be added to calibration dataframe for reference
         """
+        # TODO Unknown peaks could be added
+        # to calibration dataframe for reference
         self.integration_inds()
         # Creates empty series where index are ChemIDs from Cal file
         conc = pd.Series(0.0, index=['timestamp', *calDF.index.to_list()])
@@ -326,11 +313,13 @@ class GCData:
         """
         Plot the chromatogram with the peaks and indices indicated.
 
-        Todo:
-        ----
+        Notes
+        -----
             The plotting style update here can be integrated with data_analysis
             module.
         """
+        # TODO The plotting style update here can be integrated
+        # with data_analysis module.
         plt.close('all')
         plt.rcParams.update({'font.size': 14})
         plt.rcParams['axes.linewidth'] = 2
@@ -369,9 +358,8 @@ class GCData:
 
         Returns
         -------
-        int
+        run_number : int
             run number extracted from filename
-
         """
         filename = os.path.basename(self.filepath)
         parts = filename.split('_')
@@ -393,7 +381,7 @@ class GCData:
 
         Returns
         -------
-        float
+        y : float
             Counts for a single peak converted into ppm based on calDF
         """
         # Pull Cal data for given chemical

@@ -17,6 +17,14 @@ Subpackages
 Submodules
 ----------
 
+photoreactor.equipment.experiment\_control module
+-------------------------------------------------
+
+.. automodule:: photoreactor.equipment.experiment_control
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 photoreactor.equipment.gc\_delay\_tester module
 -----------------------------------------------
 

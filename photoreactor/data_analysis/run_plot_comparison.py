@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jun 24 17:28:48 2022
 
@@ -8,26 +7,12 @@ Created on Fri Jun 24 17:28:48 2022
 # to actually run some analysis!
 
 import os
-import re
-import sys
 
-import analysis_tools
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from data_extractor import DataExtractor
-from gcdata import GCData
-
-# getting the name of the directory where the this file is present.
-current = os.path.dirname(os.path.realpath(__file__))
-
-# Getting the parent directory name where the current directory is present.
-parent = os.path.dirname(current)
-
-# adding the parent directory to the sys.path.
-sys.path.append(parent)
-
-from experiment_control import Experiment
+from photoreactor.data_analysis import analysis_tools
+from photoreactor.data_analysis.data_extractor import DataExtractor
+from photoreactor.data_analysis.gcdata import GCData
+from photoreactor.equipment.experiment_control import Experiment
 
 if __name__ == "__main__":
 
@@ -48,7 +33,7 @@ if __name__ == "__main__":
         results_dict[data_label] = result
 
     ((figX, axX), (figS, axS)) = analysis_tools.multiplot_X_and_S(results_dict)
-    #fig, ax = analysis_tools.multiplot_X_and_S(results_dict)
+    # fig, ax = analysis_tools.multiplot_X_and_S(results_dict)
     # TODO pop up a selection box asking user which they'd like to plot
 
     # Standard figsize

@@ -17,7 +17,11 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dynamic = ["dependencies"]
 
 [project.urls]
 "Homepage" = "https://github.com/Dionne-Lab/photoreactor"
 "Bug Tracker" = "https://github.com/Dionne-Lab/photoreactor/issues"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}

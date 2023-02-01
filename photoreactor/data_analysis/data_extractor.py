@@ -1,15 +1,23 @@
-# -*- coding: utf-8 -*-
 """
+Open user interface to select data.
+
 Created on Thu Jun 23 22:42:55 2022
 
-@author: brile
-https://github.com/napari/magicgui/issues/9
-https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection
-https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder
-https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog
-https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel
-https://www.youtube.com/watch?v=dqg0L7Qw3ko
-https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python
+@author: Briley Bourgeois
+
+References
+----------
+[1] https://github.com/napari/magicgui/issues/9
+[2] https://stackoverflow.com/questions/28544425
+/pyqt-qfiledialog-multiple-directory-selection
+[3] https://stackoverflow.com/questions/38746002
+/pyqt-qfiledialog-directly-browse-to-a-folder
+[4] https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog
+[5] https://stackoverflow.com/questions/38609516
+/hide-empty-parent-folders-qtreeview-qfilesystemmodel
+[6] https://www.youtube.com/watch?v=dqg0L7Qw3ko
+[7] https://stackoverflow.com/questions/52592977
+/how-to-return-variables-from-pyqt5-ui-to-main-function-python
 """
 import os
 import sys
@@ -22,21 +30,48 @@ from PyQt5.QtWidgets import QApplication, QTreeWidget, QTreeWidgetItem
 # app = QtWidgets.QApplication(sys.argv)
 # app.setApplicationName('Select the data you want to be plotted')
 
+
 class MyDelegate(QtWidgets.QItemDelegate):
+    """Use for sorting items."""
 
     def createEditor(self, parent, option, index):
+        """Create editor."""
         if index.column() == 1:
             return super(MyDelegate, self).createEditor(parent, option, index)
         return None
 
+
 class DataExtractor(QtWidgets.QDialog):
+    """File dialog for selecting data folders."""
+
     def __init__(self, starting_dir=None, target='avg_conc.csv',
                  data_depth=2, parent=None):
-        #super(DataExtractor, self).__init__(parent)
+        """
+        Initialize extraction gui.
+
+        Parameters
+        ----------
+        starting_dir : str, optional
+            Main directory to initialize gui in. The default is None.
+        target : str, optional
+            string to identify as "hass data". The default is 'avg_conc.csv'.
+        data_depth : int, optional
+            depth between data and folder to display. The default is 2.
+        parent : TYPE, optional
+            DESCRIPTION. The default is None.
+
+        Returns
+        -------
+        None.
+
+        """
+        # super(DataExtractor, self).__init__(parent)
         super().__init__()
         self.setWindowTitle('Select data to be plotted')
-        self.target = target # string to find partial match with
-        self.data_depth = data_depth # seperation between data and folder to display
+        # String to find partial match with
+        self.target = target
+        # Seperation between data and folder to display
+        self.data_depth = data_depth
         # I editted this line to bring up file dialog to set start point
         expt_dirs = self.handleChooseDirectories(starting_dir)
 
@@ -53,8 +88,22 @@ class DataExtractor(QtWidgets.QDialog):
         self.initLayout()
 
     def handleChooseDirectories(self, starting_dir=None):
-        '''we use this function instead of regular QFileDialog because
-        this lets us select multiple folders'''
+        """
+        Set alternate file dialog.
+
+        We use this function instead of regular QFileDialog because
+        this lets us select multiple folders. Updates selection mode.
+
+        Parameters
+        ----------
+        starting_dir : str, optional
+            path in which to start search. The default is None.
+
+        Returns
+        -------
+        expt_dirs : list
+            list of strings containing matching paths
+        """
         dialog = QtWidgets.QFileDialog(self)
         dialog.setWindowTitle('Choose Directories')
         dialog.setOption(QtWidgets.QFileDialog.DontUseNativeDialog, True)
@@ -65,8 +114,9 @@ class DataExtractor(QtWidgets.QDialog):
         dialog.setViewMode(1)
 
         # This loop cycles through dialog and sets multi-item selection
-        for view in dialog.findChildren(
-            (QtWidgets.QListView, QtWidgets.QTreeView)):
+        for view in dialog.findChildren((QtWidgets.QListView,
+                                         QtWidgets.QTreeView)):
+
             if isinstance(view.model(), QtWidgets.QFileSystemModel):
                 view.setSelectionMode(
                     QtWidgets.QAbstractItemView.ExtendedSelection)
@@ -75,8 +125,21 @@ class DataExtractor(QtWidgets.QDialog):
             expt_dirs = dialog.selectedFiles()
             return expt_dirs
 
-
     def getMatchingFiles(self, expt_dirs):
+        """
+        Get files matching self.target within selected directories.
+
+        Parameters
+        ----------
+        expt_dirs : list
+            list of strings containing paths to directories containing data
+
+        Returns
+        -------
+        dataset : list
+            list of strings containing paths to
+            actual data files within expt_dirs
+        """
         self.pathRoot = os.path.dirname(expt_dirs[0])
         dataset = []
         for root in expt_dirs:
@@ -87,11 +150,21 @@ class DataExtractor(QtWidgets.QDialog):
         return dataset
 
     def populateTree(self, dataset):
+        """
+        Display files in a selection gui allowing user to pick relvant files.
+
+        The path shown in the selection tree will be altered by self.data_depth
+
+        Parameters
+        ----------
+        dataset : list
+            list of strings containing paths to data files
+        """
         tree_root = (None, {})
         for f in dataset:
             # Append (../*n) to move folder depth desired number of levels
             # Named folder is the folder you want displayed when choosing data
-            file_depth_modifier = '/'.join(['..']*self.data_depth)
+            file_depth_modifier = '/'.join(['..'] * self.data_depth)
             named_folder = os.path.abspath(os.path.join(f, file_depth_modifier))
             sample_str = os.path.relpath(named_folder,
                                          os.path.dirname(self.pathRoot))
@@ -105,11 +178,10 @@ class DataExtractor(QtWidgets.QDialog):
                         # Changing setText to zero keeps name in 'one' column
                         node[1][p][0].setText(0, p)
 
-                        if i == len(parts)-1: # If bottom item
+                        if i == len(parts) - 1:  # If bottom item
                             node[1][p][0].setCheckState(0, Qt.Unchecked)
                             node[1][p][0].setFlags(node[1][p][0].flags() | Qt.ItemIsEditable)
                     node = node[1][p]
-
 
         # Add top level items
         for node in tree_root[1].values():
@@ -119,6 +191,7 @@ class DataExtractor(QtWidgets.QDialog):
             self.treeWidget.resizeColumnToContents(n)
 
     def initLayout(self):
+        """Initialize layout of GUI."""
         # create other buttons
         self.buttonBox = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok | QtWidgets.QDialogButtonBox.Cancel)
         self.buttonBox.accepted.connect(self.accept)
@@ -128,12 +201,12 @@ class DataExtractor(QtWidgets.QDialog):
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.addWidget(self.buttonBox, 0, 0)
 
-
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.treeWidget)
         self.layout.addLayout(self.gridLayout)
 
     def getParentPath(self, item):
+        """Get parent path of item."""
         def getParent(item, outstring):
             if item.parent() is None:
                 return outstring
@@ -143,6 +216,7 @@ class DataExtractor(QtWidgets.QDialog):
         return output
 
     def accept(self):
+        """Redefine accept button."""
         file_list = []
         data_labels = []
         for item in self.treeWidget.findItems("", Qt.MatchContains | Qt.MatchRecursive):
@@ -156,13 +230,14 @@ class DataExtractor(QtWidgets.QDialog):
         super(DataExtractor, self).accept()
 
     def cancel(self):
-        '''restarts init at picking starting directory'''
+        """Restart init at picking starting directory."""
         self.treeWidget.clear()
         expt_dirs = self.handleChooseDirectories()
         # function populates tree items based on matching criteria specified
         self.populateTree(self.getMatchingFiles(expt_dirs))
 
     def get_output(self):
+        """Return output of object."""
         return self._output
 
 
@@ -170,6 +245,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     main = DataExtractor()
-    #main.move(app.desktop().screen().rect().center() - main.rect().center())
+    # main.move(app.desktop().screen().rect().center() - main.rect().center())
     main.show()
     sys.exit(app.exec())

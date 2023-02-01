@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Oct 14 17:30:17 2021
 
@@ -45,15 +44,15 @@ class GC_Connector():
         print('Loading', ctrl_file)
         self.load_ctrl_file()  # Sends ctrl file to GC, updates object w/ new data
         self.sample_set_size = 4 # default value, can change in main .py script per experiment
-       
+
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
-    
+
     # Setting sample rate changes when connected to GC
     @property
     def sample_rate(self):
         return self._sample_rate
-    
+
     @sample_rate.setter
     def sample_rate(self, value):
         if value >= self._min_sample_rate:
@@ -76,7 +75,7 @@ class GC_Connector():
                 elif re.search('<CHANNEL 1 POSTRUN REPEAT>=', line):
                     line = ('<CHANNEL 1 POSTRUN REPEAT>='
                             + str(self.sample_set_size) + '\n')
-                    
+
                 elif re.search('<CHANNEL 1 FILE>=', line):
                     line = ('<CHANNEL 1 FILE>=FID\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE DATA>=', line):
@@ -87,7 +86,7 @@ class GC_Connector():
                     line = ('<CHANNEL 1 POSTRUN AUTOINCREMENT>=1\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE IMAGE>=', line):
                     line = ('<CHANNEL 1 POSTRUN SAVE IMAGE>=1\n')
-                    
+
                 elif re.search('<CHANNEL 2 FILE>=', line):
                     line = ('<CHANNEL 2 FILE>=TCD\n')
                 elif re.search('<CHANNEL 2 POSTRUN SAVE DATA>=', line):
@@ -105,7 +104,7 @@ class GC_Connector():
 
         print(self.ctrl_file)
         self.load_ctrl_file()
-    
+
     def load_ctrl_file(self):
         '''Loads a new ctrl file to the GC based on .ctrl_file atr'''
         print('Loading Control File...')
@@ -123,8 +122,8 @@ class GC_Connector():
                 break
         time.sleep(5)  # I think peaksimple is cranky when rushed
         self.read_ctrl_file()
-        
-        
+
+
     def read_ctrl_file(self):
         '''
         Reads loaded control file and updates object with values from file
@@ -146,13 +145,13 @@ class GC_Connector():
                     post_time = int(line.split('=')[-1].strip(' \n'))
 
             self._min_sample_rate = (run_time+post_time)/1000
-            
+
             if self.sample_rate < self.min_sample_rate:
                 self.sample_rate = self.min_sample_rate
-            
+
     def is_running(self, max_tries=3):
         '''Tries to connect to peak simple max_tries times'''
-        
+
         for attempt in range(1, max_tries+1):
             try:
                 result = self.peaksimple.IsRunning(1)
@@ -167,10 +166,10 @@ class GC_Connector():
                 else:
                     print('Cannot Resolve')
                     raise e
-    
+
     def connect(self, max_tries=1):
         '''Tries to connect to peak simple max_tries times'''
-        
+
         for attempt in range(1, max_tries+1):
             try:
                 self.peaksimple.Connect()
@@ -181,16 +180,16 @@ class GC_Connector():
                     print('Connection error. Retrying...')
                     time.sleep(1)
                     continue
-                else: 
+                else:
                     print('Cannot Connect :(')
                     raise Peaksimple.ConnectionFailedException
-                    
+
     def disconnect(self, max_tries=1):
         '''Tries to connect to peak simple max_tries times'''
         try:
             self.peaksimple.Disconnect()
             print('Disconnected!')
-           
+
         except Exception as e:
             print(e)
 

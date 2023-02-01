@@ -1,28 +1,15 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jan  6 12:11:00 2023
 
 @author: brile
 """
 import os
-import sys
 
-import analysis_tools
+from photoreactor.data_analysis import analysis_tools
+from photoreactor.equipment.experiment_control import Experiment
 import matplotlib.pyplot as plt
 import pandas as pd
 from PyQt5 import QtWidgets
-
-# getting the name of the directory where the this file is present.
-current = os.path.dirname(os.path.realpath(__file__))
-
-# Getting the parent directory name where the current directory is present.
-parent = os.path.dirname(current)
-
-# adding the parent directory to the sys.path.
-sys.path.append(parent)
-
-from experiment_control import Experiment
-
 
 def plot_expts_in_folder(main_dir, calDF, target_molecule, mass_bal, reactant, figsize):
     kwargs = {'calDF': calDF,

@@ -3,9 +3,8 @@ matplotlib>=3.5.3
 mcculw>=1.0.0
 numpy>=1.23.3
 pandas>=1.4.4
-psutil>=5.9.0?
+psutil>=5.9.0
 pycaw>=20191226
-pyqt>=5.9.2
 pyqtgraph>=0.11.0
 scipy>=1.9.1
 pyserial>=3.5
@@ -14,3 +13,7 @@ comtypes>=1.1.10
 pythonnet>=2.5.2
 pywin32>=302
 pywatlow>=0.1.3
+PyQt5
+
+[conda-env]
+pyqt<6,>=5

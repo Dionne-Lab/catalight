@@ -9,13 +9,27 @@ Here I am, documenting things.
 
 .. toctree::
    :maxdepth: 5
-   :caption: Contents:
-
-   intro
-   user_guide
-   examples
-   photoreactor
+   :caption: Introduction:
    
+   intro
+
+.. toctree::
+   :maxdepth: 5
+   :caption: User Guide:
+   
+   user_guide
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Examples:
+   
+   examples
+
+.. toctree::
+   :maxdepth: 5
+   :caption: Documentation:
+   
+   photoreactor
 
 Indices and tables
 ==================

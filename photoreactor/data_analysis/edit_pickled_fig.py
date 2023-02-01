@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Tue Jul  5 10:53:29 2022
 
@@ -19,4 +18,4 @@ if __name__ == "__main__":
     fig = pickle.load(open(fig_path, 'rb'))
     ax = fig.get_axes()[0]
     ax.set_xlim([-15, 315])
-    fig.show() # Show the figure, edit it, etc.!
+    fig.show()  # Show the figure, edit it, etc.!

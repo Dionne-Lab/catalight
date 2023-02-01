@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jan  7 16:59:01 2022
 Study control file: test main script before the development of a fully integrated GUI
@@ -11,11 +10,11 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.diode_laser.diode_control import Diode_Laser
-from equipment.harrick_watlow.heater_control import Heater
-from equipment.sri_gc.gc_control import GC_Connector
-from experiment_control import Experiment
+from photoreactor.equipment.alicat_MFC.gas_control import Gas_System
+from photoreactor.equipment.diode_laser.diode_control import Diode_Laser
+from photoreactor.equipment.harrick_watlow.heater_control import Heater
+from photoreactor.equipment.sri_gc.gc_control import GC_Connector
+from photoreactor.equipment.experiment_control import Experiment
 
 
 def initialize_equipment():
@@ -68,8 +67,8 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
     os.makedirs(main_fol, exist_ok=True)
     os.makedirs(p_sweep_path, exist_ok=True)
-    
-    # #example code block for setting experimental conditions 
+
+    # #example code block for setting experimental conditions
     # reduction = Experiment(eqpt_list) # edit variable name on left ("reduction") to rename experiment
     # reduction.sample_set_size = 12 # number of GC runs to run per experimental condition
     # reduction.expt_type = 'temp_sweep' # experiment type for what condition you're varying
@@ -124,7 +123,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt3.tot_flow = [10]
     # expt3.sample_name = sample_name
     # expt3.create_dirs(os.path.join(main_fol, 'run9_200C_450nm_900mW_stability'))
-    
+
     # expt4 = Experiment(eqpt_list)
     # expt4.expt_type = 'comp_sweep'
     # expt4.sample_set_size = 4
@@ -137,7 +136,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt4.tot_flow = [10]
     # expt4.sample_name = sample_name
     # expt4.create_dirs(os.path.join(main_fol, 'run9_698K_gascompsweep'))
-    
+
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
     # expt5.sample_set_size = 4
@@ -148,7 +147,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt5.sample_name = sample_name
     # expt5.power = [0]
     # expt5.create_dirs(os.path.join(main_fol, 'test13_575-700K_7H2_1CO2_520nm_0mW'))
-   
+
     # expt3 = Experiment(eqpt_list)
     # expt3.expt_type = 'flow_sweep'
     # expt3.sample_set_size = 10
@@ -159,7 +158,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt3.sample_name = sample_name
     # expt3.power = [0]
     # expt3.create_dirs(os.path.join(main_fol, 'run11_698K_flowsweep'))
-    
+
     # expt4 = Experiment(eqpt_list)
     # expt4.expt_type = 'comp_sweep'
     # expt4.temp = [373]
@@ -170,7 +169,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt4.tot_flow = [10]
     # expt4.sample_name = sample_name
     # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
-   
+
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
     # expt5.sample_set_size = 4
@@ -181,7 +180,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # expt5.power = [0]
     # expt5.sample_name = sample_name
     # expt5.create_dirs(os.path.join(main_fol, 'expt3_fulltempsweep_C2H2'))
-    
+
     # eqpt_list[0].sample_set_size = 4
     # expt3 = Experiment(eqpt_list)
     # expt3.expt_type = 'temp_sweep'
@@ -214,7 +213,7 @@ if __name__ == "__main__": #edit this part and below which will only execute whe
     # stability_test.tot_flow = [10]
     # stability_test.sample_name = sample_name
     # stability_test.create_dirs(main_fol)
-    
+
     #always run these two lines
     run_study([expt2], eqpt_list) #type in the square brackets which experiments to run (in order), based on what you named them above
     shut_down(eqpt_list)

@@ -1,26 +1,13 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Feb  3 09:25:10 2022
 
-@author: brile
+@author: Briley Bourgeois
 """
 import os
-import pdb
-import sys
 
-import analysis_tools
 import pandas as pd
-
-# getting the name of the directory where the this file is present.
-current = os.path.dirname(os.path.realpath(__file__))
-
-# Getting the parent directory name where the current directory is present.
-parent = os.path.dirname(current)
-
-# adding the parent directory to the sys.path.
-sys.path.append(parent)
-
-from experiment_control import Experiment
+from photoreactor.data_analysis import analysis_tools
+from photoreactor.equipment.experiment_control import Experiment
 
 if __name__ == "__main__":
 
