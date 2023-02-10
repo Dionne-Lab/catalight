@@ -241,6 +241,7 @@ class Experiment:
             self.sample_name = data[3]
             self.temp = literal_eval(data[4])
             self.power = literal_eval(data[5])
+            # TODO this looks like an error!!
             self.gas_type = [data[6], data[7], data[8]]
             self.gas_comp = literal_eval(data[9])
             self.tot_flow = literal_eval(data[10])
@@ -523,6 +524,8 @@ class Experiment:
 
             ## This sets path for data storage according to expt type
             if self._ind_var == 'gas_comp':  # merge gas_comp into name
+                print(step)
+                print(self.gas_type)
                 step_str = '_'.join(
                     [str(m)+n for m, n in zip(step, self.gas_type)])
                 path = os.path.join(self.data_path,
