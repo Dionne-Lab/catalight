@@ -21,33 +21,39 @@ class Experiment:
     """
     Object containing all information necessary to run a particular experiment.
 
-    Attributes
+    The experiment class is the center piece of projectname. This class
+    contains several type checked properties that should be updated with
+    relevant experimental parameters by the user. The user sets a desired
+    experimental procedure from the list provided in :py:attr:`expt_list`
+
+    Most importantly, equipment object can be passed to each instance of
+    Experiment and used to run the :py:meth:`run_experiment` method to control
+    the hardware components.
+
+    Parameters
     ----------
-        _expt_list: Pandas Dataframe
-            This class attribute defines the possible experiments. This is an
-            important part of the class and should be altered with caution
+    eqpt_list: list of objects, optional
+        List of equipment objects. Calls :py:meth:`update_eqpt_list`,
+        if provided.
+        Order of list should be:
+        (:py:class:`~photoreactor.equipment.sri_gc.gc_control.GC_Connector`,
+        :class:`~photoreactor.equipment.diode_laser.diode_control.Diode_Laser`,
+        :class:`~photoreactor.equipment.alicat_MFC.gas_control.Gas_System`,
+        :class:`~photoreactor.equipment.harrick_watlow.heater_control.Heater`)
     """
 
     def __init__(self, eqpt_list=False):
-        """
-        Init experiment object.
-
-        Parameters
-        ----------
-        eqpt_list: list of objects, optional
-            List of equipment objects. Calls update_eqpt_list is provided.
-            Order of list should be:
-            (gc controller, laser controller, gas controler, heater)
-        """
+        """Init experiment object."""
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
+        # noqa to suppress extra spaces PEP violation. Done for clarity.
         self._expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', False,    'K'],
-             ['power_sweep',    'power', False,   'mW'],
-             ['comp_sweep',  'gas_comp', False, 'frac'],
-             ['flow_sweep',  'tot_flow', False, 'sccm'],
-             ['calibration', 'gas_comp', False,  'ppm'],
-             ['stability_test',  'temp', False,  'min']],
+            [['temp_sweep',      'temp', False,    'K'],  #noqa
+             ['power_sweep',    'power', False,   'mW'],  #noqa
+             ['comp_sweep',  'gas_comp', False, 'frac'],  #noqa
+             ['flow_sweep',  'tot_flow', False, 'sccm'],  #noqa
+             ['calibration', 'gas_comp', False,  'ppm'],  #noqa
+             ['stability_test',  'temp', False,  'min']], #noqa
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
@@ -55,7 +61,7 @@ class Experiment:
 
         # These are just random default values.
         # these should all be numpy arrays and floats
-        self._temp = [273.0]
+        self._temp = [273.0]  #: initial value 273
         self._power = [0.0]
         self._tot_flow = [0.0]  # This can't be larger than 50
         # Every row should add to one
@@ -82,15 +88,83 @@ class Experiment:
 
     # These setter functions apply rules for how certain properties can be set
     def _str_setter(attr):
-        """this is the setter functions for strings"""
-        def set_any(self, value):
+        """
+        Setter function for properties with str values.
 
+        If type checking becomes necessary for string inputs,
+        it can be done here
+
+        Parameters
+        ----------
+        attr : str
+            str for non-public attribute to change value of
+
+        Returns
+        -------
+        set_any : function
+            update function for setting string properties
+        """
+
+        def set_any(self, value):
+            """
+            Func to set value.
+
+            Parameters
+            ----------
+            value : :type:`str`
+                value to attempt update
+
+            Returns
+            -------
+            None.
+
+            """
             setattr(self, attr, value)
+
         return set_any
 
     def _num_setter(attr):
-        """this is the setter function for numbers"""
+        """
+        Setter function for numbers used to set checks on value changes.
+
+        Parameters
+        ----------
+        attr : `str`
+            str for non-public attribute to change value of
+
+        Raises
+        ------
+        AttributeError
+            Attribute error is raised when value entered doesn't match with
+            corresponding limits. These vary depending on attribute given.
+
+        Returns
+        -------
+        set_any : function
+            update function for setting string properties
+
+        """
+
         def set_any(self, value):
+            """
+            Setter function for numbers.
+
+            Converts np.ndarrays to list on call. Runs through value testing if
+            statements based on attr supplied. All values provided must be a
+            form of a list. Gas comp values must individually round to 1.
+            Total flow is currently hard coded to max at 350.
+
+            Parameters
+            ----------
+            value : list of float or numpy.ndarray
+                if np array is given, converts to list in beginning of func.
+
+            Raises
+            ------
+            AttributeError
+                Attribute error is raised when value entered doesn't match with
+                corresponding limits. These vary depending on attribute given.
+            """
             if isinstance(value, np.ndarray):
                 value = list(value)
 
@@ -98,6 +172,8 @@ class Experiment:
                 raise AttributeError(attr + ' must be list')
             elif (attr == '_tot_flow') & (np.max(value) > 350):
                 raise AttributeError('Total flow must be <= 350')
+                # TODO, update this value if gas_system is connected or turn
+                # into a class attribute.
             elif (attr == '_gas_comp'):
                 for composition in value:
                     if round(sum(composition), 6) != 1:
@@ -108,7 +184,7 @@ class Experiment:
         return set_any
 
     def _attr_getter(attr):
-        """This is the getter function :noindex:"""
+        """Getter function for all properties."""
 
         def get_any(self):
             return getattr(self, attr)
@@ -117,41 +193,49 @@ class Experiment:
     # Number Properties
     temp = property(fget=_attr_getter('_temp'),
                     fset=_num_setter('_temp'))
-    """temp : list of floats; one element if constant or multiple for sweep"""
+    """one element if constant or multiple for sweep (`list` of `floats`)"""
 
     power = property(fget=_attr_getter('_power'),
                      fset=_num_setter('_power'))
-    """power : list of floats; ''"""
+    """one element if constant or multiple for sweep (`list` of `floats`)"""
 
     tot_flow = property(fget=_attr_getter('_tot_flow'),
                         fset=_num_setter('_tot_flow'))
-    """tot_flow : list of floats; ''"""
+    """one element if constant or multiple for sweep (`list` of `floats`)"""
 
     gas_comp = property(fget=_attr_getter('_gas_comp'),
                         fset=_num_setter('_gas_comp'))
-    """gas_comp : list of list [[gas1, gas2, gas3],[...]]"""
+    """[[gas1, gas2, gas3],[...]] (`list` of `list` of `float`)"""
 
     # String Properties
     gas_type = property(fget=_attr_getter('_gas_type'),
                         fset=_str_setter('_gas_type'))
-    """gas_type : list of strings"""
+    """[gasA, gasB, gasC, ...]('list' of 'str')"""
 
     sample_name = property(fget=_attr_getter('_sample_name'),
                            fset=_str_setter('_sample_name'))
-    """sample_name : str; non-public attr for logging"""
+    """Name of sample for building save paths (`str`)"""
 
     # Read only properties
     date = property(lambda self: self._date)
-    """date : str; update w/ method. For logging"""
+    """Update w/ method. For logging (`str, read-only`)"""
+
     ind_var = property(lambda self: self._ind_var)
-    """ind_var : str; non-public for internal use"""
+    """Non-public for internal use (`str, read-only`)"""
+
     expt_name = property(lambda self: self._expt_name)
-    """expt_name : str; list fixed variables for expt"""
+    """List fixed variables for expt (`str, read-only`)"""
+
     results_path = property(lambda self: self._results_path)
-    """results_path : str; save location for analysis, defined relative to log"""
+    """Save location for analysis, defined relative to log (`str, read-only`)"""
+
     data_path = property(lambda self: self._data_path)
-    """data_path : str; save location for raw data, defined relative to log"""
+    """Save location for raw data, defined relative to log (`str, read-only`)"""
+
     expt_list = property(lambda self: self._expt_list)
+    """This class attribute defines the possible experiments.
+    This is an important part of the class and should be altered with caution
+    (`pandas.DataFrame`)"""
 
     # Setting sample rate changes when connected to GC
     @property
@@ -190,8 +274,16 @@ class Experiment:
 
     @property
     def expt_type(self):
-        """expt_type : str
-            allowable sweep type. New additions need to be coded"""
+        """
+        Define the desired experimental procedure selected from _expt_list.
+
+        A key property directing much of the behavior of the class.For example,
+        the run_experiment() method is guided by the expt_type provided. New
+        values must be entered into the _expt_list attribute and the
+        appropriate class methods must be editted to account for new
+        experimental capabilities.
+        Converts 'Active Status' in _expt_list to True.
+        """
         return self._expt_type
 
     @expt_type.setter
@@ -350,7 +442,7 @@ class Experiment:
 
         Raises
         ------
-        AttributeError: Throws error if expt_type is undefined
+        AttributeError: Throws error if :attr:`expt_type` is undefined
 
         Returns
         -------
@@ -406,13 +498,13 @@ class Experiment:
 
         Returns
         -------
-        fig : matplotlib figure
+        fig : matplotlib.pyplot.figure
             figure object for experimental sweep. Two subplots for full and
             zoomed in versions. There is a hidden single subplot in background
             used for making shared axis titles
-        ax1 : matplotlib axis
+        ax1 : matplotlib.pyplot.axis
             top plot showing full experimental sweep
-        ax2 : matplotlib axis
+        ax2 : matplotlib.pyplot.axis
             bottom plot showing zoomed in version of experimental sweep
         run_time : float
             Calculate total time to run experiment
@@ -532,7 +624,10 @@ class Experiment:
         Parameters
         ----------
         eqpt_list: list of objects
-            (gc controller, laser controller, gas controler, heater)
+            (:py:class:`~photoreactor.equipment.sri_gc.gc_control.GC_Connector`,
+            :class:`~photoreactor.equipment.diode_laser.diode_control.Diode_Laser`,
+            :class:`~photoreactor.equipment.alicat_MFC.gas_control.Gas_System`,
+            :class:`~photoreactor.equipment.harrick_watlow.heater_control.Heater`)
         """
         # eqpt_list needs to be tuple
         self._gc_control = eqpt_list[0]

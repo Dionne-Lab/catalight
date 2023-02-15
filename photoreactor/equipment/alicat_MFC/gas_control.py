@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Feb 13 20:56:51 2022
+Created on Sun Feb 13 20:56:51 2022.
 
-@author: brile
-20221026 -- added mfcD as 4th flow controller. changed old mfcD to mfcE for flow meter
-AXD - edit lines 43-46
+@author: Briley Bourgeois
 """
-
 import os
 import time
 
@@ -14,15 +10,23 @@ import numpy as np
 import pandas as pd
 from alicat import FlowController, FlowMeter
 
-factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
-                  'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
-                  'N2', 'N2O', 'O2', 'C3H8', 'SF6', 'Xe']
 
 class Gas_System:
+    """MFC control."""
+
+    factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
+                      'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
+                      'N2', 'N2O', 'O2', 'C3H8', 'SF6', 'Xe']
+    #: Factory gas list saved to Alicat MFCs
+
     def __init__(self):
-        '''The user needs to update the address and COM ports for each mfc
+        """
+        Connect MFCs based on COM port and address. User needs to update.
+
+        The user needs to update the address and COM ports for each mfc
         based on their specific setup. This process can be assisted by using
-        the "connection_tester.py" file'''
+        the "connection_tester.py" file
+        """
         self.mfc_A = FlowController(port='COM6', address='A')
         self.mfc_B = FlowController(port='COM9', address='B')
         self.mfc_C = FlowController(port='COM8', address='C')
@@ -31,6 +35,19 @@ class Gas_System:
         self.is_busy = False
 
     def set_gasses(self, gas_list):
+        """
+        Update gas type to MFCs based on input list.
+
+        Parameters
+        ----------
+        gas_list : list of str
+            [gasA, gasB, gasC, gasD] Each must be within factory gasses.
+
+        Returns
+        -------
+        None.
+
+        """
         while self.is_busy:
             time.sleep(0)
 
@@ -42,14 +59,19 @@ class Gas_System:
         self.is_busy = False
 
     def set_flows(self, comp_list, tot_flow):
-        '''
-        sets the flow rate of all mfc based on a desired total flow
-        and the desired gas composition. also call set_gasE
+        """
+        Set flow rates based as fraction of tot_flow from comp_list.
+
+        Sets the flow rate of all mfc based on a desired total flow
+        and the desired gas composition. Also call set_gasE
         TODO: add limit for tot_flow for each MFC
+
         Parameters
         ----------
-        comp_list : list of gas fraction for mfc [a, b, c]. should add to one
-        tot_flow : total flow to send
+        comp_list : list of float
+            list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
+        tot_flow : float
+            Total flow to send.
 
         Raises
         ------
@@ -60,22 +82,34 @@ class Gas_System:
         -------
         None.
 
-        '''
+        """
         comp_list = self.check_comp_total(comp_list)
         while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
-        self.mfc_A.set_flow_rate(float(comp_list[0]*tot_flow))
-        self.mfc_B.set_flow_rate(float(comp_list[1]*tot_flow))
-        self.mfc_C.set_flow_rate(float(comp_list[2]*tot_flow))
-        self.mfc_D.set_flow_rate(float(comp_list[3]*tot_flow))
+        self.mfc_A.set_flow_rate(float(comp_list[0] * tot_flow))
+        self.mfc_B.set_flow_rate(float(comp_list[1] * tot_flow))
+        self.mfc_C.set_flow_rate(float(comp_list[2] * tot_flow))
+        self.mfc_D.set_flow_rate(float(comp_list[3] * tot_flow))
         self.is_busy = False
 
         self.set_gasE(comp_list)
 
     def set_gasE(self, comp_list):
+        """
+        Set gas E as a mixture of input gasses based on comp. and types.
 
+        Parameters
+        ----------
+        comp_list : list of float
+            list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
+
+        Returns
+        -------
+        None.
+
+        """
         comp_list = self.check_comp_total(comp_list)
 
         while self.is_busy:
@@ -86,13 +120,13 @@ class Gas_System:
         for mfc in [self.mfc_A, self.mfc_B, self.mfc_C, self.mfc_D]:
             gas_list.append(mfc.get()['gas'])
         # convert to percents, make dict, drop zero values
-        percents = np.array(comp_list, dtype=float)*100
+        percents = np.array(comp_list, dtype=float) * 100
         gas_dict = dict(zip(gas_list, percents))
-        gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
+        gas_dict = {x: y for x, y in gas_dict.items() if y != 0}
 
         # Uses create_mix method to write to gas slot 236,
-        # first custom gas slot on MFC
-        if len(gas_dict)>1: # if more than 1 gas, creates mix
+        # First custom gas slot on MFC
+        if len(gas_dict) > 1:  # if more than 1 gas, creates mix
             self.mfc_E.create_mix(mix_no=236, name='output',
                                   gases=gas_dict)
             self.mfc_E.set_gas(236)
@@ -101,8 +135,28 @@ class Gas_System:
         self.is_busy = False
 
     def check_comp_total(self, comp_list):
-        if sum(comp_list) == 100: # convert % to fraction
-            comp_list[:] = [x/100 for x in comp_list]
+        """
+        Takes in gas composition list, checks sum, returns as fractions.
+
+        Parameters
+        ----------
+        comp_list : list of float or int
+            Composition list in either percents or fractions.
+
+        Raises
+        ------
+        AttributeError
+            Composition list doesn't sum to 1 or 100
+
+        Returns
+        -------
+        comp_list : list of float
+            Updated composition list as fractions
+
+        """
+
+        if sum(comp_list) == 100:  # convert % to fraction
+            comp_list[:] = [x / 100 for x in comp_list]
 
         if (sum(comp_list) != 1) and (sum(comp_list) != 0):
             raise AttributeError('Gas comp. must be list of list == 1')
@@ -110,7 +164,7 @@ class Gas_System:
         return comp_list
 
     def print_flows(self):
-        '''prints mass flow rates and gas type for each MFC to console'''
+        """Print mass flow rates and gas type for each MFC to console."""
         while self.is_busy:
             time.sleep(0)
 
@@ -128,13 +182,14 @@ class Gas_System:
         self.is_busy = False
 
     def print_details(self):
-        '''
-        Runs mfc.get() for each mfc, printing full status details
+        """
+        Run mfc.get() for each mfc, printing full status details.
+
         Returns
         -------
         None.
 
-        '''
+        """
         while self.is_busy:
             time.sleep(0)
 
@@ -147,12 +202,14 @@ class Gas_System:
         self.is_busy = False
 
     def read_flows(self):
-        '''
-        Returns full details of each mfc condition arranged in a dict
+        """
+        Return full details of each mfc condition arranged in a dict.
+
         Returns
         -------
-        Nested Dictionary
-        '''
+        flow_dict : dict of dict
+            {mfc: mfc.get()}
+        """
         while self.is_busy:
             time.sleep(0)
 
@@ -166,7 +223,7 @@ class Gas_System:
         return(flow_dict)
 
     def shut_down(self):
-        '''Sets MFC with Ar or N2 running to 1 sccm and others to 0'''
+        """Set MFC with Ar or N2 running to 1 sccm and others to 0."""
         while self.is_busy:
             time.sleep(0)
 
@@ -180,7 +237,7 @@ class Gas_System:
         self.is_busy = False
 
     def disconnect(self):
-        '''Sets MFC with Ar/N2 to 1sccm, others to 0, and closes connections'''
+        """Call Gas_System.shut_down then disconnect from MFCs."""
         self.shut_down()
         while self.is_busy:
             time.sleep(0)
@@ -194,56 +251,94 @@ class Gas_System:
         del self
 
     def set_calibration_gas(self, mfc, calDF, fill_gas='Ar'):
-        '''Sets a custom gas mixture for the mfc of choice, typically for
-        calibration gas. This function uses the standard calDF format utilized
+        """
+        Sets a custom gas mixture for the mfc of choice.
+
+        Typically for calibration gas. Creates a gas mixture based on the
+        largest 5 components calgas. Sets new mixture to slot 237 as name
+        'CalGas'. This function uses the standard calDF format utilized
         elsewhere in this code. Please consult the alicat gas composer website
-        for the official list of possible gasses'''
-        percents = calDF['ppm']/10000
+        for the official list of possible gasses.
+
+        Parameters
+        ----------
+        mfc : alicat.FlowController | alicat.FlowMeter
+            Mass flow controller or meter to update with calgas
+        calDF : pandas.DataFrame
+            Formated DataFrame containing gc calibration data.
+            Specific to control file used!
+            Format [ChemID, slope, intercept, start, end]
+        fill_gas : str
+            Inert gas dilutant for calibration gas tank. The default is 'Ar'.
+        """
+        percents = calDF['ppm'] / 10000
         percents.index = percents.index.map(lambda x: x.split('_')[0])
         percents = percents[~percents.index.duplicated()]
         percents[fill_gas] = 100 - percents.sum()
         percents = percents.sort_values(ascending=False)
-        new_idx = pd.DataFrame([False]*len(percents), index=percents.index)
+        new_idx = pd.DataFrame([False] * len(percents), index=percents.index)
         for chemical in percents.index:
-            new_idx.loc[chemical] = chemical in factory_gasses
+            new_idx.loc[chemical] = chemical in Gas_System.factory_gasses
         percents = percents[new_idx[0]]
         mfc.create_mix(mix_no=237, name='CalGas', gases=percents[0:5].to_dict())
 
-    def test_pressure(self, path):
+    def test_pressure(self, path, num_samples=5):
+        """
+        Ramp flot rate, measure pressure, plot results, save.
+
+        Ramp flow rate from 5-50 sccm in steps of 5, measure pressure every
+        minute for num_samples times. Waits 1 min before first collection.
+        Plots results on yyplot w/ time on x-axis, and pressure and flow on y.
+
+        Parameters
+        ----------
+        path : str
+            Path to folder to save the results in.
+        num_samples : int
+            Number of samples to collect at each flow rate. Default is 5.
+        """
         print('Testing Pressure Build-up...')
-        output = pd.DataFrame(columns=['time', 'setpoint', 'flow rate', 'pressure'])
+        output = pd.DataFrame(columns=['time', 'setpoint',
+                                       'flow rate', 'pressure'])
         mfc_list = [self.mfc_A, self.mfc_B, self.mfc_C, self.mfc_D]
         sample_num = 0
+        # Last MFC registered as inert gas gets used as tester.
         for mfc in mfc_list:
             if mfc.get()['gas'] in ['Ar', 'N2']:
                 test_mfc = mfc
             else:
                 mfc.set_flow_rate(0.0)
+
         self.mfc_E.set_gas(test_mfc.get()['gas'])
         print('Starting Conditions:')
         self.print_flows()
         start_time = time.time()
+        # Loop through flow rate, record reading, save to output
         for setpoint in range(5, 51, 5):
             test_mfc.set_flow_rate(setpoint)
-            for sample in range(0,5):
+            for sample in range(0, num_samples):
+                time.sleep(60)
                 pressure = test_mfc.get()['pressure']
                 flow_rate = self.mfc_E.get()['mass_flow']
-                reading = [(time.time()-start_time)/60,
+                reading = [(time.time() - start_time) / 60,
                            setpoint, flow_rate, pressure]
                 print('time: %4.1f (min) setpoint: %4.2f (sccm) '
-                      'flow rate: %4.2f (sccm) pressure: %4.2f (psia)' % tuple(reading))
+                      'flow rate: %4.2f (sccm) pressure: %4.2f (psia)'
+                      % tuple(reading))
                 output.loc[sample_num] = reading
-                time.sleep(60)
                 sample_num += 1
-
-        ax1 = output.plot(x='time', y='pressure', ylabel='Pressure (psia)', style='--ok')
+        # Plot Results
+        ax1 = output.plot(x='time', y='pressure',
+                          ylabel='Pressure (psia)', style='--ok')
         ax2 = ax1.twinx()
         ax2.spines['right'].set_position(('axes', 1.0))
         output.plot(ax=ax2, x='time',
                     y=['setpoint', 'flow rate'], ylabel='Flow Rate (sccm)')
         fig = ax1.get_figure()
+        # Save Results
         fig.savefig(os.path.join(path, 'flow_test.svg'), format='svg')
         output.to_csv(os.path.join(path, 'flow_test.csv'))
+
 
 if __name__ == "__main__":
     gas_controller = Gas_System()

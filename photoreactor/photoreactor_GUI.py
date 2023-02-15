@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
     # -------------------
     def add_expt(self):
         """Create a new experiment object and add it to GUI."""
-        item = QListWidgetItem('Bob\'s your uncle', self.listWidget)
+        item = QListWidgetItem('Undefined Experiment', self.listWidget)
         expt = Experiment()
         item.setData(Qt.UserRole, expt)
 
@@ -359,9 +359,9 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        spinboxes : list of QSpinBoxes
+        spinboxes : list of PyQt5.QtWidgets.QSpinBoxes
             spinboxes to sum
-        qlabel : QLabel
+        qlabel : PyQt5.QtWidgets.QLabel
             qlabel to write to
 
         Returns
@@ -572,7 +572,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-            expt : photoreactor.Experiment
+            expt : photoreactor.equipment.Experiment
                 Experiment object containing the expt_type to be analyzed
         """
         # only actually updates ind var if number check out
@@ -746,7 +746,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        expt : photoreactor.Experiment, optional
+        expt : photoreactor.equipment.experiment_control.Experiment, optional
             Updates plot with contents of experiment if supplied.
             Scrubs plot if expt=None. The default is None.
         """

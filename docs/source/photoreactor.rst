@@ -7,7 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
-   photoreactor.data_analysis
+   photoreactor.analysis
    photoreactor.equipment
 
 Submodules

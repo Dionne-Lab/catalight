@@ -26,21 +26,21 @@ class GCData:
         filepath where data is stored (.ASC file)
     timestamp : (float)
         time since the epoch in seconds
-    rawdata : pandas dataframe
+    rawdata : pandas.DataFrame
         contains time and signal values from GC run
-    time : numpy array
+    time : numpy.ndarray
         np array version of time axis from rawdata (in minutes)
-    signal : numpy array
+    signal : numpy.ndarray
         np array version of time axis from rawdata.
         If basecorrect=True, it will be baseline
         corrected using baseline_correct()
-    apex_ind : numppy array
+    apex_ind : numppy.ndarray
         indices of all peaks identified by apex_inds()
     numpeaks : int
         length of apex_ind
-    lind : numpy array
+    lind : numpy.ndarray
         indices of leftmost bound for integration for each peak identified
-    rind : numpy array
+    rind : numpy.ndarray
         indices of rightmost bound for integration for each peak identified
     """
 
@@ -54,7 +54,7 @@ class GCData:
         ----------
         filepath : str
             full path to the acsii file
-        basecorrect : Bool
+        basecorrect : bool
             set basecorrect to True if you want correction, default is false
         """
         self.filepath = filepath
@@ -77,7 +77,7 @@ class GCData:
 
         Returns
         -------
-        pandas dataframe
+        pandas.DataFrame
             containing time (min) and signal (arb units)
         """
         with open(self.filepath, 'r') as f:
@@ -127,7 +127,7 @@ class GCData:
 
         Returns
         -------
-        Numpy array
+        numpy.ndarray
             GC signal with baseline corrected
         """
         self.signal = np.asarray(self.rawdata['Signal'])
@@ -146,7 +146,7 @@ class GCData:
 
         Returns
         -------
-        Numpy array
+        numpy.ndarray
             All peak locations (as integer indices NOT times)
         """
         apex_ind, _ = scisig.find_peaks(self.signal, prominence=4)
@@ -162,9 +162,9 @@ class GCData:
 
         Returns
         -------
-        left index : Numpy Array of int
+        left index : numpy.ndarray of int
             Left bounds of integration.
-        right index : Numpy Array of int
+        right index : numpy.ndrray of int
             Right bounds of integration.
 
         """
@@ -264,12 +264,12 @@ class GCData:
 
         Parameters
         ----------
-        calDF: Pandas DataFrame
+        calDF: pandas.DataFrame
             Calibration values by chemical ID
 
         Returns
         -------
-        Pandas Series
+        pandas.Series
             Concentrations for each peak in apex_ind, given in ppm
         Notes
         -----
@@ -372,7 +372,7 @@ class GCData:
 
         Parameters
         ----------
-        calDF: Pandas DataFrame
+        calDF: pandas.DataFrame
             Calibration values by chemical ID
         counts: float
             Raw integrated counts determined by integrate_peaks()
