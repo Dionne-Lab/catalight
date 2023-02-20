@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>﻿photoreactor.analysis.gcdata.GCData &mdash; photoreactor 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="photoreactor.analysis.make_empty_cal_expt" href="photoreactor.analysis.make_empty_cal_expt.html" />
+    <link rel="prev" title="photoreactor.analysis.gcdata" href="photoreactor.analysis.gcdata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            photoreactor
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to projectname!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#installation-instructions">Installation instructions:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#how-it-works">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#data-analysis">Data Analysis:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Providing feedback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#writing-documentation">Writing Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="photoreactor.html">﻿photoreactor</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="photoreactor.analysis.html">photoreactor.analysis</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.chromatogram_scanner_gui.html">photoreactor.analysis.chromatogram_scanner_gui</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="photoreactor.analysis.gcdata.html">photoreactor.analysis.gcdata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.make_empty_cal_expt.html">photoreactor.analysis.make_empty_cal_expt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.plotting.html">photoreactor.analysis.plotting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.run_calibration.html">photoreactor.analysis.run_calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.run_change_xdata.html">photoreactor.analysis.run_change_xdata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.run_initial_analysis.html">photoreactor.analysis.run_initial_analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.run_plot_chromatograms_stacked.html">photoreactor.analysis.run_plot_chromatograms_stacked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.run_plot_comparison.html">photoreactor.analysis.run_plot_comparison</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.tools.html">photoreactor.analysis.tools</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.analysis.user_inputs.html">photoreactor.analysis.user_inputs</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor.equipment.html">photoreactor.equipment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor.photoreactor_GUI.html">photoreactor.photoreactor_GUI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">photoreactor</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.html">﻿photoreactor</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.analysis.html">photoreactor.analysis</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.analysis.gcdata.html">photoreactor.analysis.gcdata</a></li>
+      <li class="breadcrumb-item active">﻿photoreactor.analysis.gcdata.GCData</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/photoreactor.analysis.gcdata.GCData.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="photoreactor-analysis-gcdata-gcdata">
+<h1>﻿photoreactor.analysis.gcdata.GCData<a class="headerlink" href="#photoreactor-analysis-gcdata-gcdata" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photoreactor.analysis.gcdata.</span></span><span class="sig-name descname"><span class="pre">GCData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basecorrect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p class="linemarker linemarker-1">A class for processing/analyzing gas chromatograph data from an ASCII file.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.filepath" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-5">filepath where data is stored (.ASC file)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-7">(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.timestamp" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-11">time since the epoch in seconds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-13">(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.rawdata">
+<span class="sig-name descname"><span class="pre">rawdata</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.rawdata" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-17">contains time and signal values from GC run</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-19"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.DataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.time">
+<span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.time" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-23">np array version of time axis from rawdata (in minutes)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-25"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.signal">
+<span class="sig-name descname"><span class="pre">signal</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.signal" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-29">np array version of time axis from rawdata.
+If basecorrect=True, it will be baseline
+corrected using baseline_correct()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-33"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.apex_ind">
+<span class="sig-name descname"><span class="pre">apex_ind</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.apex_ind" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-37">indices of all peaks identified by apex_inds()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-39">numppy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.numpeaks">
+<span class="sig-name descname"><span class="pre">numpeaks</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.numpeaks" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-43">length of apex_ind</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-45"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.lind">
+<span class="sig-name descname"><span class="pre">lind</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.lind" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-49">indices of leftmost bound for integration for each peak identified</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-51"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.rind">
+<span class="sig-name descname"><span class="pre">rind</span></span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.rind" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-55">indices of rightmost bound for integration for each peak identified</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-57"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basecorrect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.__init__" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Initialize the class with the attributes filename and data.</p>
+<p class="linemarker linemarker-3">(which has been read from ASCII and is a pandas dataframe)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – full path to the acsii file</p></li>
+<li><p><strong>basecorrect</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – set basecorrect to True if you want correction, default is false</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.__init__" title="photoreactor.analysis.gcdata.GCData.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filepath[, basecorrect])</p></td>
+<td><p class="linemarker linemarker-1">Initialize the class with the attributes filename and data.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.apex_inds" title="photoreactor.analysis.gcdata.GCData.apex_inds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apex_inds</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Use scipy.signal.find_peaks to find peaks in signal.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.baseline_correction" title="photoreactor.analysis.gcdata.GCData.baseline_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">baseline_correction</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Get self.signal, output signal with background subtraction.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.convert_to_ppm" title="photoreactor.analysis.gcdata.GCData.convert_to_ppm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convert_to_ppm</span></code></a>(calDF, counts, chemID)</p></td>
+<td><p class="linemarker linemarker-1">Convert integrated raw counts into ppm based on calibration data.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.get_concentrations" title="photoreactor.analysis.gcdata.GCData.get_concentrations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_concentrations</span></code></a>(calDF)</p></td>
+<td><p class="linemarker linemarker-1">Return a Pandas series of chemical concentrations.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.get_run_number" title="photoreactor.analysis.gcdata.GCData.get_run_number"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_run_number</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Determine run number from filename.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.getrawdata" title="photoreactor.analysis.gcdata.GCData.getrawdata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getrawdata</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Read data from ASCII, returns pandas dataframe.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.integrate_peak" title="photoreactor.analysis.gcdata.GCData.integrate_peak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">integrate_peak</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Find the area under the peak using a trapezoidal method.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.integration_inds" title="photoreactor.analysis.gcdata.GCData.integration_inds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">integration_inds</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Find bounds of integration for apexes.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.analysis.gcdata.GCData.plot_integration" title="photoreactor.analysis.gcdata.GCData.plot_integration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_integration</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Plot the chromatogram with the peaks and indices indicated.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.apex_inds">
+<span class="sig-name descname"><span class="pre">apex_inds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.apex_inds" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Use scipy.signal.find_peaks to find peaks in signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All peak locations (as integer indices NOT times)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.baseline_correction">
+<span class="sig-name descname"><span class="pre">baseline_correction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.baseline_correction" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Get self.signal, output signal with background subtraction.</p>
+<p class="linemarker linemarker-3">Uses tophat filter, based on PyMassSpec/pyms/TopHat.py</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>GC signal with baseline corrected</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24)">numpy.ndarray</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.convert_to_ppm">
+<span class="sig-name descname"><span class="pre">convert_to_ppm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calDF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chemID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.convert_to_ppm" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Convert integrated raw counts into ppm based on calibration data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Calibration values by chemical ID</p></li>
+<li><p><strong>counts</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Raw integrated counts determined by integrate_peaks()</p></li>
+<li><p><strong>chemID</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Contains name of chemical from calDF to be converted to ppm</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>y</strong> – Counts for a single peak converted into ppm based on calDF</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.get_concentrations">
+<span class="sig-name descname"><span class="pre">get_concentrations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calDF</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.get_concentrations" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Return a Pandas series of chemical concentrations.</p>
+<p class="linemarker linemarker-3">Output has the same order as the calibration file chem IDs.
+Prints warning if zero molecules are detected or if peaks are found
+outside of those listed in calDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Calibration values by chemical ID</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Concentrations for each peak in apex_ind, given in ppm</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v1.5.3)">pandas.Series</a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p class="linemarker linemarker-15">Unknown peaks could be added to calibration dataframe for reference</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.get_run_number">
+<span class="sig-name descname"><span class="pre">get_run_number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.get_run_number" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Determine run number from filename.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>run_number</strong> – run number extracted from filename</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.getrawdata">
+<span class="sig-name descname"><span class="pre">getrawdata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.getrawdata" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Read data from ASCII, returns pandas dataframe.</p>
+<p class="linemarker linemarker-3">Uses Matthias Richter’s example code (translated from Matlab)
+to read GC .ASC files</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>containing time (min) and signal (arb units)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.DataFrame</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.integrate_peak">
+<span class="sig-name descname"><span class="pre">integrate_peak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.integrate_peak" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Find the area under the peak using a trapezoidal method.</p>
+<p class="linemarker linemarker-3">Calculate for each peak identified using bounds from integration_inds.
+Integrates peak trapezoidally in units of seconds*signalintensity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>counts</strong> – counts rounded using np.around()</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.int32</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.integration_inds">
+<span class="sig-name descname"><span class="pre">integration_inds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.integration_inds" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Find bounds of integration for apexes.</p>
+<p class="linemarker linemarker-3">Edge values determined by self._half_index_search.
+Output in the same (time) order as the apex_ind array with the location
+(index) of the left and right points for integration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p class="linemarker linemarker-7"><strong>left index</strong> (<em>numpy.ndarray of int</em>) – Left bounds of integration.</p></li>
+<li><p class="linemarker linemarker-8"><strong>right index</strong> (<em>numpy.ndrray of int</em>) – Right bounds of integration.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.analysis.gcdata.GCData.plot_integration">
+<span class="sig-name descname"><span class="pre">plot_integration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.analysis.gcdata.GCData.plot_integration" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Plot the chromatogram with the peaks and indices indicated.</p>
+<p class="rubric">Notes</p>
+<p class="linemarker linemarker-5">The plotting style update here can be integrated with data_analysis
+module.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="photoreactor.analysis.gcdata.html" class="btn btn-neutral float-left" title="photoreactor.analysis.gcdata" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="photoreactor.analysis.make_empty_cal_expt.html" class="btn btn-neutral float-right" title="photoreactor.analysis.make_empty_cal_expt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Briley Bourgeois, Claire Carlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+{
+    "esbonio.sphinx.confDir": "${workspaceFolder}\\docs\\source",
+    "python.defaultInterpreterPath": "C:\\Users\\brile\\anaconda3\\envs\\photoreactor_main\\python.exe"
+}

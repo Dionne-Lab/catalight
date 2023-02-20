@@ -21,10 +21,15 @@ release = '0.0.1'
 
 extensions = [
     'sphinx.ext.napoleon', 
-    'sphinx.ext.autodoc', 
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary', 
+    'sphinx.ext.doctest',
     'sphinx.ext.todo',
     "sphinx.ext.intersphinx"
     ]
+
+autosummary_generate = True
+autodoc_default_options = {'inherited-members': False}
 
 templates_path = ['_templates']
 source_suffix = '.rst'

@@ -1,0 +1,30 @@
+﻿photoreactor.analysis.user\_inputs.DirectorySelector
+====================================================
+
+.. currentmodule:: photoreactor.analysis.user_inputs
+
+.. autoclass:: DirectorySelector
+   :members:
+   :show-inheritance:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DirectorySelector.__init__
+      ~DirectorySelector.get_output
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+   
+   

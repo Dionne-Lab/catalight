@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>﻿photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter &mdash; photoreactor 0.0.1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="photoreactor.equipment.run_diode_calibration" href="photoreactor.equipment.run_diode_calibration.html" />
+    <link rel="prev" title="photoreactor.equipment.power_meter.power_meter_ctrl" href="photoreactor.equipment.power_meter.power_meter_ctrl.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            photoreactor
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to projectname!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html#installation-instructions">Installation instructions:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#how-it-works">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#data-analysis">Data Analysis:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Providing feedback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#writing-documentation">Writing Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="photoreactor.html">﻿photoreactor</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="photoreactor.analysis.html">photoreactor.analysis</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="photoreactor.equipment.html">photoreactor.equipment</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.alicat_MFC.html">photoreactor.equipment.alicat_MFC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.diode_laser.html">photoreactor.equipment.diode_laser</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.experiment_control.html">photoreactor.equipment.experiment_control</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.gc_delay_tester.html">photoreactor.equipment.gc_delay_tester</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.harrick_watlow.html">photoreactor.equipment.harrick_watlow</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.nkt_laser.html">photoreactor.equipment.nkt_laser</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="photoreactor.equipment.power_meter.html">photoreactor.equipment.power_meter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.run_diode_calibration.html">photoreactor.equipment.run_diode_calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.sri_gc.html">photoreactor.equipment.sri_gc</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="photoreactor.photoreactor_GUI.html">photoreactor.photoreactor_GUI</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">photoreactor</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.html">﻿photoreactor</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.equipment.html">photoreactor.equipment</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.equipment.power_meter.html">photoreactor.equipment.power_meter</a></li>
+          <li class="breadcrumb-item"><a href="photoreactor.equipment.power_meter.power_meter_ctrl.html">photoreactor.equipment.power_meter.power_meter_ctrl</a></li>
+      <li class="breadcrumb-item active">﻿photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="photoreactor-equipment-power-meter-power-meter-ctrl-newportmeter">
+<h1>﻿photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter<a class="headerlink" href="#photoreactor-equipment-power-meter-power-meter-ctrl-newportmeter" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">photoreactor.equipment.power_meter.power_meter_ctrl.</span></span><span class="sig-name descname"><span class="pre">NewportMeter</span></span><a class="headerlink" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p class="linemarker linemarker-1">NewportMeter.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.__init__" title="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.change_wavelength" title="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.change_wavelength"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_wavelength</span></code></a>(wavelength)</p></td>
+<td><p class="linemarker linemarker-1">Change to desired wavelength, modifies slot 4 if wavelength DNE.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.read" title="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.read"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read</span></code></a>([averaging_time])</p></td>
+<td><p class="linemarker linemarker-1">Read average powermeter output in mW over averaging_time.</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.shut_down" title="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.shut_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shut_down</span></code></a>()</p></td>
+<td><p class="linemarker linemarker-1">Stop &amp; Close all devices.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.change_wavelength">
+<span class="sig-name descname"><span class="pre">change_wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.change_wavelength" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Change to desired wavelength, modifies slot 4 if wavelength DNE.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">averaging_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.read" title="Permalink to this definition"></a></dt>
+<dd><blockquote>
+<div><p class="linemarker linemarker-1">Read average powermeter output in mW over averaging_time.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>averaging_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Time to collect dataset in seconds. The default is 0.5.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p class="linemarker linemarker-6"><strong>timestamp</strong> (<em>float</em>) – Time since epoch from time.time() of recording</p></li>
+<li><p class="linemarker linemarker-7"><strong>reading</strong> (<em>float</em>) – Power reading in mW</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.shut_down">
+<span class="sig-name descname"><span class="pre">shut_down</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.equipment.power_meter.power_meter_ctrl.NewportMeter.shut_down" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Stop &amp; Close all devices.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="photoreactor.equipment.power_meter.power_meter_ctrl.html" class="btn btn-neutral float-left" title="photoreactor.equipment.power_meter.power_meter_ctrl" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="photoreactor.equipment.run_diode_calibration.html" class="btn btn-neutral float-right" title="photoreactor.equipment.run_diode_calibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Briley Bourgeois, Claire Carlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
