@@ -18,7 +18,6 @@ import numpy as np
 import pandas as pd
 import psutil
 from alicat import FlowController
-from photoreactor.equipment.alicat_MFC import gas_control
 from photoreactor.equipment.alicat_MFC.gas_control import Gas_System
 from photoreactor.equipment.diode_laser.diode_control import Diode_Laser
 from photoreactor.equipment.harrick_watlow.heater_control import Heater
@@ -52,6 +51,7 @@ class MainWindow(QMainWindow):
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
+        sys.stdout = EmittingStream(self.consoleOutput)
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -74,7 +74,6 @@ class MainWindow(QMainWindow):
         self.set_form_limits()
 
         self.timer.start(500)  # timer connected to update in init_manual_ctrl
-        # sys.stdout = EmittingStream(textWritten=self.normalOutputWritten)
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
@@ -275,10 +274,10 @@ class MainWindow(QMainWindow):
         self.IndVar_start.valueChanged.connect(self.update_expt)
         self.IndVar_stop.valueChanged.connect(self.update_expt)
         self.IndVar_step.valueChanged.connect(self.update_expt)
-        self.setGasAType.insertItems(0, gas_control.factory_gasses)
-        self.setGasBType.insertItems(0, gas_control.factory_gasses)
-        self.setGasCType.insertItems(0, gas_control.factory_gasses)
-        self.setGasDType.insertItems(0, gas_control.factory_gasses)
+        self.setGasAType.insertItems(0, Gas_System.factory_gasses)
+        self.setGasBType.insertItems(0, Gas_System.factory_gasses)
+        self.setGasCType.insertItems(0, Gas_System.factory_gasses)
+        self.setGasDType.insertItems(0, Gas_System.factory_gasses)
         if self.gas_Status.isChecked():  # sets gas type to last used
             flow_dict = self.gas_controller.read_flows()
             self.setGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
@@ -337,10 +336,10 @@ class MainWindow(QMainWindow):
                 self.manualGasCComp.setValue(flow_dict['mfc_C']['setpoint'] / tot_flow * 100)
                 self.manualGasDComp.setValue(flow_dict['mfc_D']['setpoint'] / tot_flow * 100)
 
-            self.manualGasAType.insertItems(0, gas_control.factory_gasses)
-            self.manualGasBType.insertItems(0, gas_control.factory_gasses)
-            self.manualGasCType.insertItems(0, gas_control.factory_gasses)
-            self.manualGasDType.insertItems(0, gas_control.factory_gasses)
+            self.manualGasAType.insertItems(0, Gas_System.factory_gasses)
+            self.manualGasBType.insertItems(0, Gas_System.factory_gasses)
+            self.manualGasCType.insertItems(0, Gas_System.factory_gasses)
+            self.manualGasDType.insertItems(0, Gas_System.factory_gasses)
             self.manualGasAType.setCurrentText(flow_dict['mfc_A']['gas'])
             self.manualGasBType.setCurrentText(flow_dict['mfc_B']['gas'])
             self.manualGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
@@ -952,23 +951,38 @@ class MainWindow(QMainWindow):
         # self.threadpool.disconnect()
         self.shut_down()
 
-
-class EmittingStream(QObject):
+class EmittingStream():
     """
     Capture console print statements and broadcast within the GUI.
 
-    See:
-    (https://stackoverflow.com/questions/8356336/
-    how-to-capture-output-of-pythons-interpreter-and-show-in-a-text-widget)
+    Redefine sys.stdout, which typically handles all print statements.
+    We rewrite the write method to also write to a given Qtextedit.
+    
+    Arguments
+    ---------
+    textedit : QLineEdit
+        This should be a line edit box you want to populate w/ print statement.
     """
-
-    textWritten = pyqtSignal(str)
+    def __init__(self, textedit):
+        self.textbox = textedit
+        self.terminal = sys.stdout
+        sys.stdout = self
 
     def write(self, text):
-        """Send captured text."""
-        self.textWritten.emit(str(text))
+        """Send captured text to sys.stdout and textedit."""
+        self.terminal.write(str(text))
+        cursor = self.textbox.textCursor()
+        cursor.movePosition(QTextCursor.End)
+        cursor.insertText(text)
+        self.textbox.setTextCursor(cursor)
+        self.textbox.ensureCursorVisible()
+    
+    def flush(self):
+        """Force print to terminal without buffering"""
+        self.terminal.flush()
 
 class WorkerSignal(QObject):
+    """Provide signals for interacting w/ worker threads."""
     finished = pyqtSignal()
 
 class Worker(QRunnable):
