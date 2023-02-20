@@ -141,9 +141,11 @@ class MainWindow(QMainWindow):
             print(filePath)
             self.ctrl_path.setText(filePath)
             self.gc_connector.ctrl_file = filePath
-            self.gc_connector.load_ctrl_file()
-            self.set_form_limits()
-        else:
+            load_ctrl_file_thread = Worker(self.gc_connector.load_ctrl_file)
+            self.threadpool.start(load_ctrl_file_thread)
+            load_ctrl_file_thread.signal.finished.connect(self.set_form_limits)
+            
+        else: 
             print('GC Not Connected')
 
     def select_cal_file(self):
@@ -156,26 +158,27 @@ class MainWindow(QMainWindow):
         options = self.file_browser.Options()
         options |= self.file_browser.DontUseNativeDialog
         filePath = self.file_browser \
-                       .getOpenFileName(self, 'Select Control File',
+                       .getOpenFileName(self, 'Select Calibration File',
                                         "C:\\Peak489Win10\\CONTROL_FILE",
-                                        "Control files (*.CON)")[0]
+                                        "Control files (*.csv)")[0]
         print(filePath)
         self.cal_path.setText(filePath)
         calDF = pd.read_csv(filePath, delimiter=',', index_col='Chem ID')
         if self.gas_Status.isChecked():
             attribute_list = vars(self.gas_controller)
             for key in attribute_list:
-                if isinstance(attribute_list[key], FlowController):
-                    self.gas_controller.set_calibration(calDF, fill_gas='Ar')
+                attr = attribute_list[key]
+                if isinstance(attr, FlowController):
+                    self.gas_controller.set_calibration_gas(attr, calDF, fill_gas='Ar')
 
-            self.setGasAType.insertItems(0, 'CalGas')
-            self.setGasBType.insertItems(0, 'CalGas')
-            self.setGasCType.insertItems(0, 'CalGas')
-            self.setGasDType.insertItems(0, 'CalGas')
-            self.manualGasAType.insertItems(0, 'CalGas')
-            self.manualGasBType.insertItems(0, 'CalGas')
-            self.manualGasCType.insertItems(0, 'CalGas')
-            self.manualGasDType.insertItems(0, 'CalGas')
+            self.setGasAType.insertItem(0, 'CalGas')
+            self.setGasBType.insertItem(0, 'CalGas')
+            self.setGasCType.insertItem(0, 'CalGas')
+            self.setGasDType.insertItem(0, 'CalGas')
+            self.manualGasAType.insertItem(0, 'CalGas')
+            self.manualGasBType.insertItem(0, 'CalGas')
+            self.manualGasCType.insertItem(0, 'CalGas')
+            self.manualGasDType.insertItem(0, 'CalGas')
 
     def reset_eqpt(self):
         """Disconnects from equipment and attempts to reconnect."""
@@ -965,6 +968,8 @@ class EmittingStream(QObject):
         """Send captured text."""
         self.textWritten.emit(str(text))
 
+class WorkerSignal(QObject):
+    finished = pyqtSignal()
 
 class Worker(QRunnable):
     """
@@ -997,11 +1002,14 @@ class Worker(QRunnable):
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
+        self.signal = WorkerSignal()
 
     @pyqtSlot()
     def run(self):
         """Initialise the runner function with passed args, kwargs."""
         self.fn(*self.args, **self.kwargs)
+        self.signal.finished.emit()
+        
 
 
 def setup_style(app):

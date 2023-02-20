@@ -48,14 +48,22 @@ class Gas_System:
         None.
 
         """
+        # Custom mixes cannot be indexed by name in alicat package
+        # mix 237 is designated as the calibration gas slot in this package
+        # if calgas is given in gas_list, assign via mix number instead of name
+        gas_list_copy = gas_list.copy()  # Don't edit global!!
+        for i in range(len(gas_list_copy)):
+            if gas_list_copy[i].lower() == 'calgas':
+                gas_list_copy[i] = 237
+            
         while self.is_busy:
             time.sleep(0)
 
         self.is_busy = True
-        self.mfc_A.set_gas(gas_list[0])
-        self.mfc_B.set_gas(gas_list[1])
-        self.mfc_C.set_gas(gas_list[2])
-        self.mfc_D.set_gas(gas_list[3])
+        self.mfc_A.set_gas(gas_list_copy[0])
+        self.mfc_B.set_gas(gas_list_copy[1])
+        self.mfc_C.set_gas(gas_list_copy[2])
+        self.mfc_D.set_gas(gas_list_copy[3])
         self.is_busy = False
 
     def set_flows(self, comp_list, tot_flow):
@@ -118,15 +126,21 @@ class Gas_System:
         self.is_busy = True
         gas_list = []
         for mfc in [self.mfc_A, self.mfc_B, self.mfc_C, self.mfc_D]:
-            gas_list.append(mfc.get()['gas'])
+            gas_name = mfc.get()['gas']
+            if gas_name.lower() == 'calgas':
+                gas_list.append('Ar')  # Can't handle custom mixes
+            else:
+                gas_list.append(gas_name)
         # convert to percents, make dict, drop zero values
         percents = np.array(comp_list, dtype=float) * 100
-        gas_dict = dict(zip(gas_list, percents))
-        gas_dict = {x: y for x, y in gas_dict.items() if y != 0}
+        gas_series = pd.Series(percents, gas_list)
+        gas_series = gas_series.groupby(level=0).sum()  # sums duplicates
+        gas_dict = gas_series.to_dict()
+        gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
 
         # Uses create_mix method to write to gas slot 236,
-        # First custom gas slot on MFC
-        if len(gas_dict) > 1:  # if more than 1 gas, creates mix
+        # first custom gas slot on MFC
+        if len(gas_dict)>1: # if more than 1 gas, creates mix
             self.mfc_E.create_mix(mix_no=236, name='output',
                                   gases=gas_dict)
             self.mfc_E.set_gas(236)
@@ -274,13 +288,20 @@ class Gas_System:
         percents = calDF['ppm'] / 10000
         percents.index = percents.index.map(lambda x: x.split('_')[0])
         percents = percents[~percents.index.duplicated()]
-        percents[fill_gas] = 100 - percents.sum()
         percents = percents.sort_values(ascending=False)
         new_idx = pd.DataFrame([False] * len(percents), index=percents.index)
         for chemical in percents.index:
             new_idx.loc[chemical] = chemical in Gas_System.factory_gasses
         percents = percents[new_idx[0]]
-        mfc.create_mix(mix_no=237, name='CalGas', gases=percents[0:5].to_dict())
+        percents = percents[0:4]  # TODO Handle if gas list short
+        percents = percents.round(2)  # High precision breaks FlowController()
+        percents[fill_gas] = 100 - percents.sum()
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+        print(percents.to_dict())
+        mfc.create_mix(mix_no=237, name='CalGas', gases=percents.to_dict())
+        self.is_busy = False
 
     def test_pressure(self, path, num_samples=5):
         """
