@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Jan  7 16:59:01 2022
 Study control file: test main script before the development of a fully integrated GUI
@@ -10,11 +9,11 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-from equipment.alicat_MFC.gas_control import Gas_System
-from equipment.diode_laser.diode_control import Diode_Laser
-from equipment.harrick_watlow.heater_control import Heater
-from equipment.sri_gc.gc_control import GC_Connector
-from experiment_control import Experiment
+from photoreactor.equipment.alicat_MFC.gas_control import Gas_System
+from photoreactor.equipment.diode_laser.diode_control import Diode_Laser
+from photoreactor.equipment.harrick_watlow.heater_control import Heater
+from photoreactor.equipment.sri_gc.gc_control import GC_Connector
+from photoreactor.equipment.experiment_control import Experiment
 
 
 def initialize_equipment():
@@ -50,10 +49,10 @@ def shut_down(eqpt_list):
 
 def run_study(expt_list, eqpt_list):
     for expt in expt_list:
-        
+
         try:
             expt.run_experiment()
-            
+
         except:
             shut_down(eqpt_list)
             raise
@@ -64,12 +63,12 @@ if __name__ == "__main__":
     sample_name = '20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
     # os.makedirs(main_fol, exist_ok=True)
-   
+
     # os.makedirs(p_sweep_path, exist_ok=True)
     # p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
     # os.makedirs(p_sweep_path, exist_ok=True)
     # eqpt_list[2].test_pressure(p_sweep_path)
-    
+
     # expt1 = Experiment(eqpt_list)
     # expt1.expt_type = 'temp_sweep'
     # expt1.temp = list(np.arange(300, 401, 10))
@@ -88,7 +87,7 @@ if __name__ == "__main__":
     # expt2.tot_flow = [50]
     # expt2.sample_name = sample_name
     # expt2.create_dirs(os.path.join(main_fol, 'prereduction'))
-    
+
     # reduction = Experiment(eqpt_list)
     # reduction.sample_set_size = 12*21
     # reduction.expt_type = 'stability_test'
@@ -98,7 +97,7 @@ if __name__ == "__main__":
     # reduction.tot_flow = [50]
     # reduction.sample_name = sample_name
     # reduction.create_dirs(main_fol)
-   
+
     # expt3 = Experiment(eqpt_list)
     # expt3.expt_type = 'temp_sweep'
     # expt3.temp = list(np.arange(300, 401, 10))
@@ -127,7 +126,7 @@ if __name__ == "__main__":
     # stability_test.tot_flow = [50]
     # stability_test.sample_name = sample_name
     # stability_test.create_dirs(main_fol)
-    
+
     # expt5 = Experiment(eqpt_list)
     # expt5.expt_type = 'temp_sweep'
     # expt5.temp = list(np.arange(300, 401, 10))
@@ -146,7 +145,7 @@ if __name__ == "__main__":
     # expt6.tot_flow = [50]
     # expt6.sample_name = sample_name
     # expt6.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
+
     # expt7 = Experiment(eqpt_list)
     # expt7.expt_type = 'flow_sweep'
     # expt7.temp = [340]
@@ -155,7 +154,7 @@ if __name__ == "__main__":
     # expt7.tot_flow = list(np.arange(10, 60, 10))
     # expt7.sample_name = sample_name
     # expt7.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
+
     # expt8 = Experiment(eqpt_list)
     # expt8.expt_type = 'comp_sweep'
     # expt8.temp = [340]
@@ -166,7 +165,7 @@ if __name__ == "__main__":
     # expt8.tot_flow = [50]
     # expt8.sample_name = sample_name
     # expt8.create_dirs(os.path.join(main_fol, 'postreduction'))
-    
+
     # expt_list = [expt3, expt4, expt7]
     # calculate_time(expt_list)
     # run_study(expt_list, eqpt_list)

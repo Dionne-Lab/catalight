@@ -19,7 +19,12 @@ release = '0.0.1'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.napoleon', 'sphinx.ext.autodoc']
+extensions = [
+    'sphinx.ext.napoleon', 
+    'sphinx.ext.autodoc', 
+    'sphinx.ext.todo',
+    "sphinx.ext.intersphinx"
+    ]
 
 templates_path = ['_templates']
 source_suffix = '.rst'
@@ -28,9 +33,21 @@ exclude_patterns = ['photoreactor/data_analysis/IntegrationTesting.rst']
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
+todo_include_todos = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = "sphinx"
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    "python": ("http://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/docs/", None),
+    "matplotlib": ("https://matplotlib.org/stable/", None)
+}

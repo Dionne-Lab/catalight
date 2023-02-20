@@ -1,4 +1,3 @@
-=======================
 Welcome to projectname!
 =======================
 Projectname is tool set developed by scientists at Stanford to help automate photocatalysis experiments. Projectname is capable of connecting to hardware, coordinating instruments to run a variety of different experimental procedures, and organizing and analyzing data collected by the system. The project is designed in a modular format to enable users to bring their own unique hardware while still utilizing the core features of experiment management and data handling. The program functions in both a scripted version and a GUI to aid users in planning experimental procedures and manually controlling hardware.
@@ -8,12 +7,24 @@ To date, Projectname is compatible with Alicat mass flow controllers, heater sys
 
 including temperature, laser power, flow rate, and composition sweeps
 
+Installation instructions:
+==========================
+At this stage of the project, you will very likely need to make edits to the source modules of the package. The current expectation is that each user utilizes the package as a starting point for developping their own automated system. This includes both adding new instrument classes and editting the GUI and experiment control files.
+As such, you should install the package in an editable configuration. Before doing so, we **strongly** encourage you to create a new virtual environment specifically for projectname.
+A note of caution: this package relies on PyQt which has a different package name when using pip and conda for installation. We try to automatically detect and handle conflicts, but please be aware that its possible to overwrite one with the other if installing in an existing virtual environment.
+
+.. code-block:: console
+
+    git clone https://github.com/Dionne-Lab/photoreactor.git
+    cd photoreactor
+    pip install -e .  # install in editable mode. 
+    
 Areas for Future Development:
 =============================
 The current iteration of the system has been designed with modularity in mind, but additional improvements could be made to enable more seamless use by a variety of groups with different hardware configurations. This will become increasingly important as users develop their own equipment classes.
-*Subclassing could be utilized to make generic system components (such as “gas_system”) that do not necessarily rely on specific hardware. Some configuration file could be utilized for selecting equipment types to fill into the generic system components. For example, an abstract gas_system class could be created with specific class method names compatible with the rest of the package, then a specific class can be initialized (Alicat_gas_system) that subclasses the abstract class and decorates the class methods to make them compatible with the specific hardware used by a particular lab. This would ideally be managed in a single location, such as a configuration file, that a new user could edit once in order to make the system compatible with their hardware. Ideally no other code components would need to be edited. The LightLab package is an excellent example of flexible lab configuration and could be a very helpful reference for development in this area (Welcome to Lightlab’s documentation! — Lightwave Laboratory Instrumentation 1.1.0 documentation).
-*The gas_system class and the related GUI components are currently configured to work with a specific number of mass flow controllers. This could easily be amended by utilizing loops and list for accessing MFC data and controls. For example, the MFC class currently has attributes self.mfc_a, self.mfc_b, etc. This should be replaced by self.mfc_list which contains a list of all mfcs used by the system, allowing flexibility for different system configurations. Ideally this can be managed by a file outside the gas_system class. This also needs to be updated within the GUI code, which currently generates MFC components using QtDesigner. This would need to be done programmatically for flexibility.
-*The data analysis sub-package was initially designed with only gas chromatography data in mind. The original authors intend to implement FTIR data in the near future, but additional consideration for adaptability with other data types needs to be considered to expand usability.
+* Subclassing could be utilized to make generic system components (such as “gas_system”) that do not necessarily rely on specific hardware. Some configuration file could be utilized for selecting equipment types to fill into the generic system components. For example, an abstract gas_system class could be created with specific class method names compatible with the rest of the package, then a specific class can be initialized (Alicat_gas_system) that subclasses the abstract class and decorates the class methods to make them compatible with the specific hardware used by a particular lab. This would ideally be managed in a single location, such as a configuration file, that a new user could edit once in order to make the system compatible with their hardware. Ideally no other code components would need to be edited. The LightLab package is an excellent example of flexible lab configuration and could be a very helpful reference for development in this area (Welcome to Lightlab’s documentation! — Lightwave Laboratory Instrumentation 1.1.0 documentation).
+* The gas_system class and the related GUI components are currently configured to work with a specific number of mass flow controllers. This could easily be amended by utilizing loops and list for accessing MFC data and controls. For example, the MFC class currently has attributes self.mfc_a, self.mfc_b, etc. This should be replaced by self.mfc_list which contains a list of all mfcs used by the system, allowing flexibility for different system configurations. Ideally this can be managed by a file outside the gas_system class. This also needs to be updated within the GUI code, which currently generates MFC components using QtDesigner. This would need to be done programmatically for flexibility.
+* The data analysis sub-package was initially designed with only gas chromatography data in mind. The original authors intend to implement FTIR data in the near future, but additional consideration for adaptability with other data types needs to be considered to expand usability.
 
 Equipment Specific Guides:
 ==========================

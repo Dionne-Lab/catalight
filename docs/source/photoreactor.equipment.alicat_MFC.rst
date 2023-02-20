@@ -20,14 +20,6 @@ photoreactor.equipment.alicat\_MFC.gas\_control module
    :undoc-members:
    :show-inheritance:
 
-photoreactor.equipment.alicat\_MFC.multi\_threading\_tester module
-------------------------------------------------------------------
-
-.. automodule:: photoreactor.equipment.alicat_MFC.multi_threading_tester
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

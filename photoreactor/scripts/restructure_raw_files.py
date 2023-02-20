@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Wed Dec 22 14:20:44 2021
 The code is meant to restructure the data hierarchy of raw data from GC runs
@@ -19,12 +18,11 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from experiment_control import Experiment
+from photoreactor.equipiment.experiment_control import Experiment
 
 
 def listfiles(folder_path):
-    """Returns the .ASC files for FID data in the specified path."""
+    """Return the .ASC files for FID data in the specified path."""
     # I could pull this from the analysis module
 # but there are import issues under current config
     files_list = []
