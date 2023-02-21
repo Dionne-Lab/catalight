@@ -1,7 +1,7 @@
-﻿photoreactor.equipment.alicat\_MFC.gas\_control.Gas\_System
+﻿catalight.equipment.alicat\_MFC.gas\_control.Gas\_System
 ===========================================================
 
-.. currentmodule:: photoreactor.equipment.alicat_MFC.gas_control
+.. currentmodule:: catalight.equipment.alicat_MFC.gas_control
 
 .. autoclass:: Gas_System
    :members:

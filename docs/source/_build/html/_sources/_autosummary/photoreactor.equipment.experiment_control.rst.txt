@@ -1,7 +1,7 @@
-photoreactor.equipment.experiment\_control
+catalight.equipment.experiment\_control
 ==========================================
 
-.. automodule:: photoreactor.equipment.experiment_control
+.. automodule:: catalight.equipment.experiment_control
    
    
    

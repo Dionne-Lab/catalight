@@ -1,7 +1,7 @@
-﻿photoreactor.equipment.harrick\_watlow.heater\_control.Heater
+﻿catalight.equipment.harrick\_watlow.heater\_control.Heater
 =============================================================
 
-.. currentmodule:: photoreactor.equipment.harrick_watlow.heater_control
+.. currentmodule:: catalight.equipment.harrick_watlow.heater_control
 
 .. autoclass:: Heater
    :members:

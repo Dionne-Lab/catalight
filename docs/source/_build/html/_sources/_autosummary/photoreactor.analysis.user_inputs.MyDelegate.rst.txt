@@ -1,7 +1,7 @@
-﻿photoreactor.analysis.user\_inputs.MyDelegate
+﻿catalight.analysis.user\_inputs.MyDelegate
 =============================================
 
-.. currentmodule:: photoreactor.analysis.user_inputs
+.. currentmodule:: catalight.analysis.user_inputs
 
 .. autoclass:: MyDelegate
    :members:

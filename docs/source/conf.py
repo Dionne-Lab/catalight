@@ -11,7 +11,7 @@ print(sys.path)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'photoreactor'
+project = 'catalight'
 copyright = '2022, Briley Bourgeois, Claire Carlin'
 author = 'Briley Bourgeois, Claire Carlin'
 release = '0.0.1'
@@ -34,7 +34,7 @@ autodoc_default_options = {'inherited-members': False}
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-exclude_patterns = ['photoreactor/data_analysis/IntegrationTesting.rst']
+exclude_patterns = ['catalight/data_analysis/IntegrationTesting.rst']
 
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True

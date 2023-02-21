@@ -1,7 +1,7 @@
-﻿photoreactor
+﻿catalight
 ============
 
-.. automodule:: photoreactor
+.. automodule:: catalight
    
    
    
@@ -27,7 +27,7 @@
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.analysis
-   photoreactor.equipment
-   photoreactor.photoreactor_GUI
+   catalight.analysis
+   catalight.equipment
+   catalight.catalight_GUI
 

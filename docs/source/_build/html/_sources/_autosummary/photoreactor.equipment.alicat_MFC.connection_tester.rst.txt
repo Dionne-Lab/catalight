@@ -1,7 +1,7 @@
-photoreactor.equipment.alicat\_MFC.connection\_tester
+catalight.equipment.alicat\_MFC.connection\_tester
 =====================================================
 
-.. automodule:: photoreactor.equipment.alicat_MFC.connection_tester
+.. automodule:: catalight.equipment.alicat_MFC.connection_tester
    
    
    

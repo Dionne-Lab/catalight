@@ -1,7 +1,7 @@
-﻿photoreactor.analysis.user\_inputs.Option
+﻿catalight.analysis.user\_inputs.Option
 =========================================
 
-.. currentmodule:: photoreactor.analysis.user_inputs
+.. currentmodule:: catalight.analysis.user_inputs
 
 .. autoclass:: Option
    :members:

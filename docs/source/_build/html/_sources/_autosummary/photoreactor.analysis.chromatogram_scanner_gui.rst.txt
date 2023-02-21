@@ -1,7 +1,7 @@
-photoreactor.analysis.chromatogram\_scanner\_gui
+catalight.analysis.chromatogram\_scanner\_gui
 ================================================
 
-.. automodule:: photoreactor.analysis.chromatogram_scanner_gui
+.. automodule:: catalight.analysis.chromatogram_scanner_gui
    
    
    

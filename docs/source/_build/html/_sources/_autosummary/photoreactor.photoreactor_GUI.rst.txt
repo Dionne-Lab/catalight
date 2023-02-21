@@ -1,7 +1,7 @@
-photoreactor.photoreactor\_GUI
+catalight.catalight\_GUI
 ==============================
 
-.. automodule:: photoreactor.photoreactor_GUI
+.. automodule:: catalight.catalight_GUI
    
    
    

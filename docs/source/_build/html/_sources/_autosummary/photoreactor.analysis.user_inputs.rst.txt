@@ -1,7 +1,7 @@
-photoreactor.analysis.user\_inputs
+catalight.analysis.user\_inputs
 ==================================
 
-.. automodule:: photoreactor.analysis.user_inputs
+.. automodule:: catalight.analysis.user_inputs
    
    
    

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>photoreactor.equipment.diode_laser &mdash; photoreactor 0.0.1 documentation</title>
+  <title>catalight.equipment.diode_laser &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,9 +18,7 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="photoreactor.equipment.diode_laser.diode_control" href="photoreactor.equipment.diode_laser.diode_control.html" />
-    <link rel="prev" title="﻿photoreactor.equipment.alicat_MFC.gas_control.Gas_System" href="photoreactor.equipment.alicat_MFC.gas_control.Gas_System.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +30,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            photoreactor
+            catalight
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,13 +42,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to projectname!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to catalight!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html#installation-instructions">Installation instructions:</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#how-it-works">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#data-analysis">Data Analysis:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
@@ -67,27 +65,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="photoreactor.html">﻿photoreactor</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="photoreactor.analysis.html">photoreactor.analysis</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="photoreactor.equipment.html">photoreactor.equipment</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.alicat_MFC.html">photoreactor.equipment.alicat_MFC</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">photoreactor.equipment.diode_laser</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.experiment_control.html">photoreactor.equipment.experiment_control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.gc_delay_tester.html">photoreactor.equipment.gc_delay_tester</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.harrick_watlow.html">photoreactor.equipment.harrick_watlow</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.nkt_laser.html">photoreactor.equipment.nkt_laser</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.power_meter.html">photoreactor.equipment.power_meter</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.run_diode_calibration.html">photoreactor.equipment.run_diode_calibration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.sri_gc.html">photoreactor.equipment.sri_gc</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="photoreactor.photoreactor_GUI.html">photoreactor.photoreactor_GUI</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tests.html">Tests</a></li>
 </ul>
 
@@ -97,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">photoreactor</a>
+          <a href="../index.html">catalight</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -105,10 +84,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
-          <li class="breadcrumb-item"><a href="photoreactor.html">﻿photoreactor</a></li>
-          <li class="breadcrumb-item"><a href="photoreactor.equipment.html">photoreactor.equipment</a></li>
-      <li class="breadcrumb-item active">photoreactor.equipment.diode_laser</li>
+      <li class="breadcrumb-item active">catalight.equipment.diode_laser</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/_autosummary/photoreactor.equipment.diode_laser.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -118,14 +94,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-photoreactor.equipment.diode_laser">
-<span id="photoreactor-equipment-diode-laser"></span><h1>photoreactor.equipment.diode_laser<a class="headerlink" href="#module-photoreactor.equipment.diode_laser" title="Permalink to this heading"></a></h1>
+  <section id="module-catalight.equipment.diode_laser">
+<span id="catalight-equipment-diode-laser"></span><h1>catalight.equipment.diode_laser<a class="headerlink" href="#module-catalight.equipment.diode_laser" title="Permalink to this heading"></a></h1>
 <p class="linemarker linemarker-1">Created on Mon Jan 16 16:29:11 2023</p>
 <p class="linemarker linemarker-3">&#64;author: brile</p>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="photoreactor.equipment.diode_laser.diode_control.html#module-photoreactor.equipment.diode_laser.diode_control" title="photoreactor.equipment.diode_laser.diode_control"><code class="xref py py-obj docutils literal notranslate"><span class="pre">photoreactor.equipment.diode_laser.diode_control</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="photoreactor.equipment.diode_laser.diode_control.html#module-catalight.equipment.diode_laser.diode_control" title="catalight.equipment.diode_laser.diode_control"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.equipment.diode_laser.diode_control</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">Control Diode laser via DAQ board.</p></td>
 </tr>
 </tbody>
@@ -135,10 +111,7 @@
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="photoreactor.equipment.alicat_MFC.gas_control.Gas_System.html" class="btn btn-neutral float-left" title="﻿photoreactor.equipment.alicat_MFC.gas_control.Gas_System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="photoreactor.equipment.diode_laser.diode_control.html" class="btn btn-neutral float-right" title="photoreactor.equipment.diode_laser.diode_control" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

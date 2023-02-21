@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>photoreactor.equipment.run_diode_calibration.main &mdash; photoreactor 0.0.1 documentation</title>
+  <title>catalight.equipment.run_diode_calibration.main &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,9 +18,7 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="photoreactor.equipment.sri_gc" href="photoreactor.equipment.sri_gc.html" />
-    <link rel="prev" title="photoreactor.equipment.run_diode_calibration" href="photoreactor.equipment.run_diode_calibration.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +30,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            photoreactor
+            catalight
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,13 +42,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to projectname!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to catalight!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html#installation-instructions">Installation instructions:</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#how-it-works">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html#usage">Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#data-analysis">Data Analysis:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
@@ -67,27 +65,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="photoreactor.html">﻿photoreactor</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="photoreactor.analysis.html">photoreactor.analysis</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="photoreactor.equipment.html">photoreactor.equipment</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.alicat_MFC.html">photoreactor.equipment.alicat_MFC</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.diode_laser.html">photoreactor.equipment.diode_laser</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.experiment_control.html">photoreactor.equipment.experiment_control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.gc_delay_tester.html">photoreactor.equipment.gc_delay_tester</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.harrick_watlow.html">photoreactor.equipment.harrick_watlow</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.nkt_laser.html">photoreactor.equipment.nkt_laser</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.power_meter.html">photoreactor.equipment.power_meter</a></li>
-<li class="toctree-l4 current"><a class="reference internal" href="photoreactor.equipment.run_diode_calibration.html">photoreactor.equipment.run_diode_calibration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="photoreactor.equipment.sri_gc.html">photoreactor.equipment.sri_gc</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="photoreactor.photoreactor_GUI.html">photoreactor.photoreactor_GUI</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tests.html">Tests</a></li>
 </ul>
 
@@ -97,7 +76,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">photoreactor</a>
+          <a href="../index.html">catalight</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -105,11 +84,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
-          <li class="breadcrumb-item"><a href="photoreactor.html">﻿photoreactor</a></li>
-          <li class="breadcrumb-item"><a href="photoreactor.equipment.html">photoreactor.equipment</a></li>
-          <li class="breadcrumb-item"><a href="photoreactor.equipment.run_diode_calibration.html">photoreactor.equipment.run_diode_calibration</a></li>
-      <li class="breadcrumb-item active">photoreactor.equipment.run_diode_calibration.main</li>
+      <li class="breadcrumb-item active">catalight.equipment.run_diode_calibration.main</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/_autosummary/photoreactor.equipment.run_diode_calibration.main.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -119,11 +94,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="photoreactor-equipment-run-diode-calibration-main">
-<h1>photoreactor.equipment.run_diode_calibration.main<a class="headerlink" href="#photoreactor-equipment-run-diode-calibration-main" title="Permalink to this heading"></a></h1>
+  <section id="catalight-equipment-run-diode-calibration-main">
+<h1>catalight.equipment.run_diode_calibration.main<a class="headerlink" href="#catalight-equipment-run-diode-calibration-main" title="Permalink to this heading"></a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="photoreactor.equipment.run_diode_calibration.main">
-<span class="sig-prename descclassname"><span class="pre">photoreactor.equipment.run_diode_calibration.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(150,</span> <span class="pre">800,</span> <span class="pre">35)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">450</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#photoreactor.equipment.run_diode_calibration.main" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="catalight.equipment.run_diode_calibration.main">
+<span class="sig-prename descclassname"><span class="pre">catalight.equipment.run_diode_calibration.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(150,</span> <span class="pre">800,</span> <span class="pre">35)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelength</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">450</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.run_diode_calibration.main" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Runs a calibration on the connected Diode_Laser.</p>
 <p class="linemarker linemarker-3">The current is varied based on the supplied current_range and the power
 is measured using the attached NewportMeter. The sampling time is the
@@ -164,10 +139,7 @@ The default is 10.</p></li>
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="photoreactor.equipment.run_diode_calibration.html" class="btn btn-neutral float-left" title="photoreactor.equipment.run_diode_calibration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="photoreactor.equipment.sri_gc.html" class="btn btn-neutral float-right" title="photoreactor.equipment.sri_gc" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

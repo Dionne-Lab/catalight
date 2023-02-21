@@ -1,7 +1,7 @@
-photoreactor.analysis
+catalight.analysis
 =====================
 
-.. automodule:: photoreactor.analysis
+.. automodule:: catalight.analysis
    
    
    
@@ -27,15 +27,15 @@ photoreactor.analysis
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.analysis.chromatogram_scanner_gui
-   photoreactor.analysis.gcdata
-   photoreactor.analysis.make_empty_cal_expt
-   photoreactor.analysis.plotting
-   photoreactor.analysis.run_calibration
-   photoreactor.analysis.run_change_xdata
-   photoreactor.analysis.run_initial_analysis
-   photoreactor.analysis.run_plot_chromatograms_stacked
-   photoreactor.analysis.run_plot_comparison
-   photoreactor.analysis.tools
-   photoreactor.analysis.user_inputs
+   catalight.analysis.chromatogram_scanner_gui
+   catalight.analysis.gcdata
+   catalight.analysis.make_empty_cal_expt
+   catalight.analysis.plotting
+   catalight.analysis.run_calibration
+   catalight.analysis.run_change_xdata
+   catalight.analysis.run_initial_analysis
+   catalight.analysis.run_plot_chromatograms_stacked
+   catalight.analysis.run_plot_comparison
+   catalight.analysis.tools
+   catalight.analysis.user_inputs
 

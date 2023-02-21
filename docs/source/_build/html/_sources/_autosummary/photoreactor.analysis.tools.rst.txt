@@ -1,7 +1,7 @@
-photoreactor.analysis.tools
+catalight.analysis.tools
 ===========================
 
-.. automodule:: photoreactor.analysis.tools
+.. automodule:: catalight.analysis.tools
    
    
    

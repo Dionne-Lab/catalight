@@ -1,7 +1,7 @@
-photoreactor.analysis.run\_initial\_analysis
+catalight.analysis.run\_initial\_analysis
 ============================================
 
-.. automodule:: photoreactor.analysis.run_initial_analysis
+.. automodule:: catalight.analysis.run_initial_analysis
    
    
    

@@ -1,7 +1,7 @@
-photoreactor.equipment.diode\_laser.diode\_control
+catalight.equipment.diode\_laser.diode\_control
 ==================================================
 
-.. automodule:: photoreactor.equipment.diode_laser.diode_control
+.. automodule:: catalight.equipment.diode_laser.diode_control
    
    
    

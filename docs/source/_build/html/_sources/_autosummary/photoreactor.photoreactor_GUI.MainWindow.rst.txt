@@ -1,7 +1,7 @@
-﻿photoreactor.photoreactor\_GUI.MainWindow
+﻿catalight.catalight\_GUI.MainWindow
 =========================================
 
-.. currentmodule:: photoreactor.photoreactor_GUI
+.. currentmodule:: catalight.catalight_GUI
 
 .. autoclass:: MainWindow
    :members:

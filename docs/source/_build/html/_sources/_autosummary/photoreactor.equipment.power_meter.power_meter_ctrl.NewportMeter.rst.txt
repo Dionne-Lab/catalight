@@ -1,7 +1,7 @@
-﻿photoreactor.equipment.power\_meter.power\_meter\_ctrl.NewportMeter
+﻿catalight.equipment.power\_meter.power\_meter\_ctrl.NewportMeter
 ===================================================================
 
-.. currentmodule:: photoreactor.equipment.power_meter.power_meter_ctrl
+.. currentmodule:: catalight.equipment.power_meter.power_meter_ctrl
 
 .. autoclass:: NewportMeter
    :members:

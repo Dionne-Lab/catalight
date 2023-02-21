@@ -1,7 +1,7 @@
-﻿photoreactor.equipment.diode\_laser.diode\_control.RepeatTimer
+﻿catalight.equipment.diode\_laser.diode\_control.RepeatTimer
 ==============================================================
 
-.. currentmodule:: photoreactor.equipment.diode_laser.diode_control
+.. currentmodule:: catalight.equipment.diode_laser.diode_control
 
 .. autoclass:: RepeatTimer
    :members:

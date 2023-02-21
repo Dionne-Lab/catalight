@@ -1,6 +1,6 @@
-photoreactor.analysis.plotting.plot\_ppm
+catalight.analysis.plotting.plot\_ppm
 ========================================
 
-.. currentmodule:: photoreactor.analysis.plotting
+.. currentmodule:: catalight.analysis.plotting
 
 .. autofunction:: plot_ppm

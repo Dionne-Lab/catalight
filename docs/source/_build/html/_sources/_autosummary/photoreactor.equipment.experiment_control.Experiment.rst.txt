@@ -1,7 +1,7 @@
-﻿photoreactor.equipment.experiment\_control.Experiment
+﻿catalight.equipment.experiment\_control.Experiment
 =====================================================
 
-.. currentmodule:: photoreactor.equipment.experiment_control
+.. currentmodule:: catalight.equipment.experiment_control
 
 .. autoclass:: Experiment
    :members:

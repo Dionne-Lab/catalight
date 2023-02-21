@@ -1,7 +1,7 @@
-﻿photoreactor.analysis.chromatogram\_scanner\_gui.MainWindow
+﻿catalight.analysis.chromatogram\_scanner\_gui.MainWindow
 ===========================================================
 
-.. currentmodule:: photoreactor.analysis.chromatogram_scanner_gui
+.. currentmodule:: catalight.analysis.chromatogram_scanner_gui
 
 .. autoclass:: MainWindow
    :members:

@@ -1,7 +1,7 @@
-photoreactor.analysis.plotting
+catalight.analysis.plotting
 ==============================
 
-.. automodule:: photoreactor.analysis.plotting
+.. automodule:: catalight.analysis.plotting
    
    
    

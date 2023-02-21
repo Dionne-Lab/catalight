@@ -1,7 +1,7 @@
-photoreactor.equipment.sri\_gc.gc\_control
+catalight.equipment.sri\_gc.gc\_control
 ==========================================
 
-.. automodule:: photoreactor.equipment.sri_gc.gc_control
+.. automodule:: catalight.equipment.sri_gc.gc_control
    
    
    

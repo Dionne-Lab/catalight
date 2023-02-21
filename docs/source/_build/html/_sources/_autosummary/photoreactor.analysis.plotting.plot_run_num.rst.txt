@@ -1,6 +1,6 @@
-photoreactor.analysis.plotting.plot\_run\_num
+catalight.analysis.plotting.plot\_run\_num
 =============================================
 
-.. currentmodule:: photoreactor.analysis.plotting
+.. currentmodule:: catalight.analysis.plotting
 
 .. autofunction:: plot_run_num

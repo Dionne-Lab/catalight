@@ -1,6 +1,6 @@
-photoreactor.analysis.tools.analyze\_cal\_data
+catalight.analysis.tools.analyze\_cal\_data
 ==============================================
 
-.. currentmodule:: photoreactor.analysis.tools
+.. currentmodule:: catalight.analysis.tools
 
 .. autofunction:: analyze_cal_data

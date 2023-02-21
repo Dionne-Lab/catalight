@@ -1,6 +1,6 @@
-photoreactor.analysis.tools.get\_bool
+catalight.analysis.tools.get\_bool
 =====================================
 
-.. currentmodule:: photoreactor.analysis.tools
+.. currentmodule:: catalight.analysis.tools
 
 .. autofunction:: get_bool

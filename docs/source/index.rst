@@ -1,9 +1,4 @@
-.. photoreactor documentation master file, created by
-   sphinx-quickstart on Mon Nov 21 15:40:13 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to photoreactor's documentation!
+Welcome to catalight's documentation!
 ========================================
 The purpose of this project is to share tools developed in the Dionne Lab at Stanford University for automating photocatalysis experiments and data analysis.
 
@@ -17,7 +12,7 @@ If your experimental setup looks anything like this:
 You might be able to take advantage of our code base to accelerate your experiments!!
 
 **Don't have this exact configuration?**
-We've designed projectname with modularity in mind. We want to enable interested labs to develop their own equipment drivers to and reuse as much of our code as possible. Please visit the :doc:`Development Guide <developer_guide>` for more information about customizing projectname for your applications!
+We've designed catalight with modularity in mind. We want to enable interested labs to develop their own equipment drivers to and reuse as much of our code as possible. Please visit the :doc:`Development Guide <developer_guide>` for more information about customizing catalight for your applications!
 
 .. toctree::
    :maxdepth: 5

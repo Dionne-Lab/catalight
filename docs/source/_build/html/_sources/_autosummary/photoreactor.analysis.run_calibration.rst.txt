@@ -1,7 +1,7 @@
-photoreactor.analysis.run\_calibration
+catalight.analysis.run\_calibration
 ======================================
 
-.. automodule:: photoreactor.analysis.run_calibration
+.. automodule:: catalight.analysis.run_calibration
    
    
    

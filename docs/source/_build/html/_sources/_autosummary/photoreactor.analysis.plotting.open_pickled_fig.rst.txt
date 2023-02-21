@@ -1,6 +1,6 @@
-photoreactor.analysis.plotting.open\_pickled\_fig
+catalight.analysis.plotting.open\_pickled\_fig
 =================================================
 
-.. currentmodule:: photoreactor.analysis.plotting
+.. currentmodule:: catalight.analysis.plotting
 
 .. autofunction:: open_pickled_fig

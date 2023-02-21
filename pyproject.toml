@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "photoreactor"
+name = "catalight"
 version = "0.0.1"
 authors = [
   { name="Briley Bourgeois", email="bbourge6@stanford.edu" },
@@ -20,8 +20,8 @@ classifiers = [
 dynamic = ["dependencies"]
 
 [project.urls]
-"Homepage" = "https://github.com/Dionne-Lab/photoreactor"
-"Bug Tracker" = "https://github.com/Dionne-Lab/photoreactor/issues"
+"Homepage" = "https://github.com/Dionne-Lab/catalight"
+"Bug Tracker" = "https://github.com/Dionne-Lab/catalight/issues"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

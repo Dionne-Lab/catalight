@@ -1,7 +1,7 @@
-photoreactor.equipment.sri\_gc.peaksimple\_control\_demo
+catalight.equipment.sri\_gc.peaksimple\_control\_demo
 ========================================================
 
-.. automodule:: photoreactor.equipment.sri_gc.peaksimple_control_demo
+.. automodule:: catalight.equipment.sri_gc.peaksimple_control_demo
    
    
    

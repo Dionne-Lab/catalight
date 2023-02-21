@@ -1,7 +1,7 @@
-photoreactor.analysis.run\_change\_xdata
+catalight.analysis.run\_change\_xdata
 ========================================
 
-.. automodule:: photoreactor.analysis.run_change_xdata
+.. automodule:: catalight.analysis.run_change_xdata
    
    
    

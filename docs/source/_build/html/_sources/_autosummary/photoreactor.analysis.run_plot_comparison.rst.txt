@@ -1,7 +1,7 @@
-photoreactor.analysis.run\_plot\_comparison
+catalight.analysis.run\_plot\_comparison
 ===========================================
 
-.. automodule:: photoreactor.analysis.run_plot_comparison
+.. automodule:: catalight.analysis.run_plot_comparison
    
    
    

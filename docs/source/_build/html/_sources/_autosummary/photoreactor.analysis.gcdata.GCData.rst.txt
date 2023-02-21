@@ -1,7 +1,7 @@
-﻿photoreactor.analysis.gcdata.GCData
+﻿catalight.analysis.gcdata.GCData
 ===================================
 
-.. currentmodule:: photoreactor.analysis.gcdata
+.. currentmodule:: catalight.analysis.gcdata
 
 .. autoclass:: GCData
    :members:

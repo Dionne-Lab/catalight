@@ -1,7 +1,7 @@
-photoreactor.equipment.run\_diode\_calibration
+catalight.equipment.run\_diode\_calibration
 ==============================================
 
-.. automodule:: photoreactor.equipment.run_diode_calibration
+.. automodule:: catalight.equipment.run_diode_calibration
    
    
    

@@ -1,7 +1,7 @@
-photoreactor.equipment.harrick\_watlow
+catalight.equipment.harrick\_watlow
 ======================================
 
-.. automodule:: photoreactor.equipment.harrick_watlow
+.. automodule:: catalight.equipment.harrick_watlow
    
    
    
@@ -27,5 +27,5 @@ photoreactor.equipment.harrick\_watlow
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.equipment.harrick_watlow.heater_control
+   catalight.equipment.harrick_watlow.heater_control
 

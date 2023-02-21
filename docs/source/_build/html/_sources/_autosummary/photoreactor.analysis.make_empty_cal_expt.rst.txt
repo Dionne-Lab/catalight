@@ -1,7 +1,7 @@
-photoreactor.analysis.make\_empty\_cal\_expt
+catalight.analysis.make\_empty\_cal\_expt
 ============================================
 
-.. automodule:: photoreactor.analysis.make_empty_cal_expt
+.. automodule:: catalight.analysis.make_empty_cal_expt
    
    
    

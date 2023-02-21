@@ -1,6 +1,6 @@
-photoreactor.equipment.gc\_delay\_tester.main
+catalight.equipment.gc\_delay\_tester.main
 =============================================
 
-.. currentmodule:: photoreactor.equipment.gc_delay_tester
+.. currentmodule:: catalight.equipment.gc_delay_tester
 
 .. autofunction:: main

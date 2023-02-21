@@ -1,7 +1,7 @@
-photoreactor.equipment.power\_meter.power\_meter\_ctrl
+catalight.equipment.power\_meter.power\_meter\_ctrl
 ======================================================
 
-.. automodule:: photoreactor.equipment.power_meter.power_meter_ctrl
+.. automodule:: catalight.equipment.power_meter.power_meter_ctrl
    
    
    

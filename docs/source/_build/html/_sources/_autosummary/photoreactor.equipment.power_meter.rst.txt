@@ -1,7 +1,7 @@
-photoreactor.equipment.power\_meter
+catalight.equipment.power\_meter
 ===================================
 
-.. automodule:: photoreactor.equipment.power_meter
+.. automodule:: catalight.equipment.power_meter
    
    
    
@@ -27,6 +27,6 @@ photoreactor.equipment.power\_meter
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.equipment.power_meter.demo
-   photoreactor.equipment.power_meter.power_meter_ctrl
+   catalight.equipment.power_meter.demo
+   catalight.equipment.power_meter.power_meter_ctrl
 

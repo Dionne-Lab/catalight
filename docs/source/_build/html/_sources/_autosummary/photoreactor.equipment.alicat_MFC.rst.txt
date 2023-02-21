@@ -1,7 +1,7 @@
-photoreactor.equipment.alicat\_MFC
+catalight.equipment.alicat\_MFC
 ==================================
 
-.. automodule:: photoreactor.equipment.alicat_MFC
+.. automodule:: catalight.equipment.alicat_MFC
    
    
    
@@ -27,6 +27,6 @@ photoreactor.equipment.alicat\_MFC
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.equipment.alicat_MFC.connection_tester
-   photoreactor.equipment.alicat_MFC.gas_control
+   catalight.equipment.alicat_MFC.connection_tester
+   catalight.equipment.alicat_MFC.gas_control
 

@@ -1,6 +1,6 @@
-photoreactor.analysis.plotting.multiplot\_X\_vs\_S
+catalight.analysis.plotting.multiplot\_X\_vs\_S
 ==================================================
 
-.. currentmodule:: photoreactor.analysis.plotting
+.. currentmodule:: catalight.analysis.plotting
 
 .. autofunction:: multiplot_X_vs_S

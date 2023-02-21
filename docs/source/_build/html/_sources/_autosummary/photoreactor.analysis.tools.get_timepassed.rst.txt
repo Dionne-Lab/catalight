@@ -1,6 +1,6 @@
-photoreactor.analysis.tools.get\_timepassed
+catalight.analysis.tools.get\_timepassed
 ===========================================
 
-.. currentmodule:: photoreactor.analysis.tools
+.. currentmodule:: catalight.analysis.tools
 
 .. autofunction:: get_timepassed

@@ -1,7 +1,7 @@
-photoreactor.analysis.gcdata
+catalight.analysis.gcdata
 ============================
 
-.. automodule:: photoreactor.analysis.gcdata
+.. automodule:: catalight.analysis.gcdata
    
    
    

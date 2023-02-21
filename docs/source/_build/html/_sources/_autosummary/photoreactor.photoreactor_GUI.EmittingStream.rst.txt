@@ -1,7 +1,7 @@
-﻿photoreactor.photoreactor\_GUI.EmittingStream
+﻿catalight.catalight\_GUI.EmittingStream
 =============================================
 
-.. currentmodule:: photoreactor.photoreactor_GUI
+.. currentmodule:: catalight.catalight_GUI
 
 .. autoclass:: EmittingStream
    :members:

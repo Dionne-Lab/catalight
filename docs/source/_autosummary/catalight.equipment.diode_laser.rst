@@ -1,0 +1,31 @@
+catalight.equipment.diode\_laser
+================================
+
+.. automodule:: catalight.equipment.diode_laser
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   catalight.equipment.diode_laser.diode_control
+

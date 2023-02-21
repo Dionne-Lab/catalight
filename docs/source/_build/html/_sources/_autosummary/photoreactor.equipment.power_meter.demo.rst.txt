@@ -1,7 +1,7 @@
-photoreactor.equipment.power\_meter.demo
+catalight.equipment.power\_meter.demo
 ========================================
 
-.. automodule:: photoreactor.equipment.power_meter.demo
+.. automodule:: catalight.equipment.power_meter.demo
    
    
    

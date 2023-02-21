@@ -1,7 +1,7 @@
-photoreactor.equipment
+catalight.equipment
 ======================
 
-.. automodule:: photoreactor.equipment
+.. automodule:: catalight.equipment
    
    
    
@@ -27,13 +27,13 @@ photoreactor.equipment
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.equipment.alicat_MFC
-   photoreactor.equipment.diode_laser
-   photoreactor.equipment.experiment_control
-   photoreactor.equipment.gc_delay_tester
-   photoreactor.equipment.harrick_watlow
-   photoreactor.equipment.nkt_laser
-   photoreactor.equipment.power_meter
-   photoreactor.equipment.run_diode_calibration
-   photoreactor.equipment.sri_gc
+   catalight.equipment.alicat_MFC
+   catalight.equipment.diode_laser
+   catalight.equipment.experiment_control
+   catalight.equipment.gc_delay_tester
+   catalight.equipment.harrick_watlow
+   catalight.equipment.nkt_laser
+   catalight.equipment.power_meter
+   catalight.equipment.run_diode_calibration
+   catalight.equipment.sri_gc
 

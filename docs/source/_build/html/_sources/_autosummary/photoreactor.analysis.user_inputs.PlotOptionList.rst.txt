@@ -1,7 +1,7 @@
-﻿photoreactor.analysis.user\_inputs.PlotOptionList
+﻿catalight.analysis.user\_inputs.PlotOptionList
 =================================================
 
-.. currentmodule:: photoreactor.analysis.user_inputs
+.. currentmodule:: catalight.analysis.user_inputs
 
 .. autoclass:: PlotOptionList
    :members:

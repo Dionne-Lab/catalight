@@ -1,0 +1,29 @@
+catalight.equipment.sri\_gc.peaksimple\_control\_demo
+=====================================================
+
+.. automodule:: catalight.equipment.sri_gc.peaksimple_control_demo
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      initialize_connection
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

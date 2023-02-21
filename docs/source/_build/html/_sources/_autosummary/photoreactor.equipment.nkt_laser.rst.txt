@@ -1,7 +1,7 @@
-photoreactor.equipment.nkt\_laser
+catalight.equipment.nkt\_laser
 =================================
 
-.. automodule:: photoreactor.equipment.nkt_laser
+.. automodule:: catalight.equipment.nkt_laser
    
    
    

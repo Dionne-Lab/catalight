@@ -1,7 +1,7 @@
-photoreactor.equipment.diode\_laser
+catalight.equipment.diode\_laser
 ===================================
 
-.. automodule:: photoreactor.equipment.diode_laser
+.. automodule:: catalight.equipment.diode_laser
    
    
    
@@ -27,5 +27,5 @@ photoreactor.equipment.diode\_laser
    :template: custom-module-template.rst
    :recursive:
 
-   photoreactor.equipment.diode_laser.diode_control
+   catalight.equipment.diode_laser.diode_control
 
