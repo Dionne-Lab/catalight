@@ -325,7 +325,11 @@ Total Flow [sccm] = [5.0]
 <section id="graphical-user-interface">
 <span id="gui"></span><h2>Graphical User interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this heading"></a></h2>
 <p class="linemarker linemarker-183">A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of packagename, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See <a class="reference internal" href="developer_guide.html#future"><span class="std std-ref">Areas for Future Development</span></a> for additional details on making code changes.</p>
-<p class="linemarker linemarker-185"><a class="reference internal" href="_autosummary/catalight.catalight_GUI.html#module-catalight.catalight_GUI" title="catalight.catalight_GUI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.catalight_GUI</span></code></a></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p class="linemarker linemarker-185">If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an iPython kernel can cause errors with threading in the current implementation.</p>
+</div>
+<p class="linemarker linemarker-187"><a class="reference internal" href="_autosummary/catalight.catalight_GUI.html#module-catalight.catalight_GUI" title="catalight.catalight_GUI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.catalight_GUI</span></code></a></p>
 <figure class="align-default">
 <a class="reference internal image-reference" href="_images/gui_live_view.png"><img alt="_images/gui_live_view.png" src="_images/gui_live_view.png" style="width: 800px;" /></a>
 </figure>
@@ -342,7 +346,7 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="equipment-specific-guides">
 <span id="equipment"></span><h1>Equipment Specific Guides:<a class="headerlink" href="#equipment-specific-guides" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-203">The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature “Watlow.write()”. We further create the <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don’t go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().</p>
+<p class="linemarker linemarker-205">The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature “Watlow.write()”. We further create the <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don’t go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().</p>
 <figure class="align-default" id="id5">
 <a class="reference internal image-reference" href="_images/equipment_connections.svg"><img alt="_images/equipment_connections.svg" src="_images/equipment_connections.svg" width="800" /></a>
 <figcaption>
@@ -351,7 +355,7 @@ Total Flow [sccm] = [5.0]
 </figure>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p class="linemarker linemarker-211">The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).</p>
+<p class="linemarker linemarker-213">The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).</p>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
@@ -365,7 +369,7 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="data-analysis">
 <h1>Data Analysis:<a class="headerlink" href="#data-analysis" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-219">We have a subpackage dedicated to performing data analysis</p>
+<p class="linemarker linemarker-221">We have a subpackage dedicated to performing data analysis</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_analysis.html">The main toolboxes</a><ul>
@@ -382,7 +386,7 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="auxiliary-tools">
 <h1>Auxiliary tools:<a class="headerlink" href="#auxiliary-tools" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-227">We also have other stuff!</p>
+<p class="linemarker linemarker-229">We also have other stuff!</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html">Laser Calibration</a></li>

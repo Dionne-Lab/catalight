@@ -182,6 +182,8 @@ Graphical User interface
 ------------------------
 A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of packagename, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See :ref:`Areas for Future Development <future>` for additional details on making code changes.
 
+.. warning:: If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an iPython kernel can cause errors with threading in the current implementation.
+
 :mod:`catalight.catalight_GUI`
 
 .. figure:: _static/images/gui_live_view.png

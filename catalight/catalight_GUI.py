@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
-        sys.stdout = EmittingStream(self.consoleOutput)
+        #sys.stdout = EmittingStream(self.consoleOutput)
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -143,8 +143,8 @@ class MainWindow(QMainWindow):
             load_ctrl_file_thread = Worker(self.gc_connector.load_ctrl_file)
             self.threadpool.start(load_ctrl_file_thread)
             load_ctrl_file_thread.signal.finished.connect(self.set_form_limits)
-            
-        else: 
+
+        else:
             print('GC Not Connected')
 
     def select_cal_file(self):
@@ -839,8 +839,8 @@ class MainWindow(QMainWindow):
             self.gas_controller.set_gasses(gas_list)
             self.progressBar.setValue(25)
             self.gas_controller.set_flows(comp_list, tot_flow)
-        self.progressBar.setValue(50)
-
+        #self.progressBar.setValue(50)
+        time.sleep(1)
         if self.diode_Status.isChecked():
             # TODO: I was trying to change color of changing variable, but
             # ran into some bug with this implementation.
@@ -849,7 +849,8 @@ class MainWindow(QMainWindow):
             self.laser_controller.set_power(self.manualPower.value())
             # self.current_power_setpoint1.setStyleSheet('Color: White')
             # self.current_power_setpoint2.setStyleSheet('Color: White')
-        self.progressBar.setValue(75)
+        #self.progressBar.setValue(75)
+        time.sleep(1)
 
         if self.heater_Status.isChecked():
             # self.current_temp_setpoint1.setStyleSheet('Color: Red')
@@ -859,7 +860,7 @@ class MainWindow(QMainWindow):
             # self.current_temp_setpoint1.setStyleSheet('Color: White')
             # self.current_temp_setpoint2.setStyleSheet('Color: White')
 
-        self.progressBar.setValue(100)
+        #self.progressBar.setValue(100)
         self.toggle_controls(False)
 
     def toggle_controls(self, value):
@@ -957,7 +958,7 @@ class EmittingStream():
 
     Redefine sys.stdout, which typically handles all print statements.
     We rewrite the write method to also write to a given Qtextedit.
-    
+
     Arguments
     ---------
     textedit : QLineEdit
@@ -976,7 +977,7 @@ class EmittingStream():
         cursor.insertText(text)
         self.textbox.setTextCursor(cursor)
         self.textbox.ensureCursorVisible()
-    
+
     def flush(self):
         """Force print to terminal without buffering"""
         self.terminal.flush()
@@ -1023,7 +1024,7 @@ class Worker(QRunnable):
         """Initialise the runner function with passed args, kwargs."""
         self.fn(*self.args, **self.kwargs)
         self.signal.finished.emit()
-        
+
 
 
 def setup_style(app):
