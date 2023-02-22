@@ -40,7 +40,8 @@ matplotlib.use('Qt5Agg')
 
 class MainWindow(QMainWindow):
     """Subclass QMainWindow to customize your application's main window."""
-
+    progress_signal = pyqtSignal(int)  #: triggered to update progress bar
+    change_color_signal = pyqtSignal(object, str)  #: update QLabel font color
     def __init__(self):
         super().__init__()
         loadUi(r'.\gui_components\\reactorUI.ui', self)
@@ -51,18 +52,15 @@ class MainWindow(QMainWindow):
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
-        #sys.stdout = EmittingStream(self.consoleOutput)
+        sys.stdout = EmittingStream(self.consoleOutput)
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
         # Any other args, kwargs are passed to the run function
         self.run_study_thread = Worker(self.start_study)
-        self.eqpt_status_thread = Worker(self.update_eqpt_status)
         self.manual_ctrl_thread = Worker(self.manual_ctrl_eqpt)
         self.run_study_thread.setAutoDelete(False)
-        self.eqpt_status_thread.setAutoDelete(False)
         self.manual_ctrl_thread.setAutoDelete(False)
-        # TODO : Timer has weird definition in tab init
 
         # Initilize equipment
         self.init_equipment()
@@ -73,7 +71,6 @@ class MainWindow(QMainWindow):
         self.init_figs()
         self.set_form_limits()
 
-        self.timer.start(500)  # timer connected to update in init_manual_ctrl
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
@@ -315,7 +312,9 @@ class MainWindow(QMainWindow):
         Initialize Manual Control Tab.
 
         Blocks tabWidget updates, puts intial values in manual tab widgets.
-        Insert possible gasses to combo boxes
+        Insert possible gasses to combo boxes. The update process for live
+        readings for both the manual and live view tabs is created/connected
+        in the connect_manual_ctrl() method.
         """
         self.tabWidget.setUpdatesEnabled(False)  # Block Signals during update
         # Initialize Values for gas controller
@@ -354,6 +353,7 @@ class MainWindow(QMainWindow):
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
+        
 
     def sum_spinboxes(self, spinboxes, qlabel):
         """
@@ -398,7 +398,9 @@ class MainWindow(QMainWindow):
         """
         Connect Manual Control (signals/slots).
 
-        Connect to eqpt status and manual ctrl threads
+        Connect buttons within manual control tab to corresponding functions.
+        Also initialize a timer that calls update_eqpt_status(), updating both
+        the manua_ctrl tab and live view
         """
         # Connect buttons in manual ctrl tab
         self.buttonBox.button(QDialogButtonBox.Apply).clicked \
@@ -410,8 +412,9 @@ class MainWindow(QMainWindow):
         self.eqpt_ReconnectBut.clicked.connect(self.reset_eqpt)
 
         # Connect timer for live feed
-        self.timer.timeout \
-            .connect(lambda: self.threadpool.start(self.eqpt_status_thread))
+        self.timer = QTimer(self)
+        self.timer.start(500)  # timer connected to update in init_manual_ctrl
+        self.timer.timeout.connect(self.update_eqpt_status)
 
         # Redefine function and arguments for brevity.
         gas_spinboxes = [self.manualGasAComp, self.manualGasBComp,
@@ -424,6 +427,8 @@ class MainWindow(QMainWindow):
         self.manualGasBComp.valueChanged.connect(lambda: func(*args))
         self.manualGasCComp.valueChanged.connect(lambda: func(*args))
         self.manualGasDComp.valueChanged.connect(lambda: func(*args))
+        self.progress_signal.connect(self.progressBar.setValue)
+        self.change_color_signal.connect(self.change_label_color)
 
     def init_figs(self):
         """
@@ -822,7 +827,13 @@ class MainWindow(QMainWindow):
         Update setpoint of equipment.
 
         Updates the setpoint of all equipment based on the current manual
-        control values entered in the GUI
+        control values entered in the GUI. This method is usually called from a
+        worker thread as it takes a long time to complete and uses many 
+        MainWindow attributes. As such, this method emits several signals to
+        trigger visual updates in the GUI. 
+        
+        .. Note:: The visual updates need to be sent out as signals to not cause
+        issues with updating the GUI outside the main thread!!
         """
         self.toggle_controls(True)
         comp_list = [self.manualGasAComp.value(),
@@ -837,30 +848,27 @@ class MainWindow(QMainWindow):
 
         if self.gas_Status.isChecked():
             self.gas_controller.set_gasses(gas_list)
-            self.progressBar.setValue(25)
+            self.progress_signal.emit(25)
             self.gas_controller.set_flows(comp_list, tot_flow)
-        #self.progressBar.setValue(50)
-        time.sleep(1)
+        self.progress_signal.emit(50)
+
         if self.diode_Status.isChecked():
-            # TODO: I was trying to change color of changing variable, but
-            # ran into some bug with this implementation.
-            # self.current_power_setpoint1.setStyleSheet('Color: Red')
-            # self.current_power_setpoint2.setStyleSheet('Color: Red')
+            self.change_color_signal.emit(self.current_power_setpoint1, 'red')
+            self.change_color_signal.emit(self.current_power_setpoint2, 'red')
             self.laser_controller.set_power(self.manualPower.value())
-            # self.current_power_setpoint1.setStyleSheet('Color: White')
-            # self.current_power_setpoint2.setStyleSheet('Color: White')
-        #self.progressBar.setValue(75)
-        time.sleep(1)
+            self.change_color_signal.emit(self.current_power_setpoint1, 'white')
+            self.change_color_signal.emit(self.current_power_setpoint2, 'white')
+        self.progress_signal.emit(75)
 
         if self.heater_Status.isChecked():
-            # self.current_temp_setpoint1.setStyleSheet('Color: Red')
-            # self.current_temp_setpoint2.setStyleSheet('Color: Red')
+            self.change_color_signal.emit(self.current_temp_setpoint1, 'red')
+            self.change_color_signal.emit(self.current_temp_setpoint2, 'red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
-            # self.current_temp_setpoint1.setStyleSheet('Color: White')
-            # self.current_temp_setpoint2.setStyleSheet('Color: White')
+            self.change_color_signal.emit(self.current_temp_setpoint1, 'red')
+            self.change_color_signal.emit(self.current_temp_setpoint2, 'red')
 
-        #self.progressBar.setValue(100)
+        self.progress_signal.emit(100)
         self.toggle_controls(False)
 
     def toggle_controls(self, value):
@@ -882,6 +890,9 @@ class MainWindow(QMainWindow):
         for item in group:
             item.setDisabled(value)
 
+    def change_label_color(self, label, new_color):
+        label.setStyleSheet('Color: ' + new_color)
+        
     def open_peaksimple(self, path_name):
         """
         Use subprocess package to open peaksimple instance.
@@ -1046,4 +1057,4 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     setup_style(app)
-    sys.exit(app.exec())
+    sys.exit(app.exec_())
