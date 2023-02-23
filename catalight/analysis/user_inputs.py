@@ -20,6 +20,7 @@ References
 from __future__ import annotations
 import os
 import sys
+from ast import literal_eval
 from dataclasses import astuple, asdict, dataclass, fields, is_dataclass
 
 
@@ -34,7 +35,7 @@ from PyQt5.QtWidgets import (QDialogButtonBox, QItemDelegate, QDialog,
 
 # Not sure this is needed. can likely delete after testing
 # you need to run Qapplication before initiating these windows.
-app = QApplication(sys.argv)
+#app = QApplication(sys.argv)
 #app.setApplicationName('Select the data you want to be plotted')
 
 
@@ -107,39 +108,51 @@ class PlotOptionList():
                     '1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);\n'
                     '1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);')
 
-    reactant: Option = Option('', False, 'Reactant', _reactant_tip, QLineEdit())
+    reactant: Option = Option('', False, 'Reactant', _reactant_tip, QLineEdit)
+
     target_molecule: Option = Option('', False, 'Target Molecule', _target_tip,
-                                     QLineEdit())
-    mole_bal: Option = Option('c', False, 'Mole Balance Element', _mole_bal_tip,
-                              QLineEdit())
+                                     QLineEdit)
+
+    mole_bal: Option = Option('c', False, 'Mole Balance Element',
+                              _mole_bal_tip, QLineEdit)
+
     figsize: Option = Option((6.5, 4.5), False, 'Figure Size (x, y)',
-                             _figsize_tip, QComboBox())
+                             _figsize_tip, QComboBox)
+
     savedata: Option = Option(True, False, 'Save Data? (T/F)',
-                              'Save Data? T/F', QComboBox())
+                              'Save Data? T/F', QComboBox)
+
     switch_to_hours: Option = Option(2, False,
                                      'Time to switch units to hours (hr)',
                                      'Time in hour to switch x axis unit',
-                                     QDoubleSpinBox())
+                                     QDoubleSpinBox)
+
     overwrite: Option = Option(False, False,
                                'Overwrite previous calculations?',
-                               None, QComboBox())
+                               None, QComboBox)
+
     basecorrect: Option = Option(True, False, 'Add baseline correction?',
-                                  None, QComboBox())
+                                  None, QComboBox)
+
     xdata: Option = Option('[x1, x2, x3, ...]', False,
-                           'Enter array for new X data', 'Alice', QLineEdit())
+                           'Enter array for new X data', 'Alice', QLineEdit)
+
     units: Option = Option('H2/C2H2', False, 'Enter New X Units',
-                           None, QLineEdit())
+                           None, QLineEdit)
+
     XandS: Option = Option(False, False,
                            'Plot Conversion and Selectivity (2 plots)',
                            'True to plot conversion and selectivity plots.',
-                           QRadioButton())
+                           QRadioButton)
+
     XvsS: Option = Option(False, False,
                           'Plot Selectivity vs Conversion (1 plot)',
                           'True plots selectivity as function of conversion.',
-                          QRadioButton())
+                          QRadioButton)
+
     forcezero: Option = Option(True, False, 'Include (0, 0) in fit?',
                                'Add point (x=0, y=0) to data set.',
-                               QComboBox())
+                               QComboBox)
 
     def __iter__(self):
         """
@@ -238,7 +251,7 @@ class PlotOptionsDialog(QDialog):
                 continue
 
             # Get widgets from Option instance and update properties
-            widget = option.widget
+            widget = option.widget()  # Instantiate widget
             widget.setToolTip(option.tooltip)
             if isinstance(widget, QComboBox):
                 if isinstance(option.value, bool):
@@ -250,6 +263,7 @@ class PlotOptionsDialog(QDialog):
             # Add widgets to layout
             self.layout.addWidget(QLabel(option.label), row_num, 0)
             self.layout.addWidget(widget, row_num, 1)
+            option.widget = widget  # Assign instantiated widget back to option
             row_num += 1
 
         # Create Dialog buttons, connect, and add to window
@@ -273,11 +287,11 @@ class PlotOptionsDialog(QDialog):
                 continue
             widget = option.widget
             if isinstance(widget, QComboBox):
-                option.value = eval(widget.currentText())
+                option.value = literal_eval(widget.currentText())
             elif isinstance(widget, QLineEdit):
                 option.value = widget.text()
             elif isinstance(widget, QDoubleSpinBox):
-                option.value = eval(widget.value())
+                option.value = widget.value()
             elif isinstance(widget, QRadioButton):
                 option.value = widget.isChecked()
             else:

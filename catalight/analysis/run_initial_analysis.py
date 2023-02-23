@@ -9,10 +9,10 @@ import sys
 import matplotlib.pyplot as plt
 import pandas as pd
 from PyQt5.QtWidgets import QFileDialog, QApplication, QDialog
-import catalight.analysis.tools as analysis_tools
+import catalight.analysis as analysis
 from catalight.analysis.user_inputs import (DirectorySelector,
-                                               PlotOptionsDialog,
-                                               PlotOptionList)
+                                                PlotOptionsDialog,
+                                                PlotOptionList)
 
 
 def get_user_inputs(starting_dir=None, cal_folder=None):
@@ -61,7 +61,8 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     options.change_includes(include_dict)  # Modify gui components
     options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
-        response_dict = options.value_todict()
+        response_dict = options.values_todict()
+        print('options acccepted')
 
     return expt_dirs, calDF, response_dict
 
@@ -119,23 +120,24 @@ def main(main_dirs, calDF, reactant, target_molecule, mole_bal='c',
     None.
 
     """
+    print('inside main')
     plt.ioff()  # suppress plot windows
-    options = (calDF, reactant, target_molecule, mole_bal,
+    options = (reactant, target_molecule, mole_bal,
                figsize, savedata, switch_to_hours)
-    filepaths = analysis_tools.list_matching_files(main_dirs,
+    filepaths = analysis.tools.list_matching_files(main_dirs,
                                                    'expt_log', '.txt')
-    expts = analysis_tools.list_expt_obj(filepaths)
-
+    expts = analysis.tools.list_expt_obj(filepaths)
+    print(expts)
     for expt in expts:
-        has_data = analysis_tools.list_matching_files(expt.results_path,
+        has_data = analysis.tools.list_matching_files(expt.results_path,
                                                       'avg_conc', '.csv')
         if not has_data or overwrite:  # skip if has data and overwrite=False
-            calculations = analysis_tools.run_analysis(expt, calDF,
+            calculations = analysis.tools.run_analysis(expt, calDF,
                                                        basecorrect, savedata)
             (concentrations, avg, std) = calculations
 
-        (ax1, ax2, ax3) = analysis_tools.plot_expt_summary(expt, calDF,
-                                                           *options)
+        (ax1, ax2, ax3) = analysis.plotting.plot_expt_summary(expt, calDF,
+                                                              *options)
 
         # These outputs are defined to make it a little easier for output
         # if that is ever desired. Otherwise open pickled figs!!
@@ -145,4 +147,5 @@ if __name__ == "__main__":
 
     plt.close('all')
     expt_dirs, calDF, response_dict = get_user_inputs()
+    print('out of inputs...')
     main(expt_dirs, calDF, **response_dict)

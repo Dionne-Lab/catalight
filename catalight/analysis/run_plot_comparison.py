@@ -50,7 +50,7 @@ def get_user_inputs(starting_dir=None):
     options.change_includes(include_dict)  # Modify gui components
     options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
-        response_dict = options.value_todict()
+        response_dict = options.values_todict()
 
     return (file_list, data_labels, response_dict)
 

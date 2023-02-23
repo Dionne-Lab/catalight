@@ -7,6 +7,7 @@ This File can likely get folded into gcdata.py to define experiment and data
 classes in the same module in the future
 @author: Briley Bourgeois
 """
+import re
 import os
 import time
 from ast import literal_eval
@@ -176,10 +177,13 @@ class Experiment:
                 # into a class attribute.
             elif (attr == '_gas_comp'):
                 for composition in value:
+                    if round(sum(composition), 6) == 100:  # convert % to fraction
+                        composition[:] = [x / 100 for x in composition]
+
                     if round(sum(composition), 6) != 1:
-                        print(sum(composition))
                         raise AttributeError(
                             'Gas comp. must be list of list == 1')
+
             setattr(self, attr, value)
         return set_any
 
@@ -341,6 +345,9 @@ class Experiment:
         """
         Read data from an existing log file and update object parameters.
 
+        Grows gas_type list if more gasses are found in the expt_log than
+        contained in current gas_type list.
+
         Parameters
         ----------
         log_path : str
@@ -352,20 +359,43 @@ class Experiment:
 
         """
         with open(log_path, 'r') as log:
-            data = []
-            for line in log:  # read in the values after '=' sign line by line
-                data.append(line.split('=')[-1].strip(' \n'))
+            for line in log:  # Read file line by line
+                # Read the values after '=' sign
+                data = line.split('=')[-1].strip(' \n')
 
-            self._date = data[0]
-            self.expt_type = data[1]
-            self._expt_name = data[2]
-            self.sample_name = data[3]
-            self.temp = literal_eval(data[4])
-            self.power = literal_eval(data[5])
-            # TODO this looks like an error!!
-            self.gas_type = [data[6], data[7], data[8]]
-            self.gas_comp = literal_eval(data[9])
-            self.tot_flow = literal_eval(data[10])
+                # Check the text before '=' to pick which value to assign
+                if re.search('Experiment Date =', line):
+                    self._date = data[0]
+                elif re.search('Experiment Type =', line):
+                    self.expt_type = data
+                elif re.search('Experiment Name =', line):
+                    self._expt_name = data
+                elif re.search('Sample Name =', line):
+                    self.sample_name = data
+                elif re.search('Temperature', line):
+                    self.temp = literal_eval(data)
+                elif re.search('Power', line):
+                    self.power = literal_eval(data)
+                elif re.search('Gas \d+ type', line):  # \d+ is 1 or more digit
+                    # Get left side of '=' sign
+                    gas_str = line.split('=')[0].strip(' \n')
+                    # Pull number from left side
+                    for string in gas_str.split():
+                        if string.isdigit():
+                            num = int(string)
+                    # If the gas_type list is shorter than this entry number,
+                    # append extra blank values. Appending blanks vs just
+                    # appending the value accounts for if gas # is out of order
+                    if len(self.gas_type) < num:
+                        for n in range(num - len(self.gas_type)):
+                            self.gas_type.append([])
+                    self.gas_type[num-1] = data
+
+                elif re.search('Gas Composition', line):
+                    self.gas_comp = literal_eval(data)
+                elif re.search('Total Flow', line):
+                    self.tot_flow = literal_eval(data)
+
             expt_path = os.path.dirname(log_path)
             # Will throw error if no data folders
             self.update_save_paths(expt_path)
@@ -711,7 +741,7 @@ class Experiment:
                 self._heater.ramp(step, temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
-            elif self.expt_type == 'comp_sweep':
+            elif self.expt_type in ['comp_sweep', 'calibration']:
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()
             elif self.expt_type == 'flow_sweep':

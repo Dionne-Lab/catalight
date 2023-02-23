@@ -71,7 +71,7 @@ def list_expt_obj(file_paths):
     """
     experiments = []
     for log_path in file_paths:
-        if log_path == 'expt_log.txt':  # Double check filename is correct
+        if os.path.basename(log_path) == 'expt_log.txt':  # Double check filename is correct
             expt_path = os.path.dirname(log_path)
             expt = Experiment()  # Initialize experiment obj
             expt.read_expt_log(log_path)  # Read expt parameters from log

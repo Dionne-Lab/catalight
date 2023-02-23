@@ -110,7 +110,7 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
     set_plot_style(figsize)
     fig1, ax1 = plot_run_num(expt, calDF, switch_to_hours)
     fig2, ax2 = plot_ppm(expt, calDF, mole_bal, switch_to_hours)
-    fig3, ax3 = plot_X_and_S(expt, reactant, target_molecule, switch_to_hours)
+    fig3, ax3 = plot_X_and_S(expt, reactant, target_molecule)
 
     # Figure Export
     if savedata:

@@ -145,7 +145,7 @@ class PlotOptionsLayout(QGridLayout):
         -------
         options : PlotOptions
             PlotOptions instance containing reactant, target, mole_bal,
-            figsize, savedata, switch_to_hour as attributes
+            figsize, savedata, switch_to_hours as attributes
 
         """
         reactant = self.reactant_entry.text()
@@ -166,7 +166,7 @@ class PlotDialog(QDialog):
     ----------
     plot_options : PlotOptions
         PlotOptions instance containing reactant, target, mole_bal,
-        figsize, savedata, switch_to_hour as attributes
+        figsize, savedata, switch_to_hours as attributes
     overwrite : bool
         User input for whether or not to overwrite existing data.
     """
@@ -222,7 +222,7 @@ class ChangeXDialog(QDialog):
     ----------
     plot_options : PlotOptions
         PlotOptions instance containing reactant, target, mole_bal,
-        figsize, savedata, switch_to_hour as attributes
+        figsize, savedata, switch_to_hours as attributes
     overwrite : bool
         User input for whether or not to overwrite existing data.
     """
@@ -276,7 +276,7 @@ class MultiplotDialog(QDialog):
     ----------
     plot_options : PlotOptions
         PlotOptions instance containing reactant, target, mole_bal,
-        figsize, savedata, switch_to_hour as attributes
+        figsize, savedata, switch_to_hours as attributes
     XandS : bool
         Radiobutton result. True to plot conversion and selectivity plots.
     XvsS : bool
