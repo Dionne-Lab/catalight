@@ -48,9 +48,9 @@ def get_user_inputs(starting_dir=None):
 
     # Open UI and request plot options from user
     include_dict = {'basecorrect': True, 'figsize': True}
-    options = PlotOptionList()
-    options.change_includes(include_dict)
-    options_dialog = PlotOptionsDialog(options)
+    options = PlotOptionList()  # Create default gui options list
+    options.change_includes(include_dict)  # Modify gui components
+    options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec() == PlotOptionsDialog.Accepted:
         response_dict = options.values_todict()
 

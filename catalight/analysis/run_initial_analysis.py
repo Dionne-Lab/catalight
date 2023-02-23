@@ -39,7 +39,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         Dict Keys depend on options proved to PlotOptionsDialog.
         {'overwrite': bool, 'basecorrect': bool, 'reactant': str,
         'target_molecule': str, 'mole_bal': str, 'figsize': tuple,
-        'savedata': bool, 'switch_to_hour': float}
+        'savedata': bool, 'switch_to_hours': float}
 
     """
     # Prompt user to select calibration file
@@ -56,9 +56,10 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     # Edit Options specifically for initial analysis dialog
     include_dict = {'overwrite': True, 'basecorrect': True, 'reactant': True,
                     'target_molecule': True, 'mole_bal': True, 'figsize': True,
-                    'savedata': True, 'switch_to_hour': True}
-    options = PlotOptionList().change_includes(include_dict)
-    options_dialog = PlotOptionsDialog(options)
+                    'savedata': True, 'switch_to_hours': True}
+    options = PlotOptionList()  # Create default gui options list
+    options.change_includes(include_dict)  # Modify gui components
+    options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
         response_dict = options.value_todict()
 

@@ -46,8 +46,9 @@ def get_user_inputs(starting_dir=None):
     # Edit Options specifically for initial analysis dialog
     include_dict = {'reactant': True, 'target_molecule': True,
                     'XandS': True, 'XvsS': True, 'figsize': True}
-    options = PlotOptionList().change_includes(include_dict)
-    options_dialog = PlotOptionsDialog(options)
+    options = PlotOptionList()  # Create default gui options list
+    options.change_includes(include_dict)  # Modify gui components
+    options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
         response_dict = options.value_todict()
 
