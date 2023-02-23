@@ -116,6 +116,9 @@
            <layout class="QGridLayout" name="gridLayout">
             <item row="2" column="1">
              <widget class="QPushButton" name="butDelete">
+              <property name="toolTip">
+               <string>Delete the currently selected experiment.</string>
+              </property>
               <property name="text">
                <string>Delete</string>
               </property>
@@ -123,6 +126,9 @@
             </item>
             <item row="2" column="0">
              <widget class="QPushButton" name="butAddExpt">
+              <property name="toolTip">
+               <string>Create a new experiment object.</string>
+              </property>
               <property name="text">
                <string>Add Experiment</string>
               </property>
@@ -136,6 +142,9 @@
             </item>
             <item row="2" column="2" colspan="2">
              <widget class="QPushButton" name="butStart">
+              <property name="toolTip">
+               <string>Run each experiment in the list above in order.</string>
+              </property>
               <property name="text">
                <string>Start Study</string>
               </property>
@@ -161,7 +170,11 @@
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="sample_name"/>
+               <widget class="QLineEdit" name="sample_name">
+                <property name="toolTip">
+                 <string>Name of sample, mostly used for creating main data directory.</string>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -187,6 +200,9 @@
                   <width>16777215</width>
                   <height>30</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Total mass of sample loaded into reactor. Saved in the expt log and used in main directory name.</string>
                 </property>
                </widget>
               </item>
@@ -324,7 +340,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QComboBox" name="expt_types"/>
+             <widget class="QComboBox" name="expt_types">
+              <property name="toolTip">
+               <string>Choose the experiment type to run for the currently selected Experiment</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -368,6 +388,9 @@
             </property>
             <item row="1" column="2">
              <widget class="QDoubleSpinBox" name="IndVar_step">
+              <property name="toolTip">
+               <string>Step size to use between start and stop values</string>
+              </property>
               <property name="maximum">
                <double>1000.000000000000000</double>
               </property>
@@ -401,6 +424,9 @@
             </item>
             <item row="1" column="0">
              <widget class="QDoubleSpinBox" name="IndVar_start">
+              <property name="toolTip">
+               <string>Beginning point of variable ramp. Not used in stability test</string>
+              </property>
               <property name="maximum">
                <double>1000.000000000000000</double>
               </property>
@@ -421,6 +447,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="IndVar_stop">
+              <property name="toolTip">
+               <string>Ending point of variable ramp. Not used in stability test. </string>
+              </property>
               <property name="maximum">
                <double>1000.000000000000000</double>
               </property>
@@ -442,6 +471,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QDoubleSpinBox" name="setPower">
+              <property name="toolTip">
+               <string>Constant power setting for laser if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -459,6 +491,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="setTemp">
+              <property name="toolTip">
+               <string>Constant temperature setting for the heater if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -476,6 +511,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QDoubleSpinBox" name="setSampleRate">
+              <property name="toolTip">
+               <string>Length of time between starting GC samples.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -490,6 +528,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QSpinBox" name="setSampleSize">
+              <property name="toolTip">
+               <string>Number of GC samples per step in the sweep.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -504,6 +545,9 @@
             </item>
             <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="setRampRate">
+              <property name="toolTip">
+               <string>Heating rate used when going between setpoints.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -518,6 +562,9 @@
             </item>
             <item row="6" column="1">
              <widget class="QDoubleSpinBox" name="setBuffer">
+              <property name="toolTip">
+               <string>Time between the last GC sample being taken and the system going to the next setpoint.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -532,6 +579,9 @@
             </item>
             <item row="7" column="1">
              <widget class="QDoubleSpinBox" name="setFlow">
+              <property name="toolTip">
+               <string>Constant total flow for the gas system if it is not the independent variable.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -552,6 +602,9 @@
             </item>
             <item row="5" column="1">
              <widget class="QDoubleSpinBox" name="setTSteady">
+              <property name="toolTip">
+               <string>Time between the setpoint ramp ending and the first GC sample being taken.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -566,6 +619,9 @@
             </property>
             <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="setGasDComp">
+              <property name="toolTip">
+               <string>Constant composition input used if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -588,7 +644,11 @@
              </widget>
             </item>
             <item row="4" column="2">
-             <widget class="QComboBox" name="setGasDType"/>
+             <widget class="QComboBox" name="setGasDType">
+              <property name="toolTip">
+               <string>Gas type used regardless of variable.</string>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_16">
@@ -599,6 +659,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="setGasCComp">
+              <property name="toolTip">
+               <string>Constant composition input used if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -615,6 +678,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="setGasAComp">
+              <property name="toolTip">
+               <string>Constant composition input used if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -637,13 +703,25 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QComboBox" name="setGasAType"/>
+             <widget class="QComboBox" name="setGasAType">
+              <property name="toolTip">
+               <string>Gas type used regardless of variable.</string>
+              </property>
+             </widget>
             </item>
             <item row="3" column="2">
-             <widget class="QComboBox" name="setGasCType"/>
+             <widget class="QComboBox" name="setGasCType">
+              <property name="toolTip">
+               <string>Gas type used regardless of variable.</string>
+              </property>
+             </widget>
             </item>
             <item row="2" column="2">
-             <widget class="QComboBox" name="setGasBType"/>
+             <widget class="QComboBox" name="setGasBType">
+              <property name="toolTip">
+               <string>Gas type used regardless of variable.</string>
+              </property>
+             </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_14">
@@ -661,6 +739,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QDoubleSpinBox" name="setGasBComp">
+              <property name="toolTip">
+               <string>Constant composition input used if it is not the independent variable</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1146,6 +1227,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="manualRamp">
+              <property name="toolTip">
+               <string>Heating rate used when going between setpoints.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -2003,7 +2087,7 @@ Stop</string>
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>31</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>
