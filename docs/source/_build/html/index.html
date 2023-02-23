@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to catalight’s documentation! &mdash; catalight 0.0.1 documentation</title>
+  <title>Welcome to Catalight! &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,7 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Welcome to catalight!" href="intro.html" /> 
+    <link rel="next" title="Welcome to Catalight!" href="intro.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,7 +43,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to catalight!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to Catalight!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro.html#installation-instructions">Installation instructions:</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
@@ -58,6 +58,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Providing feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
 </ul>
@@ -85,7 +87,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Welcome to catalight’s documentation!</li>
+      <li class="breadcrumb-item active">Welcome to Catalight!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -95,23 +97,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="welcome-to-catalight-s-documentation">
-<h1>Welcome to catalight’s documentation!<a class="headerlink" href="#welcome-to-catalight-s-documentation" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-3">The purpose of this project is to share tools developed in the Dionne Lab at Stanford University for automating photocatalysis experiments and data analysis.</p>
-<p class="linemarker linemarker-5">If your experimental setup looks anything like this:</p>
+  <section id="welcome-to-catalight">
+<h1>Welcome to Catalight!<a class="headerlink" href="#welcome-to-catalight" title="Permalink to this heading"></a></h1>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/catalight_header_g.png"><img alt="_images/catalight_header_g.png" src="_images/catalight_header_g.png" style="width: 800px;" /></a>
+</figure>
+<p class="linemarker linemarker-6">The purpose of this project is to share tools developed in the Dionne Lab at Stanford University for automating photocatalysis experiments and data analysis.</p>
+<p class="linemarker linemarker-8">If your experimental setup looks anything like this:</p>
 <figure class="align-default" id="id1">
 <a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 800px;" /></a>
 <figcaption>
 <p><span class="caption-text">D-Lab Hardware Configuration</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<p class="linemarker linemarker-12">You might be able to take advantage of our code base to accelerate your experiments!!</p>
-<p class="linemarker linemarker-14"><strong>Don’t have this exact configuration?</strong>
+<p class="linemarker linemarker-15">You might be able to take advantage of our code base to accelerate your experiments!!</p>
+<p class="linemarker linemarker-17"><strong>Don’t have this exact configuration?</strong>
 We’ve designed catalight with modularity in mind. We want to enable interested labs to develop their own equipment drivers to and reuse as much of our code as possible. Please visit the <a class="reference internal" href="developer_guide.html"><span class="doc">Development Guide</span></a> for more information about customizing catalight for your applications!</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to catalight!</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to Catalight!</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#motivation">Motivation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="intro.html#limitations">Limitations</a></li>
 </ul>
@@ -166,6 +172,12 @@ We’ve designed catalight with modularity in mind. We want to enable interested
 <li class="toctree-l2"><a class="reference internal" href="developer_guide.html#my-equipment-doesn-t-have-a-python-api">My equipment doesn’t have a Python API</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#function">Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="developer_guide.html#style">Style</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
 </ul>
@@ -198,9 +210,9 @@ We’ve designed catalight with modularity in mind. We want to enable interested
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
 <ul class="simple">
-<li><p class="linemarker linemarker-51"><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p class="linemarker linemarker-52"><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p class="linemarker linemarker-53"><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+<li><p class="linemarker linemarker-54"><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p class="linemarker linemarker-55"><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p class="linemarker linemarker-56"><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
 </section>
 
@@ -208,7 +220,7 @@ We’ve designed catalight with modularity in mind. We want to enable interested
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="intro.html" class="btn btn-neutral float-right" title="Welcome to catalight!" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="intro.html" class="btn btn-neutral float-right" title="Welcome to Catalight!" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

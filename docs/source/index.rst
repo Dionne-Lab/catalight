@@ -1,5 +1,8 @@
-Welcome to catalight's documentation!
+Welcome to Catalight!
 ========================================
+.. figure:: _static/images/catalight_header_g.png
+    :width: 800
+
 The purpose of this project is to share tools developed in the Dionne Lab at Stanford University for automating photocatalysis experiments and data analysis.
 
 If your experimental setup looks anything like this:

@@ -72,7 +72,7 @@ What does this mean and what is a "`.NET assembly <https://dotnet.microsoft.com/
     There is a documented bug in SRI's "PeakSimpleRemoteControlJune2014" instructions stating that 
         "Once a connecton has been broken by stopping either Peaksimple or the calling program, the other must be restarted also before another connecton can be made."
 
-    This means that Peaksimple must be manually closed and reopened each time the packagename GUI or scripted interface is closed. If you using this package with an interactive python kernel, you may also have to restart the kernel before reconnecting to peaksimple.
+    This means that Peaksimple must be manually closed and reopened each time the catalight GUI or scripted interface is closed. If you using this package with an interactive python kernel, you may also have to restart the kernel before reconnecting to peaksimple.
 
 .. figure:: _static/images/peaksimple_client_contents.png
     :width: 800

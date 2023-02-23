@@ -1,4 +1,4 @@
-catalight.catalight\_GUI.MainWindow
+﻿catalight.catalight\_GUI.MainWindow
 ===================================
 
 .. currentmodule:: catalight.catalight_GUI
@@ -17,6 +17,7 @@ catalight.catalight\_GUI.MainWindow
    
       ~MainWindow.__init__
       ~MainWindow.add_expt
+      ~MainWindow.change_label_color
       ~MainWindow.closeEvent
       ~MainWindow.connect_manual_ctrl
       ~MainWindow.delete_expt
@@ -54,5 +55,7 @@ catalight.catalight\_GUI.MainWindow
 
    .. autosummary::
    
+      ~MainWindow.change_color_signal
+      ~MainWindow.progress_signal
    
    

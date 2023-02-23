@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Alicat MFCs" href="equipment_guides.html" />
-    <link rel="prev" title="Welcome to catalight!" href="intro.html" /> 
+    <link rel="prev" title="Welcome to Catalight!" href="intro.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,7 +44,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to catalight!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to Catalight!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="intro.html#installation-instructions">Installation instructions:</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
@@ -83,6 +83,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Providing feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
 </ul>
@@ -324,38 +326,62 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="graphical-user-interface">
 <span id="gui"></span><h2>Graphical User interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-183">A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of packagename, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See <a class="reference internal" href="developer_guide.html#future"><span class="std std-ref">Areas for Future Development</span></a> for additional details on making code changes.</p>
+<p class="linemarker linemarker-183">A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See <a class="reference internal" href="developer_guide.html"><span class="doc">the development guide</span></a> for more details on making your changes to the codebase.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p class="linemarker linemarker-185">If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an iPython kernel can cause errors with threading in the current implementation.</p>
+<p class="linemarker linemarker-185">If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.</p>
 </div>
-<p class="linemarker linemarker-187"><a class="reference internal" href="_autosummary/catalight.catalight_GUI.html#module-catalight.catalight_GUI" title="catalight.catalight_GUI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.catalight_GUI</span></code></a></p>
-<figure class="align-default">
-<a class="reference internal image-reference" href="_images/gui_live_view.png"><img alt="_images/gui_live_view.png" src="_images/gui_live_view.png" style="width: 800px;" /></a>
-</figure>
-<figure class="align-default">
-<a class="reference internal image-reference" href="_images/gui_manual_control.png"><img alt="_images/gui_manual_control.png" src="_images/gui_manual_control.png" style="width: 800px;" /></a>
-</figure>
-<figure class="align-default">
-<a class="reference internal image-reference" href="_images/gui_study_overview.png"><img alt="_images/gui_study_overview.png" src="_images/gui_study_overview.png" style="width: 800px;" /></a>
-</figure>
-<figure class="align-default">
-<a class="reference internal image-reference" href="_images/gui_experiment_design.png"><img alt="_images/gui_experiment_design.png" src="_images/gui_experiment_design.png" style="width: 800px;" /></a>
-</figure>
-</section>
-</section>
-<section id="equipment-specific-guides">
-<span id="equipment"></span><h1>Equipment Specific Guides:<a class="headerlink" href="#equipment-specific-guides" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-205">The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature “Watlow.write()”. We further create the <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don’t go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().</p>
+<p class="linemarker linemarker-187">There are two main types of GUIs present within catalight. Files containing the phrase “GUI” (<a class="reference internal" href="_autosummary/catalight.catalight_GUI.html#module-catalight.catalight_GUI" title="catalight.catalight_GUI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.catalight_GUI</span></code></a>) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase “<code class="docutils literal notranslate"><span class="pre">run_</span></code>” contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the <a class="reference internal" href="data_analysis.html"><span class="doc">data analysis section</span></a>.</p>
 <figure class="align-default" id="id5">
-<a class="reference internal image-reference" href="_images/equipment_connections.svg"><img alt="_images/equipment_connections.svg" src="_images/equipment_connections.svg" width="800" /></a>
+<a class="reference internal image-reference" href="_images/gui_live_view.png"><img alt="_images/gui_live_view.png" src="_images/gui_live_view.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">An overview of the connections used in the D-Lab system setup. Text in green indicates an installable python package, blue represents external programs, and black is hardware.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+<p><span class="caption-text">The GUI always opens in the live view showing status indicators for which equipment connected succesfully as well as current readouts of the equipment.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id6">
+<a class="reference internal image-reference" href="_images/gui_manual_control.png"><img alt="_images/gui_manual_control.png" src="_images/gui_manual_control.png" style="width: 800px;" /></a>
+<figcaption>
+<p><span class="caption-text">The manual control tab can be used to modulate the connected hardware in real time. Enter the desired values and hit the “apply” button to set those conditions. The equipment will be controlled in a seperate thread, and access to this tab will be blocked while the equipiment is going to the desired state. The “reset” button returns the edittable values to their previous state.</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p class="linemarker linemarker-200">You can shut down equipment control of the study by pressing the emergency stop button in the bottom right</p>
+</div>
+<figure class="align-default" id="id7">
+<a class="reference internal image-reference" href="_images/gui_study_overview.png"><img alt="_images/gui_study_overview.png" src="_images/gui_study_overview.png" style="width: 800px;" /></a>
+<figcaption>
+<p><span class="caption-text">The study overview tab is the starting point for developing a study. Append new experiments to your study by clicking the “Add Experiment” button. These can always be deleted with the “Delete” button. Enter study wide values such as the sample name, weight, control file, and calibration file (for running calibrations). To edit an experiment, click on it in the list and edit the selected experiment on the experiment tab. When all experiments have been updated, click the “Start Study” button to run all experiments in order.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p class="linemarker linemarker-213">The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).</p>
+<p class="linemarker linemarker-208">The minimum for GC sample time is only set when the control file is loaded. It it good practice to load your desired control file at the beginning.</p>
+</div>
+<figure class="align-default" id="id8">
+<a class="reference internal image-reference" href="_images/gui_experiment_design.png"><img alt="_images/gui_experiment_design.png" src="_images/gui_experiment_design.png" style="width: 800px;" /></a>
+<figcaption>
+<p><span class="caption-text">The experiment tab allows the user to edit the experimental parameters desired. When appropriate values are entered, a preview of the experiment will be plotted on the right hand side of the screen. This preview will also remain on the study tab to allow you to easily scan between experiments. Save previews using the tool bar on the bottom of the figure window.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p class="linemarker linemarker-216">Limits on edittable widgets can be set in the <a class="reference internal" href="_autosummary/catalight.catalight_GUI.MainWindow.html#catalight.catalight_GUI.MainWindow.set_form_limits" title="catalight.catalight_GUI.MainWindow.set_form_limits"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_form_limits()</span></code></a> method of the catalight GUI MainWindow.</p>
+</div>
+</section>
+</section>
+<section id="equipment-specific-guides">
+<span id="equipment"></span><h1>Equipment Specific Guides:<a class="headerlink" href="#equipment-specific-guides" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-222">The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature “Watlow.write()”. We further create the <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don’t go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().</p>
+<figure class="align-default" id="id9">
+<a class="reference internal image-reference" href="_images/equipment_connections.svg"><img alt="_images/equipment_connections.svg" src="_images/equipment_connections.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">An overview of the connections used in the D-Lab system setup. Text in green indicates an installable python package, blue represents external programs, and black is hardware.</span><a class="headerlink" href="#id9" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p class="linemarker linemarker-230">The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).</p>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
@@ -369,7 +395,7 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="data-analysis">
 <h1>Data Analysis:<a class="headerlink" href="#data-analysis" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-221">We have a subpackage dedicated to performing data analysis</p>
+<p class="linemarker linemarker-238">We have a subpackage dedicated to performing data analysis</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_analysis.html">The main toolboxes</a><ul>
@@ -386,7 +412,7 @@ Total Flow [sccm] = [5.0]
 </section>
 <section id="auxiliary-tools">
 <h1>Auxiliary tools:<a class="headerlink" href="#auxiliary-tools" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-229">We also have other stuff!</p>
+<p class="linemarker linemarker-246">We also have other stuff!</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html">Laser Calibration</a></li>
@@ -402,7 +428,7 @@ Total Flow [sccm] = [5.0]
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="intro.html" class="btn btn-neutral float-left" title="Welcome to catalight!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="intro.html" class="btn btn-neutral float-left" title="Welcome to Catalight!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="equipment_guides.html" class="btn btn-neutral float-right" title="Alicat MFCs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

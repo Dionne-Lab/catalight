@@ -180,23 +180,40 @@ Thats it! Define as many experiments as you'd like, supplying a list or list of 
 
 Graphical User interface
 ------------------------
-A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of packagename, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See :ref:`Areas for Future Development <future>` for additional details on making code changes.
+A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See :doc:`the development guide </developer_guide>` for more details on making your changes to the codebase.
 
-.. warning:: If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an iPython kernel can cause errors with threading in the current implementation.
+.. warning:: If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.
 
-:mod:`catalight.catalight_GUI`
+There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (:mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "``run_``" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
 
 .. figure:: _static/images/gui_live_view.png
     :width: 800
 
+    The GUI always opens in the live view showing status indicators for which equipment connected succesfully as well as current readouts of the equipment.
+
 .. figure:: _static/images/gui_manual_control.png
     :width: 800
+
+    The manual control tab can be used to modulate the connected hardware in real time. Enter the desired values and hit the "apply" button to set those conditions. The equipment will be controlled in a seperate thread, and access to this tab will be blocked while the equipiment is going to the desired state. The "reset" button returns the edittable values to their previous state.
+
+.. tip:: 
+    You can shut down equipment control of the study by pressing the emergency stop button in the bottom right
 
 .. figure:: _static/images/gui_study_overview.png
     :width: 800
 
+    The study overview tab is the starting point for developing a study. Append new experiments to your study by clicking the "Add Experiment" button. These can always be deleted with the "Delete" button. Enter study wide values such as the sample name, weight, control file, and calibration file (for running calibrations). To edit an experiment, click on it in the list and edit the selected experiment on the experiment tab. When all experiments have been updated, click the "Start Study" button to run all experiments in order.
+
+.. warning:: 
+    The minimum for GC sample time is only set when the control file is loaded. It it good practice to load your desired control file at the beginning.
+
 .. figure:: _static/images/gui_experiment_design.png
     :width: 800
+
+    The experiment tab allows the user to edit the experimental parameters desired. When appropriate values are entered, a preview of the experiment will be plotted on the right hand side of the screen. This preview will also remain on the study tab to allow you to easily scan between experiments. Save previews using the tool bar on the bottom of the figure window. 
+
+.. tip:: 
+    Limits on edittable widgets can be set in the :meth:`~catalight.catalight_GUI.MainWindow.set_form_limits` method of the catalight GUI MainWindow.
 
 .. _equipment:
 

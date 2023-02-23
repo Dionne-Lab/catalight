@@ -229,7 +229,7 @@ class MainWindow(QMainWindow):
 
     def init_study_tab(self):
         """Connect Study Overview Tab Contents (signals/slots)."""
-        self.setWindowTitle("BruceJr")
+        self.setWindowTitle("CataLight")
         self.butAddExpt.clicked.connect(self.add_expt)
         self.butDelete.clicked.connect(self.delete_expt)
         self.butStart.clicked.connect(lambda: self.threadpool.start(self.run_study_thread))
@@ -353,7 +353,7 @@ class MainWindow(QMainWindow):
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
-        
+
 
     def sum_spinboxes(self, spinboxes, qlabel):
         """
@@ -828,12 +828,14 @@ class MainWindow(QMainWindow):
 
         Updates the setpoint of all equipment based on the current manual
         control values entered in the GUI. This method is usually called from a
-        worker thread as it takes a long time to complete and uses many 
+        worker thread as it takes a long time to complete and uses many
         MainWindow attributes. As such, this method emits several signals to
-        trigger visual updates in the GUI. 
-        
-        .. Note:: The visual updates need to be sent out as signals to not cause
-        issues with updating the GUI outside the main thread!!
+        trigger visual updates in the GUI.
+
+        .. Note::
+            The visual updates need to be sent out as signals to not cause
+            issues with updating the GUI outside the main thread!!
+
         """
         self.toggle_controls(True)
         comp_list = [self.manualGasAComp.value(),
@@ -892,7 +894,7 @@ class MainWindow(QMainWindow):
 
     def change_label_color(self, label, new_color):
         label.setStyleSheet('Color: ' + new_color)
-        
+
     def open_peaksimple(self, path_name):
         """
         Use subprocess package to open peaksimple instance.

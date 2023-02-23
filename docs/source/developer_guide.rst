@@ -20,6 +20,22 @@ If the producer of your equipment does not provide a Python-specific programming
 
 Ideally, users that need to develop their own communication interfaces through some read/write commands via pySerial, pyVISA, and the like can write their python driver in a seperate package, publish it, and import it into the catalight package. It is much easier for users to use tools with more human readable commands like alicat.MassFlowController.set_flow() wrapping over the signals communication. Ease of use is exactly why we choose to use packages like alicat and pywatlow in the first place!!
 
+Creating New Experiment Types
+-----------------------------
+Coming soon
+
+Making Changes to the GUI
+-------------------------
+Function
+^^^^^^^^
+To create new static widget, we recommend using the QtDesigner application and opening the :file:`catalight.gui_components.reactorUI.ui` file. Any custom widgets added to the GUI can be inserted to the `catalight.gui_components` folder and promoted within QtDesigner. In the current state, all static widgets were created in this way when used within :mod:`catalight.catalight_GUI` and the code inside of this module connection all of the functionality of the GUI window and its components. Remember, the main purpose of the GUI is to help the user create experiment objects and "run a study". Experimental functionality should be added to the :class:`~catalight.equipment.experiment_control.Experiment` class. New widgets should help fill attributes of the Experiment class or other classes that need to be developed in the future. A second, but major function of the GUI is to directly control hardware. Future development should allow users to choose and utilize any equipment within the GUI.
+
+Style
+^^^^^
+:mod:`catalight.gui_components.style_guide` is a subpackage accessible when catalight is downloaded as a repository from the GitHub page. Within this folder is two image files and a folder containing QSS templates. The "icon.svg" and "drawing.svg" files can be replaced with the file of your choice, provided your match the filename exactly. This should replace the catalight icon and D-Lab logos within the GUI directly, without any code changes. To use alternate file types, you'll need to utilize QT Designer (or edit the ui file - not recommended) to change the image resource path.
+The QSS sheet was downloaded an lightly modified from `the QSS Stock website <https://qss-stock.devsecstudio.com/templates.php>`_. You can edit this file for wide-spread style changes to the GUI appearance, or enter your own QSS style sheet and insert it to the GUI by editting the path inside the :func:`catalight.catalight_GUI.setup_style` function.
+
+
 .. _future: 
 
 Areas for Future Development:
