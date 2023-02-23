@@ -20,8 +20,8 @@ from catalight.equipment.alicat_MFC.gas_control import Gas_System
 from catalight.equipment.sri_gc.gc_control import GC_Connector
 
 
-def main(main_dir, delay_times, flows,
-         gas_list, comp_list_on, comp_list_off):
+def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off, 
+         ctrl_file=None, flush_flowrate=50):
     """
     Test the response time of the GC by collecting samples in controlled way.
 
@@ -48,6 +48,12 @@ def main(main_dir, delay_times, flows,
     comp_list_off : list of float or int
         Composition list for flush mix.
         Example: [0, 0, 0, 1] sends 100 gas D, which should be inert gas
+    ctrl_file : str
+        Full path to the control file for the GC to use. Get entered on 
+        GC init. The default value is None, which uses the GC class default.
+    flush_flowrate : float or int
+        [sccm] Total flow rate to use when flushing between gc samples. 
+        The default is 50 sccm
 
     Returns
     -------
@@ -57,8 +63,8 @@ def main(main_dir, delay_times, flows,
     expt_dir = os.path.join(main_dir,
                             (date.today().strftime('%Y%m%d') + '_gc_delay_test'))
     os.makedirs(expt_dir, exist_ok=True)
-
-    gc = GC_Connector()
+    
+    gc = GC_Connector(ctrl_file)
     gc.sample_set_size = 1  # Subsequent runs will be wrong delay!!
     gas_control = Gas_System()
     gas_control.set_gasses(gas_list)
@@ -79,7 +85,7 @@ def main(main_dir, delay_times, flows,
             gc.peaksimple.SetRunning(1, True)
             time.sleep(60)
 
-            gas_control.set_flows(comp_list_off, 50)  # Clear out line
+            gas_control.set_flows(comp_list_off, flush_flowrate)  # Clear out line
 
             # Wait until gc collection is done
             for second in range(int((gc.sample_rate - 1) * 60)):
