@@ -27,6 +27,8 @@ A major task will be configuring and connecting your unique instruments. See :re
 
 After connecting your equipment and running experiments with either the GUI or scripts, you'll want to run some data analysis. Data output from experiments performed with catalight follow a uniform structrue (see figure below). If you are having trouble or don't want to use our code for automating your experiments, you can also make use of our analysis subpackage by structuring your data in a similar fashion (you can create data structures by creating a matching :class:`~catalight.equipment.experiment_control.Experiment` and using the :meth:`~catalight.equipment.experiment_control.Experiment.create_dirs()` method). See the :doc:`data analysis guide <data_analysis>` for more detailed instructions about the analysis subpackage.
 
+.. _data_folder:
+
 .. code-block:: text
     :caption: Example of the data structure saved after running experiments (a study)
 
@@ -190,6 +192,9 @@ There are two main types of GUIs present within catalight. Files containing the 
     :width: 800
 
     The GUI always opens in the live view showing status indicators for which equipment connected succesfully as well as current readouts of the equipment.
+
+.. warning:: 
+    The current version does not actively check for hardware changes. If and instrument is unplugged, the code won't know until you press the reconnect button or an error is thrown
 
 .. figure:: _static/images/gui_manual_control.png
     :width: 800

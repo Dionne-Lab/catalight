@@ -112,8 +112,45 @@
              
   <section id="the-main-toolboxes">
 <h1>The main toolboxes<a class="headerlink" href="#the-main-toolboxes" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-3">The <a class="reference internal" href="_autosummary/catalight.analysis.html#module-catalight.analysis" title="catalight.analysis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.analysis</span></code></a> sub-package contains a number of helpful tools to assist with data analysis. There are 4 types of modules found within the sub-package:</p>
+<ul class="simple">
+<li><p class="linemarker linemarker-5"><strong>Toolboxes —</strong>
+Compiled functions grouped by function to help with common tasks</p></li>
+<li><p class="linemarker linemarker-8"><strong>Data classes —</strong>
+Modules containing classes to act on specific data types</p></li>
+<li><p class="linemarker linemarker-11"><strong>Runnable scripts (prepended with “run_”) —</strong>
+Can either be called from another script or run as a gui in command line or editor</p></li>
+<li><p class="linemarker linemarker-14"><strong>GUIs (appended with “gui”) —</strong>
+More complex scripts that should be run exclusively from command line or editor, not called.</p></li>
+</ul>
+<p class="linemarker linemarker-17">We will discuss the contents of each type of files within this section, and additional details can be found in the <a class="reference internal" href="api.html"><span class="doc">API</span></a> documentation.</p>
 <section id="analysis-plotting">
 <h2>analysis.plotting<a class="headerlink" href="#analysis-plotting" title="Permalink to this heading"></a></h2>
+<p class="linemarker linemarker-21">The <a class="reference internal" href="_autosummary/catalight.analysis.plotting.html#module-catalight.analysis.plotting" title="catalight.analysis.plotting"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plotting</span></code></a> module groups functions used for plotting a variety of data types and formats. The <a class="reference internal" href="_autosummary/catalight.analysis.plotting.set_plot_style.html#catalight.analysis.plotting.set_plot_style" title="catalight.analysis.plotting.set_plot_style"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_plot_style()</span></code></a> function controls the appearance of all output functions, and adjust some plot visuals automatically based on the plot dimensions requested.</p>
+<p class="linemarker linemarker-23">The most standard function in the module is <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_expt_summary.html#catalight.analysis.plotting.plot_expt_summary" title="catalight.analysis.plotting.plot_expt_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_expt_summary()</span></code></a> which is usually the first plotting function called after running an experiment in conjunction with the <a class="reference internal" href="_autosummary/catalight.analysis.tools.run_analysis.html#catalight.analysis.tools.run_analysis" title="catalight.analysis.tools.run_analysis"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_analysis()</span></code></a> functions from the <a class="reference internal" href="_autosummary/catalight.analysis.tools.html#module-catalight.analysis.tools" title="catalight.analysis.tools"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tools</span></code></a> module. The <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_expt_summary.html#catalight.analysis.plotting.plot_expt_summary" title="catalight.analysis.plotting.plot_expt_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_expt_summary()</span></code></a> functions calls 3 seperate plotting functions, <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_run_num.html#catalight.analysis.plotting.plot_run_num" title="catalight.analysis.plotting.plot_run_num"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_run_num()</span></code></a>, <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_ppm.html#catalight.analysis.plotting.plot_ppm" title="catalight.analysis.plotting.plot_ppm"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_ppm()</span></code></a>, <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_X_and_S.html#catalight.analysis.plotting.plot_X_and_S" title="catalight.analysis.plotting.plot_X_and_S"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_X_and_S()</span></code></a> which we group together because they are often called back to back. Lets step through the output of each of these to better understand how normal analysis is done.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/run_num_plot.svg"><img alt="_images/run_num_plot.svg" src="_images/run_num_plot.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_run_num.html#catalight.analysis.plotting.plot_run_num" title="catalight.analysis.plotting.plot_run_num"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_run_num()</span></code></a> produces the GC counts in ppm as a function of time based on the provided calibration file. This is the output of the reactor as seen by the GC.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="_images/avg_conc_plot.svg"><img alt="_images/avg_conc_plot.svg" src="_images/avg_conc_plot.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_ppm.html#catalight.analysis.plotting.plot_ppm" title="catalight.analysis.plotting.plot_ppm"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_ppm()</span></code></a> plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-36">The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.</p>
+</div>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="_images/Conv_Sel_plot.svg"><img alt="_images/Conv_Sel_plot.svg" src="_images/Conv_Sel_plot.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">Finally, <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_X_and_S.html#catalight.analysis.plotting.plot_X_and_S" title="catalight.analysis.plotting.plot_X_and_S"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_X_and_S()</span></code></a> utilizes the <a class="reference internal" href="_autosummary/catalight.analysis.tools.calculate_X_and_S.html#catalight.analysis.tools.calculate_X_and_S" title="catalight.analysis.tools.calculate_X_and_S"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_X_and_S()</span></code></a> function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p class="linemarker linemarker-43">If the <code class="docutils literal notranslate"><span class="pre">savedata</span></code> parameter of the <a class="reference internal" href="_autosummary/catalight.analysis.plotting.plot_expt_summary.html#catalight.analysis.plotting.plot_expt_summary" title="catalight.analysis.plotting.plot_expt_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_expt_summary()</span></code></a> function is entered as “True”, all three of these plots will be saved in the results subfolder of the experiment’s <a class="reference internal" href="user_guide.html#data-folder"><span class="std std-ref">data folder</span></a>.</p>
 </section>
 <section id="analysis-user-inputs">
 <h2>analysis.user_inputs<a class="headerlink" href="#analysis-user-inputs" title="Permalink to this heading"></a></h2>
@@ -127,26 +164,26 @@
 </section>
 <section id="helper-scripts">
 <h1>Helper scripts<a class="headerlink" href="#helper-scripts" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-15">A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase “run/_” indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each “run” file in the analysis subpackage contains two function: “get_user_inputs()” and “main()”. “get_user_inputs()” is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. “main()” is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_”filename”.main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.</p>
+<p class="linemarker linemarker-56">A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase “run/_” indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each “run” file in the analysis subpackage contains two function: “get_user_inputs()” and “main()”. “get_user_inputs()” is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. “main()” is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_”filename”.main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.</p>
 </section>
 <section id="running-a-calibration">
 <span id="calibration"></span><h1>Running a calibration<a class="headerlink" href="#running-a-calibration" title="Permalink to this heading"></a></h1>
-<figure class="align-default" id="id1">
+<figure class="align-default" id="id4">
 <a class="reference internal image-reference" href="_images/running_calibration.png"><img alt="_images/running_calibration.png" src="_images/running_calibration.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">An example of running the “analyze_cal_data” method in a scripted format. An empty calibration file containing chemical ID strings and GC elution times windows needs to be provided and a calibration experiment should already be run.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+<p><span class="caption-text">An example of running the “analyze_cal_data” method in a scripted format. An empty calibration file containing chemical ID strings and GC elution times windows needs to be provided and a calibration experiment should already be run.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id2">
+<figure class="align-default" id="id5">
 <a class="reference internal image-reference" href="_images/calibration_output_runnum.png"><img alt="_images/calibration_output_runnum.png" src="_images/calibration_output_runnum.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">An example of the output of running calibration analysis on a data set.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+<p><span class="caption-text">An example of the output of running calibration analysis on a data set.</span><a class="headerlink" href="#id5" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="id3">
+<figure class="align-default" id="id6">
 <a class="reference internal image-reference" href="_images/calibration_output_fits.png"><img alt="_images/calibration_output_fits.png" src="_images/calibration_output_fits.png" style="width: 800px;" /></a>
 <figcaption>
-<p><span class="caption-text">An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+<p><span class="caption-text">An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
 </section>

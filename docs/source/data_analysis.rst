@@ -1,9 +1,50 @@
 The main toolboxes
 ------------------
+The :mod:`catalight.analysis` sub-package contains a number of helpful tools to assist with data analysis. There are 4 types of modules found within the sub-package:
+
+* **Toolboxes ---**
+  Compiled functions grouped by function to help with common tasks
+  
+* **Data classes ---**
+  Modules containing classes to act on specific data types
+
+* **Runnable scripts (prepended with "run\_") ---**
+  Can either be called from another script or run as a gui in command line or editor
+
+* **GUIs (appended with "gui") ---**
+  More complex scripts that should be run exclusively from command line or editor, not called.
+
+We will discuss the contents of each type of files within this section, and additional details can be found in the :doc:`/api` documentation.
+
 analysis.plotting
 ^^^^^^^^^^^^^^^^^
+The :mod:`~catalight.analysis.plotting` module groups functions used for plotting a variety of data types and formats. The :func:`~catalight.analysis.plotting.set_plot_style` function controls the appearance of all output functions, and adjust some plot visuals automatically based on the plot dimensions requested.
+
+The most standard function in the module is :func:`~catalight.analysis.plotting.plot_expt_summary` which is usually the first plotting function called after running an experiment in conjunction with the :func:`~catalight.analysis.tools.run_analysis` functions from the :mod:`~catalight.analysis.tools` module. The :func:`~catalight.analysis.plotting.plot_expt_summary` functions calls 3 seperate plotting functions, :func:`~catalight.analysis.plotting.plot_run_num`, :func:`~catalight.analysis.plotting.plot_ppm`, :func:`~catalight.analysis.plotting.plot_X_and_S` which we group together because they are often called back to back. Lets step through the output of each of these to better understand how normal analysis is done.
+
+.. figure:: _static/images/run_num_plot.svg
+    :width: 800
+
+    :func:`~catalight.analysis.plotting.plot_run_num` produces the GC counts in ppm as a function of time based on the provided calibration file. This is the output of the reactor as seen by the GC.
+
+.. figure:: _static/images/avg_conc_plot.svg
+    :width: 800
+
+    :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
+
+.. note:: 
+    The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.
+
+.. figure:: _static/images/Conv_Sel_plot.svg
+    :width: 800
+
+    Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots
+
+If the ``savedata`` parameter of the :func:`~catalight.analysis.plotting.plot_expt_summary` function is entered as "True", all three of these plots will be saved in the results subfolder of the experiment's :ref:`data folder <data_folder>`.
+
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
+
 analysis.tools
 ^^^^^^^^^^^^^^
 
