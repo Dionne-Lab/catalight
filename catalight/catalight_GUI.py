@@ -702,7 +702,7 @@ class MainWindow(QMainWindow):
                 msg.exec()
 
         # if not comp sweep but grid is still set up
-        elif (expt.expt_type != 'comp_sweep') and \
+        elif (expt.expt_type not in ['comp_sweep', 'calibration']) and \
              (self.default_grid_widgets[0][0].isHidden()):
 
             clear_grid()
@@ -714,7 +714,7 @@ class MainWindow(QMainWindow):
                     self.default_grid_widgets[i][j].setHidden(False)
 
         # update active elements if comp_sweep is set up
-        if (expt.expt_type == 'comp_sweep') and \
+        if (expt.expt_type in ['comp_sweep', 'calibration']) and \
            (self.default_grid_widgets[0][0].isHidden()):
 
             # sweep rows of grid
