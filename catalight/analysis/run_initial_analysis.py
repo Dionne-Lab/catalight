@@ -42,8 +42,8 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         'savedata': bool, 'switch_to_hours': float}
 
     """
-    # Prompt user to select calibration file
     app = QApplication(sys.argv)
+    # Prompt user to select calibration file
     cal_file = QFileDialog.getOpenFileName(None, 'Select Calibration File',
                                            cal_folder, "csv file (*.csv)")[0]
     calDF = pd.read_csv(cal_file, delimiter=',', index_col='Chem ID')

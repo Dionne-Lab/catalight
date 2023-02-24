@@ -5,12 +5,13 @@ Created on Thu Feb  3 09:25:10 2022
 @author: Briley Bourgeois
 """
 import os
+import sys
 
 import pandas as pd
 import catalight.analysis.tools as analysis_tools
 from catalight.analysis.user_inputs import PlotOptionsDialog, PlotOptionList
 from catalight.equipment.experiment_control import Experiment
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QApplication
 
 
 def get_user_inputs(starting_dir=None, cal_folder=None):
@@ -38,6 +39,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         Add point (x=0, y=0) to data set.
 
     """
+    app = QApplication(sys.argv)
     # Prompt user to select calibration file
     prompt = "Please select the desired calibration file"
     calibration_path = QFileDialog.getOpenFileName(None, prompt, cal_folder,
@@ -45,7 +47,8 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     calDF = pd.read_csv(calibration_path, delimiter=',', index_col='Chem ID')
 
     # Build Expt object from user selected expt directory
-    expt_dir = QFileDialog.getExistingDirectory('Select Calibration Experiment')
+    prompt = 'Select Calibration Experiment Folder (containing expt log)'
+    expt_dir = QFileDialog.getExistingDirectory(None, prompt)
     log_path = os.path.join(expt_dir, 'expt_log.txt')
     expt = Experiment()  # Initialize experiment obj
     expt.read_expt_log(log_path)  # Read expt parameters from log
@@ -96,5 +99,5 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
 
 if __name__ == "__main__":
 
-    options = get_user_inputs()
-    run_num_plots, cal_plots = main(*options)
+    expt, calDF, response_dict = get_user_inputs()
+    run_num_plots, cal_plots = main(expt, calDF, **response_dict)

@@ -276,12 +276,14 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
         Axis handle for plots showing expected ppm vs measured counts
 
     """
-    print('Analyzing Calibration data')
+    print('Analyzing calibration data')
     plt.close('all')
 
     # Returns raw counts with error bars for each chemical in each folder
     concentrations, avg, std = run_analysis(expt, calDF)
-    plotting.set_plot_style(figsize)
+    # plotting.set_plot_style(figsize)
+    plt.rcParams['figure.figsize'] = figsize
+    plt.rcParams['svg.fonttype'] = 'none'
 
     # Calculations:
     calchemIDs = calDF.index.to_numpy()  # get chem IDs from calibration files
@@ -364,6 +366,8 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     ax_calibration.set_ylabel('Counts/1000')
 
     # Figure Export
+    fig_run_num.tight_layout(pad=0, w_pad=0, h_pad=0)
+    fig_calibration.tight_layout(pad=0, w_pad=0, h_pad=0)
     fig_run_num_path = os.path.join(expt.results_path,
                                     str(figsize[0])
                                     + 'w_run_num_plot_individuals')
@@ -377,7 +381,8 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
     pickle.dump(fig_run_num, open(fig_run_num_path + '.pickle', 'wb'))
     pickle.dump(fig_calibration, open(fig_calibration_path + '.pickle', 'wb'))
-
+    plt.show()
+    print('Finished calibration analysis')
     return(run_num_plots, calibration_plots)
 
 
@@ -419,8 +424,8 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     # Analysis Loop
     # TODO add TCD part
     ##############################################################################
-    print('Analyzing Data...')
-
+    print('Analyzing data...')
+    print(expt.expt_name)
     expt_data_fol = expt.data_path
     expt_results_fol = expt.results_path
     os.makedirs(expt_results_fol, exist_ok=True)  # Make dir if not there
@@ -429,7 +434,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     step_path_list = []
     for dirpath, dirnames, filenames in os.walk(expt_data_fol):
         # only looks at .ASC
-        num_data_points = len((dirpath, 'FID', '.asc'))
+        num_data_points = len(list_matching_files(dirpath, 'FID', '.asc'))
 
         # determine bottom most dirs
         if not dirnames:
@@ -447,6 +452,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
 
     # Loops through the ind var step and calculates conc in each data file
     for step_path in step_path_list:
+        print(os.path.basename(step_path))
         step_num, step_val = os.path.basename(step_path).split(' ')
         step_num = int(step_num) - 1
         data_list = list_matching_files(step_path, 'FID', '.asc')
@@ -479,6 +485,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
         np.save(os.path.join(expt_results_fol, 'concentrations'), concentrations)
         avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
         std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
+    print('Finished analyzing ' + expt.expt_name)
     return(concentrations, avg, std)
 
 
