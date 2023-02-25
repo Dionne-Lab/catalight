@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calibration File Details &mdash; catalight 0.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/catalight_logo1_thick.svg"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Laser Calibration" href="auxiliary_tools.html" />
+    <link rel="prev" title="The main toolboxes" href="data_analysis.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            catalight
+              <img src="_static/catalight_header_g_whitetext.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Welcome to Catalight!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro.html#installation-instructions">Installation instructions:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#usage">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html#data-analysis">Data Analysis:</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data_analysis.html">The main toolboxes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_analysis.html#the-gcdata-class">The GCData class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_analysis.html#helper-scripts">Helper scripts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="data_analysis.html#running-a-calibration">Running a calibration</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Calibration File Details</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development Guide:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Providing feedback</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">Tests</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">catalight</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="user_guide.html">How it works</a></li>
+          <li class="breadcrumb-item"><a href="data_analysis.html">The main toolboxes</a></li>
+      <li class="breadcrumb-item active">Calibration File Details</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/calibration_file_details.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibration-file-details">
+<h1>Calibration File Details<a class="headerlink" href="#calibration-file-details" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-3">Here we will provide extra details about the calibration file, what components are required, and at which stages of analysis you need to have different parts of the file completed.</p>
+<p class="linemarker linemarker-5">Important Requirements:</p>
+<ul class="simple">
+<li><p class="linemarker linemarker-7"><strong>The Chem ID column must contain strings which match the alicat gas library</strong> if the user wishes to perform calibration with the catalight GUI. If this isn’t possible, the user can perform a composition sweep using the fill gas of the mixture, but this will reduce the precision of the MFC control.</p></li>
+<li><p class="linemarker linemarker-8"><strong>The elution times for each peak must be determined by the user</strong> and entered into the calibration file. One way to do this is to look at the peaks inside peaksimple and mark the locations using the peaksimple component system. Opening the component file will then show the start and end times for each peak, which can be copied into a calibration file for use with catalight.</p></li>
+<li><p class="linemarker linemarker-9"><strong>The GC control file must be tweaked by the user to acheive optimal results.</strong> The catalight package does not attempt to alter the GC settings, though automated condition screening could programmed using the <a class="reference internal" href="_autosummary/catalight.equipment.sri_gc.gc_control.GC_Connector.html#catalight.equipment.sri_gc.gc_control.GC_Connector" title="catalight.equipment.sri_gc.gc_control.GC_Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">GC_Connector</span></code></a> class and editting the different system files used by the GC (i.e. the .tem and .evt files).</p></li>
+</ul>
+<p class="linemarker linemarker-12">When first running the calibration experiment, the role of the calibration file is to build a custom CalGas mixture to be used by the MFC for accurate gas control. As such, the only important entries are the Chem ID column (must match gas library on MFC) and the expected concentractions (ppm column).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-15">The data in the calibration file is accessed by the column name. The locations can technically vary, but the names of the columns must remain exact.</p>
+</div>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/calgas_precalibration.svg"><img alt="_images/calgas_precalibration.svg" src="_images/calgas_precalibration.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">In this file, all components of the calibration gas are listed with their concentration in ppm provided. The elution times are also included for illustration, but these columns do not need to be filled prior to running a calibration experiment.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p class="linemarker linemarker-22">For some gas mixtures and hardware configurations, total peak seperation isn’t possible. This can be handled by combining the peaks into one name and treating the resulting measured concentration as a sum of the components.</p>
+<figure class="align-default" id="id2">
+<a class="reference internal image-reference" href="_images/calibration_peaksimple.png"><img alt="_images/calibration_peaksimple.png" src="_images/calibration_peaksimple.png" style="width: 800px;" /></a>
+<figcaption>
+<p><span class="caption-text">A screenshot of the same gas analyzed in peaksimple. Note that the C<sub>3</sub>H<sub>6</sub>/C<sub>3</sub>H<sub>8</sub> peak here is completely overlapped and the C<sub>4</sub>H<sub>10</sub>/C<sub>4</sub>H<sub>8</sub> peaks are heavily convuluted.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p class="linemarker linemarker-29">When proceeding to the analysis portion of running a calibration, make sure that peak elution times do not overlap and that only numbers are entered into these cells. Notice that H<sub>2</sub> was removed from the calibration file since it is not picked up by the FID detector used here.</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="_images/calgas_precalibration_truncated.svg"><img alt="_images/calgas_precalibration_truncated.svg" src="_images/calgas_precalibration_truncated.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">When using the calibration gas as an input for the <a class="reference internal" href="_autosummary/catalight.analysis.tools.analyze_cal_data.html#catalight.analysis.tools.analyze_cal_data" title="catalight.analysis.tools.analyze_cal_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyze_cal_data()</span></code></a> function, combine overlapped peaks as single entries. Here Propylene/Propane peaks and the Butane/Butene peaks are combined in the calibration file, and the expected ppm is supplied as the sum of the two individual components.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-37">The catalight system utilizes regular expression to determine the number of atoms of a given element within a Chem ID. Entering C<sub>3</sub>H<sub>6</sub>/C<sub>3</sub>H<sub>8</sub> would cause double counting of the carbon components for this chemical, leading to error when calculating the mole balance.</p>
+</div>
+<figure class="align-default" id="id4">
+<a class="reference internal image-reference" href="_images/calgas_postcalibration.svg"><img alt="_images/calgas_postcalibration.svg" src="_images/calgas_postcalibration.svg" width="800" /></a>
+<figcaption>
+<p><span class="caption-text">An example of the calibration file output by calling the <a class="reference internal" href="_autosummary/catalight.analysis.tools.analyze_cal_data.html#catalight.analysis.tools.analyze_cal_data" title="catalight.analysis.tools.analyze_cal_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">analyze_cal_data()</span></code></a> function. The fit values for each molecule are now entered into the calibration file by the software, and this calibration file can be imported as calDF going forward for future analysis.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p class="linemarker linemarker-44">Make sure to read the <a class="reference internal" href="data_analysis.html#calibration"><span class="std std-ref">Running a calibration</span></a> analysis section for a walkthrough on using the software tools to perform the calibration fits.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_analysis.html" class="btn btn-neutral float-left" title="The main toolboxes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="auxiliary_tools.html" class="btn btn-neutral float-right" title="Laser Calibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Briley Bourgeois, Claire Carlin.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

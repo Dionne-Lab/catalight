@@ -4,9 +4,10 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>﻿catalight.catalight_GUI.MainWindow &mdash; catalight 0.0.1 documentation</title>
+  <title>catalight.catalight_GUI.MainWindow &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/catalight_logo1_thick.svg"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -33,6 +34,7 @@
           
           <a href="../index.html" class="icon icon-home">
             catalight
+              <img src="../_static/catalight_header_g_whitetext.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -76,7 +78,7 @@
 <li class="toctree-l3 current"><a class="reference internal" href="catalight.catalight_GUI.html">catalight.catalight_GUI</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="catalight.catalight_GUI.setup_style.html">catalight.catalight_GUI.setup_style</a></li>
 <li class="toctree-l4"><a class="reference internal" href="catalight.catalight_GUI.EmittingStream.html">catalight.catalight_GUI.EmittingStream</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">﻿catalight.catalight_GUI.MainWindow</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">catalight.catalight_GUI.MainWindow</a></li>
 <li class="toctree-l4"><a class="reference internal" href="catalight.catalight_GUI.Worker.html">catalight.catalight_GUI.Worker</a></li>
 <li class="toctree-l4"><a class="reference internal" href="catalight.catalight_GUI.WorkerSignal.html">catalight.catalight_GUI.WorkerSignal</a></li>
 </ul>
@@ -106,7 +108,7 @@
           <li class="breadcrumb-item"><a href="../api.html">API</a></li>
           <li class="breadcrumb-item"><a href="catalight.html">﻿catalight</a></li>
           <li class="breadcrumb-item"><a href="catalight.catalight_GUI.html">catalight.catalight_GUI</a></li>
-      <li class="breadcrumb-item active">﻿catalight.catalight_GUI.MainWindow</li>
+      <li class="breadcrumb-item active">catalight.catalight_GUI.MainWindow</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/_autosummary/catalight.catalight_GUI.MainWindow.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -117,7 +119,7 @@
            <div itemprop="articleBody">
              
   <section id="catalight-catalight-gui-mainwindow">
-<h1>﻿catalight.catalight_GUI.MainWindow<a class="headerlink" href="#catalight-catalight-gui-mainwindow" title="Permalink to this heading"></a></h1>
+<h1>catalight.catalight_GUI.MainWindow<a class="headerlink" href="#catalight-catalight-gui-mainwindow" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="catalight.catalight_GUI.MainWindow">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catalight.catalight_GUI.</span></span><span class="sig-name descname"><span class="pre">MainWindow</span></span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow" title="Permalink to this definition"></a></dt>
@@ -137,88 +139,91 @@
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.add_expt" title="catalight.catalight_GUI.MainWindow.add_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_expt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Create a new experiment object and add it to GUI.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.closeEvent" title="catalight.catalight_GUI.MainWindow.closeEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeEvent</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_label_color</span></code>(label, new_color)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.closeEvent" title="catalight.catalight_GUI.MainWindow.closeEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeEvent</span></code></a>(*args, **kwargs)</p></td>
 <td><p class="linemarker linemarker-1">Redefines shutdown process for window to close equipment.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.connect_manual_ctrl" title="catalight.catalight_GUI.MainWindow.connect_manual_ctrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect_manual_ctrl</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.connect_manual_ctrl" title="catalight.catalight_GUI.MainWindow.connect_manual_ctrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">connect_manual_ctrl</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Connect Manual Control (signals/slots).</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.delete_expt" title="catalight.catalight_GUI.MainWindow.delete_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_expt</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.delete_expt" title="catalight.catalight_GUI.MainWindow.delete_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_expt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Delete currently selected item from listWidget.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.disconnect" title="catalight.catalight_GUI.MainWindow.disconnect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.disconnect" title="catalight.catalight_GUI.MainWindow.disconnect"><code class="xref py py-obj docutils literal notranslate"><span class="pre">disconnect</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Run shutdown sequence then disconnect communications.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.display_expt" title="catalight.catalight_GUI.MainWindow.display_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_expt</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.display_expt" title="catalight.catalight_GUI.MainWindow.display_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_expt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update GUI display when new expt is selected in listWidget.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.emergency_stop" title="catalight.catalight_GUI.MainWindow.emergency_stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emergency_stop</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.emergency_stop" title="catalight.catalight_GUI.MainWindow.emergency_stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">emergency_stop</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Cancel active threads, call self.shut_down().</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_design_tab" title="catalight.catalight_GUI.MainWindow.init_design_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_design_tab</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_design_tab" title="catalight.catalight_GUI.MainWindow.init_design_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_design_tab</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Connect Experiment Design Tab Contents (signals/slots).</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_equipment" title="catalight.catalight_GUI.MainWindow.init_equipment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_equipment</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_equipment" title="catalight.catalight_GUI.MainWindow.init_equipment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_equipment</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Try to connect to each piece of equipment.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_figs" title="catalight.catalight_GUI.MainWindow.init_figs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_figs</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_figs" title="catalight.catalight_GUI.MainWindow.init_figs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_figs</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Initialize figure canvas.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_manual_ctrl_tab" title="catalight.catalight_GUI.MainWindow.init_manual_ctrl_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_manual_ctrl_tab</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_manual_ctrl_tab" title="catalight.catalight_GUI.MainWindow.init_manual_ctrl_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_manual_ctrl_tab</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Initialize Manual Control Tab.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_study_tab" title="catalight.catalight_GUI.MainWindow.init_study_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_study_tab</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.init_study_tab" title="catalight.catalight_GUI.MainWindow.init_study_tab"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_study_tab</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Connect Study Overview Tab Contents (signals/slots).</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.manual_ctrl_eqpt" title="catalight.catalight_GUI.MainWindow.manual_ctrl_eqpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manual_ctrl_eqpt</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.manual_ctrl_eqpt" title="catalight.catalight_GUI.MainWindow.manual_ctrl_eqpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manual_ctrl_eqpt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update setpoint of equipment.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.normalOutputWritten" title="catalight.catalight_GUI.MainWindow.normalOutputWritten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalOutputWritten</span></code></a>(text)</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.normalOutputWritten" title="catalight.catalight_GUI.MainWindow.normalOutputWritten"><code class="xref py py-obj docutils literal notranslate"><span class="pre">normalOutputWritten</span></code></a>(text)</p></td>
 <td><p class="linemarker linemarker-1">Append console ouput to the QTextEdit.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.open_peaksimple" title="catalight.catalight_GUI.MainWindow.open_peaksimple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_peaksimple</span></code></a>(path_name)</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.open_peaksimple" title="catalight.catalight_GUI.MainWindow.open_peaksimple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_peaksimple</span></code></a>(path_name)</p></td>
 <td><p class="linemarker linemarker-1">Use subprocess package to open peaksimple instance.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.reset_eqpt" title="catalight.catalight_GUI.MainWindow.reset_eqpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_eqpt</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.reset_eqpt" title="catalight.catalight_GUI.MainWindow.reset_eqpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_eqpt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Disconnects from equipment and attempts to reconnect.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.select_cal_file" title="catalight.catalight_GUI.MainWindow.select_cal_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_cal_file</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.select_cal_file" title="catalight.catalight_GUI.MainWindow.select_cal_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_cal_file</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Prompt user to select calibration file.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.select_ctrl_file" title="catalight.catalight_GUI.MainWindow.select_ctrl_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_ctrl_file</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.select_ctrl_file" title="catalight.catalight_GUI.MainWindow.select_ctrl_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_ctrl_file</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Prompt user to selector GC control file if gc is connected.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.set_form_limits" title="catalight.catalight_GUI.MainWindow.set_form_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_form_limits</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.set_form_limits" title="catalight.catalight_GUI.MainWindow.set_form_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_form_limits</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update the limits of widgets within the GUI.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.shut_down" title="catalight.catalight_GUI.MainWindow.shut_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shut_down</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.shut_down" title="catalight.catalight_GUI.MainWindow.shut_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shut_down</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Run shutdown method on each connected piece of equipment.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.start_study" title="catalight.catalight_GUI.MainWindow.start_study"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_study</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.start_study" title="catalight.catalight_GUI.MainWindow.start_study"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_study</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Loop through experiment objects, update, and call .run_experiment().</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.sum_spinboxes" title="catalight.catalight_GUI.MainWindow.sum_spinboxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum_spinboxes</span></code></a>(spinboxes, qlabel)</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.sum_spinboxes" title="catalight.catalight_GUI.MainWindow.sum_spinboxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sum_spinboxes</span></code></a>(spinboxes, qlabel)</p></td>
 <td><p class="linemarker linemarker-1">Take list of spinboxes, get values, write sum to qlabel.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.toggle_controls" title="catalight.catalight_GUI.MainWindow.toggle_controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_controls</span></code></a>(value)</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.toggle_controls" title="catalight.catalight_GUI.MainWindow.toggle_controls"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_controls</span></code></a>(value)</p></td>
 <td><p class="linemarker linemarker-1">Toggle status of widgets in tabWidget.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_eqpt_status" title="catalight.catalight_GUI.MainWindow.update_eqpt_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_eqpt_status</span></code></a>()</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_eqpt_status" title="catalight.catalight_GUI.MainWindow.update_eqpt_status"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_eqpt_status</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update the equipment live view.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_expt" title="catalight.catalight_GUI.MainWindow.update_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_expt</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_expt" title="catalight.catalight_GUI.MainWindow.update_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_expt</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update Experiment object with GUI values.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_ind_var" title="catalight.catalight_GUI.MainWindow.update_ind_var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_ind_var</span></code></a>(expt)</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_ind_var" title="catalight.catalight_GUI.MainWindow.update_ind_var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_ind_var</span></code></a>(expt)</p></td>
 <td><p class="linemarker linemarker-1">Update independent variable if applicable.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_ind_var_grid" title="catalight.catalight_GUI.MainWindow.update_ind_var_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_ind_var_grid</span></code></a>()</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_ind_var_grid" title="catalight.catalight_GUI.MainWindow.update_ind_var_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_ind_var_grid</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Update widgets in independent variable grid.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_plot" title="catalight.catalight_GUI.MainWindow.update_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_plot</span></code></a>([expt])</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.update_plot" title="catalight.catalight_GUI.MainWindow.update_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_plot</span></code></a>([expt])</p></td>
 <td><p class="linemarker linemarker-1">Update the plots in GUI when experiment is changed.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.values_from_spinboxes" title="catalight.catalight_GUI.MainWindow.values_from_spinboxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values_from_spinboxes</span></code></a>(spinboxes)</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.values_from_spinboxes" title="catalight.catalight_GUI.MainWindow.values_from_spinboxes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">values_from_spinboxes</span></code></a>(spinboxes)</p></td>
 <td><p class="linemarker linemarker-1">Give list of spinboxes, return list of values.</p></td>
 </tr>
 </tbody>
@@ -226,12 +231,24 @@
 <p class="rubric">Attributes</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.change_color_signal" title="catalight.catalight_GUI.MainWindow.change_color_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_color_signal</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">update QLabel font color</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.catalight_GUI.MainWindow.progress_signal" title="catalight.catalight_GUI.MainWindow.progress_signal"><code class="xref py py-obj docutils literal notranslate"><span class="pre">progress_signal</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">triggered to update progress bar</p></td>
+</tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="catalight.catalight_GUI.MainWindow.add_expt">
 <span class="sig-name descname"><span class="pre">add_expt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.add_expt" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Create a new experiment object and add it to GUI.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.catalight_GUI.MainWindow.change_color_signal">
+<span class="sig-name descname"><span class="pre">change_color_signal</span></span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.change_color_signal" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">update QLabel font color</p>
 </dd></dl>
 
 <dl class="py method">
@@ -244,7 +261,9 @@
 <dt class="sig sig-object py" id="catalight.catalight_GUI.MainWindow.connect_manual_ctrl">
 <span class="sig-name descname"><span class="pre">connect_manual_ctrl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.connect_manual_ctrl" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Connect Manual Control (signals/slots).</p>
-<p class="linemarker linemarker-3">Connect to eqpt status and manual ctrl threads</p>
+<p class="linemarker linemarker-3">Connect buttons within manual control tab to corresponding functions.
+Also initialize a timer that calls update_eqpt_status(), updating both
+the manua_ctrl tab and live view</p>
 </dd></dl>
 
 <dl class="py method">
@@ -301,7 +320,9 @@ Calls set_form_limits() at end</p>
 <span class="sig-name descname"><span class="pre">init_manual_ctrl_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.init_manual_ctrl_tab" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Initialize Manual Control Tab.</p>
 <p class="linemarker linemarker-3">Blocks tabWidget updates, puts intial values in manual tab widgets.
-Insert possible gasses to combo boxes</p>
+Insert possible gasses to combo boxes. The update process for live
+readings for both the manual and live view tabs is created/connected
+in the connect_manual_ctrl() method.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -315,7 +336,15 @@ Insert possible gasses to combo boxes</p>
 <span class="sig-name descname"><span class="pre">manual_ctrl_eqpt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.manual_ctrl_eqpt" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Update setpoint of equipment.</p>
 <p class="linemarker linemarker-3">Updates the setpoint of all equipment based on the current manual
-control values entered in the GUI</p>
+control values entered in the GUI. This method is usually called from a
+worker thread as it takes a long time to complete and uses many
+MainWindow attributes. As such, this method emits several signals to
+trigger visual updates in the GUI.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-10">The visual updates need to be sent out as signals to not cause
+issues with updating the GUI outside the main thread!!</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
@@ -343,6 +372,12 @@ if you don’t close the window manually. Still searching for solution.</p>
 <dd class="field-odd"><p>subprocess.process</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.catalight_GUI.MainWindow.progress_signal">
+<span class="sig-name descname"><span class="pre">progress_signal</span></span><a class="headerlink" href="#catalight.catalight_GUI.MainWindow.progress_signal" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">triggered to update progress bar</p>
 </dd></dl>
 
 <dl class="py method">

@@ -7,6 +7,7 @@
   <title>catalight.equipment.experiment_control.Experiment &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/catalight_logo1_thick.svg"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -33,6 +34,7 @@
           
           <a href="../index.html" class="icon icon-home">
             catalight
+              <img src="../_static/catalight_header_g_whitetext.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -174,7 +176,7 @@ Order of list should be:
 <td><p class="linemarker linemarker-1">Set initial conditions for experiment.</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_date" title="catalight.equipment.experiment_control.Experiment.update_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_date</span></code></a>()</p></td>
-<td><p class="linemarker linemarker-1">Set self.date based on current date.</p></td>
+<td><p class="linemarker linemarker-1">Set <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.date" title="catalight.equipment.experiment_control.Experiment.date"><code class="xref py py-attr docutils literal notranslate"><span class="pre">date</span></code></a> based on current date.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_eqpt_list" title="catalight.equipment.experiment_control.Experiment.update_eqpt_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_eqpt_list</span></code></a>(eqpt_list)</p></td>
 <td><p class="linemarker linemarker-1">Assign equipment objects as attributes of Experiment object.</p></td>
@@ -191,46 +193,58 @@ Order of list should be:
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.data_path" title="catalight.equipment.experiment_control.Experiment.data_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">data_path</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Save location for raw data, defined relative to log (<cite>str, read-only</cite>)</p></td>
+<td><p class="linemarker linemarker-1">Save location for raw data, defined relative to expt_log.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.date" title="catalight.equipment.experiment_control.Experiment.date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">date</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Update w/ method.</p></td>
+<td><p class="linemarker linemarker-1">Update w/ <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_date" title="catalight.equipment.experiment_control.Experiment.update_date"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_date()</span></code></a> method.</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_list" title="catalight.equipment.experiment_control.Experiment.expt_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expt_list</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">This class attribute defines the possible experiments.</p></td>
+<td><p class="linemarker linemarker-1">This class attr defines the possible experiments.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_name" title="catalight.equipment.experiment_control.Experiment.expt_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expt_name</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">List fixed variables for expt (<cite>str, read-only</cite>)</p></td>
+<td><p class="linemarker linemarker-1">Creates name using the fixed variables for expt</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_type" title="catalight.equipment.experiment_control.Experiment.expt_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">expt_type</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">Define the desired experimental procedure selected from _expt_list.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.gas_comp" title="catalight.equipment.experiment_control.Experiment.gas_comp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gas_comp</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">[[gas1, gas2, gas3],[...]] (<cite>list</cite> of <cite>list</cite> of <cite>float</cite>)</p></td>
+<td><p class="linemarker linemarker-1">List of gas composition lists to sweep through.</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.gas_type" title="catalight.equipment.experiment_control.Experiment.gas_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gas_type</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">[gasA, gasB, gasC, ...]('list' of 'str')</p></td>
+<td><p class="linemarker linemarker-1">List of gas types for the MFCs to use to measure flow rates.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.ind_var" title="catalight.equipment.experiment_control.Experiment.ind_var"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ind_var</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Non-public for internal use (<cite>str, read-only</cite>)</p></td>
+<td><p class="linemarker linemarker-1">Describes the variable being modified.</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.power" title="catalight.equipment.experiment_control.Experiment.power"><code class="xref py py-obj docutils literal notranslate"><span class="pre">power</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p></td>
+<td><p class="linemarker linemarker-1">List of power (mW) values to step through during experiment.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.results_path" title="catalight.equipment.experiment_control.Experiment.results_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">results_path</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Save location for analysis, defined relative to log (<cite>str, read-only</cite>)</p></td>
+<td><p class="linemarker linemarker-1">Save location for analysis, defined relative to expt_log.</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_name" title="catalight.equipment.experiment_control.Experiment.sample_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_name</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Name of sample for building save paths (<cite>str</cite>)</p></td>
+<td><p class="linemarker linemarker-1">Name of sample for building save paths</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_rate" title="catalight.equipment.experiment_control.Experiment.sample_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_rate</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">Return sample_rate property.</p></td>
+<td><p class="linemarker linemarker-1">Sample rate in minutes (time it takes to collect a sample).</p></td>
 </tr>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.temp" title="catalight.equipment.experiment_control.Experiment.temp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temp</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p></td>
+<td><p class="linemarker linemarker-1">List of temperature (C) values to step through during experiment.</p></td>
 </tr>
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.tot_flow" title="catalight.equipment.experiment_control.Experiment.tot_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tot_flow</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p></td>
+<td><p class="linemarker linemarker-1">List of flow rates (sccm) to step through during experiment.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_set_size" title="catalight.equipment.experiment_control.Experiment.sample_set_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_set_size</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">Number of GC samples to collect</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_buffer" title="catalight.equipment.experiment_control.Experiment.t_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_buffer</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">(min) Time between last GC sample of a step and going to next condition</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_steady_state" title="catalight.equipment.experiment_control.Experiment.t_steady_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_steady_state</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">(min) Time between going to next condition and collecting first sample of a step</p></td>
+</tr>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.heat_rate" title="catalight.equipment.experiment_control.Experiment.heat_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heat_rate</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">(deg C/min) Ramp rate to use when heating reactor.</p></td>
 </tr>
 </tbody>
 </table>
@@ -258,27 +272,49 @@ experiment log file in the sample path</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.data_path">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">data_path</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.data_path" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Save location for raw data, defined relative to log (<cite>str, read-only</cite>)</p>
+<dd><p class="linemarker linemarker-1">Save location for raw data, defined relative to expt_log.
+Update using <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_save_paths" title="catalight.equipment.experiment_control.Experiment.update_save_paths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_save_paths()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.date">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">date</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.date" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Update w/ method. For logging (<cite>str, read-only</cite>)</p>
+<dd><p class="linemarker linemarker-1">Update w/ <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_date" title="catalight.equipment.experiment_control.Experiment.update_date"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_date()</span></code></a> method. For logging</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-3"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.expt_list">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_list</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.expt_list" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">This class attribute defines the possible experiments.
-This is an important part of the class and should be altered with caution
-(<cite>pandas.DataFrame</cite>)</p>
+<dd><p class="linemarker linemarker-1">This class attr defines the possible
+experiments. This is an important part of the class and should be altered
+with caution. Changing the units within this DF should allow different unit
+inputs for the rest of the codebase, but this feature is untested!!!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-6"><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.DataFrame</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.expt_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expt_name</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.expt_name" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">List fixed variables for expt (<cite>str, read-only</cite>)</p>
+<dd><p class="linemarker linemarker-1">Creates name using the fixed variables for expt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-3"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -290,25 +326,59 @@ the run_experiment() method is guided by the expt_type provided. New
 values must be entered into the _expt_list attribute and the
 appropriate class methods must be editted to account for new
 experimental capabilities.
-Converts ‘Active Status’ in _expt_list to True.</p>
+Updates <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.ind_var" title="catalight.equipment.experiment_control.Experiment.ind_var"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ind_var</span></code></a> when called.
+Converts ‘Active Status’ in <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_list" title="catalight.equipment.experiment_control.Experiment.expt_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expt_list</span></code></a> to True.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.gas_comp">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_comp</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.gas_comp" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">[[gas1, gas2, gas3],[…]] (<cite>list</cite> of <cite>list</cite> of <cite>float</cite>)</p>
+<dd><p class="linemarker linemarker-1">List of gas composition lists to sweep through.
+(ex. [[gas1, gas2, gas3],[…]]) Can be len=1 if not comp sweep.
+Each inner list must sum to 1 or 100.
+Initial value of  [[0.0, 50.0, 0.0, 0.0]].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-6"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.gas_type">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gas_type</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.gas_type" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">[gasA, gasB, gasC, …](‘list’ of ‘str’)</p>
+<dd><p class="linemarker linemarker-1">List of gas types for the MFCs to use to measure flow rates.
+(ex. [gasA, gasB, gasC, …]) All values must be found in
+the gas library of the MFC system used.
+Initial value of [‘C2H2’, ‘Ar’, ‘H2’, ‘Ar’].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-6"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.heat_rate">
+<span class="sig-name descname"><span class="pre">heat_rate</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.heat_rate" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">(deg C/min) Ramp rate to use when heating reactor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-3"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.ind_var">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ind_var</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.ind_var" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Non-public for internal use (<cite>str, read-only</cite>)</p>
+<dd><p class="linemarker linemarker-1">Describes the variable being modified. This gets updated
+when expt_type is updated based on what defined by <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_list" title="catalight.equipment.experiment_control.Experiment.expt_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expt_list</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -317,16 +387,16 @@ Converts ‘Active Status’ in _expt_list to True.</p>
 <dd><p class="linemarker linemarker-1">Plot the sweep parameter vs time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fig</strong> (<em>matplotlib figure</em><em>, </em><em>optional</em>) – Can supply figure object to write plot to it. The default is None.</p>
+<dd class="field-odd"><p><strong>fig</strong> (<em>matplotlib.pyplot.figure</em><em>, </em><em>optional</em>) – Can supply figure object to write plot to it. The default is None.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-6"><strong>fig</strong> (<em>matplotlib.pyplot.figure</em>) – figure object for experimental sweep. Two subplots for full and
+<li><p class="linemarker linemarker-6"><em>matplotlib.pyplot.figure</em> – figure object for experimental sweep. Two subplots for full and
 zoomed in versions. There is a hidden single subplot in background
 used for making shared axis titles</p></li>
-<li><p class="linemarker linemarker-9"><strong>ax1</strong> (<em>matplotlib.pyplot.axis</em>) – top plot showing full experimental sweep</p></li>
-<li><p class="linemarker linemarker-10"><strong>ax2</strong> (<em>matplotlib.pyplot.axis</em>) – bottom plot showing zoomed in version of experimental sweep</p></li>
-<li><p class="linemarker linemarker-11"><strong>run_time</strong> (<em>float</em>) – Calculate total time to run experiment</p></li>
+<li><p class="linemarker linemarker-9"><em>matplotlib.pyplot.axis</em> – ax1 - top plot showing full experimental sweep</p></li>
+<li><p class="linemarker linemarker-10"><em>matplotlib.pyplot.axis</em> – ax2 - bottom plot showing zoomed in version of experimental sweep</p></li>
+<li><p class="linemarker linemarker-11"><em>float</em> – run_time - Calculate total time to run experiment</p></li>
 </ul>
 </p>
 </dd>
@@ -336,13 +406,21 @@ used for making shared axis titles</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.power">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">power</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.power" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p>
+<dd><p class="linemarker linemarker-1">List of power (mW) values to step through during experiment.
+One element if constant or multiple for sweep. Initial value of [0.0].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.read_expt_log">
 <span class="sig-name descname"><span class="pre">read_expt_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.read_expt_log" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Read data from an existing log file and update object parameters.</p>
+<p class="linemarker linemarker-3">Grows gas_type list if more gasses are found in the expt_log than
+contained in current gas_type list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>log_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – string to the full file path of the log file (‘./expt_log.txt’).</p>
@@ -356,7 +434,13 @@ used for making shared axis titles</p></li>
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.results_path">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">results_path</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.results_path" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Save location for analysis, defined relative to log (<cite>str, read-only</cite>)</p>
+<dd><p class="linemarker linemarker-1">Save location for analysis, defined relative to expt_log.
+Update using <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.update_save_paths" title="catalight.equipment.experiment_control.Experiment.update_save_paths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">update_save_paths()</span></code></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -373,37 +457,105 @@ and take the corresponding actions.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.sample_name">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_name</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.sample_name" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Name of sample for building save paths (<cite>str</cite>)</p>
+<dd><p class="linemarker linemarker-1">Name of sample for building save paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-3"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.sample_rate">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample_rate</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.sample_rate" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Return sample_rate property.</p>
+<dd><p class="linemarker linemarker-1">Sample rate in minutes (time it takes to collect a sample).</p>
+<p class="linemarker linemarker-3">Set sample rate based on whether GC is connected.
+If GC is connected, try to set sample rate to that defined by expt.
+If that failed, _gc_control.sample_rate will be set to min defined by
+ctrl file.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.sample_set_size">
+<span class="sig-name descname"><span class="pre">sample_set_size</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.sample_set_size" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Number of GC samples to collect</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-3"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.set_initial_conditions">
 <span class="sig-name descname"><span class="pre">set_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.set_initial_conditions" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Set initial conditions for experiment.</p>
+<p class="linemarker linemarker-3">Uses the first element of each attributes list to define initial
+conditions. Will also check that the temperature is not more than
+10 degrees C above the first setpoint.
+The order is:
+1. Set temperature
+2. Give 1 minute time warning for laser
+3. Set initial laser power
+4. set gas type
+5. set gas flows
+6. wait 2 minutes
+7. print gas flows
+8. update gc sample set size</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.t_buffer">
+<span class="sig-name descname"><span class="pre">t_buffer</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.t_buffer" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">(min) Time between last GC sample of a step and going to
+next condition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.t_steady_state">
+<span class="sig-name descname"><span class="pre">t_steady_state</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.t_steady_state" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">(min) Time between going to next condition and collecting
+first sample of a step</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.temp">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.temp" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p>
+<dd><p class="linemarker linemarker-1">List of temperature (C) values to step through during experiment.
+One element if constant or multiple for sweep. Initial value of [273.0].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.tot_flow">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tot_flow</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.tot_flow" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">one element if constant or multiple for sweep (<cite>list</cite> of <cite>floats</cite>)</p>
+<dd><p class="linemarker linemarker-1">List of flow rates (sccm) to step through during experiment.
+One element if constant or multiple for sweep. Initial value of [0.0].</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.update_date">
 <span class="sig-name descname"><span class="pre">update_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.update_date" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Set self.date based on current date.</p>
+<dd><p class="linemarker linemarker-1">Set <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.date" title="catalight.equipment.experiment_control.Experiment.date"><code class="xref py py-attr docutils literal notranslate"><span class="pre">date</span></code></a> based on current date.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -417,7 +569,7 @@ updates sample rate by given value in gc_control and updates heater
 ramp rate by the rate specified in experiment object</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>eqpt_list</strong> (<em>list of objects</em>) – (<a class="reference internal" href="catalight.equipment.sri_gc.gc_control.GC_Connector.html#catalight.equipment.sri_gc.gc_control.GC_Connector" title="catalight.equipment.sri_gc.gc_control.GC_Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">GC_Connector</span></code></a>,
+<dd class="field-odd"><p><strong>eqpt_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)"><em>object</em></a><em>]</em>) – (<a class="reference internal" href="catalight.equipment.sri_gc.gc_control.GC_Connector.html#catalight.equipment.sri_gc.gc_control.GC_Connector" title="catalight.equipment.sri_gc.gc_control.GC_Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">GC_Connector</span></code></a>,
 <a class="reference internal" href="catalight.equipment.diode_laser.diode_control.Diode_Laser.html#catalight.equipment.diode_laser.diode_control.Diode_Laser" title="catalight.equipment.diode_laser.diode_control.Diode_Laser"><code class="xref py py-class docutils literal notranslate"><span class="pre">Diode_Laser</span></code></a>,
 <a class="reference internal" href="catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System" title="catalight.equipment.alicat_MFC.gas_control.Gas_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gas_System</span></code></a>,
 <a class="reference internal" href="catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a>)</p>
@@ -445,7 +597,7 @@ ramp rate by the rate specified in experiment object</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expt_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – string to the full file path of the experiments dir.</p></li>
-<li><p><strong>should_exist</strong> (<em>Boolean</em><em>, </em><em>optional</em>) – If updating based on existing log file, set to true.
+<li><p><strong>should_exist</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – If updating based on existing log file, set to true.
 The default is True.</p></li>
 </ul>
 </dd>

@@ -48,5 +48,9 @@ catalight.equipment.experiment\_control.Experiment
       ~Experiment.sample_rate
       ~Experiment.temp
       ~Experiment.tot_flow
+      ~Experiment.sample_set_size
+      ~Experiment.t_buffer
+      ~Experiment.t_steady_state
+      ~Experiment.heat_rate
    
    

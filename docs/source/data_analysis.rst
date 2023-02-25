@@ -59,6 +59,11 @@ A number of executable scripts have been written to perform basic data analysis 
 
 Running a calibration
 ---------------------
+Within catalight, calibrations are handled using external csv files. These are imported as a :class:`pandas.DataFrame`, usually reffered to in the code as "calDF". We primarily handle calibrations and integration outside of peaksimple to offer more control over the process and automation of analysis. For users that would prefer to utilize peaksimple for calibration, the results files output from peaksimple are saved in the same location as the ascii files.
+
+Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize :func:`catalight.analysis.tools.analyze_cal_data` to analyze the collected data. The :mod:`catalight.analysis.run_calibration` module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it's :attr:`~catalight.equipment.experiment_control.Experiment.expt_type` attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` class provides a :meth:`~atalight.equipment.alicat_MFC.gas_control.Gas_System.set_calibration_gas` method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called seperatly if scripting.
+
+In addition to performing the physical calibration experiment, the user needs to provide a calibration file describing the input gas. More information about the calibration file can be found in the :doc:`/calibration_file_details` section.
 
 .. figure:: _static/images/running_calibration.png
     :width: 800
@@ -74,3 +79,6 @@ Running a calibration
     :width: 800
 
     An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.
+
+.. toctree:: 
+    calibration_file_details

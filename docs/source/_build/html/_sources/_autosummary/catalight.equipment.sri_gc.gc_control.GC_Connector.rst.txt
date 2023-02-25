@@ -33,5 +33,6 @@ catalight.equipment.sri\_gc.gc\_control.GC\_Connector
    
       ~GC_Connector.min_sample_rate
       ~GC_Connector.sample_rate
+      ~GC_Connector.ctrl_file
    
    
