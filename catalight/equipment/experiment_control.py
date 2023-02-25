@@ -1,10 +1,7 @@
 """
-Created on Tue Dec 21 08:30:33 2021.
+This module contains the Experiment class and any future add ons.
 
-This is the experiment class file
-TODO matlab cases? switch?
-This File can likely get folded into gcdata.py to define experiment and data
-classes in the same module in the future
+Created on Tue Dec 21 08:30:33 2021.
 @author: Briley Bourgeois
 """
 import re
@@ -48,26 +45,32 @@ class Experiment:
         # This class attribute defines the possible experiments. This is an
         # important part of the class and should be altered with caution
         # noqa to suppress extra spaces PEP violation. Done for clarity.
+
+        # TODO: ind_var of stability test should be changed to time, but
+        # careful bug checking needs to be performed everywhere expt.ind_var
+        # is used.
         self._expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', False,    'K'],  #noqa
-             ['power_sweep',    'power', False,   'mW'],  #noqa
-             ['comp_sweep',  'gas_comp', False, 'frac'],  #noqa
-             ['flow_sweep',  'tot_flow', False, 'sccm'],  #noqa
-             ['calibration', 'gas_comp', False,  'ppm'],  #noqa
-             ['stability_test',  'temp', False,  'min']], #noqa
+            [['temp_sweep',      'temp', False,    'K'],  # noqa
+             ['power_sweep',    'power', False,   'mW'],  # noqa
+             ['comp_sweep',  'gas_comp', False, 'frac'],  # noqa
+             ['flow_sweep',  'tot_flow', False, 'sccm'],  # noqa
+             ['calibration', 'gas_comp', False,  'ppm'],  # noqa
+             ['stability_test',  'temp', False,  'min']], # noqa
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
                      'Units'])
 
+        # Set default values of properties
+        # --------------------------------
         # These are just random default values.
-        # these should all be numpy arrays and floats
-        self._temp = [273.0]  #: initial value 273
+        # Descriptions below in property definitions
+        self._temp = [273.0]
         self._power = [0.0]
-        self._tot_flow = [0.0]  # This can't be larger than 50
-        # Every row should add to one
+        self._tot_flow = [0.0]
         self._gas_comp = [[0.0, 50.0, 0.0, 0.0]]
         self._gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
+        self._sample_rate = 10
 
         # Returns todays date as YYYYMMDD by default
         self._date = date.today().strftime('%Y%m%d')
@@ -78,11 +81,25 @@ class Experiment:
         self._results_path = 'Undefined'
         self._data_path = 'Undefined'
 
+        # Define attributes and set default
+        # ---------------------------------
         self.sample_set_size = 4
+        """int: Number of GC samples to collect"""
+
         self.t_buffer = 5
+        """
+        int or float: (min) Time between last GC sample of a step and going to
+        next condition
+        """
+
         self.t_steady_state = 15
-        self._sample_rate = 10
+        """
+        int or float: (min) Time between going to next condition and collecting
+        first sample of a step
+        """
+
         self.heat_rate = 15
+        """int or float: (deg C/min) Ramp rate to use when heating reactor."""
 
         if eqpt_list is not False:
             self.update_eqpt_list(eqpt_list)
@@ -112,7 +129,7 @@ class Experiment:
 
             Parameters
             ----------
-            value : :type:`str`
+            value : str
                 value to attempt update
 
             Returns
@@ -177,7 +194,8 @@ class Experiment:
                 # into a class attribute.
             elif (attr == '_gas_comp'):
                 for composition in value:
-                    if round(sum(composition), 6) == 100:  # convert % to fraction
+                    # convert % to fraction
+                    if round(sum(composition), 6) == 100:
                         composition[:] = [x / 100 for x in composition]
 
                     if round(sum(composition), 6) != 1:
@@ -194,84 +212,116 @@ class Experiment:
             return getattr(self, attr)
         return get_any
 
+    # Property definitions
+    # ====================
     # Number Properties
+    # -----------------
     temp = property(fget=_attr_getter('_temp'),
                     fset=_num_setter('_temp'))
-    """one element if constant or multiple for sweep (`list` of `floats`)"""
-
+    """
+    list[float]: List of temperature values to step through during experiment.
+    One element if constant or multiple for sweep. Initial value of [273.0].
+    """
     power = property(fget=_attr_getter('_power'),
                      fset=_num_setter('_power'))
-    """one element if constant or multiple for sweep (`list` of `floats`)"""
+    """
+    list[float]: List of power (mW) values to step through during experiment.
+    One element if constant or multiple for sweep. Initial value of [0.0].
+    """
 
     tot_flow = property(fget=_attr_getter('_tot_flow'),
                         fset=_num_setter('_tot_flow'))
-    """one element if constant or multiple for sweep (`list` of `floats`)"""
+    """
+    list[float]: List of flow rates (sccm) to step through during experiment.
+    One element if constant or multiple for sweep. Initial value of [0.0].
+    """
 
     gas_comp = property(fget=_attr_getter('_gas_comp'),
                         fset=_num_setter('_gas_comp'))
-    """[[gas1, gas2, gas3],[...]] (`list` of `list` of `float`)"""
+    """
+    list[list[float]]: List of gas composition lists to sweep through.
+    (ex. [[gas1, gas2, gas3],[...]]) Can be len=1 if not comp sweep.
+    Each inner list must sum to 1 or 100.
+    Initial value of  [[0.0, 50.0, 0.0, 0.0]].
+    """
 
     # String Properties
+    # -----------------
     gas_type = property(fget=_attr_getter('_gas_type'),
                         fset=_str_setter('_gas_type'))
-    """[gasA, gasB, gasC, ...]('list' of 'str')"""
+    """
+    list[str]: List of gas types for the MFCs to use to measure flow rates.
+    (ex. [gasA, gasB, gasC, ...]) All values must be found in
+    the gas library of the MFC system used.
+    Initial value of ['C2H2', 'Ar', 'H2', 'Ar'].
+    """
 
     sample_name = property(fget=_attr_getter('_sample_name'),
                            fset=_str_setter('_sample_name'))
-    """Name of sample for building save paths (`str`)"""
+    """str: Name of sample for building save paths"""
 
     # Read only properties
+    # --------------------
     date = property(lambda self: self._date)
-    """Update w/ method. For logging (`str, read-only`)"""
+    """str, read-only: Update w/ :meth:`update_date` method. For logging"""
 
     ind_var = property(lambda self: self._ind_var)
-    """Non-public for internal use (`str, read-only`)"""
+    """
+    str, read-only: Describes the variable being modified. This gets updated
+    when expt_type is updated based on what defined by :attr:`expt_list`.
+    """
 
     expt_name = property(lambda self: self._expt_name)
-    """List fixed variables for expt (`str, read-only`)"""
+    """str, read-only: Creates name using the fixed variables for expt"""
 
     results_path = property(lambda self: self._results_path)
-    """Save location for analysis, defined relative to log (`str, read-only`)"""
+    """
+    str, read-only: Save location for analysis, defined relative to expt_log.
+    Update using :meth:`update_save_paths`
+    """
 
     data_path = property(lambda self: self._data_path)
-    """Save location for raw data, defined relative to log (`str, read-only`)"""
+    """
+    str, read-only: Save location for raw data, defined relative to expt_log.
+    Update using :meth:`update_save_paths`
+    """
 
     expt_list = property(lambda self: self._expt_list)
-    """This class attribute defines the possible experiments.
-    This is an important part of the class and should be altered with caution
-    (`pandas.DataFrame`)"""
+    """
+    pandas.DataFrame, read-only: This class attr defines the possible
+    experiments. This is an important part of the class and should be altered
+    with caution. Changing the units within this DF should allow different unit
+    inputs for the rest of the codebase, but this feature is untested!!!
+    """
 
     # Setting sample rate changes when connected to GC
     @property
     def sample_rate(self):
-        """Return sample_rate property."""
+        """
+        Sample rate in minutes (time it takes to collect a sample).
+
+        Set sample rate based on whether GC is connected.
+        If GC is connected, try to set sample rate to that defined by expt.
+        If that failed, _gc_control.sample_rate will be set to min defined by
+        ctrl file.
+        """
         return self._sample_rate
 
     @sample_rate.setter
     def sample_rate(self, value):
-        """
-        Set sample rate based on whether GC is connected.
-
-        If GC is connected, try to set sample rate to that defined by expt.
-        If that failed, _gc_control.sample_rate will be set to min defined by
-        ctrl file.
-
-        Parameters
-        ----------
-        value : float
-            sample rate in minutes (time it takes to collect a sample)
-        """
+        """Returns sample rate value."""
         if hasattr(self, '_gc_control'):
             if value >= self._gc_control.min_sample_rate:
                 # try to set sample rate to that defined by expt
                 self._sample_rate = value
                 self._gc_control.sample_rate = self.sample_rate
             else:
-                # If that failed, _gc_control.sample_rate will be set to min defined by
-                # ctrl file. This line makes sure gc and expt match
+                # If that failed, _gc_control.sample_rate will be set to min
+                # defined by ctrl file. This line makes sure gc and expt match.
                 self._sample_rate = self._gc_control.sample_rate
                 print('Error: Input Sample Rate is Lower Than GC Minimum')
-                print('Sample rate set to: %.2f' % self._gc_control.sample_rate)
+                print('Sample rate set to: %.2f'
+                      % self._gc_control.sample_rate)
 
         else:
             self._sample_rate = value
@@ -286,7 +336,8 @@ class Experiment:
         values must be entered into the _expt_list attribute and the
         appropriate class methods must be editted to account for new
         experimental capabilities.
-        Converts 'Active Status' in _expt_list to True.
+        Updates :attr:`ind_var` when called.
+        Converts 'Active Status' in :attr:`expt_list` to True.
         """
         return self._expt_type
 
@@ -308,7 +359,7 @@ class Experiment:
         self._ind_var = ind_var_series.to_string(index=False)
 
     def update_date(self):
-        """Set self.date based on current date."""
+        """Set :attr:`date` based on current date."""
         self._date = date.today().strftime('%Y%m%d')
 
     def update_expt_log(self, expt_path):
@@ -430,7 +481,7 @@ class Experiment:
         ----------
         expt_path : str
             string to the full file path of the experiments dir.
-        should_exist : Boolean, optional
+        should_exist : bool, optional
             If updating based on existing log file, set to true.
             The default is True.
 
@@ -524,21 +575,21 @@ class Experiment:
 
         Parameters
         ----------
-        fig : matplotlib figure, optional
+        fig : matplotlib.pyplot.figure, optional
             Can supply figure object to write plot to it. The default is None.
 
         Returns
         -------
-        fig : matplotlib.pyplot.figure
+        matplotlib.pyplot.figure
             figure object for experimental sweep. Two subplots for full and
             zoomed in versions. There is a hidden single subplot in background
             used for making shared axis titles
-        ax1 : matplotlib.pyplot.axis
-            top plot showing full experimental sweep
-        ax2 : matplotlib.pyplot.axis
-            bottom plot showing zoomed in version of experimental sweep
-        run_time : float
-            Calculate total time to run experiment
+        matplotlib.pyplot.axis
+            ax1 - top plot showing full experimental sweep
+        matplotlib.pyplot.axis
+            ax2 - bottom plot showing zoomed in version of experimental sweep
+        float
+            run_time - Calculate total time to run experiment
 
         """
         # have to get the sample run time from GC
@@ -589,7 +640,8 @@ class Experiment:
 
         # Loop through remaining setpoints
         for step_num in range(1, len(sweep_val)):
-            # new sample times: start at last sample, add t_buffer, add new batch
+            # new sample times: start at last sample,
+            # add t_buffer, add new batch
             t_sample = np.append(t_sample,
                                  t_sample[-1] + self.t_buffer + t_batch)
             sample_val = np.concatenate((sample_val,
@@ -630,7 +682,8 @@ class Experiment:
                         top=False, bottom=False, left=False, right=False)
         plt.xlabel("time [min]")
         plt.ylabel(sweep_title + ' [' + units + ']')
-        ax1.annotate('Experiment Overview', xy=(0.05, 0.95), xycoords='axes fraction')
+        ax1.annotate('Experiment Overview', xy=(0.05, 0.95),
+                     xycoords='axes fraction')
         line_names = ['Setpoint', "GC Sample"]
         if self.expt_type in ['comp_sweep', 'calibration']:
             line_names = self.gas_type + ["GC Sample"]
@@ -654,7 +707,7 @@ class Experiment:
 
         Parameters
         ----------
-        eqpt_list: list of objects
+        eqpt_list: list[object]
             (:py:class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`,
             :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`,
             :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System`,
@@ -670,13 +723,28 @@ class Experiment:
             # try to set sample rate to that defined by expt
             self._gc_control.sample_rate = self.sample_rate
         else:
-            # If that failed, _gc_control.sample_rate will be set to min defined by
-            # ctrl file. This line makes sure gc and expt match
+            # If that failed, _gc_control.sample_rate will be set to min
+            # defined by ctrl file. This line makes sure gc and expt match
             self._sample_rate = self._gc_control.sample_rate
         self._heater.ramp_rate = self.heat_rate
 
     def set_initial_conditions(self):
-        """Set initial conditions for experiment."""
+        """Set initial conditions for experiment.
+
+        Uses the first element of each attributes list to define initial
+        conditions. Will also check that the temperature is not more than
+        10 degrees C above the first setpoint.
+        The order is:
+        1. Set temperature
+        2. Give 1 minute time warning for laser
+        3. Set initial laser power
+        4. set gas type
+        5. set gas flows
+        6. wait 2 minutes
+        7. print gas flows
+        8. update gc sample set size
+        """
+
         self.update_date()
         unit = self.expt_list['Units'][0]
         self._heater.ramp(self.temp[0], temp_units=unit)
@@ -690,11 +758,12 @@ class Experiment:
 
         if self.power[0] > 0:
             self._laser_control.time_warning(1)
-            time.sleep(60)  # Wait for a minute before turning on laser for safety
+            # Wait for a minute before turning on laser for safety
+            time.sleep(60)
 
         self._laser_control.set_power(self.power[0])
-        self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         self._gas_control.set_gasses(self.gas_type)
+        self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
@@ -737,6 +806,7 @@ class Experiment:
 
             # This chooses the run type and sets condition accordingly
             # --------------------------------------------------------
+            # Python 3.10+ implements match/case which could replace these.
             if self.expt_type == 'temp_sweep':
                 self._heater.ramp(step, temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
@@ -749,7 +819,9 @@ class Experiment:
                 print(self.gas_type)
                 print(np.array(self.gas_comp) * step)
                 self._gas_control.print_flows()
-            # Stability Test conditions set in initial conditions
+            elif self.expt_type == 'stability_test':
+                pass
+                # Stability Test conditions set in initial conditions
 
             # This segment times when to start GC and prints status
             # -----------------------------------------------------

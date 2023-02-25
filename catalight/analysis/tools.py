@@ -14,7 +14,7 @@ import re
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import catalight.analysis.plotting as plotting
+
 from catalight.analysis.gcdata import GCData
 from catalight.equipment.experiment_control import Experiment
 
@@ -71,7 +71,8 @@ def list_expt_obj(file_paths):
     """
     experiments = []
     for log_path in file_paths:
-        if os.path.basename(log_path) == 'expt_log.txt':  # Double check filename is correct
+        # Double check filename is correct
+        if os.path.basename(log_path) == 'expt_log.txt':
             expt_path = os.path.dirname(log_path)
             expt = Experiment()  # Initialize experiment obj
             expt.read_expt_log(log_path)  # Read expt parameters from log
@@ -178,7 +179,7 @@ def load_results(expt):
     avg = pd.read_csv(os.path.join(fol, 'avg_conc.csv'), index_col=(0))
     std = pd.read_csv(os.path.join(fol, 'std_conc.csv'), index_col=(0))
     concentrations = np.load(os.path.join(fol, 'concentrations.npy'))
-    return(concentrations, avg, std)
+    return (concentrations, avg, std)
 
 
 def convert_index(dataframe):
@@ -224,9 +225,9 @@ def get_timepassed(concentrations, switch_to_hours=2):
 
     Returns
     -------
-    time_passed : numpy.ndarray
-        Numpy array of cumulative time passed since the start of the experiment.
-    time_unit : str
+    numpy.ndarray
+        Numpy array of cumulative time passed since the start of experiment.
+    str
         Either 'min' or 'hr' based on the length of total time and parameters.
 
     """
@@ -343,7 +344,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
             ax_calibration.text(.02, .75, label,
                                 horizontalalignment='left',
                                 transform=ax_calibration.transAxes, fontsize=8)
-        except(np.linalg.LinAlgError):
+        except (np.linalg.LinAlgError):
             label = chemical + '\nBad Fit'
             ax_calibration.text(.02, .75, label,
                                 horizontalalignment='left',
@@ -361,7 +362,8 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     ax_calibration = fig_calibration.add_subplot(111, frameon=False)
     # hide tick and tick label of the big axis
     ax_calibration.tick_params(labelcolor='none', which='both',
-                               top=False, bottom=False, left=False, right=False)
+                               top=False, bottom=False,
+                               left=False, right=False)
     ax_calibration.set_xlabel("ppm")
     ax_calibration.set_ylabel('Counts/1000')
 
@@ -383,7 +385,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     pickle.dump(fig_calibration, open(fig_calibration_path + '.pickle', 'wb'))
     plt.show()
     print('Finished calibration analysis')
-    return(run_num_plots, calibration_plots)
+    return (run_num_plots, calibration_plots)
 
 
 def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
@@ -423,7 +425,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     """
     # Analysis Loop
     # TODO add TCD part
-    ##############################################################################
+    ###########################################################################
     print('Analyzing data...')
     print(expt.expt_name)
     expt_data_fol = expt.data_path
@@ -482,11 +484,12 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     std_dat = np.nanstd(concentrations[:, 1:, :], axis=2)
     std = pd.DataFrame(std_dat, columns=calchemIDs, index=condition)
     if savedata:
-        np.save(os.path.join(expt_results_fol, 'concentrations'), concentrations)
+        np.save(os.path.join(expt_results_fol, 'concentrations'),
+                concentrations)
         avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
         std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
     print('Finished analyzing ' + expt.expt_name)
-    return(concentrations, avg, std)
+    return (concentrations, avg, std)
 
 
 def calculate_X_and_S(expt, reactant, target_molecule):
