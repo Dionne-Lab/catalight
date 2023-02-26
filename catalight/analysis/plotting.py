@@ -162,7 +162,8 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
     # Calculations:
     calchemIDs = calDF.index  # get chem IDs from calibration files
     time_passed, time_unit = analysis_tools.get_timepassed(concentrations,
-                                                           switch_to_hours)
+                                                           switch_to_hours,
+                                                           expt)
 
     # use regex to determine number of carbons (or other) in molecule name
     for chemical in calchemIDs:
@@ -217,27 +218,21 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     fig, ax = plt.subplots()
     concentrations, avg, std = analysis_tools.load_results(expt)
     calchemIDs = calDF.index  # get chem IDs from calibration files
-    time_passed, time_unit = analysis_tools.get_timepassed(concentrations,
-                                                           switch_to_hours)
+
     units = (expt.expt_list['Units']
              [expt.expt_list['Active Status']].to_string(index=False))
-    try:
-        x_data = getattr(expt, expt.ind_var)
-    except AttributeError:  # Fails for stability test
-        order = np.argsort(time_passed)
-        x_data = time_passed[order]
-        avg = pd.DataFrame(concentrations[0, 1:, order])
-        avg.columns = calchemIDs
-        avg.index = x_data
-        # TODO Need to update error when integration and fit error gets included.
-        std = 0 * avg
-        units = time_unit
 
     if units == 'frac':
         avg.index = avg.index.str.replace('_', '\n')
         avg.index = avg.index.str.replace('frac', '')
         std.index = std.index.str.replace('_', '\n')
         std.index = std.index.str.replace('frac', '')
+    elif expt.expt_type == 'stability_test':
+        # TODO This could check unit if expt_list updates
+        # to have time instead of temp in future.
+        if np.max(avg.index) > switch_to_hours:
+            avg.index = avg.index / 60  # convert minutes to hours
+            units = 'hr'
     else:
         avg = analysis_tools.convert_index(avg)
         std = analysis_tools.convert_index(std)
@@ -245,7 +240,8 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     stoyk = pd.Series(0, index=calchemIDs)
     # use regex to determine number of carbons (or other) in molecule name
     for chemical in calchemIDs:
-        chem_num = calchemIDs.get_loc(chemical) + 1  # index 0 is timestamp
+        # Use chem_num to access by index number instead of name.
+        # chem_num = calchemIDs.get_loc(chemical) + 1  # index 0 is timestamp
         # read number after 'c' in each chem name
         count = re.findall(mole_bal + r"(\d+)", chemical, re.IGNORECASE)
         if not count:
@@ -263,11 +259,15 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     mol_error = std @ (np.array(stoyk, dtype=int))
 
     # Plotting:
-    undetected = avg.sum(axis=0) == 0  # Don't plot molecules that don't show up
+    # Don't plot molecules that don't show up
+    undetected = avg.sum(axis=0) == 0
+    if avg.to_numpy().sum() == 0:
+        print('No Molecules Detected')
+        return (fig, ax)
+
     avg.loc[:, ~undetected].plot(ax=ax, marker='o',
                                  yerr=std.loc[:, ~undetected])
-    mol_count.loc[:, ~undetected].plot(ax=ax, marker='o',
-                                       yerr=mol_error.loc[:, ~undetected])
+    mol_count.plot(ax=ax, marker='o', yerr=mol_error)
     ax.set_xlabel(expt.ind_var + ' [' + units + ']')
     ax.set_ylabel('Conc (ppm)')
     # ax.set_xticklabels(avg.iloc[0:len(x_data)], rotation=90)

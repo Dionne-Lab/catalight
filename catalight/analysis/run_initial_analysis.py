@@ -11,8 +11,8 @@ import pandas as pd
 from PyQt5.QtWidgets import QFileDialog, QApplication, QDialog
 import catalight.analysis as analysis
 from catalight.analysis.user_inputs import (DirectorySelector,
-                                                PlotOptionsDialog,
-                                                PlotOptionList)
+                                            PlotOptionsDialog,
+                                            PlotOptionList)
 
 
 def get_user_inputs(starting_dir=None, cal_folder=None):

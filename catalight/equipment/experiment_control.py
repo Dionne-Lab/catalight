@@ -268,8 +268,9 @@ class Experiment:
 
     start_time = property(lambda self: self._start_time)
     """
-    str, read-only: Update w/ when :meth:`run_experiment` method is called
-    For logging. Used to calculate time_passed during analysis.
+    str, read-only: Updates when :meth:`set_initial_conditions` method is
+    called. For logging. Used to calculate time_passed during analysis.
+    Given by time.time() at the **end** of initial conditions steps.
     """
 
     ind_var = property(lambda self: self._ind_var)
@@ -748,14 +749,13 @@ class Experiment:
         1. Set temperature
         2. Give 1 minute time warning for laser
         3. Set initial laser power
-        4. set gas type
-        5. set gas flows
-        6. wait 2 minutes
-        7. print gas flows
-        8. update gc sample set size
+        4. Set gas type
+        5. Set gas flows
+        6. Wait 2 minutes
+        7. Print gas flows
+        8. Update gc sample set size
+        9. Update date, time, and update log
         """
-
-        self.update_date()
         unit = self.expt_list['Units'][0]
         self._heater.ramp(self.temp[0], temp_units=unit)
         starting_temp = self._heater.read_temp()
@@ -777,7 +777,12 @@ class Experiment:
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
+
+        # Update experiment start time and date, save to log.
+        self.update_date()
         self._start_time = time.time()  # Log beginning of expt
+        # TODO Its a little silly to do all this instead of define a higher
+        # level path as a instance attr in the first place.
         log_path = os.path.join(os.path.dirname(self.data_path),
                                 'expt_log.txt')
         self.update_expt_log(log_path)
@@ -872,8 +877,9 @@ class Experiment:
 
 
 if __name__ == "__main__":
-    # This is just a demo which runs when you run this class file as the main script
-    # as of 20221026 this demo will not run because an extra mfc was added to setup
+    # This is just a demo which runs when you run this class file as the main
+    # script as of 20221026 this demo will not run because an extra mfc was
+    # added to setup
     plt.close('all')
     # main_fol = ("C:\\Users\\brile\\Documents\\Temp Files\\"
     #             "20210524_8%AgPdMix_1wt%__200C_24.8mg\\PostReduction")

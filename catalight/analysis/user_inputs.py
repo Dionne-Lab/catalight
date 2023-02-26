@@ -8,6 +8,7 @@ Created on Thu Jun 23 22:42:55 2022
 
 References
 ----------
+# noqa
 (1) https://github.com/napari/magicgui/issues/9
 (2) https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection
 (3) https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder
@@ -32,11 +33,6 @@ from PyQt5.QtWidgets import (QDialogButtonBox, QItemDelegate, QDialog,
                              QFileDialog, QFileSystemModel, QTreeWidgetItem,
                              QComboBox, QRadioButton, QLineEdit, QLabel,
                              QDoubleSpinBox)
-
-# Not sure this is needed. can likely delete after testing
-# you need to run Qapplication before initiating these windows.
-#app = QApplication(sys.argv)
-#app.setApplicationName('Select the data you want to be plotted')
 
 
 class DirectorySelector(QFileDialog):

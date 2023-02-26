@@ -61,15 +61,19 @@ def list_expt_obj(file_paths):
 
     Parameters
     ----------
-    file_paths : list of str
+    file_paths : list[str]
         List of full paths to expt_log.txt files.
 
     Returns
     -------
-    experiments : list of Experiment
+    experiments : list[Experiment]
         List of Experiment objects from provided filepaths.
     """
     experiments = []
+    # If user enters one filepath as str, convert to list for them.
+    if isinstance(file_paths, str):
+        file_paths = [file_paths]
+
     for log_path in file_paths:
         # Double check filename is correct
         if os.path.basename(log_path) == 'expt_log.txt':
@@ -209,7 +213,7 @@ def convert_index(dataframe):
     return dataframe
 
 
-def get_timepassed(concentrations, switch_to_hours=2):
+def get_timepassed(concentrations, switch_to_hours=2, expt=None):
     """
     Convert time stamps to array of cumulative time passed.
 
@@ -234,11 +238,18 @@ def get_timepassed(concentrations, switch_to_hours=2):
     time_stamps = concentrations[:, 0, :].reshape(-1)
     time_stamps = time_stamps[~np.isnan(time_stamps)]
 
+    # Experiments after 20230225 save w/ timestamp
+    if isinstance(expt.start_time, float):
+        start_time = expt.start_time
+
+    else:  # Method before 20230225 (less accurate)
+        start_time = np.min(time_stamps)
+
     if np.max(time_stamps) > (switch_to_hours * 60 * 60):
-        time_passed = (time_stamps - np.min(time_stamps)) / 60 / 60
+        time_passed = (time_stamps - start_time) / 60 / 60
         time_unit = 'hr'
     else:
-        time_passed = (time_stamps - np.min(time_stamps)) / 60
+        time_passed = (time_stamps - start_time) / 60
         time_unit = 'min'
 
     return time_passed, time_unit
@@ -427,7 +438,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     # TODO add TCD part
     ###########################################################################
     print('Analyzing data...')
-    print(expt.expt_name)
+    print(expt.date + expt.expt_type + '_' + expt.expt_name)
     expt_data_fol = expt.data_path
     expt_results_fol = expt.results_path
     os.makedirs(expt_results_fol, exist_ok=True)  # Make dir if not there
@@ -451,6 +462,8 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     num_chems = int(len(calchemIDs))
     condition = np.full(num_fols, 0, dtype=object)
     concentrations = np.full((num_fols, num_chems + 1, max_runs), np.nan)
+    # TODO create err np.array
+    # err_concentrations = np.full((num_fols, num_chems + 1, max_runs), np.nan)
 
     # Loops through the ind var step and calculates conc in each data file
     for step_path in step_path_list:
@@ -460,28 +473,55 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
         data_list = list_matching_files(step_path, 'FID', '.asc')
         condition[step_num] = step_val
         conc = []
+        # conc_err = [] TODO
         for filepath in data_list:
             # data is an instance of a class, for signal use data.signal etc
             data = GCData(filepath, basecorrect=True)
 
             values = data.get_concentrations(calDF)
+            # TODO add error output to GC_Data.get_concentrations()
+            # values, err = data.get_concentrations(calDF)
+            # conc_err.append(err.tolist())
             conc.append(values.tolist())
 
         num_runs = len(conc)
         # [Condition x [Timestamps, ChemID] x run number]
         concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
+        # err_concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
 
     units = (expt.expt_list['Units']
-             [expt.expt_list['Active Status']].to_string(index=False))
-    idx_name = (expt.ind_var + ' [' + units + ']')  # Sweep Parameter
+                [expt.expt_list['Active Status']].to_string(index=False))
+
+    if expt.expt_type == 'stability_test':
+        # Reset "condition" to be time passed for stability tests
+        # TODO This could check unit if expt_list updates
+        # to have time instead of temp in future.
+
+        # Don't switch unit, get time passed in minutes.
+        time_passed, _ = get_timepassed(concentrations,
+                                        switch_to_hours=1e9, expt=expt)
+        # Make sure time is chronological
+        order = np.argsort(time_passed)
+        condition = time_passed[order]  # Rewrite condition as time passed
+
+        idx_name = 'time [min]'  # We can get rid of this and else if TODO done
+        avg_dat = concentrations[0, 1:, order]
+        # TODO add err_concentration values to std
+        std_dat = avg_dat * 0
+
+    else:
+        idx_name = (expt.ind_var + ' [' + units + ']')  # Sweep Parameter
+        avg_dat = np.nanmean(concentrations[:, 1:, :], axis=2)
+        # TODO add err_concentration values to std
+        std_dat = np.nanstd(concentrations[:, 1:, :], axis=2)
+
     # Redefine condition list as pandas index so we can assign a name
     condition = pd.Index(condition, name=idx_name)
 
     # Results
     ###########################################################################
-    avg_dat = np.nanmean(concentrations[:, 1:, :], axis=2)
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)
-    std_dat = np.nanstd(concentrations[:, 1:, :], axis=2)
+    # TODO add err_concentration values to std
     std = pd.DataFrame(std_dat, columns=calchemIDs, index=condition)
     if savedata:
         np.save(os.path.join(expt_results_fol, 'concentrations'),
