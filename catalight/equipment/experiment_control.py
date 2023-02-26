@@ -74,6 +74,7 @@ class Experiment:
 
         # Returns todays date as YYYYMMDD by default
         self._date = date.today().strftime('%Y%m%d')
+        self._start_time = 'Undefined'
         self._expt_type = 'Undefined'
         self._sample_name = 'Undefined'
         self._ind_var = 'Undefined'
@@ -265,6 +266,12 @@ class Experiment:
     date = property(lambda self: self._date)
     """str, read-only: Update w/ :meth:`update_date` method. For logging"""
 
+    start_time = property(lambda self: self._start_time)
+    """
+    str, read-only: Update w/ when :meth:`run_experiment` method is called
+    For logging. Used to calculate time_passed during analysis.
+    """
+
     ind_var = property(lambda self: self._ind_var)
     """
     str, read-only: Describes the variable being modified. This gets updated
@@ -374,6 +381,7 @@ class Experiment:
         with open(os.path.join(expt_path, 'expt_log.txt'), 'w+') as log:
             log_entry = [
                 'Experiment Date = ' + self.date,
+                'Experiment Start = ' + self.start_time,
                 'Experiment Type = ' + self.expt_type,
                 'Experiment Name = ' + self.expt_name,
                 'Sample Name = ' + self.sample_name,
@@ -416,7 +424,9 @@ class Experiment:
 
                 # Check the text before '=' to pick which value to assign
                 if re.search('Experiment Date =', line):
-                    self._date = data[0]
+                    self._date = data
+                elif re.search('Experiment Start =', line):
+                    self._start_time = data
                 elif re.search('Experiment Type =', line):
                     self.expt_type = data
                 elif re.search('Experiment Name =', line):
@@ -767,6 +777,10 @@ class Experiment:
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
+        self._start_time = time.time()  # Log beginning of expt
+        log_path = os.path.join(os.path.dirname(self.data_path),
+                                'expt_log.txt')
+        self.update_expt_log(log_path)
 
     def run_experiment(self):
         """
