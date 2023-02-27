@@ -42,7 +42,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         'savedata': bool, 'switch_to_hours': float}
 
     """
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # noqa
     # Prompt user to select calibration file
     cal_file = QFileDialog.getOpenFileName(None, 'Select Calibration File',
                                            cal_folder, "csv file (*.csv)")[0]

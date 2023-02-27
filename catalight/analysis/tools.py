@@ -492,6 +492,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     units = (expt.expt_list['Units']
                 [expt.expt_list['Active Status']].to_string(index=False))
 
+
     if expt.expt_type == 'stability_test':
         # Reset "condition" to be time passed for stability tests
         # TODO This could check unit if expt_list updates
@@ -518,6 +519,16 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     # Redefine condition list as pandas index so we can assign a name
     condition = pd.Index(condition, name=idx_name)
 
+    if units == 'frac':  # Change label style to stacked compositions.
+        condition = condition.str.replace('_', '\n')
+        condition = condition.str.replace('frac', '')
+
+    elif expt.expt_type == 'stability_test':
+        pass  # Already Float
+
+    else:  # Convert filenames to float w/o units.
+        condition = condition.str.replace(r'\D', '', regex=True).astype(float)
+    print(condition)
     # Results
     ###########################################################################
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)

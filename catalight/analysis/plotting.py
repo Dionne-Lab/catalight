@@ -222,20 +222,12 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     units = (expt.expt_list['Units']
              [expt.expt_list['Active Status']].to_string(index=False))
 
-    if units == 'frac':
-        avg.index = avg.index.str.replace('_', '\n')
-        avg.index = avg.index.str.replace('frac', '')
-        std.index = std.index.str.replace('_', '\n')
-        std.index = std.index.str.replace('frac', '')
-    elif expt.expt_type == 'stability_test':
+    if expt.expt_type == 'stability_test':
         # TODO This could check unit if expt_list updates
         # to have time instead of temp in future.
         if np.max(avg.index) > switch_to_hours:
             avg.index = avg.index / 60  # convert minutes to hours
             units = 'hr'
-    else:
-        avg = analysis_tools.convert_index(avg)
-        std = analysis_tools.convert_index(std)
 
     stoyk = pd.Series(0, index=calchemIDs)
     # use regex to determine number of carbons (or other) in molecule name
