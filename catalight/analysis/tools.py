@@ -489,9 +489,9 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
         concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
         # err_concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
 
+    # Pull out "Active" Units from expt_list DF
     units = (expt.expt_list['Units']
-                [expt.expt_list['Active Status']].to_string(index=False))
-
+             [expt.expt_list['Active Status']].to_string(index=False))
 
     if expt.expt_type == 'stability_test':
         # Reset "condition" to be time passed for stability tests

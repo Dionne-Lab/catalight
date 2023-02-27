@@ -12,7 +12,7 @@ An excellent example of a flexible automated lab design can be found in the `Lig
 
 My equipment doesn't have a Python API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-This is a tough situation and some additional programming will be required! Two approaches for this situation include (1) connecting with the equipment by interfacing with the providers software system and (2) writing low level or VISA communication interfaces, for example, by using pySerial/pyVISA. 
+This is a tough situation and some additional programming will be required! Two approaches for this situation include (1) connecting with the equipment by interfacing with the providers software system and (2) writing low level or VISA communication interfaces, for example, by using pySerial/pyVISA.
 
 Our SRI GC connection is an example of approach 1. There is no Python interface supported by the equipment developer or by found on PyPi or Github (that we could find). Fortunately, the equipment developer does supply a programing interface to thier control software, but it is not written specifically for Python. We were able to connect to this using the "`.NET infrastructure <https://dotnet.microsoft.com/en-us/learn/dotnet/what-is-dotnet>`_" which is a way to reuse code across multiple languages via something called "`Common Language Runtime <https://learn.microsoft.com/en-us/dotnet/standard/clr>`_" and `python.NET <https://pypi.org/project/pythonnet/>`_. If you've never heard of this, neither did we! Thankfully, this can look pretty simple in practice. See our :ref:`SRI GC <sri_gc_doc>` specific guide for more details on how this works.
 
@@ -36,7 +36,7 @@ Style
 The QSS sheet was downloaded an lightly modified from `the QSS Stock website <https://qss-stock.devsecstudio.com/templates.php>`_. You can edit this file for wide-spread style changes to the GUI appearance, or enter your own QSS style sheet and insert it to the GUI by editting the path inside the :func:`catalight.catalight_GUI.setup_style` function.
 
 
-.. _future: 
+.. _future:
 
 Areas for Future Development:
 -----------------------------
@@ -46,11 +46,11 @@ The current iteration of the system has been designed with modularity in mind, b
 
 * Better methods need to be developped to **allow users to configure specific hardware** with minimal coding while maximizing compatibility with the rest of the package.
 
-  * For example, an abstract "GasSystem" class could be created with standardized class method names compatible with the rest of the package, then a specific "AlicatGasSystem" class can be initialized that subclasses the abstract class and decorates the class methods to make them compatible with the specific hardware used by a particular lab. In otherwords, the methods of every gas sytem should behave identically on the surface, while the actual implementation should change for each specific hardware setup. AlicatGasSystem.set_flow() needs to behave the same as a hypothetical BronkhorstGasSystem.set_flow() 
+  * For example, an abstract "GasSystem" class could be created with standardized class method names compatible with the rest of the package, then a specific "AlicatGasSystem" class can be initialized that subclasses the abstract class and decorates the class methods to make them compatible with the specific hardware used by a particular lab. In otherwords, the methods of every gas sytem should behave identically on the surface, while the actual implementation should change for each specific hardware setup. AlicatGasSystem.set_flow() needs to behave the same as a hypothetical BronkhorstGasSystem.set_flow()
 
   * This would ideally be managed in a single location, such as a configuration file, that a new user could edit once in order to make the system compatible with their hardware. Ideally no other code components would need to be edited. This configuration file could allow the user to change between "AlicatGasSystem" or "BronkhorstGasSystem". If class abstraction is implemented correctly, the rest the code package will continue working as intended.
 
-  * The `LightLab <https://lightlab.readthedocs.io/en/development/index.html>`_ package is an excellent example of flexible lab configuration and could be a very helpful reference for development in this area. In particular, future development should look into their implementation of `"essentialMethods" <https://lightlab.readthedocs.io/en/development/API/lightlab.laboratory.instruments.interfaces.html>`_ attribute for abstract drivers and type checking in their `DriverMeta <https://github.com/lightwave-lab/lightlab/blob/development/lightlab/equipment/visa_bases/visa_driver.py>`_ class. Their tutorial on `creating instrument drivers <https://lightlab.readthedocs.io/en/development/_static/tutorials/drivers/drivers.html>`_ is also a great reference. 
+  * The `LightLab <https://lightlab.readthedocs.io/en/development/index.html>`_ package is an excellent example of flexible lab configuration and could be a very helpful reference for development in this area. In particular, future development should look into their implementation of `"essentialMethods" <https://lightlab.readthedocs.io/en/development/API/lightlab.laboratory.instruments.interfaces.html>`_ attribute for abstract drivers and type checking in their `DriverMeta <https://github.com/lightwave-lab/lightlab/blob/development/lightlab/equipment/visa_bases/visa_driver.py>`_ class. Their tutorial on `creating instrument drivers <https://lightlab.readthedocs.io/en/development/_static/tutorials/drivers/drivers.html>`_ is also a great reference.
 
 * **The Gas_System class needs to support a flexible number of MFCs.** The gas_system class and the related GUI components are currently configured to work with a specific number of mass flow controllers. This could easily be amended by utilizing loops and list for accessing MFC data and controls. For example, the MFC class currently has attributes self.mfc_a, self.mfc_b, etc. This should be replaced by self.mfc_list which contains a list of all mfcs used by the system, allowing flexibility for different system configurations. Ideally this can be managed by a file outside the gas_system class. This also needs to be updated within the GUI code, which currently generates MFC components using QtDesigner. This would need to be done programmatically for flexibility.
 
@@ -64,6 +64,8 @@ The current iteration of the system has been designed with modularity in mind, b
 * **Formalized error reporting** needs to be handled.
 * **Wavelength sweep experiments** will be implemented when NKT support is (soon)
 * **Stability test experiments should be implemented more clearly.** The current implementation of stability test is clunky. It looks confusing in the GUI and doesn't have a dedicated time ind_var. Fixing will require some refactoring.
+* **Add plot integration option to chromatogram_scanner_gui**
+* **Add option to lock scale on chromatogram_scanner_gui**, possibly by getting max value of all files
 
 Writing Documentation
 ---------------------

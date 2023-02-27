@@ -135,7 +135,7 @@ class GCData:
         struct_elm_frac = 0.1
         struct_pts = int(round(self.signal.size * struct_elm_frac))
         str_el = np.repeat([1], struct_pts)
-        line = nd.generate_binary_structure(rank=1, connectivity=9)
+        line = nd.generate_binary_structure(rank=1, connectivity=9)  # noqa
         # structure = line
         signal_basesub = nd.white_tophat(input=self.signal, footprint=str_el)
         return signal_basesub
@@ -344,7 +344,6 @@ class GCData:
 
         plt.xlabel('Retention (min)', fontsize=18)
         plt.ylabel('Signal (a.u.)', fontsize=18)
-        plt.xlim([0, 13])
         plt.legend()
         plt.tight_layout()
         plt.show()

@@ -7,6 +7,7 @@ import os
 import sys
 
 import pyqtgraph as pg
+import numpy as np
 from catalight.analysis.gcdata import GCData
 import catalight.analysis.tools as analysis_tools
 from PyQt5.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QGridLayout,
@@ -33,6 +34,7 @@ class MainWindow(QMainWindow):
         # Create options
         self.options_layout = QGridLayout()
         self.bc_box = QCheckBox("baseline correction?")
+        self.int_box = QCheckBox("Plot integration bounds?")
         self.target_entry = QComboBox()
         self.target_entry.addItems(['FID', 'TCD'])
         self.suffix_entry = QLineEdit('.asc')
@@ -40,7 +42,8 @@ class MainWindow(QMainWindow):
         self.suffix_label = QLabel('File Ending:')
 
         # Assemble options to layout
-        self.options_layout.addWidget(self.bc_box, 0, 0, 2, 1)
+        self.options_layout.addWidget(self.bc_box, 0, 0)
+        self.options_layout.addWidget(self.int_box, 1, 0)
         self.options_layout.addWidget(self.target_label, 0, 1)
         self.options_layout.addWidget(self.target_entry, 1, 1)
         self.options_layout.addWidget(self.suffix_label, 0, 2)
@@ -61,6 +64,7 @@ class MainWindow(QMainWindow):
         self.target_entry.currentTextChanged.connect(self.get_files)
         self.suffix_entry.editingFinished.connect(self.get_files)
         self.bc_box.clicked.connect(self.update_plot)
+        self.int_box.clicked.connect(self.update_plot)
 
         # Get main directory containing data files
         self.folderpath = QFileDialog \
@@ -140,11 +144,25 @@ class MainWindow(QMainWindow):
         # Update data, check if baseline correction is needed
         self.data_line.setData(data.time, data.signal,
                                pen=self.pen1, name="raw")
+        if self.int_box.isChecked():
+            data.integration_inds()
+            [left_idx, right_idx] = (np.rint(data.lind).astype('int'),
+                                     np.rint(data.rind).astype('int'))
+            self.graphWidget.plot(data.time[data.apex_ind],
+                                  data.signal[data.apex_ind],
+                                  'bo', label='apex')
+            self.graphWidget.plot(data.time[left_idx],
+                                  data.signal[left_idx],
+                                  'go', label='left')
+            self.graphWidget.plot(data.time[right_idx],
+                                  data.signal[right_idx],
+                                  'ro', label='right')
         if self.bc_box.isChecked():
             self.data_line_corr.setData(datacorr.time, datacorr.signal,
                                         pen=self.pen2, name="corrected")
         else:
             self.data_line_corr.clear()
+
 
 if __name__ == "__main__":
 

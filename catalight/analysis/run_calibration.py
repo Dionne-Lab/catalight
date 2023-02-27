@@ -39,7 +39,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         Add point (x=0, y=0) to data set.
 
     """
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # noqa
     # Prompt user to select calibration file
     prompt = "Please select the desired calibration file"
     calibration_path = QFileDialog.getOpenFileName(None, prompt, cal_folder,
