@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
     """Subclass QMainWindow to customize your application's main window."""
     progress_signal = pyqtSignal(int)  #: triggered to update progress bar
     change_color_signal = pyqtSignal(object, str)  #: update QLabel font color
+
     def __init__(self):
         super().__init__()
         loadUi(r'.\gui_components\\reactorUI.ui', self)
@@ -52,7 +53,7 @@ class MainWindow(QMainWindow):
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
-        sys.stdout = EmittingStream(self.consoleOutput)
+        # sys.stdout = EmittingStream(self.consoleOutput)
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
         # Pass the function to execute
@@ -165,7 +166,8 @@ class MainWindow(QMainWindow):
             for key in attribute_list:
                 attr = attribute_list[key]
                 if isinstance(attr, FlowController):
-                    self.gas_controller.set_calibration_gas(attr, calDF, fill_gas='Ar')
+                    self.gas_controller.set_calibration_gas(attr, calDF,
+                                                             fill_gas='Ar')
 
             self.setGasAType.insertItem(0, 'CalGas')
             self.setGasBType.insertItem(0, 'CalGas')
@@ -250,13 +252,16 @@ class MainWindow(QMainWindow):
         # On first run, this should populate expt drop down on GUI
         if self.expt_types.count() < len(Experiment().expt_list['Expt Name']):
             self.expt_types.addItem('Undefined')
-            self.expt_types.addItems(Experiment().expt_list['Expt Name'].to_list())
+            expt_list = Experiment().expt_list['Expt Name'].to_list()
+            self.expt_types.addItems(expt_list)
         self.setTemp.valueChanged.connect(self.update_expt)
         self.setPower.valueChanged.connect(self.update_expt)
         self.setFlow.valueChanged.connect(self.update_expt)
-        self.setSampleRate.valueChanged.connect(self.update_expt)  # This needs to have a min set by ctrl file
+        # TODO This needs to have a min set by ctrl file
+        self.setSampleRate.valueChanged.connect(self.update_expt)
         self.setSampleSize.valueChanged.connect(self.update_expt)
-        self.setRampRate.valueChanged.connect(self.update_expt)  # get from heater?
+        # TODO get from heater?
+        self.setRampRate.valueChanged.connect(self.update_expt)
         self.setTSteady.valueChanged.connect(self.update_expt)
         self.setBuffer.valueChanged.connect(self.update_expt)
         self.setGasAComp.valueChanged.connect(self.update_expt)
@@ -282,8 +287,10 @@ class MainWindow(QMainWindow):
             self.setGasCType.setCurrentText(flow_dict['mfc_C']['gas'])
             self.setGasDType.setCurrentText(flow_dict['mfc_D']['gas'])
 
-        self.default_grid_widgets = [[self.label_78, self.label_79, self.label_80],
-                                     [self.IndVar_start, self.IndVar_stop, self.IndVar_step]]
+        # Label independent variable widgets as default grid
+        widgets = [[self.label_78, self.label_79, self.label_80],
+                   [self.IndVar_start, self.IndVar_stop, self.IndVar_step]]
+        self.default_grid_widgets = widgets
 
         # create initial list of buttons to be added into grid layout when
         # comp sweep is selected
@@ -353,7 +360,6 @@ class MainWindow(QMainWindow):
             self.manualPower.setValue(self.laser_controller.get_output_power())
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
-
 
     def sum_spinboxes(self, spinboxes, qlabel):
         """
