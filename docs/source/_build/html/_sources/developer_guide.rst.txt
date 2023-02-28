@@ -66,6 +66,9 @@ The current iteration of the system has been designed with modularity in mind, b
 * **Stability test experiments should be implemented more clearly.** The current implementation of stability test is clunky. It looks confusing in the GUI and doesn't have a dedicated time ind_var. Fixing will require some refactoring.
 * **Add plot integration option to chromatogram_scanner_gui**
 * **Add option to lock scale on chromatogram_scanner_gui**, possibly by getting max value of all files
+* **Save control file used in expt_log.txt**
+* **Print console output to a new study_log.txt file**
+* **Make sure close process occurs if GUI crashes**. The GUI occassionally crashes in what seems to be a computer fault, emitting no error messages. When this happens, the close event protocol is not run and the equipment is not shutdown. There must be some way to detect this events and shutdown the hardware still.
 
 Writing Documentation
 ---------------------

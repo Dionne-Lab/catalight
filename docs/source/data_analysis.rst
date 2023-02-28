@@ -4,7 +4,7 @@ The :mod:`catalight.analysis` sub-package contains a number of helpful tools to 
 
 * **Toolboxes ---**
   Compiled functions grouped by function to help with common tasks
-  
+
 * **Data classes ---**
   Modules containing classes to act on specific data types
 
@@ -32,7 +32,7 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
 
     :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
 
-.. note:: 
+.. note::
     The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.
 
 .. figure:: _static/images/Conv_Sel_plot.svg
@@ -41,6 +41,8 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
     Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots
 
 If the ``savedata`` parameter of the :func:`~catalight.analysis.plotting.plot_expt_summary` function is entered as "True", all three of these plots will be saved in the results subfolder of the experiment's :ref:`data folder <data_folder>`.
+
+
 
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
@@ -73,12 +75,12 @@ In addition to performing the physical calibration experiment, the user needs to
 .. figure:: _static/images/calibration_output_runnum.png
     :width: 800
 
-    An example of the output of running calibration analysis on a data set.  
+    An example of the output of running calibration analysis on a data set.
 
 .. figure:: _static/images/calibration_output_fits.png
     :width: 800
 
     An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.
 
-.. toctree:: 
+.. toctree::
     calibration_file_details
