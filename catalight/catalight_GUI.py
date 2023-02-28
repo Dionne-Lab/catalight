@@ -864,8 +864,8 @@ class MainWindow(QMainWindow):
             self.change_color_signal.emit(self.current_power_setpoint1, 'red')
             self.change_color_signal.emit(self.current_power_setpoint2, 'red')
             self.laser_controller.set_power(self.manualPower.value())
-            self.change_color_signal.emit(self.current_power_setpoint1, 'white')
-            self.change_color_signal.emit(self.current_power_setpoint2, 'white')
+            self.change_color_signal.emit(self.current_power_setpoint1, 'white')  # noqa
+            self.change_color_signal.emit(self.current_power_setpoint2, 'white')  # noqa
         self.progress_signal.emit(75)
 
         if self.heater_Status.isChecked():
@@ -873,8 +873,8 @@ class MainWindow(QMainWindow):
             self.change_color_signal.emit(self.current_temp_setpoint2, 'red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
-            self.change_color_signal.emit(self.current_temp_setpoint1, 'red')
-            self.change_color_signal.emit(self.current_temp_setpoint2, 'red')
+            self.change_color_signal.emit(self.current_temp_setpoint1, 'white')
+            self.change_color_signal.emit(self.current_temp_setpoint2, 'white')
 
         self.progress_signal.emit(100)
         self.toggle_controls(False)
