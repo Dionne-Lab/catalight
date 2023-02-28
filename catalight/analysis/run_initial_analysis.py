@@ -11,8 +11,8 @@ import pandas as pd
 from PyQt5.QtWidgets import QFileDialog, QApplication, QDialog
 import catalight.analysis as analysis
 from catalight.analysis.user_inputs import (DirectorySelector,
-                                                PlotOptionsDialog,
-                                                PlotOptionList)
+                                            PlotOptionsDialog,
+                                            PlotOptionList)
 
 
 def get_user_inputs(starting_dir=None, cal_folder=None):
@@ -42,7 +42,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         'savedata': bool, 'switch_to_hours': float}
 
     """
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # noqa
     # Prompt user to select calibration file
     cal_file = QFileDialog.getOpenFileName(None, 'Select Calibration File',
                                            cal_folder, "csv file (*.csv)")[0]
@@ -62,7 +62,6 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
         response_dict = options.values_todict()
-        print('options acccepted')
 
     return expt_dirs, calDF, response_dict
 
@@ -120,7 +119,6 @@ def main(main_dirs, calDF, reactant, target_molecule, mole_bal='c',
     None.
 
     """
-    print('inside main')
     plt.ioff()  # suppress plot windows
     options = (reactant, target_molecule, mole_bal,
                figsize, savedata, switch_to_hours)
@@ -147,5 +145,4 @@ if __name__ == "__main__":
 
     plt.close('all')
     expt_dirs, calDF, response_dict = get_user_inputs()
-    print('out of inputs...')
     main(expt_dirs, calDF, **response_dict)

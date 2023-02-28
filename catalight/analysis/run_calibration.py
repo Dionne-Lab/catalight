@@ -39,7 +39,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         Add point (x=0, y=0) to data set.
 
     """
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # noqa
     # Prompt user to select calibration file
     prompt = "Please select the desired calibration file"
     calibration_path = QFileDialog.getOpenFileName(None, prompt, cal_folder,
@@ -93,7 +93,9 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
         Axis handle for plots showing expected ppm vs measured counts
 
     """
-    run_num_plots, cal_plots = analysis_tools.analyze_cal_data(expt, calDF)
+    run_num_plots, cal_plots = analysis_tools.analyze_cal_data(expt, calDF,
+                                                               figsize,
+                                                               forcezero)
     return run_num_plots, cal_plots
 
 

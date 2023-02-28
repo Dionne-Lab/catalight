@@ -7,6 +7,7 @@
   <title>catalight.analysis &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/catalight_logo1_thick.svg"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="catalight.analysis.chromatogram_scanner_gui" href="catalight.analysis.chromatogram_scanner_gui.html" />
+    <link rel="next" title="catalight.catalight_GUI" href="catalight.catalight_GUI.html" />
     <link rel="prev" title="﻿catalight" href="catalight.html" /> 
 </head>
 
@@ -33,6 +34,7 @@
           
           <a href="../index.html" class="icon icon-home">
             catalight
+              <img src="../_static/catalight_header_g_whitetext.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -44,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to catalight!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Welcome to Catalight!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intro.html#installation-instructions">Installation instructions:</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide:</span></p>
@@ -59,6 +61,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Providing feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html#writing-documentation">Writing Documentation</a></li>
 </ul>
@@ -70,20 +74,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="catalight.html">﻿catalight</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">catalight.analysis</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.chromatogram_scanner_gui.html">catalight.analysis.chromatogram_scanner_gui</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.gcdata.html">catalight.analysis.gcdata</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.make_empty_cal_expt.html">catalight.analysis.make_empty_cal_expt</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.plotting.html">catalight.analysis.plotting</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.run_calibration.html">catalight.analysis.run_calibration</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.run_change_xdata.html">catalight.analysis.run_change_xdata</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.run_initial_analysis.html">catalight.analysis.run_initial_analysis</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.run_plot_chromatograms_stacked.html">catalight.analysis.run_plot_chromatograms_stacked</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.run_plot_comparison.html">catalight.analysis.run_plot_comparison</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.tools.html">catalight.analysis.tools</a></li>
-<li class="toctree-l4"><a class="reference internal" href="catalight.analysis.user_inputs.html">catalight.analysis.user_inputs</a></li>
-</ul>
-</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">catalight.analysis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="catalight.catalight_GUI.html">catalight.catalight_GUI</a></li>
 <li class="toctree-l3"><a class="reference internal" href="catalight.equipment.html">catalight.equipment</a></li>
 </ul>
@@ -124,37 +115,37 @@
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.chromatogram_scanner_gui.html#module-catalight.analysis.chromatogram_scanner_gui" title="catalight.analysis.chromatogram_scanner_gui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.chromatogram_scanner_gui</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.chromatogram_scanner_gui</span></code></p></td>
 <td><p class="linemarker linemarker-1">Graphical User Interface for scanning through chromatogroms within a directory.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.gcdata.html#module-catalight.analysis.gcdata" title="catalight.analysis.gcdata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.gcdata</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.gcdata</span></code></p></td>
 <td><p class="linemarker linemarker-1">Gas chromatograph data and associated processing methods.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.make_empty_cal_expt.html#module-catalight.analysis.make_empty_cal_expt" title="catalight.analysis.make_empty_cal_expt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.make_empty_cal_expt</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.make_empty_cal_expt</span></code></p></td>
 <td><p class="linemarker linemarker-1">Create empty calibration experiment data structure.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.plotting.html#module-catalight.analysis.plotting" title="catalight.analysis.plotting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.plotting</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.plotting</span></code></p></td>
 <td><p class="linemarker linemarker-1">Tools specifically related to plotting data.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.run_calibration.html#module-catalight.analysis.run_calibration" title="catalight.analysis.run_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_calibration</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_calibration</span></code></p></td>
 <td><p class="linemarker linemarker-1">Prompt user for inputs and run calibration analysis on data set.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.run_change_xdata.html#module-catalight.analysis.run_change_xdata" title="catalight.analysis.run_change_xdata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_change_xdata</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_change_xdata</span></code></p></td>
 <td><p class="linemarker linemarker-1">Executable script prompting the user to select experiments and enter new xdata.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.run_initial_analysis.html#module-catalight.analysis.run_initial_analysis" title="catalight.analysis.run_initial_analysis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_initial_analysis</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_initial_analysis</span></code></p></td>
 <td><p class="linemarker linemarker-1">Executable script to run basic analysis on existing data sets.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.run_plot_chromatograms_stacked.html#module-catalight.analysis.run_plot_chromatograms_stacked" title="catalight.analysis.run_plot_chromatograms_stacked"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_plot_chromatograms_stacked</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_plot_chromatograms_stacked</span></code></p></td>
 <td><p class="linemarker linemarker-1">Executable file that asks user for inputs and plot GC data on one plot.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.run_plot_comparison.html#module-catalight.analysis.run_plot_comparison" title="catalight.analysis.run_plot_comparison"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_plot_comparison</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.run_plot_comparison</span></code></p></td>
 <td><p class="linemarker linemarker-1">Generate conversion and selectivity plots for multiple experiments using GUI.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.tools.html#module-catalight.analysis.tools" title="catalight.analysis.tools"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.tools</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.tools</span></code></p></td>
 <td><p class="linemarker linemarker-1">Tools to help with performing data analysis.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="catalight.analysis.user_inputs.html#module-catalight.analysis.user_inputs" title="catalight.analysis.user_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.user_inputs</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">catalight.analysis.user_inputs</span></code></p></td>
 <td><p class="linemarker linemarker-1">Graphical user interface classes for helping user input parameters.</p></td>
 </tr>
 </tbody>
@@ -166,7 +157,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="catalight.html" class="btn btn-neutral float-left" title="﻿catalight" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="catalight.analysis.chromatogram_scanner_gui.html" class="btn btn-neutral float-right" title="catalight.analysis.chromatogram_scanner_gui" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="catalight.catalight_GUI.html" class="btn btn-neutral float-right" title="catalight.catalight_GUI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

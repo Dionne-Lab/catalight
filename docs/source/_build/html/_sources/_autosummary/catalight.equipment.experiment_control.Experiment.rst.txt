@@ -1,4 +1,4 @@
-catalight.equipment.experiment\_control.Experiment
+﻿catalight.equipment.experiment\_control.Experiment
 ==================================================
 
 .. currentmodule:: catalight.equipment.experiment_control
@@ -46,7 +46,12 @@ catalight.equipment.experiment\_control.Experiment
       ~Experiment.results_path
       ~Experiment.sample_name
       ~Experiment.sample_rate
+      ~Experiment.start_time
       ~Experiment.temp
       ~Experiment.tot_flow
+      ~Experiment.sample_set_size
+      ~Experiment.t_buffer
+      ~Experiment.t_steady_state
+      ~Experiment.heat_rate
    
    

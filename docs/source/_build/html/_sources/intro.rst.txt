@@ -20,7 +20,7 @@ catalight comes equipped with a full featured :ref:`graphical user interface <gu
 .. figure:: _static/images/gui_experiment_design.png
     :width: 800
 
-    Development version of catalight GUI showing the Experiment Design feature. Supported experiment types are created by the user and display as a preview.    
+    Development version of catalight GUI showing the Experiment Design feature. Supported experiment types are created by the user and display as a preview.
 
 Motivation
 ----------
@@ -35,12 +35,14 @@ Installation instructions:
 At this stage of the project, you will very likely need to make edits to the source modules of the package. The current expectation is that each user utilizes the package as a starting point for developing their own automated system. This includes both adding new instrument classes and editting the GUI and experiment control files.
 As such, you should install the package in an editable configuration. Before doing so, we **strongly** encourage you to create a new virtual environment specifically for catalight.
 
-.. caution:: 
+.. caution::
     This package relies on PyQt which has a different package name when using pip or conda for installation. We try to automatically detect and handle conflicts, but please be aware that its possible to overwrite one with the other if installing in an existing virtual environment. Avoid this by using a fresh environment!
 
 .. code-block:: console
 
     git clone https://github.com/Dionne-Lab/catalight.git
     cd catalight
-    pip install -e .  # install in editable mode. 
+    pip install -e .  # install in editable mode.
 
+.. note::
+    Some hardware requires Windows OS to access. The package should still install and allow use of other tools and data analysis on other operating system. If you have an OS related bug when pip installing, please report this issue.

@@ -4,7 +4,6 @@ Interface with SRI GC through Peaksimple interface via .dll file.
 Created on Thu Oct 14 17:30:17 2021
 @author: Briley Bourgeois
 """
-
 import os
 import re
 import time
@@ -19,7 +18,7 @@ assemblydir = os.path.join(dir_path, 'PeaksimpleClient',
 clr.AddReference(assemblydir)  # Add the assembly to python.NET
 # Now that the Assembly has been added to python.NET,
 # it can be imported like a normal module, though the name is different.
-import Peaksimple  # noqa, need add assmbly before import.
+import Peaksimple  # Need add assembly before import. # noqa # type: ignore
 
 # TODO some control file needs to be placed within package to work w/ any user.
 # the default won't run from the repo for some reason
@@ -31,33 +30,50 @@ class GC_Connector():
     """
     Interface with SRI GC through Peaksimple interface via .dll file.
 
-    If the assembly can't be found, find the .dll file, right click, properties,
-    check "unblock", click apply
+    If the assembly can't be found, find the .dll file, right click,
+    properties, check "unblock", click apply
 
     Parameters
     ----------
-    ctr_file : str
+    ctrl_file : str
         Full path to the initial ctrl file to use.
     """
 
     def __init__(self, ctrl_file=default_ctrl_file):
+        """Connect to GC and load control file."""
         print('Connecting to Peaksimple...')
-        # This class has all the functions
+        # Define Attributes:
+        # ------------------
         self.peaksimple = Peaksimple.PeaksimpleConnector()
+        """Create instance of PeaksimpleConnector.
+        :ref:`sri_gc_doc` for more info on methods."""
+
+        self.ctrl_file = ctrl_file
+        """str: Full path to control file to use."""
+
+        self.sample_set_size = 4
+        """
+        int:  Number of GC collection for each time peaksimple.setRunning()
+        is called. Can be changed per experiment by editting
+        :attr:`Experiment.sample_set_size
+        <catalight.equipment.experiment_control.Experiment.sample_set_size>`
+        """
+
+        # Init Procedure:
+        # ---------------
         self.connect()
         self._sample_rate = 0  # Dummy value, reset when ctrl file loaded
-        self.ctrl_file = ctrl_file
-        #: Full path to control file to use.
-
         # Sends ctrl file to GC, updates self w/ new data
         print('Loading', ctrl_file)
         self.load_ctrl_file()
 
-        self.sample_set_size = 4
-        #: default value = 4, can change in main .py script per experiment
-
+    # Properties
+    # ----------
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
+    """float, read-only: (min) Minimum setpoint for sample_rate.
+    Sum of Channel 1 Time and Channel 1 Posttime from GC control file.
+    Value automatically updates when :meth:`read_ctrl_file` is called."""
 
     # Setting sample rate changes when connected to GC
     @property
@@ -80,6 +96,8 @@ class GC_Connector():
             print('Sample rate set to minimum')
             self._sample_rate = self.min_sample_rate
 
+    # Methods:
+    # --------
     def update_ctrl_file(self, data_file_path):
         """
         Write over the currently loaded ctrl file to update settings.

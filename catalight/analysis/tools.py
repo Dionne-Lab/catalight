@@ -10,11 +10,12 @@ Created on Mon Feb  6 11:46:49 2023.
 import os
 import pickle
 import re
+from math import sqrt
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import catalight.analysis.plotting as plotting
+
 from catalight.analysis.gcdata import GCData
 from catalight.equipment.experiment_control import Experiment
 
@@ -61,17 +62,22 @@ def list_expt_obj(file_paths):
 
     Parameters
     ----------
-    file_paths : list of str
+    file_paths : list[str]
         List of full paths to expt_log.txt files.
 
     Returns
     -------
-    experiments : list of Experiment
+    experiments : list[Experiment]
         List of Experiment objects from provided filepaths.
     """
     experiments = []
+    # If user enters one filepath as str, convert to list for them.
+    if isinstance(file_paths, str):
+        file_paths = [file_paths]
+
     for log_path in file_paths:
-        if os.path.basename(log_path) == 'expt_log.txt':  # Double check filename is correct
+        # Double check filename is correct
+        if os.path.basename(log_path) == 'expt_log.txt':
             expt_path = os.path.dirname(log_path)
             expt = Experiment()  # Initialize experiment obj
             expt.read_expt_log(log_path)  # Read expt parameters from log
@@ -178,7 +184,7 @@ def load_results(expt):
     avg = pd.read_csv(os.path.join(fol, 'avg_conc.csv'), index_col=(0))
     std = pd.read_csv(os.path.join(fol, 'std_conc.csv'), index_col=(0))
     concentrations = np.load(os.path.join(fol, 'concentrations.npy'))
-    return(concentrations, avg, std)
+    return (concentrations, avg, std)
 
 
 def convert_index(dataframe):
@@ -208,7 +214,7 @@ def convert_index(dataframe):
     return dataframe
 
 
-def get_timepassed(concentrations, switch_to_hours=2):
+def get_timepassed(concentrations, switch_to_hours=2, expt=None):
     """
     Convert time stamps to array of cumulative time passed.
 
@@ -224,20 +230,27 @@ def get_timepassed(concentrations, switch_to_hours=2):
 
     Returns
     -------
-    time_passed : numpy.ndarray
-        Numpy array of cumulative time passed since the start of the experiment.
-    time_unit : str
+    numpy.ndarray
+        Numpy array of cumulative time passed since the start of experiment.
+    str
         Either 'min' or 'hr' based on the length of total time and parameters.
 
     """
     time_stamps = concentrations[:, 0, :].reshape(-1)
     time_stamps = time_stamps[~np.isnan(time_stamps)]
 
+    # Experiments after 20230225 save w/ timestamp
+    if isinstance(expt.start_time, float):
+        start_time = expt.start_time
+
+    else:  # Method before 20230225 (less accurate)
+        start_time = np.min(time_stamps)
+
     if np.max(time_stamps) > (switch_to_hours * 60 * 60):
-        time_passed = (time_stamps - np.min(time_stamps)) / 60 / 60
+        time_passed = (time_stamps - start_time) / 60 / 60
         time_unit = 'hr'
     else:
-        time_passed = (time_stamps - np.min(time_stamps)) / 60
+        time_passed = (time_stamps - start_time) / 60
         time_unit = 'min'
 
     return time_passed, time_unit
@@ -318,10 +331,13 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
         ax_calibration = calibration_plots.ravel()[chem_num]
         expected_ppm = calDF.loc[chemical, 'ppm'] * calgas_flow
-        ax_calibration.errorbar(expected_ppm, avg[chemical] / 1000,
-                                yerr=std[chemical] / 1000, fmt='o')
+        ax_calibration.errorbar(avg[chemical] / 1000, expected_ppm,
+                                xerr=std[chemical] / 1000, fmt='o')
+        ax_calibration.ticklabel_format(axis='both', style='sci',
+                                        scilimits=[-2, 2])
 
-        if force_zero:
+        # Fit w/ counts as 'y' and 'y_err'
+        if force_zero:  # Add point (0, 0) w/ infinitesimal error
             x_data = np.append(0, expected_ppm)
             y_data = np.append(0, avg[chemical].to_numpy())
             y_err = np.append(1e-19, std[chemical].to_numpy())
@@ -332,18 +348,30 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
         try:
             p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1 / y_err)
             m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
-            x_fit = np.linspace(0, max(x_data), 100)
+
+            # Convert linear fit of ppm vs counts
+            # to linear fit of counts vs ppm (flip axes)
+            m = 1 / m
+            err_m = err_m
+            # Propogate error using error propogation formula
+            b = b / m
+            err_b = sqrt(err_b**2 + b**2 * err_m**2) / m
+
+            counts_fit = np.linspace(0, max(y_data), 100)
+            ppm_fit = m * counts_fit + b
 
             # add fit to plot
-            ax_calibration.plot(x_fit, (p[0] * x_fit + p[1]) / 1000, '--r')
-            label = '\n'.join([chemical,
-                               "m: %4.2f +/- %4.2f" % (m, err_m),
-                               "b: %4.2f +/- %4.2f" % (b, err_b)])
+            ax_calibration.plot(counts_fit / 1000, ppm_fit, '--r')
+            fit_label = '\n'.join(["m: %4.2f\n+/- %4.2f" % (m, err_m),
+                                   "b: %4.2f\n+/- %4.2f" % (b, err_b)])
 
-            ax_calibration.text(.02, .75, label,
+            ax_calibration.text(.02, .5, fit_label,
                                 horizontalalignment='left',
                                 transform=ax_calibration.transAxes, fontsize=8)
-        except(np.linalg.LinAlgError):
+            ax_calibration.text(1, 1.05, chemical,
+                                horizontalalignment='right',
+                                transform=ax_calibration.transAxes, fontsize=8)
+        except (np.linalg.LinAlgError):
             label = chemical + '\nBad Fit'
             ax_calibration.text(.02, .75, label,
                                 horizontalalignment='left',
@@ -361,13 +389,14 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     ax_calibration = fig_calibration.add_subplot(111, frameon=False)
     # hide tick and tick label of the big axis
     ax_calibration.tick_params(labelcolor='none', which='both',
-                               top=False, bottom=False, left=False, right=False)
-    ax_calibration.set_xlabel("ppm")
-    ax_calibration.set_ylabel('Counts/1000')
+                               top=False, bottom=False,
+                               left=False, right=False)
+    ax_calibration.set_ylabel("Expected ppm")
+    ax_calibration.set_xlabel('Counts/1000')
 
     # Figure Export
-    fig_run_num.tight_layout(pad=0, w_pad=0, h_pad=0)
-    fig_calibration.tight_layout(pad=0, w_pad=0, h_pad=0)
+    fig_run_num.tight_layout(pad=1, w_pad=0.4, h_pad=0.4)
+    fig_calibration.tight_layout(pad=1, w_pad=0.4, h_pad=0.4)
     fig_run_num_path = os.path.join(expt.results_path,
                                     str(figsize[0])
                                     + 'w_run_num_plot_individuals')
@@ -383,7 +412,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     pickle.dump(fig_calibration, open(fig_calibration_path + '.pickle', 'wb'))
     plt.show()
     print('Finished calibration analysis')
-    return(run_num_plots, calibration_plots)
+    return (run_num_plots, calibration_plots)
 
 
 def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
@@ -423,9 +452,9 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     """
     # Analysis Loop
     # TODO add TCD part
-    ##############################################################################
+    ###########################################################################
     print('Analyzing data...')
-    print(expt.expt_name)
+    print(expt.date + expt.expt_type + '_' + expt.expt_name)
     expt_data_fol = expt.data_path
     expt_results_fol = expt.results_path
     os.makedirs(expt_results_fol, exist_ok=True)  # Make dir if not there
@@ -449,6 +478,8 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     num_chems = int(len(calchemIDs))
     condition = np.full(num_fols, 0, dtype=object)
     concentrations = np.full((num_fols, num_chems + 1, max_runs), np.nan)
+    # TODO create err np.array
+    # err_concentrations = np.full((num_fols, num_chems + 1, max_runs), np.nan)
 
     # Loops through the ind var step and calculates conc in each data file
     for step_path in step_path_list:
@@ -458,35 +489,74 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
         data_list = list_matching_files(step_path, 'FID', '.asc')
         condition[step_num] = step_val
         conc = []
+        # conc_err = [] TODO
         for filepath in data_list:
             # data is an instance of a class, for signal use data.signal etc
             data = GCData(filepath, basecorrect=True)
 
             values = data.get_concentrations(calDF)
+            # TODO add error output to GC_Data.get_concentrations()
+            # values, err = data.get_concentrations(calDF)
+            # conc_err.append(err.tolist())
             conc.append(values.tolist())
 
         num_runs = len(conc)
         # [Condition x [Timestamps, ChemID] x run number]
         concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
+        # err_concentrations[step_num, :, 0:num_runs] = np.asarray(conc).T
 
+    # Pull out "Active" Units from expt_list DF
     units = (expt.expt_list['Units']
              [expt.expt_list['Active Status']].to_string(index=False))
-    idx_name = (expt.ind_var + ' [' + units + ']')  # Sweep Parameter
+
+    if expt.expt_type == 'stability_test':
+        # Reset "condition" to be time passed for stability tests
+        # TODO This could check unit if expt_list updates
+        # to have time instead of temp in future.
+
+        # Don't switch unit, get time passed in minutes.
+        time_passed, _ = get_timepassed(concentrations,
+                                        switch_to_hours=1e9, expt=expt)
+        # Make sure time is chronological
+        order = np.argsort(time_passed)
+        condition = time_passed[order]  # Rewrite condition as time passed
+
+        idx_name = 'time [min]'  # We can get rid of this and else if TODO done
+        avg_dat = concentrations[0, 1:, order]
+        # TODO add err_concentration values to std
+        std_dat = avg_dat * 0
+
+    else:
+        idx_name = (expt.ind_var + ' [' + units + ']')  # Sweep Parameter
+        avg_dat = np.nanmean(concentrations[:, 1:, :], axis=2)
+        # TODO add err_concentration values to std
+        std_dat = np.nanstd(concentrations[:, 1:, :], axis=2)
+
     # Redefine condition list as pandas index so we can assign a name
     condition = pd.Index(condition, name=idx_name)
 
+    if units == 'frac':  # Change label style to stacked compositions.
+        condition = condition.str.replace('_', '\n')
+        condition = condition.str.replace('frac', '')
+
+    elif expt.expt_type == 'stability_test':
+        pass  # Already Float
+
+    else:  # Convert filenames to float w/o units.
+        condition = condition.str.replace(r'\D', '', regex=True).astype(float)
+
     # Results
     ###########################################################################
-    avg_dat = np.nanmean(concentrations[:, 1:, :], axis=2)
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)
-    std_dat = np.nanstd(concentrations[:, 1:, :], axis=2)
+    # TODO add err_concentration values to std
     std = pd.DataFrame(std_dat, columns=calchemIDs, index=condition)
     if savedata:
-        np.save(os.path.join(expt_results_fol, 'concentrations'), concentrations)
+        np.save(os.path.join(expt_results_fol, 'concentrations'),
+                concentrations)
         avg.to_csv(os.path.join(expt_results_fol, 'avg_conc.csv'))
         std.to_csv(os.path.join(expt_results_fol, 'std_conc.csv'))
     print('Finished analyzing ' + expt.expt_name)
-    return(concentrations, avg, std)
+    return (concentrations, avg, std)
 
 
 def calculate_X_and_S(expt, reactant, target_molecule):

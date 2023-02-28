@@ -46,7 +46,7 @@ todo_include_todos = True
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_logo = '_static/images/catalight_header_g_whitetext.png'
-html_favicon = '_static/images/catalight_logo1_thick.png'
+html_favicon = '_static/images/catalight_logo1_thick.svg'
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"

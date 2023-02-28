@@ -4,7 +4,7 @@ The :mod:`catalight.analysis` sub-package contains a number of helpful tools to 
 
 * **Toolboxes ---**
   Compiled functions grouped by function to help with common tasks
-  
+
 * **Data classes ---**
   Modules containing classes to act on specific data types
 
@@ -32,7 +32,7 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
 
     :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
 
-.. note:: 
+.. note::
     The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.
 
 .. figure:: _static/images/Conv_Sel_plot.svg
@@ -41,6 +41,8 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
     Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots
 
 If the ``savedata`` parameter of the :func:`~catalight.analysis.plotting.plot_expt_summary` function is entered as "True", all three of these plots will be saved in the results subfolder of the experiment's :ref:`data folder <data_folder>`.
+
+
 
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
@@ -59,6 +61,11 @@ A number of executable scripts have been written to perform basic data analysis 
 
 Running a calibration
 ---------------------
+Within catalight, calibrations are handled using external csv files. These are imported as a :class:`pandas.DataFrame`, usually reffered to in the code as "calDF". We primarily handle calibrations and integration outside of peaksimple to offer more control over the process and automation of analysis. For users that would prefer to utilize peaksimple for calibration, the results files output from peaksimple are saved in the same location as the ascii files.
+
+Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize :func:`catalight.analysis.tools.analyze_cal_data` to analyze the collected data. The :mod:`catalight.analysis.run_calibration` module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it's :attr:`~catalight.equipment.experiment_control.Experiment.expt_type` attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` class provides a :meth:`~atalight.equipment.alicat_MFC.gas_control.Gas_System.set_calibration_gas` method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called seperatly if scripting.
+
+In addition to performing the physical calibration experiment, the user needs to provide a calibration file describing the input gas. More information about the calibration file can be found in the :doc:`/calibration_file_details` section.
 
 .. figure:: _static/images/running_calibration.png
     :width: 800
@@ -68,9 +75,12 @@ Running a calibration
 .. figure:: _static/images/calibration_output_runnum.png
     :width: 800
 
-    An example of the output of running calibration analysis on a data set.  
+    An example of the output of running calibration analysis on a data set.
 
 .. figure:: _static/images/calibration_output_fits.png
     :width: 800
 
     An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.
+
+.. toctree::
+    calibration_file_details

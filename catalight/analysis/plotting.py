@@ -162,7 +162,8 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
     # Calculations:
     calchemIDs = calDF.index  # get chem IDs from calibration files
     time_passed, time_unit = analysis_tools.get_timepassed(concentrations,
-                                                           switch_to_hours)
+                                                           switch_to_hours,
+                                                           expt)
 
     # use regex to determine number of carbons (or other) in molecule name
     for chemical in calchemIDs:
@@ -170,6 +171,8 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
         # Concentrations for individual chemical
         ind_concentrations = concentrations[:, chem_num, :]
         ind_concentrations = ind_concentrations[~np.isnan(ind_concentrations)]
+        if sum(ind_concentrations) == 0:
+            continue  # Skip chemicals with no values
         ax.plot(time_passed, ind_concentrations, 'o', label=chemical)
 
     ax.legend()
@@ -215,34 +218,22 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     fig, ax = plt.subplots()
     concentrations, avg, std = analysis_tools.load_results(expt)
     calchemIDs = calDF.index  # get chem IDs from calibration files
-    time_passed, time_unit = analysis_tools.get_timepassed(concentrations,
-                                                           switch_to_hours)
+
     units = (expt.expt_list['Units']
              [expt.expt_list['Active Status']].to_string(index=False))
-    try:
-        x_data = getattr(expt, expt.ind_var)
-    except AttributeError:  # Fails for stability test
-        order = np.argsort(time_passed)
-        x_data = time_passed[order]
-        avg = pd.DataFrame(concentrations[0, 1:, order])
-        avg.columns = calchemIDs
-        avg.index = x_data
-        std = 0 * avg
-        units = time_unit
 
-    if units == 'frac':
-        avg.index = avg.index.str.replace('_', '\n')
-        avg.index = avg.index.str.replace('frac', '')
-        std.index = std.index.str.replace('_', '\n')
-        std.index = std.index.str.replace('frac', '')
-    else:
-        avg = analysis_tools.convert_index(avg)
-        std = analysis_tools.convert_index(std)
+    if expt.expt_type == 'stability_test':
+        # TODO This could check unit if expt_list updates
+        # to have time instead of temp in future.
+        if np.max(avg.index) > switch_to_hours:
+            avg.index = avg.index / 60  # convert minutes to hours
+            units = 'hr'
 
     stoyk = pd.Series(0, index=calchemIDs)
     # use regex to determine number of carbons (or other) in molecule name
     for chemical in calchemIDs:
-        chem_num = calchemIDs.get_loc(chemical) + 1  # index 0 is timestamp
+        # Use chem_num to access by index number instead of name.
+        # chem_num = calchemIDs.get_loc(chemical) + 1  # index 0 is timestamp
         # read number after 'c' in each chem name
         count = re.findall(mole_bal + r"(\d+)", chemical, re.IGNORECASE)
         if not count:
@@ -260,8 +251,15 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     mol_error = std @ (np.array(stoyk, dtype=int))
 
     # Plotting:
-    avg.iloc[0:len(x_data)].plot(ax=ax, marker='o', yerr=std)
-    mol_count.iloc[0:len(x_data)].plot(ax=ax, marker='o', yerr=mol_error.iloc[0:len(x_data)])
+    # Don't plot molecules that don't show up
+    undetected = avg.sum(axis=0) == 0
+    if avg.to_numpy().sum() == 0:
+        print('No Molecules Detected')
+        return (fig, ax)
+
+    avg.loc[:, ~undetected].plot(ax=ax, marker='o',
+                                 yerr=std.loc[:, ~undetected])
+    mol_count.plot(ax=ax, marker='o', yerr=mol_error)
     ax.set_xlabel(expt.ind_var + ' [' + units + ']')
     ax.set_ylabel('Conc (ppm)')
     # ax.set_xticklabels(avg.iloc[0:len(x_data)], rotation=90)
@@ -426,8 +424,7 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
         S = results['Selectivity']
         X_err = results['Error'] * results['Conversion']
         S_err = results['Error'] * results['Selectivity']
-        ax.plot(X, S, '--o', label=data_label)
-        # TODO implement x and y error bars
+        ax.plot(X, S, yerr=S_err, xerr=X_err, fmt='--o', label=data_label)
 
     ax.set_ylabel('Selectivity [%]')
     ax.set_xlabel('Conversion [%]')

@@ -8,6 +8,7 @@ Created on Thu Jun 23 22:42:55 2022
 
 References
 ----------
+# noqa
 (1) https://github.com/napari/magicgui/issues/9
 (2) https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection
 (3) https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder
@@ -21,7 +22,7 @@ from __future__ import annotations
 import os
 import sys
 from ast import literal_eval
-from dataclasses import astuple, asdict, dataclass, fields, is_dataclass
+from dataclasses import dataclass, fields, is_dataclass
 
 
 import catalight.analysis.tools as analysis_tools
@@ -32,11 +33,6 @@ from PyQt5.QtWidgets import (QDialogButtonBox, QItemDelegate, QDialog,
                              QFileDialog, QFileSystemModel, QTreeWidgetItem,
                              QComboBox, QRadioButton, QLineEdit, QLabel,
                              QDoubleSpinBox)
-
-# Not sure this is needed. can likely delete after testing
-# you need to run Qapplication before initiating these windows.
-#app = QApplication(sys.argv)
-#app.setApplicationName('Select the data you want to be plotted')
 
 
 class DirectorySelector(QFileDialog):
@@ -71,6 +67,7 @@ class DirectorySelector(QFileDialog):
     def get_output(self):
         """Return list of selected directories."""
         return self.selectedFiles()
+
 
 @dataclass
 class Option():
@@ -132,7 +129,7 @@ class PlotOptionList():
                                None, QComboBox)
 
     basecorrect: Option = Option(True, False, 'Add baseline correction?',
-                                  None, QComboBox)
+                                 None, QComboBox)
 
     xdata: Option = Option('[x1, x2, x3, ...]', False,
                            'Enter array for new X data', 'Alice', QLineEdit)
@@ -401,7 +398,8 @@ class DataExtractor(QDialog):
             # Append (../*n) to move folder depth desired number of levels
             # Named folder is the folder you want displayed when choosing data
             file_depth_modifier = '/'.join(['..'] * self.data_depth)
-            named_folder = os.path.abspath(os.path.join(f, file_depth_modifier))
+            named_folder = os.path.abspath(os.path.join(f,
+                                                        file_depth_modifier))
             sample_str = os.path.relpath(named_folder,
                                          os.path.dirname(self.pathRoot))
             parts = sample_str.split('\\')
@@ -416,7 +414,8 @@ class DataExtractor(QDialog):
 
                         if i == len(parts) - 1:  # If bottom item
                             node[1][p][0].setCheckState(0, Qt.Unchecked)
-                            node[1][p][0].setFlags(node[1][p][0].flags() | Qt.ItemIsEditable)
+                            node[1][p][0].setFlags(node[1][p][0].flags()
+                                                   | Qt.ItemIsEditable)
                     node = node[1][p]
 
         # Add top level items

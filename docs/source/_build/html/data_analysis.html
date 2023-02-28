@@ -7,6 +7,7 @@
   <title>The main toolboxes &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/catalight_logo1_thick.svg"/>
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Laser Calibration" href="auxiliary_tools.html" />
+    <link rel="next" title="Calibration File Details" href="calibration_file_details.html" />
     <link rel="prev" title="Alicat MFCs" href="equipment_guides.html" /> 
 </head>
 
@@ -33,6 +34,7 @@
           
           <a href="index.html" class="icon icon-home">
             catalight
+              <img src="_static/catalight_header_g_whitetext.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -61,7 +63,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#the-gcdata-class">The GCData class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#helper-scripts">Helper scripts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#running-a-calibration">Running a calibration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-a-calibration">Running a calibration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="calibration_file_details.html">Calibration File Details</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
@@ -164,10 +169,13 @@ More complex scripts that should be run exclusively from command line or editor,
 </section>
 <section id="helper-scripts">
 <h1>Helper scripts<a class="headerlink" href="#helper-scripts" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-56">A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase “run/_” indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each “run” file in the analysis subpackage contains two function: “get_user_inputs()” and “main()”. “get_user_inputs()” is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. “main()” is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_”filename”.main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.</p>
+<p class="linemarker linemarker-58">A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase “run/_” indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each “run” file in the analysis subpackage contains two function: “get_user_inputs()” and “main()”. “get_user_inputs()” is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. “main()” is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_”filename”.main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.</p>
 </section>
 <section id="running-a-calibration">
 <span id="calibration"></span><h1>Running a calibration<a class="headerlink" href="#running-a-calibration" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-64">Within catalight, calibrations are handled using external csv files. These are imported as a <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, usually reffered to in the code as “calDF”. We primarily handle calibrations and integration outside of peaksimple to offer more control over the process and automation of analysis. For users that would prefer to utilize peaksimple for calibration, the results files output from peaksimple are saved in the same location as the ascii files.</p>
+<p class="linemarker linemarker-66">Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize <a class="reference internal" href="_autosummary/catalight.analysis.tools.analyze_cal_data.html#catalight.analysis.tools.analyze_cal_data" title="catalight.analysis.tools.analyze_cal_data"><code class="xref py py-func docutils literal notranslate"><span class="pre">catalight.analysis.tools.analyze_cal_data()</span></code></a> to analyze the collected data. The <a class="reference internal" href="_autosummary/catalight.analysis.run_calibration.html#module-catalight.analysis.run_calibration" title="catalight.analysis.run_calibration"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.analysis.run_calibration</span></code></a> module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it’s <a class="reference internal" href="_autosummary/catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment.expt_type" title="catalight.equipment.experiment_control.Experiment.expt_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expt_type</span></code></a> attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System" title="catalight.equipment.alicat_MFC.gas_control.Gas_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gas_System</span></code></a> class provides a <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_calibration_gas()</span></code> method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called seperatly if scripting.</p>
+<p class="linemarker linemarker-68">In addition to performing the physical calibration experiment, the user needs to provide a calibration file describing the input gas. More information about the calibration file can be found in the <a class="reference internal" href="calibration_file_details.html"><span class="doc">Calibration File Details</span></a> section.</p>
 <figure class="align-default" id="id4">
 <a class="reference internal image-reference" href="_images/running_calibration.png"><img alt="_images/running_calibration.png" src="_images/running_calibration.png" style="width: 800px;" /></a>
 <figcaption>
@@ -186,6 +194,11 @@ More complex scripts that should be run exclusively from command line or editor,
 <p><span class="caption-text">An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.</span><a class="headerlink" href="#id6" title="Permalink to this image"></a></p>
 </figcaption>
 </figure>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="calibration_file_details.html">Calibration File Details</a></li>
+</ul>
+</div>
 </section>
 
 
@@ -193,7 +206,7 @@ More complex scripts that should be run exclusively from command line or editor,
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="equipment_guides.html" class="btn btn-neutral float-left" title="Alicat MFCs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="auxiliary_tools.html" class="btn btn-neutral float-right" title="Laser Calibration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="calibration_file_details.html" class="btn btn-neutral float-right" title="Calibration File Details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
