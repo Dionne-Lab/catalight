@@ -10,6 +10,7 @@ Created on Mon Feb  6 11:46:49 2023.
 import os
 import pickle
 import re
+from math import sqrt
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -330,10 +331,13 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
         ax_calibration = calibration_plots.ravel()[chem_num]
         expected_ppm = calDF.loc[chemical, 'ppm'] * calgas_flow
-        ax_calibration.errorbar(expected_ppm, avg[chemical] / 1000,
-                                yerr=std[chemical] / 1000, fmt='o')
+        ax_calibration.errorbar(avg[chemical] / 1000, expected_ppm,
+                                xerr=std[chemical] / 1000, fmt='o')
+        ax_calibration.ticklabel_format(axis='both', style='sci',
+                                        scilimits=[-2, 2])
 
-        if force_zero:
+        # Fit w/ counts as 'y' and 'y_err'
+        if force_zero:  # Add point (0, 0) w/ infinitesimal error
             x_data = np.append(0, expected_ppm)
             y_data = np.append(0, avg[chemical].to_numpy())
             y_err = np.append(1e-19, std[chemical].to_numpy())
@@ -344,16 +348,28 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
         try:
             p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1 / y_err)
             m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
-            x_fit = np.linspace(0, max(x_data), 100)
+
+            # Convert linear fit of ppm vs counts
+            # to linear fit of counts vs ppm (flip axes)
+            m = 1 / m
+            err_m = err_m
+            # Propogate error using error propogation formula
+            b = b / m
+            err_b = sqrt(err_b**2 + b**2 * err_m**2) / m
+
+            counts_fit = np.linspace(0, max(y_data), 100)
+            ppm_fit = m * counts_fit + b
 
             # add fit to plot
-            ax_calibration.plot(x_fit, (p[0] * x_fit + p[1]) / 1000, '--r')
-            label = '\n'.join([chemical,
-                               "m: %4.2f +/- %4.2f" % (m, err_m),
-                               "b: %4.2f +/- %4.2f" % (b, err_b)])
+            ax_calibration.plot(counts_fit / 1000, ppm_fit, '--r')
+            fit_label = '\n'.join(["m: %4.2f\n+/- %4.2f" % (m, err_m),
+                                   "b: %4.2f\n+/- %4.2f" % (b, err_b)])
 
-            ax_calibration.text(.02, .75, label,
+            ax_calibration.text(.02, .5, fit_label,
                                 horizontalalignment='left',
+                                transform=ax_calibration.transAxes, fontsize=8)
+            ax_calibration.text(1, 1.05, chemical,
+                                horizontalalignment='right',
                                 transform=ax_calibration.transAxes, fontsize=8)
         except (np.linalg.LinAlgError):
             label = chemical + '\nBad Fit'
@@ -375,12 +391,12 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     ax_calibration.tick_params(labelcolor='none', which='both',
                                top=False, bottom=False,
                                left=False, right=False)
-    ax_calibration.set_xlabel("ppm")
-    ax_calibration.set_ylabel('Counts/1000')
+    ax_calibration.set_ylabel("Expected ppm")
+    ax_calibration.set_xlabel('Counts/1000')
 
     # Figure Export
-    fig_run_num.tight_layout(pad=0, w_pad=0, h_pad=0)
-    fig_calibration.tight_layout(pad=0, w_pad=0, h_pad=0)
+    fig_run_num.tight_layout(pad=1, w_pad=0.4, h_pad=0.4)
+    fig_calibration.tight_layout(pad=1, w_pad=0.4, h_pad=0.4)
     fig_run_num_path = os.path.join(expt.results_path,
                                     str(figsize[0])
                                     + 'w_run_num_plot_individuals')
@@ -528,7 +544,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
 
     else:  # Convert filenames to float w/o units.
         condition = condition.str.replace(r'\D', '', regex=True).astype(float)
-    print(condition)
+
     # Results
     ###########################################################################
     avg = pd.DataFrame(avg_dat, columns=calchemIDs, index=condition)

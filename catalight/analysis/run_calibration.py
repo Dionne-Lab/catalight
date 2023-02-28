@@ -93,7 +93,9 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
         Axis handle for plots showing expected ppm vs measured counts
 
     """
-    run_num_plots, cal_plots = analysis_tools.analyze_cal_data(expt, calDF)
+    run_num_plots, cal_plots = analysis_tools.analyze_cal_data(expt, calDF,
+                                                               figsize,
+                                                               forcezero)
     return run_num_plots, cal_plots
 
 

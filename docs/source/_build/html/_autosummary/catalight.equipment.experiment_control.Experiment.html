@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>catalight.equipment.experiment_control.Experiment &mdash; catalight 0.0.1 documentation</title>
+  <title>﻿catalight.equipment.experiment_control.Experiment &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/catalight_logo1_thick.svg"/>
@@ -113,7 +113,7 @@
           <li class="breadcrumb-item"><a href="catalight.html">﻿catalight</a></li>
           <li class="breadcrumb-item"><a href="catalight.equipment.html">catalight.equipment</a></li>
           <li class="breadcrumb-item"><a href="catalight.equipment.experiment_control.html">catalight.equipment.experiment_control</a></li>
-      <li class="breadcrumb-item active">catalight.equipment.experiment_control.Experiment</li>
+      <li class="breadcrumb-item active">﻿catalight.equipment.experiment_control.Experiment</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/_autosummary/catalight.equipment.experiment_control.Experiment.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -124,7 +124,7 @@
            <div itemprop="articleBody">
              
   <section id="catalight-equipment-experiment-control-experiment">
-<h1>catalight.equipment.experiment_control.Experiment<a class="headerlink" href="#catalight-equipment-experiment-control-experiment" title="Permalink to this heading"></a></h1>
+<h1>﻿catalight.equipment.experiment_control.Experiment<a class="headerlink" href="#catalight-equipment-experiment-control-experiment" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">catalight.equipment.experiment_control.</span></span><span class="sig-name descname"><span class="pre">Experiment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment" title="Permalink to this definition"></a></dt>
@@ -228,22 +228,25 @@ Order of list should be:
 <tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_rate" title="catalight.equipment.experiment_control.Experiment.sample_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_rate</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">Sample rate in minutes (time it takes to collect a sample).</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.temp" title="catalight.equipment.experiment_control.Experiment.temp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temp</span></code></a></p></td>
-<td><p class="linemarker linemarker-1">List of temperature (C) values to step through during experiment.</p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.start_time" title="catalight.equipment.experiment_control.Experiment.start_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_time</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">Updates when <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.set_initial_conditions" title="catalight.equipment.experiment_control.Experiment.set_initial_conditions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_initial_conditions()</span></code></a> method is called.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.tot_flow" title="catalight.equipment.experiment_control.Experiment.tot_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tot_flow</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.temp" title="catalight.equipment.experiment_control.Experiment.temp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temp</span></code></a></p></td>
+<td><p class="linemarker linemarker-1">List of temperature values to step through during experiment.</p></td>
+</tr>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.tot_flow" title="catalight.equipment.experiment_control.Experiment.tot_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tot_flow</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">List of flow rates (sccm) to step through during experiment.</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_set_size" title="catalight.equipment.experiment_control.Experiment.sample_set_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_set_size</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.sample_set_size" title="catalight.equipment.experiment_control.Experiment.sample_set_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sample_set_size</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">Number of GC samples to collect</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_buffer" title="catalight.equipment.experiment_control.Experiment.t_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_buffer</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_buffer" title="catalight.equipment.experiment_control.Experiment.t_buffer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_buffer</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">(min) Time between last GC sample of a step and going to next condition</p></td>
 </tr>
-<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_steady_state" title="catalight.equipment.experiment_control.Experiment.t_steady_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_steady_state</span></code></a></p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.t_steady_state" title="catalight.equipment.experiment_control.Experiment.t_steady_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">t_steady_state</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">(min) Time between going to next condition and collecting first sample of a step</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.heat_rate" title="catalight.equipment.experiment_control.Experiment.heat_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heat_rate</span></code></a></p></td>
+<tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.heat_rate" title="catalight.equipment.experiment_control.Experiment.heat_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">heat_rate</span></code></a></p></td>
 <td><p class="linemarker linemarker-1">(deg C/min) Ramp rate to use when heating reactor.</p></td>
 </tr>
 </tbody>
@@ -497,11 +500,25 @@ The order is:
 1. Set temperature
 2. Give 1 minute time warning for laser
 3. Set initial laser power
-4. set gas type
-5. set gas flows
-6. wait 2 minutes
-7. print gas flows
-8. update gc sample set size</p>
+4. Set gas type
+5. Set gas flows
+6. Wait 2 minutes
+7. Print gas flows
+8. Update gc sample set size
+9. Update date, time, and update log</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.start_time">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start_time</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.start_time" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Updates when <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.set_initial_conditions" title="catalight.equipment.experiment_control.Experiment.set_initial_conditions"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_initial_conditions()</span></code></a> method is
+called. For logging. Used to calculate time_passed during analysis.
+Given by time.time() at the <strong>end</strong> of initial conditions steps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-5"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a>, read-only</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py attribute">
@@ -531,7 +548,7 @@ first sample of a step</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="catalight.equipment.experiment_control.Experiment.temp">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">temp</span></span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.temp" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">List of temperature (C) values to step through during experiment.
+<dd><p class="linemarker linemarker-1">List of temperature values to step through during experiment.
 One element if constant or multiple for sweep. Initial value of [273.0].</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>

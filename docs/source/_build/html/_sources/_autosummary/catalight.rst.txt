@@ -1,5 +1,5 @@
 ﻿catalight
-==========
+=========
 
 .. automodule:: catalight
    

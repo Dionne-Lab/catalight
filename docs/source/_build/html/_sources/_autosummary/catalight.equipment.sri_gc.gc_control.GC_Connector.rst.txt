@@ -1,4 +1,4 @@
-catalight.equipment.sri\_gc.gc\_control.GC\_Connector
+﻿catalight.equipment.sri\_gc.gc\_control.GC\_Connector
 =====================================================
 
 .. currentmodule:: catalight.equipment.sri_gc.gc_control
@@ -33,6 +33,8 @@ catalight.equipment.sri\_gc.gc\_control.GC\_Connector
    
       ~GC_Connector.min_sample_rate
       ~GC_Connector.sample_rate
+      ~GC_Connector.peaksimple
       ~GC_Connector.ctrl_file
+      ~GC_Connector.sample_set_size
    
    

@@ -62,7 +62,6 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
         response_dict = options.values_todict()
-        print('options acccepted')
 
     return expt_dirs, calDF, response_dict
 
@@ -120,7 +119,6 @@ def main(main_dirs, calDF, reactant, target_molecule, mole_bal='c',
     None.
 
     """
-    print('inside main')
     plt.ioff()  # suppress plot windows
     options = (reactant, target_molecule, mole_bal,
                figsize, savedata, switch_to_hours)
@@ -147,5 +145,4 @@ if __name__ == "__main__":
 
     plt.close('all')
     expt_dirs, calDF, response_dict = get_user_inputs()
-    print('out of inputs...')
     main(expt_dirs, calDF, **response_dict)
