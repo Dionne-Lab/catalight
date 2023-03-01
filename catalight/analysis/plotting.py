@@ -300,8 +300,12 @@ def plot_X_and_S(expt, reactant, target_molecule):
              [expt.expt_list['Active Status']].to_string(index=False))
     X = results['Conversion']
     S = results['Selectivity']
-    X_err = results['Error'] * results['Conversion']
-    S_err = results['Error'] * results['Selectivity']
+    if 'X Error' in results.columns:
+        X_err = results['X Error']
+        S_err = results['S Error']
+    else:  # Older data calculated one Error
+        X_err = results['Error'] * results['Conversion']
+        S_err = results['Error'] * results['Selectivity']
     X.plot(ax=ax, yerr=X_err, fmt='--ok')
     S.plot(ax=ax, yerr=S_err, fmt='--^r')
     ax.set_xlabel(expt.ind_var + ' [' + units + ']')
@@ -351,25 +355,30 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
     # calculate_X_and_S() called within this function
     figX, axX = plt.subplots()
     figS, axS = plt.subplots()
-
+    xlabel = None
     for data_set in results_dict.items():
         data_label = data_set[0]
         results = data_set[1]
         X = results['Conversion']
         S = results['Selectivity']
-        X_err = results['Error'] * results['Conversion']
-        S_err = results['Error'] * results['Selectivity']
+        if 'X Error' in results.columns:
+            X_err = results['X Error']
+            S_err = results['S Error']
+        else:
+            X_err = results['Error'] * results['Conversion']
+            S_err = results['Error'] * results['Selectivity']
         X.plot(ax=axX, yerr=X_err, fmt='--o', label=data_label)
         S.plot(ax=axS, yerr=S_err, fmt='--^', label=data_label)
+        xlabel = results.index.name
 
     axX.set_ylabel('Conversion [%]')
-    axX.set_xlabel('Blank')
+    axX.set_xlabel(xlabel)
     axX.set_ylim([0, 105])
     plt.legend()
     figX.tight_layout()
 
     axS.set_ylabel('Selectivity [%]')
-    axS.set_xlabel('Blank')
+    axS.set_xlabel(xlabel)
     axS.set_ylim([0, 105])
     plt.legend()
     figS.tight_layout()
@@ -422,9 +431,13 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
         results = data_set[1]
         X = results['Conversion']
         S = results['Selectivity']
-        X_err = results['Error'] * results['Conversion']
-        S_err = results['Error'] * results['Selectivity']
-        ax.plot(X, S, yerr=S_err, xerr=X_err, fmt='--o', label=data_label)
+        X_err = results['X Error']
+        S_err = results['S Error']
+        # Defunct. Older data had single error output.
+        # X_err = results['Error'] * results['Conversion']
+        # S_err = results['Error'] * results['Selectivity']
+
+        ax.errorbar(X, S, yerr=S_err, xerr=X_err, fmt='--o', label=data_label)
 
     ax.set_ylabel('Selectivity [%]')
     ax.set_xlabel('Conversion [%]')

@@ -83,18 +83,24 @@ def list_expt_obj(file_paths):
             expt.read_expt_log(log_path)  # Read expt parameters from log
             expt.update_save_paths(expt_path)  # update file paths
             experiments.append(expt)
+        else:
+            print('Path other than expt_log.txt passed to list_expt_obj()')
     return experiments
 
 
 def build_results_dict(file_list, data_labels, reactant, target):
     """
-    Generate a results dictionary containing [X, S, err] for given datasets.
+    Generate a results dictionary of X/S and data labels for paths given.
+
+    Results dict contains [X, S, X Error, S Error] for given datasets and
+    labels typically for use with plotting.
 
     Parameters
     ----------
     file_list : list of str
-        List of file paths to experiment folders then used to initiate
-        experiment objects and calculate conversion and selectivity.
+        List of file paths to experiment folders or experiment log paths then
+        used to initiate experiment objects and calculate conversion and
+        selectivity.
     data_labels : list of str
         List of data labels used for generating plot legends.
     reactant : str
@@ -111,12 +117,24 @@ def build_results_dict(file_list, data_labels, reactant, target):
         {data label: result}
         where data label is a string with the desired legend label and
         result is a pandas.DataFrame with column headers
-        ['Conversion', 'Selectivity', 'Error']
+        ['Conversion', 'Selectivity', 'X Error', 'S Error']
         This function is most easily used in conjunction with DataExtractor
         such as in the run_plot_comparison script.
 
     """
     results_dict = {}
+    # If the file_list is expt folders, convert to experiment log paths
+    if (not file_list[0].endswith('expt_log.txt')
+            and os.path.isfile(os.path.join(file_list[0], 'expt_log.txt'))):
+        for n in range(len(file_list)):
+            file_list[n] = os.path.join(file_list[n], 'expt_log.txt')
+    elif file_list[0].endswith('expt_log.txt'):
+        # Atleast first file is ok to move on
+        pass
+    else:
+        msg = 'Item 1 of file_list is not experiment log or experiment folder'
+        raise AttributeError(msg)
+
     expt_list = list_expt_obj(file_list)
     for expt, data_label in zip(expt_list, data_labels):
         result = calculate_X_and_S(expt, reactant, target)
@@ -581,15 +599,79 @@ def calculate_X_and_S(expt, reactant, target_molecule):
         DataFrame with column header ['Conversion', 'Selectivity', 'Error']
         Error is one standard deviation.
 
+    Notes
+    -----
+    Conversion and error are calculated in fraction assumming a total mole
+    balance of 1. Error calculations are based off the error propogation
+    formula, resulting in the equations below:
+    .. math::
+
+      &X = 1 - \\frac{C_{reactant}}{C_{total}}
+
+      &S = \\frac{C_{target}}{C_{total}*X}
+
+      &\\sigma_{C_{tot}} = \\sqrt{\\sigma_{Molecule A}^{2} + ...
+                                 + \\sigma_{Molecule N}^{2}}
+
+      &\\sigma_{X} = \\sqrt{(\\frac{\\sigma_{C_{reactant}}} {C_{total}})^{2}
+                            + (\\frac{\\sigma_{C_{total}}*C_{reactant}}
+                                     {C_{total}^{2}})^{2}}
+
+      &\\sigma_{S} = \\sqrt{(\\frac{\\sigma_{C_{target}}} {C_{total}*X})^{2}
+                            + (\\frac{\\sigma_{C_{total}}*C_{target}}
+                                     {C_{total}^{2}*X})^{2}
+                            + (\\frac{\\sigma_{X}*C_{target}}
+                                     {C_{total}*X^{2}})^{2}}
+
     """
     concentrations, avg, std = load_results(expt)
-    C_Tot = avg.sum(axis=1)  # total conc of all molecules
-    C_reactant = avg[reactant]  # total conc of reactant molecule
-    X = (1 - C_reactant / C_Tot) * 100  # conversion assuming 100% mol bal
-    rel_err = std / avg
-    X_err = ((rel_err**2).sum(axis=1))**(1 / 2) * rel_err.max(axis=1)
-    S = (avg[target_molecule] / (C_Tot * X / 100)) * 100  # selectivity
+    # Compute relevant concentrations
+    C_tot = avg.sum(axis=1)  # total conc. of all molecules
+    C_reactant = avg[reactant]  # total conc. of reactant molecule
+    C_tar = avg[target_molecule]  # total conc. of target molecule
+
+    # Alternative method of calculating:
+    # C_tot = concentrations[:,1:,:].sum(axis=1)
+    # C_reactant = concentrations[:,1,:]
+    # C_tar = concentrations[:, 2, :]
+    # X = 1- C_reactant / C_tot
+    # np.average(X, axis=1)
+    # np.std(X, axis=1)
+    # S = (C_tar / (C_tot * X))
+    # np.average(S, axis=1)
+    # np.std(S, axis=1)
+
+    # Compute errors in concentrations
+    # Error in total conc = quad sum of errors
+    err_Ctot = np.sqrt((std**2).sum(axis=1))
+    err_Cr = std[reactant]  # Error in reactant concentration
+    err_Ctar = std[target_molecule]  # Error in target molecule concentration
+
+    # Computs Conversion and Selectivity
+    X = (1 - C_reactant / C_tot)  # conversion assuming mol bal of 1
+    S = (C_tar / (C_tot * X))  # Selectivity
     S = S.fillna(0)
-    results = pd.concat([X, S, X_err], axis=1)
-    results.columns = ['Conversion', 'Selectivity', 'Error']
+
+    # Compute total errors using error propogation formula
+    X_err = np.sqrt((err_Cr/C_tot)**2
+                    + (err_Ctot * C_reactant/C_tot**2)**2)
+    # Simple Formula. Gives different numbers but should be same...
+    # X_err_2 = X * np.sqrt((err_Ctot/C_tot)**2 + (err_Cr/C_reactant)**2)
+
+    # Need check for is X is zero
+    S_err = np.sqrt(
+                    (err_Ctar / (C_tot * X))**2
+                    + ((C_tar * err_Ctot) / (C_tot**2 * X))**2
+                    + ((C_tar * X_err) / (C_tot / X**2))**2
+                    )
+    # Error in selectivity undefined when conversion is zero.
+    X_err.replace([np.inf, -np.inf], 0, inplace=True)
+    S_err.replace([np.inf, -np.inf], 0, inplace=True)
+    X_err.fillna(0, inplace=True)
+    S_err.fillna(0, inplace=True)
+    # rel_err = std / avg
+    # X_err = ((rel_err**2).sum(axis=1))**(1 / 2) * rel_err.max(axis=1)
+
+    results = pd.concat([X, S, X_err, S_err], axis=1)*100
+    results.columns = ['Conversion', 'Selectivity', 'X Error', 'S Error']
     return results

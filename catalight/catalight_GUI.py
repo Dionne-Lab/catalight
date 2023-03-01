@@ -1045,7 +1045,6 @@ class Worker(QRunnable):
         self.signal.finished.emit()
 
 
-
 def setup_style(app):
     """Pull in the .qss sheet for GUI style."""
     script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in

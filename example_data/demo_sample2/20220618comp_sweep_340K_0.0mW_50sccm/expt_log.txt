@@ -1,0 +1,11 @@
+Experiment Date = 20220618
+Experiment Type = comp_sweep
+Experiment Name = 340K_0.0mW_50sccm
+Sample Name = 20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr
+Temperature [K] = [340]
+Power [mW] = [0.0]
+Gas 1 type = C2H2
+Gas 2 type = Ar
+Gas 3 type = H2
+Gas Composition [frac] = [[0.01, 0.985, 0.005], [0.01, 0.98, 0.01], [0.01, 0.97, 0.02], [0.01, 0.94, 0.05], [0.01, 0.89, 0.1], [0.01, 0.84, 0.15], [0.01, 0.79, 0.2], [0.01, 0.69, 0.3], [0.01, 0.59, 0.4]]
+Total Flow [sccm] = [50]

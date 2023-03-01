@@ -1,0 +1,11 @@
+Experiment Date = 20220618
+Experiment Type = temp_sweep
+Experiment Name = 0.0mW_0.01C2H2_0.94Ar_0.05H2frac_50sccm
+Sample Name = 20220602_Ag5Pd95_6wt%_3.45mg_sasol900_300C_3hr
+Temperature [K] = [300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400]
+Power [mW] = [0.0]
+Gas 1 type = C2H2
+Gas 2 type = Ar
+Gas 3 type = H2
+Gas Composition [frac] = [[0.01, 0.94, 0.05]]
+Total Flow [sccm] = [50]

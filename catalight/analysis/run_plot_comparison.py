@@ -8,10 +8,10 @@ import sys
 
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QApplication
-import catalight.analysis.tools as analysis_tools
+from catalight import analysis
 from catalight.analysis.user_inputs import (DataExtractor,
-                                               PlotOptionsDialog,
-                                               PlotOptionList)
+                                            PlotOptionsDialog,
+                                            PlotOptionList)
 
 
 def get_user_inputs(starting_dir=None):
@@ -36,7 +36,7 @@ def get_user_inputs(starting_dir=None):
         {'reactant': str, 'target_molecule': str,
         'XandS': bool, 'XvsS': bool, 'figsize': tuple}
     """
-    app = QApplication(sys.argv)
+    app = QApplication(sys.argv)  # noqa
 
     # Prompt user to select multiple experiment directories and label them
     data_dialog = DataExtractor(starting_dir)
@@ -45,7 +45,7 @@ def get_user_inputs(starting_dir=None):
 
     # Edit Options specifically for initial analysis dialog
     include_dict = {'reactant': True, 'target_molecule': True,
-                    'XandS': True, 'XvsS': True, 'figsize': True}
+                    'plot_XandS': True, 'plot_XvsS': True, 'figsize': True}
     options = PlotOptionList()  # Create default gui options list
     options.change_includes(include_dict)  # Modify gui components
     options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
@@ -95,17 +95,18 @@ def main(file_list, data_labels, reactant, target_molecule,
         conversion plot
 
     """
-    results_dict = analysis_tools.build_results_dict(file_list, data_labels,
+    results_dict = analysis.tools.build_results_dict(file_list, data_labels,
                                                      reactant, target_molecule)
 
     if plot_XandS:
-        plot_results = analysis_tools.multiplot_X_and_S(results_dict, figsize)
+        plot_results = analysis.plotting.multiplot_X_and_S(results_dict,
+                                                           figsize)
         ((figX, axX), (figS, axS)) = plot_results
         plt.show()
         return ((figX, axX), (figS, axS))
 
     elif plot_XvsS:
-        fig, ax = analysis_tools.multiplot_X_vs_S(results_dict, figsize)
+        fig, ax = analysis.plotting.multiplot_X_vs_S(results_dict, figsize)
         plt.show()
         return fig, ax
     print('Test if this line is executed')

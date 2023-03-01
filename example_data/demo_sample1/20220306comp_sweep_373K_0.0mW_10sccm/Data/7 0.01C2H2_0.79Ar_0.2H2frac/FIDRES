@@ -1,0 +1,27 @@
+﻿SRI Instruments
+Blayne Hartman
+N2278
+
+
+03/08/2022 00:42:53
+1ml valve loop
+
+FID
+6' Haysep D
+N2@10psi
+C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN.tem
+C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN_ch1.evt
+C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN_ch1_FID_COMP.cpt
+95.0,60.0,   10.00, 4.000,100.000,0
+C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN_TCD_off.CON
+FID04.
+No injection ECD noise
+
+
+
+"HayN_FID_CO",0.000,0.0000,0.0000,"",0.0000
+"HayN_FID_CH4",0.000,0.0000,0.0000,"",0.0000
+"HayN_FID_CO2",0.000,0.0000,0.0000,"",0.0000
+"HayN_FID_C2H4",0.000,0.0000,0.0000,"",0.0000
+"HayN_FID_C2H6",0.000,0.0000,0.0000,"",0.0000
+"HayN_FID_C2H2",0.000,0.0000,0.0000,"",0.0000
