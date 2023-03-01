@@ -38,14 +38,29 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
 .. figure:: _static/images/Conv_Sel_plot.svg
     :width: 800
 
-    Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots
+    Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots.
 
 If the ``savedata`` parameter of the :func:`~catalight.analysis.plotting.plot_expt_summary` function is entered as "True", all three of these plots will be saved in the results subfolder of the experiment's :ref:`data folder <data_folder>`.
 
+The three plotting functions called by :func:`~catalight.analysis.plotting.plot_expt_summary` can be called independently through scripting as well, and additional plotting tool are available within the :mod:`~catalight.analysis.plotting` module. :func:`~catalight.analysis.plotting.multiplot_X_and_S` and :func:`~catalight.analysis.plotting.multiplot_X_vs_S` functions are used to plot comparisons between individual experiments and can be most easily accessed using the :class:`~catalight.analysis.user_inputs.DataExtractor` dialog, covered in the :ref:`analysis.user_inputs<ui>` and :ref:`Helper scripts<helpers>` subsections.
 
+.. figure:: _static/images/avg_conc_plot.svg
+    :width: 800
+
+    :func:`~catalight.analysis.plotting.multiplot_X_and_S` produces two plots, showing conversion (selectivity) as a function of the independent variable. As such, only experiments of a single type can be compared using this function.
+
+.. figure:: _static/images/avg_conc_plot.svg
+    :width: 800
+
+    :func:`~catalight.analysis.plotting.multiplot_X_vs_S` produces a single plot, showing the selectivity as a function of conversion for the given experiments. This function can take in experiments with different independent variables, and is a good tool for comparing thermal and light driven reactions.
+
+Many users will want to customize plot style from the default styles printed by catalight. As such, whenever catalight takes a `savedata` parameter, figures are saved in a .pickle format. This allows the user to open the file as a :class:`matplotlib.pyplot.Figure` object and directly alter the plot elements. The :func:`~catalight.analysis.plotting.open_pickled_fig` function accepts the full path to a pickled figure file, shows the image, and returns figure and axis handles to be used for visual editting. When the :func:`~catalight.analysis.plotting.set_plot_style` function is called, catalight also sets :code:`plt.rcParams['svg.fonttype'] = 'none'` which allows .svg file text to be editted in vector editting software such as Inkscape. Many components of .svg type files can be editted outside of python for visual changes that can be reasonablly be performed on a file by file basis (whereas multi-file changes are better done programmatically).
+
+.. _ui:
 
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
+Where the :mod:`~catalight.analysis.plotting` toolbox provides many experiment plotting options, the :mod:`~catalight.analysis.user_inputs` toolbox provides tool for requesting plot options from the user. This toolbox is particularly helpful for users that would 
 
 analysis.tools
 ^^^^^^^^^^^^^^
@@ -53,9 +68,11 @@ analysis.tools
 The GCData class
 ----------------
 
+.. _helpers:
+
 Helper scripts
 --------------
-A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase "run/_" indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each "run" file in the analysis subpackage contains two function: "get_user_inputs()" and "main()". "get_user_inputs()" is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. "main()" is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_"filename".main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.
+A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase "run\_" indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each "run" file in the analysis subpackage contains two function: "get_user_inputs()" and "main()". "get_user_inputs()" is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. "main()" is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_"filename".main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.
 
 .. _calibration:
 
@@ -80,7 +97,7 @@ In addition to performing the physical calibration experiment, the user needs to
 .. figure:: _static/images/calibration_output_fits.png
     :width: 800
 
-    An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that c2h2 produces a bad fit output. This is because there is no c2h2 in the physical calibration gas, but it was entered into the calgas file.
+    An example of fitting to the calibration gas data set provided. Linear fit values are saved into the output calibration.csv file and can be loaded into the rest of the package wherever CalDF is used. Notice that C\ :sub:`2`\H\ :sub:`2`\ produces a bad fit output. This is because there is no C\ :sub:`2`\H\ :sub:`2`\ in the physical calibration gas, but it was entered into the calgas file.
 
 .. toctree::
     calibration_file_details

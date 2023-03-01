@@ -69,6 +69,7 @@ The current iteration of the system has been designed with modularity in mind, b
 * **Save control file used in expt_log.txt**
 * **Print console output to a new study_log.txt file**
 * **Make sure close process occurs if GUI crashes**. The GUI occassionally crashes in what seems to be a computer fault, emitting no error messages. When this happens, the close event protocol is not run and the equipment is not shutdown. There must be some way to detect this events and shutdown the hardware still.
+* **A tool can be built to scan experiment results**. A lot of data can be generated when experiments are run and analyzed automatically. Parsing through many folders of experiments and pulling out graphs is a hassle. A scanner gui can be built like the chromatogram_scanner_gui to scan through X and S plots.
 
 Writing Documentation
 ---------------------
