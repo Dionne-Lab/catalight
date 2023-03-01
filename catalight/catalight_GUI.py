@@ -544,6 +544,8 @@ class MainWindow(QMainWindow):
         if (item is not None) & update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
             # set the attributes of expt object based on GUI entries
+            if self.expt_types.currentText() == 'Undefined':
+                return  # Skip update
             expt.expt_type = self.expt_types.currentText()
             expt.temp[0] = self.setTemp.value()
             expt.power[0] = self.setPower.value()
