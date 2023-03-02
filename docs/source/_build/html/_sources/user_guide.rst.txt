@@ -33,14 +33,14 @@ After connecting your equipment and running experiments with either the GUI or s
     :caption: Example of the data structure saved after running experiments (a study)
 
     sample_name
-    ├── Experiment1          
-    │   ├── data
+    ├── Experiment1
+    │   ├── Data
     │   │    ├── 1 "condition 1"
     │   │    ├── 2 "condition 2"
     │   │    └── 3 "condition 3"
-    │   │        ├── FID01.ASC 
-    │   │        ├── FID01.CHR 
-    │   │        ├── FID01.THU 
+    │   │        ├── FID01.ASC
+    │   │        ├── FID01.CHR
+    │   │        ├── FID01.THU
     │   │        ├── FID02.ASC
     │   │        ├── FID02.CHR
     │   │        ├── FID02.THU
@@ -48,15 +48,15 @@ After connecting your equipment and running experiments with either the GUI or s
     │   │        ├── FID.JPG
     │   │        ├── FID.RES
     │   │        └── CH1_FID.LOG
-    │   ├── results
-    │   │   ├── avg_conc_plot.svg 
-    │   │   ├── Conv_Sel_plot.svg 
-    │   │   ├── run_num_plot.svg 
+    │   ├── Results
+    │   │   ├── avg_conc_plot.svg
+    │   │   ├── Conv_Sel_plot.svg
+    │   │   ├── run_num_plot.svg
     │   │   ├── avg_conc.csv
     │   │   ├── std_conc.csv
     │   │   └── concentractions.npy
     │   └── expt_log.txt
-    ├── Experiment2          
+    ├── Experiment2
     ├── Experiment3
     │   ⋮
 
@@ -84,7 +84,7 @@ Scripting
 ---------
 The entire packages was initially designed with scripted interfacing in mind. All available tools can be accessed in this way, and the interested user will likely find scripted control easier to integrate with new hardware than changing the GUI's source code to accomadate new equipment.
 
-Here, we show a few examples of what scripted interaction looks like. In this first section, we define some helpful functions to be used later in the main script. 
+Here, we show a few examples of what scripted interaction looks like. In this first section, we define some helpful functions to be used later in the main script.
 
 .. code-block:: python
 
@@ -161,7 +161,7 @@ Next, we need to call these functions, create experiments objects, and define th
         expt2.temp = [340]
         # Here H2 is the "main" variable
         P_h2 = 0.01*np.array([0.5, 1, 2, 5, 10, 15, 20, 30, 40])
-        # c2h2 is set to a constant 1% 
+        # c2h2 is set to a constant 1%
         P_c2h2 = 0.01*np.ones(len(P_h2))
         # Ar serves as the fill gas
         P_Ar = 1-P_c2h2-P_h2
@@ -170,7 +170,7 @@ Next, we need to call these functions, create experiments objects, and define th
         expt2.tot_flow = [50]
         expt2.sample_name = sample_name
         expt2.create_dirs(os.path.join(main_fol, 'postreduction'))
-        
+
         # Performing the experiment
         expt_list = [expt1, expt2]
         run_study(expt_list, eqpt_list)
@@ -186,14 +186,14 @@ A graphical user interface has been developed for both the execution of experime
 
 .. warning:: If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.
 
-There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (:mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "``run_``" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
+There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (:mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "run\_" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
 
 .. figure:: _static/images/gui_live_view.png
     :width: 800
 
     The GUI always opens in the live view showing status indicators for which equipment connected succesfully as well as current readouts of the equipment.
 
-.. warning:: 
+.. warning::
     The current version does not actively check for hardware changes. If and instrument is unplugged, the code won't know until you press the reconnect button or an error is thrown
 
 .. figure:: _static/images/gui_manual_control.png
@@ -201,7 +201,7 @@ There are two main types of GUIs present within catalight. Files containing the 
 
     The manual control tab can be used to modulate the connected hardware in real time. Enter the desired values and hit the "apply" button to set those conditions. The equipment will be controlled in a seperate thread, and access to this tab will be blocked while the equipiment is going to the desired state. The "reset" button returns the edittable values to their previous state.
 
-.. tip:: 
+.. tip::
     You can shut down equipment control of the study by pressing the emergency stop button in the bottom right
 
 .. figure:: _static/images/gui_study_overview.png
@@ -209,15 +209,15 @@ There are two main types of GUIs present within catalight. Files containing the 
 
     The study overview tab is the starting point for developing a study. Append new experiments to your study by clicking the "Add Experiment" button. These can always be deleted with the "Delete" button. Enter study wide values such as the sample name, weight, control file, and calibration file (for running calibrations). To edit an experiment, click on it in the list and edit the selected experiment on the experiment tab. When all experiments have been updated, click the "Start Study" button to run all experiments in order.
 
-.. warning:: 
+.. warning::
     The minimum for GC sample time is only set when the control file is loaded. It it good practice to load your desired control file at the beginning.
 
 .. figure:: _static/images/gui_experiment_design.png
     :width: 800
 
-    The experiment tab allows the user to edit the experimental parameters desired. When appropriate values are entered, a preview of the experiment will be plotted on the right hand side of the screen. This preview will also remain on the study tab to allow you to easily scan between experiments. Save previews using the tool bar on the bottom of the figure window. 
+    The experiment tab allows the user to edit the experimental parameters desired. When appropriate values are entered, a preview of the experiment will be plotted on the right hand side of the screen. This preview will also remain on the study tab to allow you to easily scan between experiments. Save previews using the tool bar on the bottom of the figure window.
 
-.. tip:: 
+.. tip::
     Limits on edittable widgets can be set in the :meth:`~catalight.catalight_GUI.MainWindow.set_form_limits` method of the catalight GUI MainWindow.
 
 .. _equipment:
@@ -234,7 +234,7 @@ The purpose of this section is to demonstrate the connection process for specifi
 .. Warning::
     The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).
 
-.. toctree:: 
+.. toctree::
 
     equipment_guides
 
@@ -242,7 +242,7 @@ Data Analysis:
 ==============
 We have a subpackage dedicated to performing data analysis
 
-.. toctree:: 
+.. toctree::
 
     data_analysis
 
@@ -250,6 +250,6 @@ Auxiliary tools:
 ================
 We also have other stuff!
 
-.. toctree:: 
+.. toctree::
 
-    auxiliary_tools 
+    auxiliary_tools

@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join('..','..')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
 print(sys.path)
 # Configuration file for the Sphinx documentation builder.
@@ -20,12 +20,13 @@ release = '0.0.1'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.napoleon', 
+    'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary', 
+    'sphinx.ext.autosummary',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
-    "sphinx.ext.intersphinx"
+    "sphinx.ext.intersphinx",
+    'sphinx.ext.mathjax'
     ]
 
 autosummary_generate = True
@@ -56,5 +57,6 @@ intersphinx_mapping = {
     "python": ("http://docs.python.org/3", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
-    "matplotlib": ("https://matplotlib.org/stable/", None)
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
 }

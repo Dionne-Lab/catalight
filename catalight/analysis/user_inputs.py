@@ -1,4 +1,4 @@
-r"""
+"""
 Graphical user interface classes for helping user input parameters.
 
 This module contains a number of UI classes that prompt the user to select
@@ -16,7 +16,6 @@ References
 (5) https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel
 (6) https://www.youtube.com/watch?v=dqg0L7Qw3ko
 (7) https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python
-
 """
 from __future__ import annotations
 import os
@@ -73,13 +72,18 @@ class DirectorySelector(QFileDialog):
 class Option():
     """
     Generic option to use when building plotting dialogs.
+
+    See :class:`PlotOptionList` for main usage. Mutliple Option items are
+    created within :meth:`PlotOptionList.__init__` to take in common user
+    inputs. New Option items can be created to easily update GUI components
+    for basic UI.
     """
     value: tuple | bool | float | str  #: User supplied value
     include: bool  #: Indicates whether or not to include GUI element
     label: str  #: String for constructing QLabel(label)
     tooltip: str  #: String for widget tooltip
     widget: QComboBox | QDoubleSpinBox | QLineEdit | QRadioButton
-    #: Widget used for entering option values
+    """Widget used for entering option values"""
 
 
 @dataclass
@@ -106,50 +110,72 @@ class PlotOptionList():
                     '1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);')
 
     reactant: Option = Option('', False, 'Reactant', _reactant_tip, QLineEdit)
+    """Option: Option instance w/ QLineEdit widget for entering reactant"""
 
-    target_molecule: Option = Option('', False, 'Target Molecule', _target_tip,
-                                     QLineEdit)
+    target_molecule: Option = Option('', False, 'Target Molecule',
+                                     _target_tip, QLineEdit)
+    """
+    Option: Option instance w/ QLineEdit widget for entering target molecule.
+    """
 
     mole_bal: Option = Option('c', False, 'Mole Balance Element',
                               _mole_bal_tip, QLineEdit)
+    """Option: Option instance w/ QLineEdit widget for mole balance element."""
 
     figsize: Option = Option((6.5, 4.5), False, 'Figure Size (x, y)',
                              _figsize_tip, QComboBox)
+    """
+    Option: Option instance w/ QComboBox widget for entering figure size tuple.
+    """
 
     savedata: Option = Option(True, False, 'Save Data? (T/F)',
                               'Save Data? T/F', QComboBox)
+    """Option: Option instance w/ QComboBox widget for entering T/F."""
 
     switch_to_hours: Option = Option(2, False,
                                      'Time to switch units to hours (hr)',
                                      'Time in hour to switch x axis unit',
                                      QDoubleSpinBox)
+    """
+    Option: Option instance w/ QDoubleSpinBox widget for entering time
+    in which the user would like to switch units from minute to hours.
+    """
 
     overwrite: Option = Option(False, False,
                                'Overwrite previous calculations?',
                                None, QComboBox)
+    """Option: Option instance w/ QComboBox widget for entering T/F."""
 
     basecorrect: Option = Option(True, False, 'Add baseline correction?',
                                  None, QComboBox)
+    """Option: Option instance w/ QComboBox widget for entering T/F."""
 
     xdata: Option = Option('[x1, x2, x3, ...]', False,
                            'Enter array for new X data', 'Alice', QLineEdit)
+    """
+    Option: Option instance w/ QLineEdit widget for entering new xdata array.
+    """
 
     units: Option = Option('H2/C2H2', False, 'Enter New X Units',
                            None, QLineEdit)
+    """Option: Option instance w/ QLineEdit widget for entering X data unit."""
 
-    XandS: Option = Option(False, False,
-                           'Plot Conversion and Selectivity (2 plots)',
-                           'True to plot conversion and selectivity plots.',
-                           QRadioButton)
+    plot_XandS: Option = Option(False, False,
+                                'Plot Conversion and Selectivity (2 plots)',
+                                'True to plot conversion and selectivity plots.',  # noqa
+                                QRadioButton)
+    """Option: Option instance w/ QRadioButton widget for checking T/F."""
 
-    XvsS: Option = Option(False, False,
-                          'Plot Selectivity vs Conversion (1 plot)',
-                          'True plots selectivity as function of conversion.',
-                          QRadioButton)
+    plot_XvsS: Option = Option(False, False,
+                               'Plot Selectivity vs Conversion (1 plot)',
+                               'True plots selectivity as function of conversion.',  # noqa
+                               QRadioButton)
+    """Option: Option instance w/ QRadioButton widget for checking T/F."""
 
     forcezero: Option = Option(True, False, 'Include (0, 0) in fit?',
                                'Add point (x=0, y=0) to data set.',
                                QComboBox)
+    """Option: Option instance w/ QLineEdit widget for entering T/F."""
 
     def __iter__(self):
         """
@@ -367,6 +393,7 @@ class DataExtractor(QDialog):
         self.treeWidget.setItemDelegate(delegate)
         self.treeWidget.setColumnCount(2)
         self.treeWidget.setHeaderLabels(['Name', 'Data Label'])
+        self.treeWidget.setAlternatingRowColors(True)
 
         # create other buttons
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok

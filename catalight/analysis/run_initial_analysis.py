@@ -136,9 +136,9 @@ def main(main_dirs, calDF, reactant, target_molecule, mole_bal='c',
 
         (ax1, ax2, ax3) = analysis.plotting.plot_expt_summary(expt, calDF,
                                                               *options)
-
-        # These outputs are defined to make it a little easier for output
-        # if that is ever desired. Otherwise open pickled figs!!
+    print('Finished Initial Analysis')
+    # These outputs are defined to make it a little easier for output
+    # if that is ever desired. Otherwise open pickled figs!!
 
 
 if __name__ == "__main__":

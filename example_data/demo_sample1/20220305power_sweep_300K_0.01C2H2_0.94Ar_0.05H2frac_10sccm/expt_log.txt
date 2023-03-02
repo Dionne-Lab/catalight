@@ -1,0 +1,11 @@
+Experiment Date = 20220305
+Experiment Type = power_sweep
+Experiment Name = 300K_0.01C2H2_0.94Ar_0.05H2frac_10sccm
+Sample Name = 20220201_Ag95Pd5_6wt%_20mg_sasol
+Temperature [K] = [300]
+Power [mW] = [50, 125, 200, 275]
+Gas 1 type = C2H2
+Gas 2 type = Ar
+Gas 3 type = H2
+Gas Composition [frac] = [[0.01, 0.94, 0.05]]
+Total Flow [sccm] = [10]
