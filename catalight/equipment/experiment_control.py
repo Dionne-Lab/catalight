@@ -783,9 +783,8 @@ class Experiment:
         self._start_time = time.time()  # Log beginning of expt
         # TODO Its a little silly to do all this instead of define a higher
         # level path as a instance attr in the first place.
-        log_path = os.path.join(os.path.dirname(self.data_path),
-                                'expt_log.txt')
-        self.update_expt_log(log_path)
+        expt_path = os.path.dirname(self.data_path))
+        self.update_expt_log(expt_path)
 
     def run_experiment(self):
         """
