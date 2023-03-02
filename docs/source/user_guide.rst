@@ -34,7 +34,7 @@ After connecting your equipment and running experiments with either the GUI or s
 
     sample_name
     ├── Experiment1
-    │   ├── data
+    │   ├── Data
     │   │    ├── 1 "condition 1"
     │   │    ├── 2 "condition 2"
     │   │    └── 3 "condition 3"
@@ -48,7 +48,7 @@ After connecting your equipment and running experiments with either the GUI or s
     │   │        ├── FID.JPG
     │   │        ├── FID.RES
     │   │        └── CH1_FID.LOG
-    │   ├── results
+    │   ├── Results
     │   │   ├── avg_conc_plot.svg
     │   │   ├── Conv_Sel_plot.svg
     │   │   ├── run_num_plot.svg

@@ -54,25 +54,198 @@ The three plotting functions called by :func:`~catalight.analysis.plotting.plot_
 
     :func:`~catalight.analysis.plotting.multiplot_X_vs_S` produces a single plot, showing the selectivity as a function of conversion for the given experiments. This function can take in experiments with different independent variables, and is a good tool for comparing thermal and light driven reactions.
 
-Many users will want to customize plot style from the default styles printed by catalight. As such, whenever catalight takes a `savedata` parameter, figures are saved in a .pickle format. This allows the user to open the file as a :class:`matplotlib.pyplot.Figure` object and directly alter the plot elements. The :func:`~catalight.analysis.plotting.open_pickled_fig` function accepts the full path to a pickled figure file, shows the image, and returns figure and axis handles to be used for visual editting. When the :func:`~catalight.analysis.plotting.set_plot_style` function is called, catalight also sets :code:`plt.rcParams['svg.fonttype'] = 'none'` which allows .svg file text to be editted in vector editting software such as Inkscape. Many components of .svg type files can be editted outside of python for visual changes that can be reasonablly be performed on a file by file basis (whereas multi-file changes are better done programmatically).
+Many users will want to customize plot style from the default styles printed by catalight. As such, whenever catalight takes a ``savedata`` parameter, figures are saved in a .pickle format. This allows the user to open the file as a :class:`matplotlib.pyplot.Figure` object and directly alter the plot elements. The :func:`~catalight.analysis.plotting.open_pickled_fig` function accepts the full path to a pickled figure file, shows the image, and returns figure and axis handles to be used for visual editting. When the :func:`~catalight.analysis.plotting.set_plot_style` function is called, catalight also sets :code:`plt.rcParams['svg.fonttype'] = 'none'` which allows .svg file text to be editted in vector editting software such as Inkscape. Many components of .svg type files can be editted outside of python for visual changes that can be reasonablly be performed on a file by file basis (whereas multi-file changes are better done programmatically).
 
 .. _ui:
 
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
-Where the :mod:`~catalight.analysis.plotting` toolbox provides many experiment plotting options, the :mod:`~catalight.analysis.user_inputs` toolbox provides tool for requesting plot options from the user. This toolbox is particularly helpful for users that would 
+Where the :mod:`~catalight.analysis.plotting` toolbox provides many experiment plotting options, the :mod:`~catalight.analysis.user_inputs` toolbox provides tools for requesting plot options from the user. This toolbox is particularly helpful to super users that would like to develop simple GUIs to aid less experienced team members with data analysis tasks.
+
+Selecting data
+""""""""""""""
+The :class:`~catalight.analysis.user_inputs.DirectorySelector` and :class:`~catalight.analysis.user_inputs.DataExtractor` classes were developped to aid with the selection of data to be plotted/analyzed. :class:`~catalight.analysis.user_inputs.DirectorySelector` is the more simple of the two, and is just a wrapper over a normal :class:`~PyQt5.QtWidget.QFileDialog`. In this case the file dialog is changed from the native dialog to the QT version so that multi directory selection can be enabled. The advantage of this is the user can select multiple folder to analyze (the disadvantage is the dialog looks worse).
+
+To use the user's selection in other code, call the :meth:`~catalight.analysis.user_inputs.DirectorySelector.get_output()` method. The following example demonstrates how to open the UI, allow the user to make a selection, and return the selection as a list called ``"expt_dirs"``
+
+.. code::
+
+  # Prompt user to select multiple experiment directories
+  data_dialog = DirectorySelector(starting_dir)
+  if data_dialog.exec_() == QDialog.Accepted:
+    expt_dirs = data_dialog.get_output()
+
+The :class:`~catalight.analysis.user_inputs.DataExtractor` is a bit more complex than :class:`~catalight.analysis.user_inputs.DirectorySelector` as it allows containing certain files and add custom labels to these directories for use in plotting.
+
+The use of this class is very similar to :class:`~catalight.analysis.user_inputs.DirectorySelector`. Notice that the output of the :meth:`~catalight.analysis.user_inputs.DataExtractor.get_output` methods is now a tuple returning both a list of files and matching data labels.
+
+.. code::
+
+  # Prompt user to select multiple experiment directories and label them
+  data_dialog = DataExtractor(starting_dir)
+  if data_dialog.exec_() == DataExtractor.Accepted:
+    file_list, data_labels = data_dialog.get_output()
+
+.. figure:: _static/images/dataextractor_expt_dir.png
+    :width: 800
+
+    The output of the code above after selecting a folder containing avg_conc.csv files (the default search target)
+
+
+The get_user_inputs() function of both :mod:`~catalight.analysis.run_change_xdata` and :mod:`~catalight.analysis.run_plot_comparison` utilizes the exact code above. :mod:`~catalight.analysis.run_plot_chromatograms_stacked` on the other hand alters the init parameter when instantiating the :class:`~catalight.analysis.user_inputs.DataExtractor` class. The parameter '' instructs the UI to search for any file and the '.asc' enforces that the file must have a '.asc' extension. Finally ``data_depth=0`` instructs the dialog to return file paths from its get_output() method rather than directories. This format is used to allow the user to select individual chromatograph data files for plotting.
+
+.. code::
+
+  # Prompt user to select .asc files and label them
+  data_dialog = DataExtractor(starting_dir, '', '.asc', data_depth=0)
+  if data_dialog.exec_() == DataExtractor.Accepted:
+    file_list, data_labels = data_dialog.get_output()
+
+.. figure:: _static/images/dataextractor_files.png
+    :width: 800
+
+    The output of the code above after selecting a folder that contains files endings in '.asc' (the requested search target). Notice the bottom most items now end in '.ASC'
+
+Plotting instructions
+"""""""""""""""""""""
+Using a combinations of regular file dialogs and the custom dialogs presented in the previous section, the user is now able to select many different data types in a UI. This section describes tool built to help when the user needs to enter more information than just which data they would like to plot. Many of the functions called in the various :ref:`helper tools<helpers>` take a number of arguments. Many of these arguments repeat across different functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` was developed to reuse as much code as possible while customizing a UI specifically for the options required in particular functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` mixes and matches its GUI elements programatically based on the :class:`~catalight.analysis.user_inputs.PlotOptionList` provided to it on instantiation. The :class:`~catalight.analysis.user_inputs.PlotOptionList` is a data class containing all of the default plot options each wrapped up in another data class called :class:`~catalight.analysis.user_inputs.Option`.
+
+:class:`~catalight.analysis.user_inputs.Option` contains the following format:
+
+* **value:** Holds the user supplied value
+* **include:** Indicates whether or not to include GUI element
+* **label:** Text displayed in gui to represent what the value is
+* **tooltip:** Text for widget tooltip
+* **widget:** Widget used for entering option values
+
+While :class:`~catalight.analysis.user_inputs.PlotOptionList` contains the following :class:`Options<catalight.analysis.user_inputs.Option>`
+
++-------------+------------------+----------+
+| reactant    | target_molecule  | mole_bal |
++-------------+------------------+----------+
+| figsize     | switch_to_hours  | savedata |
++-------------+------------------+----------+
+| overwrite   | basecorrect      | units    |
++-------------+------------------+----------+
+| plotXvsS    | forcezero        | xdata    |
++-------------+------------------+----------+
+| plot_XandS  |                  |          |
++-------------+------------------+----------+
+
+No changes need to be made to any default :class:`~catalight.analysis.user_inputs.Option` within the :class:`~catalight.analysis.user_inputs.PlotOptionList` before generating the :class:`~catalight.analysis.user_inputs.PlotOptionsDialog`, but the :meth:`~catalight.analysis.user_inputs.PlotOptionList.change_includes` method can be used to turn on and off specific option GUI components before instantiating the dialog. All options are turned off by default.
+
+.. code::
+
+  # Edit Options specifically for initial analysis dialog
+  include_dict = {'overwrite': True, 'basecorrect': True, 'reactant': True,
+                  'target_molecule': True, 'mole_bal': True, 'figsize': True,
+                  'savedata': True, 'switch_to_hours': True}
+  options = PlotOptionList()  # Create default gui options list
+  options.change_includes(include_dict)  # Modify gui components
+  options_dialog = PlotOptionsDialog(options)  # Build dialog w/ options
+  if options_dialog.exec_() == PlotOptionsDialog.Accepted:
+      response_dict = options.values_todict()
+
+.. figure:: _static/images/plotting_instructions.png
+
+  Example pop-up dialog produced by any of the 'run\_'.py modules when using the user_inputs() functions. This specifically is the options dialog from :mod:`~catalight.analysis.run_initial_analysis` and is the result of the example code above.
+
+Calling the :meth:`~catalight.analysis.user_inputs.PlotOptionList.values_todict` method returns a :class:`dict` of the users entries and ``kwargs`` which can be directly unpacked using the ``**`` symbol
+
+.. code-block::
+  :caption: The code that is run when running the :mod:`~catalight.analysis.run_initial_analysis` file as a script.
+
+  expt_dirs, calDF, response_dict = get_user_inputs()
+  main(expt_dirs, calDF, **response_dict)
 
 analysis.tools
 ^^^^^^^^^^^^^^
+Finally, the :mod:`~catalight.analysis.tools` toolbox contains many helper functions that get reused repeatedly throughout the code base. If you are planning to develop new components of catalight, it is particularly advantagous for you to study these functions and utilize them where ever possible. More information about each function can be obtained from the :ref:`API` section. Here we will only highlight the most important functions for the average user.
+
+Namely, we will skip over:
+
++--------------------------------------------------------+---------------------------------------------------+
+|  :func:`~catalight.analysis.tools.build_results_dict`  | :func:`~catalight.analysis.tools.get_bool`        |
++--------------------------------------------------------+---------------------------------------------------+
+|  :func:`~catalight.analysis.tools.list_matching_files` | :func:`~catalight.analysis.tools.get_run_number`  |
++--------------------------------------------------------+---------------------------------------------------+
+|  :func:`~catalight.analysis.tools.list_expt_obj`       | :func:`~catalight.analysis.tools.get_timepassed`  |
++--------------------------------------------------------+---------------------------------------------------+
+
+:func:`~catalight.analysis.tools.run_analysis` is the main workhorse of the :mod:`~catalight.analysis` subpackage. This function takes in an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and a :ref:`calibration file<calibration>` (imported as a :class:`DataFrame <pandas.DataFrame>`) and produces a 3D numpy :class:`~numpy.array` of concentrations, and two 2D :class:`pandas DataFrames <pandas.DataFrame>` (avg_conc and std_conc). If ``savedata`` is entered as ``True``, the three outputs are saved in the experiment results folder (:ref:`See data structure diagram<data_folder>`)
+
+.. figure:: _static/images/concentrations_format.png
+  :width: 800
+
+  The concentrations variable returned by the :func:`~catalight.analysis.tools.run_analysis` function is a 3D :class:`numpy array <numpy.array>` containing the timestamps and ppm values for every data point collected during an experiment.
+
+.. figure:: _static/images/avg_std_dataframes.png
+  :width: 800
+
+  The avg and std variables by the :func:`~catalight.analysis.tools.run_analysis` function are both 2D :class:`pandas DataFrames <pandas.DataFrame>` showing the average and standard deviation in ppm concentration for a given experimental condition. The time stamps are dropped from these two DataFrames, but time passed is given as the index for stability_test :class:`Experiments <catalight.equipment.experiment_control.Experiment>`.
+
+Once calculated, concentrations, avg, and std can always reintroduced into the code using the :func:`~catalight.analysis.tools.load_results` function. Generally, when the ``overwrite`` ``kwarg`` is accepted, this parameter switches between whether :func:`~catalight.analysis.tools.run_analysis` or :func:`~catalight.analysis.tools.load_results` is called (for existing datasets). Many experiments analyzed programatically using the :mod:`catalight.analysis.run_initial_analysis` module. For all analysis types, :func:`~catalight.analysis.tools.convert_index` can be a useful tool. For composition sweeps in particular, it is hard to define an exact X unit the user is looking for in a general and simplistic way. As such, catalight always outputs the x axis of composition sweeps as a :class:`string<str>` depicting each individual component. The :func:`~catalight.analysis.tools.convert_index` functions and related :mod:`~catalight.analysis.run_change_xdata` module allow the user to change the x data from strings to floats with the users desired units. This is how composition sweeps can be generalized between, for example, varying the ratio between two reactants or varying the total reactant pressure.
+
+To run analysis in the first place, a calibration must be supplied to properly convert GC counts to ppm concentractions. The :func:`~catalight.analysis.tools.analyze_cal_data` function takes in a basic .csv file describing chemical elution times and calibration data to generate a compatible calibration file. :ref:`See the calibration section for more details<calibration>`
+
+Ultimately most experiments will seek to convert some molecular concentration measurements into catalytic measurements. Thus far catalight is able to calculate conversion (X) and chemical selectivity (S). This is done by passing an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and Chem ID indicating a reactant and chemical target to the  :func:`~catalight.analysis.tools.calculate_X_and_S` function. Conversion, selectivity, and their respective errors are then calculated accodring to the following equations:
+
+.. math::
+
+    &X = 1 - \frac{C_{reactant}}{C_{total}}
+
+    &S = \frac{C_{target}}{C_{total}*X}
+
+    &\sigma_{C_{tot}} = \sqrt{\sigma_{Molecule A}^{2} + ...
+                                + \sigma_{Molecule N}^{2}}
+
+    &\sigma_{X} = \sqrt{(\frac{\sigma_{C_{reactant}}} {C_{total}})^{2}
+                          + (\frac{\sigma_{C_{total}}*C_{reactant}}
+                                    {C_{total}^{2}})^{2}}
+
+    &\sigma_{S} = \sqrt{(\frac{\sigma_{C_{target}}} {C_{total}*X})^{2}
+                          + (\frac{\sigma_{C_{total}}*C_{target}}
+                                    {C_{total}^{2}*X})^{2}
+                          + (\frac{\sigma_{X}*C_{target}}
+                                    {C_{total}*X^{2}})^{2}}
+
+.. note::
+  Before running the :func:`~catalight.analysis.tools.calculate_X_and_S` function, :func:`~catalight.analysis.tools.run_analysis` should be called on the desired experiment to generate the concentrations, avg, and std results files. These are imported to the final calculations.
 
 The GCData class
 ----------------
+
+Coming soon
 
 .. _helpers:
 
 Helper scripts
 --------------
 A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase "run\_" indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in seperate, user-created scripts without executing the file entirely. Each "run" file in the analysis subpackage contains two function: "get_user_inputs()" and "main()". "get_user_inputs()" is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. "main()" is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_"filename".main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.
+
+.. list-table:: Helper functions in the :mod:`~catalight.analysis` package
+   :header-rows: 0
+
+   * - :mod:`~catalight.analysis.run_calibration`
+     - Provide prompts to user and call functions to run calibration analysis
+   * - :mod:`~catalight.analysis.run_change_xdata`
+     - Swap the x axis values and units with a user entered array
+   * - :mod:`~catalight.analysis.run_initial_analysis`
+     - Run initial analysis on all experiments within the main folder provided by the user
+   * - :mod:`~catalight.analysis.run_plot_chromatograms_stacked`
+     - Plot any number of chromatogram files ('.asc') on a single set of axes
+   * - :mod:`~catalight.analysis.run_plot_comparison`
+     - Provide prompts to the user to plot multiple experiments either on a single plot with conversion and selectivity as axes or on two plots with conversion or selectivity plotted as a function of a shared independent variable (temperature, power, etc.)
+
+Finally, the :mod:`~catalight.analysis.chromatogram_scanner_gui` module provides a fully comprehensive GUI to scanning through collected GC data. The behavior of this feature is a bit more complicated than the UI described above, so it is intended to only be used in a GUI style. After selecting a main directory in a basic file dialog, the screen below will appear to the user showing all .asc files contained within. The user is also able to toggle between FID and TCD files (more options can be added) and an experimental feature for supplying custom file extensions is included, but not fully supported at the moment.
+
+.. figure:: /_static/images/chromatogram_scanner_gui_screenshot.png
+  :width: 800
+
+  The :mod:`~catalight.analysis.chromatogram_scanner_gui` allows the user to display chromatograms within a selected folder with or without baseline correction included.
+
+.. note::
+  The plot integration bounds feature is in development and will be included in a later release within the near future.
 
 .. _calibration:
 

@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join('..','..')))
+sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
 print(sys.path)
 # Configuration file for the Sphinx documentation builder.
@@ -57,5 +57,6 @@ intersphinx_mapping = {
     "python": ("http://docs.python.org/3", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
-    "matplotlib": ("https://matplotlib.org/stable/", None)
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
 }
