@@ -461,7 +461,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     concentrations : numpy.ndarray
         3D matrix of concentrations for each molecule, gc collection,
         and condition
-        [Condition x [Timestamps, ChemID] x run number
+        [Condition x [Timestamps, ChemID] x run number]
     avg : pandas.DataFrame
         average concentration for each molecule and experiment condition
     std : pandas.DataFrame

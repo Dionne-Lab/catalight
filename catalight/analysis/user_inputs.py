@@ -393,6 +393,7 @@ class DataExtractor(QDialog):
         self.treeWidget.setItemDelegate(delegate)
         self.treeWidget.setColumnCount(2)
         self.treeWidget.setHeaderLabels(['Name', 'Data Label'])
+        self.treeWidget.setAlternatingRowColors(True)
 
         # create other buttons
         self.buttonBox = QDialogButtonBox(QDialogButtonBox.Ok

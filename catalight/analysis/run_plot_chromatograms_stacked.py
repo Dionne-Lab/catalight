@@ -7,12 +7,15 @@ options. Plots .asc file data on a single figure.
 Created on Fri Jan  6 17:10:25 2023.
 @author: Briley Bourgeois
 """
+import sys
+
 import matplotlib.pyplot as plt
+from PyQt5.QtWidgets import QApplication
 import catalight.analysis.plotting as plot_tools
 from catalight.analysis.gcdata import GCData
 from catalight.analysis.user_inputs import (DataExtractor,
-                                               PlotOptionList,
-                                               PlotOptionsDialog)
+                                            PlotOptionList,
+                                            PlotOptionsDialog)
 
 
 def get_user_inputs(starting_dir=None):
@@ -41,6 +44,7 @@ def get_user_inputs(starting_dir=None):
         {'basecorrect': bool, 'figsize': tuple}
 
     """
+    app = QApplication(sys.argv)  # noqa
     # Prompt user to select .asc files and label them
     data_dialog = DataExtractor(starting_dir, '', '.asc', data_depth=0)
     if data_dialog.exec_() == DataExtractor.Accepted:
