@@ -27,16 +27,15 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
 
     Returns
     -------
-    expt : Experiment
+    Experiment
         Experiment object for already run calibration experiment
-    calDF : pandas.DataFrame
+    pandas.DataFrame
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
-    figsize : tuple
-        Desired size of output figure in inches (x,y).
-    force_zero : bool
-        Add point (x=0, y=0) to data set.
+    dict :
+        figsize, (tuple) Desired size of output figure in inches (x,y).
+        forcezero, (bool) Add point (x=0, y=0) to data set.
 
     """
     app = QApplication(sys.argv)  # noqa
@@ -87,9 +86,9 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
 
     Returns
     -------
-    run_num_plots : matplotlib.pyplot.axis
+    matplotlib.axes._axes.Axes
         Axis handle for "run_num" plot
-    cal_plots : matplotlib.pyplot.axis
+    matplotlib.axes._axes.Axes
         Axis handle for plots showing expected ppm vs measured counts
 
     """

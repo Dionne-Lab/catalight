@@ -88,10 +88,14 @@ def main(file_list, data_labels, reactant, target_molecule,
 
     Returns
     -------
-    ((figX, axX), (figS, axS))
-        if plot_XandS == True, returns fig and ax handles for two plots
-    fig, ax
-        if plot_XvsS == True, returns fig and ax handles for selectivity vs
+    tuple(tuple, tuple):
+        ((figX, axX), (figS, axS)) if plot_XandS == True,
+        returns fig and ax handles for two plots
+    matplotlib.figure.Figure :
+        if plot_XvsS == True, returns fig handle for selectivity vs
+        conversion plot
+    matplotlib.axes._axes.Axes :
+        if plot_XvsS == True, returns ax handle for selectivity vs
         conversion plot
 
     """

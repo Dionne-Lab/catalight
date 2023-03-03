@@ -1,0 +1,6 @@
+catalight.equipment.harrick\_watlow.heater\_control.convert\_temp
+=================================================================
+
+.. currentmodule:: catalight.equipment.harrick_watlow.heater_control
+
+.. autofunction:: convert_temp

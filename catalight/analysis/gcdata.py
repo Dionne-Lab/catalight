@@ -163,9 +163,9 @@ class GCData:
 
         Returns
         -------
-        left index : numpy.ndarray of int
+        numpy.ndarray of int
             Left bounds of integration.
-        right index : numpy.ndrray of int
+        numpy.ndrray of int
             Right bounds of integration.
 
         """
@@ -244,7 +244,7 @@ class GCData:
 
         Returns
         -------
-        counts : numpy.int32
+        numpy.int32
             counts rounded using np.around()
         """
         counts = np.zeros(self.numpeaks)
@@ -357,7 +357,7 @@ class GCData:
 
         Returns
         -------
-        run_number : int
+        int
             run number extracted from filename
         """
         filename = os.path.basename(self.filepath)
@@ -380,7 +380,7 @@ class GCData:
 
         Returns
         -------
-        y : float
+        float
             Counts for a single peak converted into ppm based on calDF
         """
         # Pull Cal data for given chemical

@@ -34,10 +34,6 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    new_x : list
-        Array of new data to be used inplace of old x axis
-    units : str
-        new units for new x axis data
     response_dict : dict
         Dictionary of user plot options.
         Dict Keys depend on options proved to PlotOptionsDialog.
@@ -67,7 +63,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     if options_dialog.exec_() == PlotOptionsDialog.Accepted:
         response_dict = options.values_todict()
 
-    return(file_list, calDF, response_dict)
+    return file_list, calDF, response_dict
 
 
 def main(expt_paths, calDF, new_x, units, reactant, target_molecule,

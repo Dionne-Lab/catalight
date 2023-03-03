@@ -1,6 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Jan 16 16:29:11 2023
+Contains MFC system resources and code.
 
-@author: brile
+Contains resources (manuals, calibration files, etc.) and code for connecting
+with equipment
+
+Created on Mon Jan 16 16:29:11 2023
+@author: Briley Bourgeois
 """

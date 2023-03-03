@@ -94,12 +94,10 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
 
     Returns
     -------
-    ax1 : :func:`matplotlib.pyplot.axis`
-        Axis handle for "run_num" plot
-    ax2 : `matplotlib.pyplot.axis`
-        Axis handle for "ppm" plot
-    ax3 : matplotlib.pyplot.axis
-        Axis handle for "X and S" plot
+    tuple(:class:`~matplotlib.axes._axes.Axes`,
+    :class:`~matplotlib.axes._axes.Axes`,
+    :class:`~matplotlib.axes._axes.Axes`) :
+        (ax1, ax2, ax3) Axis handles for "run_num",  "ppm", and "X and S" plots
 
     """
     # Plotting
@@ -151,10 +149,8 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
 
     Returns
     -------
-    fig : matplotlib.pyplot.figure
-        Figure handle for "run_num" plot
-    ax : matplotlib.pyplot.axis
-        Axis handle for "run_num" plot
+    tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes) :
+        Figure and Axis handle for "run_num" plot
     """
     # Initialize run num plot
     fig, ax = plt.subplots()
@@ -209,10 +205,8 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
 
     Returns
     -------
-    fig : matplotlib.pyplot.figure
-        Figure handle for "ppm" plot
-    ax : matplotlib.pyplot.axis
-        Axis handle for "ppm" plot
+    tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes) :
+        Figure and Axis handle for "ppm" plot
     """
     # Initialize ppm vs ind_var plot
     fig, ax = plt.subplots()
@@ -287,10 +281,8 @@ def plot_X_and_S(expt, reactant, target_molecule):
 
     Returns
     -------
-    fig : matplotlib.pyplot.figure
-        Figure handle for "X and S" plot
-    ax : matplotlib.pyplot.axis
-        Axis handle for "X and S" plot
+    tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes) :
+        Figure and Axis handle for "X and S" plot
 
     """
     # Initialize Conv and Selectivity plot
@@ -345,7 +337,7 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
 
     Returns
     -------
-    tuple of tuple of (matplotlib.pyplot.figure, matplotlib.pyplot.axis)
+    tuple(tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes)) :
         two tuples, each containing the (figure, axis) handles for the
         conversion and selectivity plots, respectively.
 
@@ -413,10 +405,8 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
 
     Returns
     -------
-    fig : matplotlib.pyplot.figure
-        Figure handle for "X vs S" plot
-    ax : matplotlib.pyplot.axis
-        Axis handle for "X vs S" plot
+    tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes) :
+        Figure and Axis handle for "X vs S" plot
 
     """
     print('Plotting...')
@@ -460,10 +450,8 @@ def open_pickled_fig(fig_path):
 
     Returns
     -------
-    fig : matplotlib.pyplot.figure
-        Figure handle for plot
-    ax : matplotlib.pyplot.axis
-        Axis handle for plot
+    tuple(matplotlib.figure.Figure, matplotlib.axes._axes.Axes) :
+        Figure and Axis handle for plot
     """
     plt.rcParams['svg.fonttype'] = 'none'
     fig = pickle.load(open(fig_path, 'rb'))

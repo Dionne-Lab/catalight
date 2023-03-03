@@ -40,7 +40,7 @@ def list_matching_files(main_dirs, target, suffix):
 
     Returns
     -------
-    filepath_list : list of str
+    list(str)
         List of filepaths ending with 'suffix' and containing 'target'
     """
     if isinstance(main_dirs, str):
@@ -67,7 +67,7 @@ def list_expt_obj(file_paths):
 
     Returns
     -------
-    experiments : list[Experiment]
+    list[Experiment]
         List of Experiment objects from provided filepaths.
     """
     experiments = []
@@ -112,7 +112,7 @@ def build_results_dict(file_list, data_labels, reactant, target):
 
     Returns
     -------
-    results_dict : dict
+    dict :
         Dictionary of results (produced by calculate_X_and_S) in the form
         {data label: result}
         where data label is a string with the desired legend label and
@@ -189,13 +189,13 @@ def load_results(expt):
 
     Returns
     -------
-    concentrations : numpy.ndarray
+    numpy.ndarray:
         3D matrix of concentrations for each molecule, gc collection,
         and condition
         [Condition x [Timestamps, ChemID] x run number
-    avg : pandas.DataFrame
+    pandas.DataFrame:
         average concentration for each molecule and experiment condition
-    std : pandas.DataFrame
+    pandas.DataFrame:
         one standard deviation of concentration measurements
     """
     fol = expt.results_path
@@ -218,7 +218,7 @@ def convert_index(dataframe):
 
     Returns
     -------
-    dataframe : pandas.DataFrame
+    pandas.DataFrame
         Same Pandas dataframe, now containing index with float labels
     """
     # scrub letters from first entry - old
@@ -248,9 +248,9 @@ def get_timepassed(concentrations, switch_to_hours=2, expt=None):
 
     Returns
     -------
-    numpy.ndarray
+    numpy.ndarray :
         Numpy array of cumulative time passed since the start of experiment.
-    str
+    str :
         Either 'min' or 'hr' based on the length of total time and parameters.
 
     """
@@ -301,10 +301,9 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
     Returns
     -------
-    run_num_plots : matplotlib.pyplot.axis
-        Axis handle for "run_num" plot
-    calibration_plots : matplotlib.pyplot.axis
-        Axis handle for plots showing expected ppm vs measured counts
+    tuple(matplotlib.axes._axes.Axes, matplotlib.axes._axes.Axes)
+        (run_num_plots, calibration_plots) Axis handles for "run_num" plot and
+        for plots showing expected ppm vs measured counts
 
     """
     print('Analyzing calibration data')
@@ -458,13 +457,13 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
 
     Returns
     -------
-    concentrations : numpy.ndarray
+    numpy.ndarray
         3D matrix of concentrations for each molecule, gc collection,
         and condition
         [Condition x [Timestamps, ChemID] x run number]
-    avg : pandas.DataFrame
+    pandas.DataFrame
         average concentration for each molecule and experiment condition
-    std : pandas.DataFrame
+    pandas.DataFrame
         one standard deviation of concentration measurements
 
     """
@@ -595,7 +594,7 @@ def calculate_X_and_S(expt, reactant, target_molecule):
 
     Returns
     -------
-    results : pandas.DataFrame
+    pandas.DataFrame
         DataFrame with column header ['Conversion', 'Selectivity', 'Error']
         Error is one standard deviation.
 
@@ -604,6 +603,7 @@ def calculate_X_and_S(expt, reactant, target_molecule):
     Conversion and error are calculated in fraction assuming a total mole
     balance of 1. Error calculations are based off the error propagation
     formula, resulting in the equations below:
+
     .. math::
 
       &X = 1 - \\frac{C_{reactant}}{C_{total}}
