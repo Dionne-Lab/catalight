@@ -1,6 +1,6 @@
 Welcome to Catalight!
 =======================
-.. figure:: /docs/source/_static/images/catalight_header_g.png
+.. figure:: https://raw.githubusercontent.com/Dionne-Lab/catalight/main/docs/source/_static/images/catalight_header_g.png
     :width: 800
 
 Introduction
@@ -12,7 +12,7 @@ To date, catalight is compatible with Alicat mass flow controllers, heater syste
 **Link to ReadtheDocs Page Coming Soon**
 ----------------------------------------
 
-.. figure:: /docs/source/_static/images/overview.png
+.. figure:: https://github.com/Dionne-Lab/catalight/raw/main/docs/source/_static/images/overview.png
     :width: 800
 
     D-Lab Hardware Configuration

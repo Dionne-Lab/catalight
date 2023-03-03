@@ -1,8 +1,12 @@
 import os
 import sys
+import tomli
+with open("../../pyproject.toml", "rb") as f:
+    toml = tomli.load(f)
+
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
-print(sys.path)
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -11,10 +15,17 @@ print(sys.path)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'catalight'
-copyright = '2022, Briley Bourgeois, Claire Carlin'
-author = 'Briley Bourgeois, Claire Carlin'
-release = '0.0.1'
+
+pyproject = toml["tool"]["poetry"]
+
+project = pyproject["name"]
+version = pyproject["version"]
+release = pyproject["version"]
+author = pyproject["authors"]
+#project = 'catalight'
+#copyright = '2022, Briley Bourgeois, Claire Carlin'
+#author = 'Briley Bourgeois, Claire Carlin'
+#release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

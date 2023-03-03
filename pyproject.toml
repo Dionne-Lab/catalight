@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catalight"
-version = "0.0.1"
+version = "0.1.2"
 authors = [
   { name="Briley Bourgeois", email="bbourge6@stanford.edu" },
   { name="Claire Carlin", email="cccarlin@stanford.edu" }
 ]
-description = "A small example package"
-readme = "README.md"
+description = "Photoreactor system automation, data handling, and analysis."
+readme = "README.rst"
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
