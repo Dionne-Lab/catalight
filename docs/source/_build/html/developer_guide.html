@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples" href="examples.html" />
-    <link rel="prev" title="Laser Calibration" href="auxiliary_tools.html" /> 
+    <link rel="prev" title="Laser calibration" href="auxiliary_tools.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -53,9 +53,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">How it works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html#usage">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html#data-analysis">Data Analysis:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools:</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#equipment-specific-guides">Equipment specific guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#data-analysis">Data analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development Guide:</span></p>
 <ul class="current">
@@ -64,14 +64,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#my-equipment-doesn-t-have-a-python-api">My equipment doesn’t have a Python API</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#creating-new-experiment-types">Creating New Experiment Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#making-changes-to-the-gui">Making Changes to the GUI</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#creating-new-experiment-types">Creating new experiment types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#making-changes-to-the-gui">Making changes to the GUI</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#function">Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#style">Style</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#areas-for-future-development">Areas for Future Development:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#writing-documentation">Writing Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#areas-for-future-development">Areas for future development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#writing-documentation">Writing documentation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
@@ -125,11 +125,11 @@
 </section>
 </section>
 <section id="creating-new-experiment-types">
-<h1>Creating New Experiment Types<a class="headerlink" href="#creating-new-experiment-types" title="Permalink to this heading"></a></h1>
+<h1>Creating new experiment types<a class="headerlink" href="#creating-new-experiment-types" title="Permalink to this heading"></a></h1>
 <p class="linemarker linemarker-25">Coming soon</p>
 </section>
 <section id="making-changes-to-the-gui">
-<h1>Making Changes to the GUI<a class="headerlink" href="#making-changes-to-the-gui" title="Permalink to this heading"></a></h1>
+<h1>Making changes to the GUI<a class="headerlink" href="#making-changes-to-the-gui" title="Permalink to this heading"></a></h1>
 <section id="function">
 <h2>Function<a class="headerlink" href="#function" title="Permalink to this heading"></a></h2>
 <p class="linemarker linemarker-31">To create new static widget, we recommend using the QtDesigner application and opening the <code class="file docutils literal notranslate"><span class="pre">catalight.gui_components.reactorUI.ui</span></code> file. Any custom widgets added to the GUI can be inserted to the <cite>catalight.gui_components</cite> folder and promoted within QtDesigner. In the current state, all static widgets were created in this way when used within <a class="reference internal" href="_autosummary/catalight.catalight_GUI.html#module-catalight.catalight_GUI" title="catalight.catalight_GUI"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.catalight_GUI</span></code></a> and the code inside of this module connection all of the functionality of the GUI window and its components. Remember, the main purpose of the GUI is to help the user create experiment objects and “run a study”. Experimental functionality should be added to the <a class="reference internal" href="_autosummary/catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment" title="catalight.equipment.experiment_control.Experiment"><code class="xref py py-class docutils literal notranslate"><span class="pre">Experiment</span></code></a> class. New widgets should help fill attributes of the Experiment class or other classes that need to be developed in the future. A second, but major function of the GUI is to directly control hardware. Future development should allow users to choose and utilize any equipment within the GUI.</p>
@@ -141,7 +141,7 @@ The QSS sheet was downloaded an lightly modified from <a class="reference extern
 </section>
 </section>
 <section id="areas-for-future-development">
-<span id="future"></span><h1>Areas for Future Development:<a class="headerlink" href="#areas-for-future-development" title="Permalink to this heading"></a></h1>
+<span id="future"></span><h1>Areas for future development<a class="headerlink" href="#areas-for-future-development" title="Permalink to this heading"></a></h1>
 <p class="linemarker linemarker-43">Design is an iterative process. The catalight project has already been updated several times going into the deployment of v1.0.0, but there is always room for improvement. Below is a laundry list of improvements that can be added to future versions of the package.</p>
 <p class="linemarker linemarker-45">The current iteration of the system has been designed with modularity in mind, but additional improvements could be made to enable more seamless use by a variety of groups with different hardware configurations. This will become increasingly important as users develop their own equipment classes.</p>
 <ul class="simple">
@@ -166,17 +166,19 @@ The QSS sheet was downloaded an lightly modified from <a class="reference extern
 <li><p class="linemarker linemarker-70"><strong>Print console output to a new study_log.txt file</strong></p></li>
 <li><p class="linemarker linemarker-71"><strong>Make sure close process occurs if GUI crashes</strong>. The GUI occassionally crashes in what seems to be a computer fault, emitting no error messages. When this happens, the close event protocol is not run and the equipment is not shutdown. There must be some way to detect this events and shutdown the hardware still.</p></li>
 <li><p class="linemarker linemarker-72"><strong>A tool can be built to scan experiment results</strong>. A lot of data can be generated when experiments are run and analyzed automatically. Parsing through many folders of experiments and pulling out graphs is a hassle. A scanner gui can be built like the chromatogram_scanner_gui to scan through X and S plots.</p></li>
+<li><p class="linemarker linemarker-73"><strong>Add get_user_inputs function to run_diode_calibration</strong></p></li>
+<li><p class="linemarker linemarker-74"><strong>Generalize run_diode_calibration</strong> to take in any laser/power meter</p></li>
 </ul>
 </section>
 <section id="writing-documentation">
-<h1>Writing Documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-76">Writing documentation is important! You can use the <a class="reference external" href="https://docs.readthedocs.io/en/stable/tutorial/index.html">ReadtheDocs tutorial</a> to get familiar with how writing documentation works. We used sphinx to build our API automatically from docstrings, and mostly utilized numpy style docstrings. Especially since this package is written by beginners for beginners, its important to note that docstrings require a specific format to be read by automatic documentation tools!!! We didn’t appreciate this when starting, and it lead to many hours of rewriting docstrings. If you aren’t familiar with docstring (typically enclosed in triple quote ‘’’ under functions/classes/attributes), you should think of them as instruction on how to use a given function, class, or method. They aren’t really a step by step of how a piece of code works, but should contain information on what the code takes in, performs, and returns. The end-user shouldn’t need to know exactly how the code works! Of course, you should still comment you source code, too! Many science users are probably most familiar with “documentation” in the form of writing comments that the end-user will use as instructions. Likely, you are used to sending a collaborator a .py file and them editting it directly with user inputs and changes. This isn’t the “right way” to distribute code. You want to write functions and documentation such that the user doesn’t need to know anything about how it works, like when you import numpy for example. The end user may never see you comments and code, only call your function using its docstring!</p>
-<p class="linemarker linemarker-78">If you write proper docstrings, the documentation of your code will be automated. This process is done using a tool called “sphinx” which is apparently the standard for documenting Python code. Though it is automated, it is not that intuitive. It is normal to experience many warning and can be difficult to find help resources. Ideally, this process won’t be necessary for other developers as we’ve already handled most of the configuring. The documentation writer should follow the spinx getting started tutorial to get basic familiarity with the process, but you should only need to run the “make clean” and “make html” commands from within catalight/docs once you’ve installed sphinx (a requirement for the catalight package anyway).</p>
+<h1>Writing documentation<a class="headerlink" href="#writing-documentation" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-78">Writing documentation is important! You can use the <a class="reference external" href="https://docs.readthedocs.io/en/stable/tutorial/index.html">ReadtheDocs tutorial</a> to get familiar with how writing documentation works. We used sphinx to build our API automatically from docstrings, and mostly utilized numpy style docstrings. Especially since this package is written by beginners for beginners, its important to note that docstrings require a specific format to be read by automatic documentation tools!!! We didn’t appreciate this when starting, and it lead to many hours of rewriting docstrings. If you aren’t familiar with docstring (typically enclosed in triple quote ‘’’ under functions/classes/attributes), you should think of them as instruction on how to use a given function, class, or method. They aren’t really a step by step of how a piece of code works, but should contain information on what the code takes in, performs, and returns. The end-user shouldn’t need to know exactly how the code works! Of course, you should still comment you source code, too! Many science users are probably most familiar with “documentation” in the form of writing comments that the end-user will use as instructions. Likely, you are used to sending a collaborator a .py file and them editting it directly with user inputs and changes. This isn’t the “right way” to distribute code. You want to write functions and documentation such that the user doesn’t need to know anything about how it works, like when you import numpy for example. The end user may never see you comments and code, only call your function using its docstring!</p>
+<p class="linemarker linemarker-80">If you write proper docstrings, the documentation of your code will be automated. This process is done using a tool called “sphinx” which is apparently the standard for documenting Python code. Though it is automated, it is not that intuitive. It is normal to experience many warning and can be difficult to find help resources. Ideally, this process won’t be necessary for other developers as we’ve already handled most of the configuring. The documentation writer should follow the spinx getting started tutorial to get basic familiarity with the process, but you should only need to run the “make clean” and “make html” commands from within catalight/docs once you’ve installed sphinx (a requirement for the catalight package anyway).</p>
 <ol class="arabic simple">
-<li><p class="linemarker linemarker-80"><a class="reference external" href="https://stackoverflow.com/questions/53099934/sphinx-apidoc-vs-autosummary">Using Sphinx’s autosummary tool vs sphinx-apidoc provides cleaner documentation</a></p></li>
-<li><p class="linemarker linemarker-81"><a class="reference external" href="https://romanvm.pythonanywhere.com/post/autodocumenting-your-python-code-sphinx-part-ii-6/">More information on autosummary vs sphinx-apidoc</a></p></li>
-<li><p class="linemarker linemarker-82"><a class="reference external" href="https://stackoverflow.com/questions/48074094/use-sphinx-autosummary-recursively-to-generate-api-documentation">autosummary isn’t a complete solution. Custom .rst templates are needed</a></p></li>
-<li><p class="linemarker linemarker-83"><a class="reference external" href="https://stackoverflow.com/questions/43983799/how-to-avoid-inherited-members-using-autosummary-and-custom-templates">Inherited members needed to be removed in the .rst class template so objects inheriting QT objects weren’t too many lines</a></p></li>
+<li><p class="linemarker linemarker-82"><a class="reference external" href="https://stackoverflow.com/questions/53099934/sphinx-apidoc-vs-autosummary">Using Sphinx’s autosummary tool vs sphinx-apidoc provides cleaner documentation</a></p></li>
+<li><p class="linemarker linemarker-83"><a class="reference external" href="https://romanvm.pythonanywhere.com/post/autodocumenting-your-python-code-sphinx-part-ii-6/">More information on autosummary vs sphinx-apidoc</a></p></li>
+<li><p class="linemarker linemarker-84"><a class="reference external" href="https://stackoverflow.com/questions/48074094/use-sphinx-autosummary-recursively-to-generate-api-documentation">autosummary isn’t a complete solution. Custom .rst templates are needed</a></p></li>
+<li><p class="linemarker linemarker-85"><a class="reference external" href="https://stackoverflow.com/questions/43983799/how-to-avoid-inherited-members-using-autosummary-and-custom-templates">Inherited members needed to be removed in the .rst class template so objects inheriting QT objects weren’t too many lines</a></p></li>
 </ol>
 </section>
 
@@ -184,7 +186,7 @@ The QSS sheet was downloaded an lightly modified from <a class="reference extern
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="auxiliary_tools.html" class="btn btn-neutral float-left" title="Laser Calibration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="auxiliary_tools.html" class="btn btn-neutral float-left" title="Laser calibration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

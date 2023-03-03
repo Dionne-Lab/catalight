@@ -1,5 +1,5 @@
 """
-Use of Ophir COM object.
+Access Newport power meter through Use of Ophir COM object.
 
 You should need to PMManager installed on your computer to use this.
 """

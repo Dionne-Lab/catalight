@@ -1,6 +1,7 @@
 """
-Created on Sun Feb 13 20:56:51 2022.
+Module containing Gas System class used for coordinating multiple MFCs
 
+Created on Sun Feb 13 20:56:51 2022.
 @author: Briley Bourgeois
 """
 import os
@@ -55,7 +56,7 @@ class Gas_System:
         for i in range(len(gas_list_copy)):
             if gas_list_copy[i].lower() == 'calgas':
                 gas_list_copy[i] = 237
-            
+
         while self.is_busy:
             time.sleep(0)
 
@@ -234,7 +235,7 @@ class Gas_System:
                      'mfc_D': self.mfc_D.get(),
                      'mfc_E': self.mfc_E.get()}
         self.is_busy = False
-        return(flow_dict)
+        return (flow_dict)
 
     def shut_down(self):
         """Set MFC with Ar or N2 running to 1 sccm and others to 0."""
@@ -279,7 +280,7 @@ class Gas_System:
         mfc : alicat.FlowController | alicat.FlowMeter
             Mass flow controller or meter to update with calgas
         calDF : pandas.DataFrame
-            Formated DataFrame containing gc calibration data.
+            Formatted DataFrame containing gc calibration data.
             Specific to control file used!
             Format [ChemID, slope, intercept, start, end]
         fill_gas : str
@@ -303,9 +304,9 @@ class Gas_System:
         mfc.create_mix(mix_no=237, name='CalGas', gases=percents.to_dict())
         self.is_busy = False
 
-    def test_pressure(self, path, num_samples=5):
+    def test_pressure(self, savepath, flows, num_samples=5):
         """
-        Ramp flot rate, measure pressure, plot results, save.
+        Ramp flow rate, measure pressure, plot results, save.
 
         Ramp flow rate from 5-50 sccm in steps of 5, measure pressure every
         minute for num_samples times. Waits 1 min before first collection.
@@ -313,9 +314,11 @@ class Gas_System:
 
         Parameters
         ----------
-        path : str
+        savepath : str
             Path to folder to save the results in.
-        num_samples : int
+        flows : list[int or float]
+            Flow rate setpoints to sweep through when testing pressure build up
+        num_samples : int, optional
             Number of samples to collect at each flow rate. Default is 5.
         """
         print('Testing Pressure Build-up...')
@@ -335,7 +338,7 @@ class Gas_System:
         self.print_flows()
         start_time = time.time()
         # Loop through flow rate, record reading, save to output
-        for setpoint in range(5, 51, 5):
+        for setpoint in flows:
             test_mfc.set_flow_rate(setpoint)
             for sample in range(0, num_samples):
                 time.sleep(60)
@@ -357,8 +360,8 @@ class Gas_System:
                     y=['setpoint', 'flow rate'], ylabel='Flow Rate (sccm)')
         fig = ax1.get_figure()
         # Save Results
-        fig.savefig(os.path.join(path, 'flow_test.svg'), format='svg')
-        output.to_csv(os.path.join(path, 'flow_test.csv'))
+        fig.savefig(os.path.join(savepath, 'flow_test.svg'), format='svg')
+        output.to_csv(os.path.join(savepath, 'flow_test.csv'))
 
 
 if __name__ == "__main__":

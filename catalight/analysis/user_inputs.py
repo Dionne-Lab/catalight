@@ -73,7 +73,7 @@ class Option():
     """
     Generic option to use when building plotting dialogs.
 
-    See :class:`PlotOptionList` for main usage. Mutliple Option items are
+    See :class:`PlotOptionList` for main usage. Multiple Option items are
     created within :meth:`PlotOptionList.__init__` to take in common user
     inputs. New Option items can be created to easily update GUI components
     for basic UI.
@@ -377,7 +377,7 @@ class DataExtractor(QDialog):
         # String to find partial match with
         self.target = target
         self.suffix = suffix
-        # Seperation between data and folder to display
+        # Separation between data and folder to display
         self.data_depth = data_depth
 
         self.initLayout()
@@ -411,7 +411,7 @@ class DataExtractor(QDialog):
 
     def populateTree(self, dataset):
         """
-        Display files in a selection gui allowing user to pick relvant files.
+        Display files in a selection gui allowing user to pick relevant files.
 
         The path shown in the selection tree will be altered by self.data_depth
 

@@ -54,10 +54,10 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">How it works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#usage">Usage</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#scripting">Scripting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#graphical-user-interface">Graphical User interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graphical-user-interface">Graphical user interface</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#equipment-specific-guides">Equipment Specific Guides:</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#equipment-specific-guides">Equipment specific guides</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="equipment_guides.html">Alicat MFCs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="equipment_guides.html#harrick-heater-watlow">Harrick Heater/Watlow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="equipment_guides.html#thorlabs-laser-diode-driver">ThorLabs Laser Diode Driver</a></li>
@@ -65,19 +65,19 @@
 <li class="toctree-l2"><a class="reference internal" href="equipment_guides.html#sri-gas-chromatograph">SRI Gas chromatograph</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#data-analysis">Data Analysis:</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#data-analysis">Data analysis</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html">The main toolboxes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html#the-gcdata-class">The GCData class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html#helper-scripts">Helper scripts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html#running-a-calibration">Running a calibration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#auxiliary-tools">Auxiliary tools:</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html">Laser Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#auxiliary-tools">Auxiliary tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html">Laser calibration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#gc-delay-measurement">GC delay measurement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#mfc-port-connection-tester">MFC Port Connection Tester</a></li>
-<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#heater-performance-measurements">Heater Performance measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#mfc-port-connection-tester">MFC port connection tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auxiliary_tools.html#heater-performance-measurements">Heater performance measurements</a></li>
 </ul>
 </li>
 </ul>
@@ -85,10 +85,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Providing feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating new experiment types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making changes to the GUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for future development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing documentation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
@@ -327,7 +327,7 @@ Total Flow [sccm] = [5.0]
 <p class="linemarker linemarker-179">Thats it! Define as many experiments as you’d like, supplying a list or list of list according to the independent variable defined by the eqpt_list attribute.</p>
 </section>
 <section id="graphical-user-interface">
-<span id="gui"></span><h2>Graphical User interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this heading"></a></h2>
+<span id="gui"></span><h2>Graphical user interface<a class="headerlink" href="#graphical-user-interface" title="Permalink to this heading"></a></h2>
 <p class="linemarker linemarker-185">A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See <a class="reference internal" href="developer_guide.html"><span class="doc">the development guide</span></a> for more details on making your changes to the codebase.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -377,7 +377,7 @@ Total Flow [sccm] = [5.0]
 </section>
 </section>
 <section id="equipment-specific-guides">
-<span id="equipment"></span><h1>Equipment Specific Guides:<a class="headerlink" href="#equipment-specific-guides" title="Permalink to this heading"></a></h1>
+<span id="equipment"></span><h1>Equipment specific guides<a class="headerlink" href="#equipment-specific-guides" title="Permalink to this heading"></a></h1>
 <p class="linemarker linemarker-227">The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature “Watlow.write()”. We further create the <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don’t go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().</p>
 <figure class="align-default" id="id9">
 <a class="reference internal image-reference" href="_images/equipment_connections.svg"><img alt="_images/equipment_connections.svg" src="_images/equipment_connections.svg" width="800" /></a>
@@ -389,6 +389,7 @@ Total Flow [sccm] = [5.0]
 <p class="admonition-title">Warning</p>
 <p class="linemarker linemarker-235">The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).</p>
 </div>
+<p class="linemarker linemarker-237"><strong>Guides:</strong></p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="equipment_guides.html">Alicat MFCs</a></li>
@@ -400,17 +401,13 @@ Total Flow [sccm] = [5.0]
 </div>
 </section>
 <section id="data-analysis">
-<h1>Data Analysis:<a class="headerlink" href="#data-analysis" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-243">We have a subpackage dedicated to performing data analysis</p>
+<h1>Data analysis<a class="headerlink" href="#data-analysis" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-245">A major benefit of using catalight for experiment automation is that data saving can be standardized with ease. This make data processing much easier, and we’ve developped a subpacke to catalight called <a class="reference internal" href="_autosummary/catalight.analysis.html#module-catalight.analysis" title="catalight.analysis"><code class="xref py py-mod docutils literal notranslate"><span class="pre">analysis</span></code></a> to automate much of the data processing work flow. In the <a class="reference internal" href="data_analysis.html"><span class="doc">data analysis</span></a> page, we cover the different aspects of the analysis subpackage.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="data_analysis.html">The main toolboxes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html#analysis-plotting">analysis.plotting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_analysis.html#analysis-user-inputs">analysis.user_inputs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data_analysis.html#selecting-data">Selecting data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_analysis.html#plotting-instructions">Plotting instructions</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="data_analysis.html#analysis-user-inputs">analysis.user_inputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_analysis.html#analysis-tools">analysis.tools</a></li>
 </ul>
 </li>
@@ -422,17 +419,21 @@ Total Flow [sccm] = [5.0]
 </li>
 </ul>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p class="linemarker linemarker-253">Inside the catalight GitHub repository you’ll find a folder called example_data containing a demo calibration file and two “samples” containing multiple experiment folders with data. You can use this data to test out the analysis functions within the analysis toolbox.</p>
+</div>
 </section>
 <section id="auxiliary-tools">
-<h1>Auxiliary tools:<a class="headerlink" href="#auxiliary-tools" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-251">We also have other stuff!</p>
+<h1>Auxiliary tools<a class="headerlink" href="#auxiliary-tools" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-257">We also have other stuff!</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html">Laser Calibration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html">Laser calibration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#gc-delay-measurement">GC delay measurement</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#mfc-port-connection-tester">MFC Port Connection Tester</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#heater-performance-measurements">Heater Performance measurements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#mfc-port-connection-tester">MFC port connection tester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auxiliary_tools.html#heater-performance-measurements">Heater performance measurements</a></li>
 </ul>
 </div>
 </section>

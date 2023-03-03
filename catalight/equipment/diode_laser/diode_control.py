@@ -324,7 +324,7 @@ class Diode_Laser():
             (min) Time to read out until setting laser
         """
         # Consider upgrading this to use asyncio or threading.Timer and have
-        # the code put out 5 4 3 2 1 minute warnings on a seperate thread
+        # the code put out 5 4 3 2 1 minute warnings on a separate thread
         # Unmutes and sets Vol in dB -0.0 is 100%
         self.volume_control.SetMute(0, None)
         self.voice_control.say(f'Warning: Diode laser will automatically'
@@ -408,7 +408,7 @@ class Diode_Laser():
             output_log.write(entry)
 
     def stop_logger(self):
-        """Cancel timer intialized w/ start_logger() and delete it."""
+        """Cancel timer initialized w/ start_logger() and delete it."""
         if self.timer:
             self.timer.cancel()
             del self.timer

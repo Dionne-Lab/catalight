@@ -1,6 +1,9 @@
 """
-Created on Tue Feb  8 14:06:48 2022.
+Contains the Heater class which connect to Watlow heating system.
 
+Also contains convert_temp helper function used within class.
+
+Created on Tue Feb  8 14:06:48 2022.
 @author: Briley Bourgeois
 """
 
@@ -50,8 +53,8 @@ class Heater:
     """
 
     max_temp = 450
-    """#: Max temp in C; 450C reduces lifetime 900C is real max. To change,
-    use Heater.max_temp = new_value"""
+    """int or float: Max temp in C; 450C reduces lifetime 900C is real max.
+    To change, use Heater.max_temp = new_value"""
 
     def __init__(self):
         """Connect to watlow, print current state."""
@@ -150,7 +153,7 @@ class Heater:
         Returns
         -------
         pandas.DataFrame, when record=True
-            pandas dataframe with columns ['time', 'set point', 'temperature']
+            pandas.DataFrame with columns ['time', 'set point', 'temperature']
             recorded during the experiment.
         matplotlib.pyplot.figure, when record=True
             figure handle for ramp rate plot
@@ -216,12 +219,12 @@ class Heater:
         ----------
         savepath : str
             Full path to directory in which to save data.
-        rates : list of int or float
-            List of heater ramp rates to test e.g. [5, 10, 15, 20]
+        rates : list[int or float]
+            (deg C/min) List of heater ramp rates to test e.g. [5, 10, 15, 20]
         T_max : int or float
-            Maximum temperature setpoint to use for testing
-        T_min : int of float, optional
-            Starting setpoint to use for testing. The default is 30.
+            (deg C) Maximum temperature setpoint to use for testing
+        T_min : int or float, optional
+            (deg C) Starting setpoint to use for testing. The default is 30.
 
         Returns
         -------

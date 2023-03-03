@@ -20,11 +20,11 @@ If the producer of your equipment does not provide a Python-specific programming
 
 Ideally, users that need to develop their own communication interfaces through some read/write commands via pySerial, pyVISA, and the like can write their python driver in a seperate package, publish it, and import it into the catalight package. It is much easier for users to use tools with more human readable commands like alicat.MassFlowController.set_flow() wrapping over the signals communication. Ease of use is exactly why we choose to use packages like alicat and pywatlow in the first place!!
 
-Creating New Experiment Types
+Creating new experiment types
 -----------------------------
 Coming soon
 
-Making Changes to the GUI
+Making changes to the GUI
 -------------------------
 Function
 ^^^^^^^^
@@ -38,7 +38,7 @@ The QSS sheet was downloaded an lightly modified from `the QSS Stock website <ht
 
 .. _future:
 
-Areas for Future Development:
+Areas for future development
 -----------------------------
 Design is an iterative process. The catalight project has already been updated several times going into the deployment of v1.0.0, but there is always room for improvement. Below is a laundry list of improvements that can be added to future versions of the package.
 
@@ -70,8 +70,10 @@ The current iteration of the system has been designed with modularity in mind, b
 * **Print console output to a new study_log.txt file**
 * **Make sure close process occurs if GUI crashes**. The GUI occassionally crashes in what seems to be a computer fault, emitting no error messages. When this happens, the close event protocol is not run and the equipment is not shutdown. There must be some way to detect this events and shutdown the hardware still.
 * **A tool can be built to scan experiment results**. A lot of data can be generated when experiments are run and analyzed automatically. Parsing through many folders of experiments and pulling out graphs is a hassle. A scanner gui can be built like the chromatogram_scanner_gui to scan through X and S plots.
+* **Add get_user_inputs function to run_diode_calibration**
+* **Generalize run_diode_calibration** to take in any laser/power meter
 
-Writing Documentation
+Writing documentation
 ---------------------
 Writing documentation is important! You can use the `ReadtheDocs tutorial <https://docs.readthedocs.io/en/stable/tutorial/index.html>`_ to get familiar with how writing documentation works. We used sphinx to build our API automatically from docstrings, and mostly utilized numpy style docstrings. Especially since this package is written by beginners for beginners, its important to note that docstrings require a specific format to be read by automatic documentation tools!!! We didn't appreciate this when starting, and it lead to many hours of rewriting docstrings. If you aren't familiar with docstring (typically enclosed in triple quote ''' under functions/classes/attributes), you should think of them as instruction on how to use a given function, class, or method. They aren't really a step by step of how a piece of code works, but should contain information on what the code takes in, performs, and returns. The end-user shouldn't need to know exactly how the code works! Of course, you should still comment you source code, too! Many science users are probably most familiar with "documentation" in the form of writing comments that the end-user will use as instructions. Likely, you are used to sending a collaborator a .py file and them editting it directly with user inputs and changes. This isn't the "right way" to distribute code. You want to write functions and documentation such that the user doesn't need to know anything about how it works, like when you import numpy for example. The end user may never see you comments and code, only call your function using its docstring!
 

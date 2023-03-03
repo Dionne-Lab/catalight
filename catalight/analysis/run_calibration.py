@@ -30,7 +30,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     expt : Experiment
         Experiment object for already run calibration experiment
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
     figsize : tuple
@@ -74,7 +74,7 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
     expt : Experiment
         Experiment object for already run calibration experiment
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
     figsize : tuple, optional

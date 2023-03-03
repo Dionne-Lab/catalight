@@ -29,7 +29,7 @@ def get_user_inputs(starting_dir=None):
 
     Parameters
     ----------
-    starting_dir : str, optionalr
+    starting_dir : str, optional
         Directory to start file dialog in. The default is None.
 
     Returns

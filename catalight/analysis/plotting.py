@@ -58,7 +58,7 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
     Plots and saves "run_num", "ppm", and "X and S" for given experiment.
     run_num: ppm concentration as a function of run number
     ppm: average ppm concentration w/ error for each experiment condition
-    X and S: Plots the average convertion and selectivity as a function of
+    X and S: Plots the average conversion and selectivity as a function of
     experimental condition
 
     If savedata=True, will save figures as both .svg and .pickle
@@ -69,7 +69,7 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
         Experiment object which has data and has been analyzed
         (i.e. has avg_conc.csv etc.)
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     reactant : str
@@ -77,7 +77,7 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
         in the calibration file exactly.
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
-        match what exists in the calibration file exacly.
+        match what exists in the calibration file exactly.
     mole_bal : str, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)
@@ -142,7 +142,7 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
         Experiment object which has data and has been analyzed
         (i.e. has avg_conc.csv etc.)
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     switch_to_hours : float, optional
@@ -156,7 +156,7 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
     ax : matplotlib.pyplot.axis
         Axis handle for "run_num" plot
     """
-    # Initilize run num plot
+    # Initialize run num plot
     fig, ax = plt.subplots()
     concentrations, avg, std = analysis_tools.load_results(expt)
     # Calculations:
@@ -197,7 +197,7 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
         and condition
         [Condition x [Timestamps, ChemID] x run number
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     mole_bal : str, optional
@@ -214,7 +214,7 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     ax : matplotlib.pyplot.axis
         Axis handle for "ppm" plot
     """
-    # Initilize ppm vs ind_var plot
+    # Initialize ppm vs ind_var plot
     fig, ax = plt.subplots()
     concentrations, avg, std = analysis_tools.load_results(expt)
     calchemIDs = calDF.index  # get chem IDs from calibration files
@@ -283,7 +283,7 @@ def plot_X_and_S(expt, reactant, target_molecule):
         in the calibration file exactly.
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
-        match what exists in the calibration file exacly.
+        match what exists in the calibration file exactly.
 
     Returns
     -------
@@ -293,7 +293,7 @@ def plot_X_and_S(expt, reactant, target_molecule):
         Axis handle for "X and S" plot
 
     """
-    # Initilize Conv and Selectivity plot
+    # Initialize Conv and Selectivity plot
     fig, ax = plt.subplots()
     results = analysis_tools.calculate_X_and_S(expt, reactant, target_molecule)
     units = (expt.expt_list['Units']
@@ -318,7 +318,7 @@ def plot_X_and_S(expt, reactant, target_molecule):
 
 def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
     """
-    Seperately plot 1) conversion and 2) selectivity for multiple experiments.
+    Separately plot 1) conversion and 2) selectivity for multiple experiments.
 
     Produces two plots:
         (1) conversion vs reaction condition
@@ -350,7 +350,7 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
         conversion and selectivity plots, respectively.
 
     """
-    # Initilize Conv and Selectivity plots
+    # Initialize Conv and Selectivity plots
     # Note: if desired, results_dict could instead be expt_dict and
     # calculate_X_and_S() called within this function
     figX, axX = plt.subplots()
@@ -423,7 +423,7 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
     plt.close('all')
 
     set_plot_style(figsize)
-    # Initilize Conv and Selectivity plot
+    # Initialize Conv and Selectivity plot
     fig, ax = plt.subplots()
 
     for data_set in results_dict.items():
@@ -451,7 +451,7 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
 
 def open_pickled_fig(fig_path):
     """
-    Open a pickled figure for editting.
+    Open a pickled figure for editing.
 
     Parameters
     ----------

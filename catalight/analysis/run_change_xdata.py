@@ -31,7 +31,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     file_list : list
         list of paths to expt_logs
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     new_x : list
@@ -80,7 +80,7 @@ def main(expt_paths, calDF, new_x, units, reactant, target_molecule,
     expt_paths : list of str
         List of full paths to expt_log.txt files.
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     new_x : list
@@ -92,7 +92,7 @@ def main(expt_paths, calDF, new_x, units, reactant, target_molecule,
         in the calibration file exactly.
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
-        match what exists in the calibration file exacly.
+        match what exists in the calibration file exactly.
     mole_bal : str, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)

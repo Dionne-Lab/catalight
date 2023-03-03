@@ -54,7 +54,7 @@ class GC_Connector():
         self.sample_set_size = 4
         """
         int:  Number of GC collection for each time peaksimple.setRunning()
-        is called. Can be changed per experiment by editting
+        is called. Can be changed per experiment by editing
         :attr:`Experiment.sample_set_size
         <catalight.equipment.experiment_control.Experiment.sample_set_size>`
         """
@@ -290,7 +290,7 @@ class GC_Connector():
 
         Runs Peaksimple.PeaksimpleConnector.Disconnect(), but attempts to
         reconnect still fail. The peaksimple software needs to be manually
-        closed to reconnect. Note, programattic attempts to close peaksimple
+        closed to reconnect. Note, programmatic attempts to close peaksimple
         using subprocesses have also failed.
 
         Parameters

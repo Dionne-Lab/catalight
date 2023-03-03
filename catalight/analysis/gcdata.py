@@ -77,8 +77,10 @@ class GCData:
 
         Returns
         -------
-        pandas.DataFrame
-            containing time (min) and signal (arb units)
+        tuple(float, pandas.DataFrame)
+            (timestamp, [Elution Time, GC Signal])
+            First element is timestamp in time since epoch. Second element is
+            pandas.DataFrame containing 'Time' (min) and 'Signal' (arb units)
         """
         with open(self.filepath, 'r') as f:
             # Skip first 18 lines
@@ -112,7 +114,6 @@ class GCData:
 
             x = np.linspace(0, 1 / rate / 60 * (size - 1), num=size).tolist()
             raw_data = pd.DataFrame({'Time': x, 'Signal': y})
-            # GC_data includes timecode in order to be synced with EC data
             GC_data = (timestamp, raw_data)
         return GC_data
 
@@ -202,7 +203,7 @@ class GCData:
         Parameters
         ----------
         tol: float, optional
-            Tolarence in percent. Summing stops when change in sum is
+            Tolerance in percent. Summing stops when change in sum is
             less than tol percent of the current area.
 
         Returns
@@ -239,7 +240,7 @@ class GCData:
         Find the area under the peak using a trapezoidal method.
 
         Calculate for each peak identified using bounds from integration_inds.
-        Integrates peak trapezoidally in units of seconds*signalintensity.
+        Integrates peak trapezoidal in units of seconds*signal intensity.
 
         Returns
         -------
@@ -298,7 +299,7 @@ class GCData:
                 # TODO I can take the ind_x and append this
                 # unknown peak to the calibration df
 
-        if UnknownPeaks > 1:  # Theres always a peak from backflush right now
+        if UnknownPeaks > 1:  # Theres always a peak from back flush right now
             print('Warning: %5d Unknown peaks detected' % (UnknownPeaks))
             print(self.filepath)
         if (conc == 0).all():  # Checks if all concentrations are zero
@@ -320,7 +321,6 @@ class GCData:
         """
         # TODO The plotting style update here can be integrated
         # with data_analysis module.
-        plt.close('all')
         plt.rcParams.update({'font.size': 14})
         plt.rcParams['axes.linewidth'] = 2
         plt.gca().tick_params(which='both', width=1.5, length=6)

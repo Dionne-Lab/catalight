@@ -72,7 +72,7 @@ def main(file_list, data_labels, reactant, target_molecule,
         exists in the calibration file exactly.
     target_molecule : str
         String identity of the target_molecule to use when calculating
-        selectivity. Must match what exists in the calibration file exacly.
+        selectivity. Must match what exists in the calibration file exactly.
     plot_XandS : bool
         True plots comparison plots of conversion and selectivity individually
         as a function of the independent variable. Ind. Var. should be the same

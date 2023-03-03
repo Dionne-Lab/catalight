@@ -342,7 +342,7 @@ class Experiment:
         A key property directing much of the behavior of the class.For example,
         the run_experiment() method is guided by the expt_type provided. New
         values must be entered into the _expt_list attribute and the
-        appropriate class methods must be editted to account for new
+        appropriate class methods must be edited to account for new
         experimental capabilities.
         Updates :attr:`ind_var` when called.
         Converts 'Active Status' in :attr:`expt_list` to True.
@@ -703,7 +703,7 @@ class Experiment:
 
         plt.tight_layout()
 
-        run_time = t_set[-1]  # TODO break this out into seperate func
+        run_time = t_set[-1]  # TODO break this out into separate func
         return (fig, ax1, ax2, run_time)
 
     def update_eqpt_list(self, eqpt_list):
@@ -711,7 +711,7 @@ class Experiment:
         Assign equipment objects as attributes of Experiment object.
 
         Takes eqpt_list as tuple in format
-        (gc controller, laser controller, gas controler, heater)
+        (gc controller, laser controller, gas controller, heater)
         and assigns each component to experiment object
         updates sample rate by given value in gc_control and updates heater
         ramp rate by the rate specified in experiment object
@@ -791,7 +791,7 @@ class Experiment:
         Directs connected equipment to run experiment based on attributes.
 
         Most critical method of the class/package. This method directs the
-        equipiment to actually carry out the experiment based on the assigned
+        equipment to actually carry out the experiment based on the assigned
         attribute values for the object instance. This method currently works
         by using a series of if-statements to determine the experiment type
         and take the corresponding actions.
@@ -852,7 +852,7 @@ class Experiment:
             t2 = time.time()
             t_passed = round(t2 - t1)  # GC can take a while to respond
             for i in range(int(self.t_steady_state * 60 - t_passed)):
-                time.sleep(1)  # Break sleep in bits so keyboard interupt works
+                time.sleep(1)  # Break sleep in bits so keyboard interrupt works
 
             print('Starting Collection: '
                   + time.strftime("%H:%M:%S", time.localtime()))

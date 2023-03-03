@@ -26,9 +26,9 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
     are supported at the moment (2023/02/09).
 
     Hardware Configuration: The laser should be on, connected to the DAQ board,
-    and the current turned to 0 on the current controller. The powermeter needs
-    to be placed in the beam path at the location in which the user would like
-    to calibrate the output (i.e. at the sample)
+    and the current turned to 0 on the current controller. The power meter
+    needs to be placed in the beam path at the location in which the user would
+    like to calibrate the output (i.e. at the sample)
 
     Parameters
     ----------
@@ -82,7 +82,7 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
         m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
         label = '\n'.join(["m: %4.2f +/- %4.2f" % (m, err_m),
                            "b: %4.2f +/- %4.2f" % (b, err_b)])
-    except(np.linalg.LinAlgError):
+    except (np.linalg.LinAlgError):
         p = np.polyfit(x_data, y_data, 1)
         m, b = (p[0], p[1])
         label = '\n'.join(["m: %4.2f" % m,
@@ -95,6 +95,7 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
     fig.savefig('diode_laser/calibration_plot.svg', format="svg")
     print(label)
     return fig, ax
+
 
 if __name__ == "__main__":
     main()

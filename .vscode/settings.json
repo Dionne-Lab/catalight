@@ -2,5 +2,9 @@
     "esbonio.sphinx.confDir": "${workspaceFolder}\\docs\\source",
     "python.defaultInterpreterPath": "C:\\Users\\brile\\anaconda3\\envs\\catalight_main\\python.exe",
     "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "cSpell.words": [
+        "gcdata",
+        "pyqtgraph"
+    ]
 }

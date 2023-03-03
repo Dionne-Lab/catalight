@@ -180,7 +180,7 @@ Thats it! Define as many experiments as you'd like, supplying a list or list of 
 
 .. _gui:
 
-Graphical User interface
+Graphical user interface
 ------------------------
 A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See :doc:`the development guide </developer_guide>` for more details on making your changes to the codebase.
 
@@ -222,8 +222,8 @@ There are two main types of GUIs present within catalight. Files containing the 
 
 .. _equipment:
 
-Equipment Specific Guides:
-==========================
+Equipment specific guides
+=========================
 The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature "Watlow.write()". We further create the :class:`~catalight.equipment.harrick_watlow.heater_control.Heater` to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don't go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().
 
 .. figure:: _static/images/equipment_connections.svg
@@ -234,20 +234,26 @@ The purpose of this section is to demonstrate the connection process for specifi
 .. Warning::
     The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).
 
+**Guides:**
+
 .. toctree::
 
     equipment_guides
 
-Data Analysis:
-==============
-We have a subpackage dedicated to performing data analysis
+Data analysis
+=============
+A major benefit of using catalight for experiment automation is that data saving can be standardized with ease. This make data processing much easier, and we've developped a subpacke to catalight called :mod:`~catalight.analysis` to automate much of the data processing work flow. In the :doc:`data analysis<data_analysis>` page, we cover the different aspects of the analysis subpackage.
 
 .. toctree::
+    :maxdepth: 2
 
     data_analysis
 
-Auxiliary tools:
-================
+.. tip::
+    Inside the catalight GitHub repository you'll find a folder called example_data containing a demo calibration file and two "samples" containing multiple experiment folders with data. You can use this data to test out the analysis functions within the analysis toolbox.
+
+Auxiliary tools
+===============
 We also have other stuff!
 
 .. toctree::

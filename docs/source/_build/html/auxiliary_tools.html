@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Laser Calibration &mdash; catalight 0.0.1 documentation</title>
+  <title>Laser calibration &mdash; catalight 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/catalight_logo1_thick.svg"/>
@@ -53,14 +53,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">How it works</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html#usage">Usage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html#equipment-specific-guides">Equipment Specific Guides:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide.html#data-analysis">Data Analysis:</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools:</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Laser Calibration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#equipment-specific-guides">Equipment specific guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide.html#data-analysis">Data analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="user_guide.html#auxiliary-tools">Auxiliary tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Laser calibration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#gc-delay-measurement">GC delay measurement</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mfc-port-connection-tester">MFC Port Connection Tester</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#heater-performance-measurements">Heater Performance measurements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pressure-drop-measurement">Pressure drop measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mfc-port-connection-tester">MFC port connection tester</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#heater-performance-measurements">Heater performance measurements</a></li>
 </ul>
 </li>
 </ul>
@@ -68,10 +68,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Providing feedback</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html#developing-equipment-drivers">Developing equipment drivers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating New Experiment Types</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making Changes to the GUI</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for Future Development:</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#creating-new-experiment-types">Creating new experiment types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#making-changes-to-the-gui">Making changes to the GUI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#areas-for-future-development">Areas for future development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html#writing-documentation">Writing documentation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
 <ul>
@@ -98,7 +98,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="user_guide.html">How it works</a></li>
-      <li class="breadcrumb-item active">Laser Calibration</li>
+      <li class="breadcrumb-item active">Laser calibration</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/auxiliary_tools.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -109,19 +109,123 @@
            <div itemprop="articleBody">
              
   <section id="laser-calibration">
-<h1>Laser Calibration<a class="headerlink" href="#laser-calibration" title="Permalink to this heading"></a></h1>
-</section>
-<section id="pressure-drop-measurement">
-<h1>Pressure drop measurement<a class="headerlink" href="#pressure-drop-measurement" title="Permalink to this heading"></a></h1>
+<h1>Laser calibration<a class="headerlink" href="#laser-calibration" title="Permalink to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p class="linemarker linemarker-4">This module will change in nature in future versions. Currently it is setup to perform calibrations only on a <a class="reference internal" href="_autosummary/catalight.equipment.power_meter.power_meter_ctrl.NewportMeter.html#catalight.equipment.power_meter.power_meter_ctrl.NewportMeter" title="catalight.equipment.power_meter.power_meter_ctrl.NewportMeter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewportMeter</span></code></a> and <a class="reference internal" href="_autosummary/catalight.equipment.diode_laser.diode_control.Diode_Laser.html#catalight.equipment.diode_laser.diode_control.Diode_Laser" title="catalight.equipment.diode_laser.diode_control.Diode_Laser"><code class="xref py py-class docutils literal notranslate"><span class="pre">Diode_Laser</span></code></a>, but these features will be generalized in the future to support generic power meters and lasers.</p>
+</div>
+<p class="linemarker linemarker-6">The <a class="reference internal" href="_autosummary/catalight.equipment.run_diode_calibration.html#module-catalight.equipment.run_diode_calibration" title="catalight.equipment.run_diode_calibration"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.equipment.run_diode_calibration</span></code></a> module is an extremely useful tool for running calibrations on your laser system. This module imports a <a class="reference internal" href="_autosummary/catalight.equipment.power_meter.power_meter_ctrl.NewportMeter.html#catalight.equipment.power_meter.power_meter_ctrl.NewportMeter" title="catalight.equipment.power_meter.power_meter_ctrl.NewportMeter"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewportMeter</span></code></a> and <a class="reference internal" href="_autosummary/catalight.equipment.diode_laser.diode_control.Diode_Laser.html#catalight.equipment.diode_laser.diode_control.Diode_Laser" title="catalight.equipment.diode_laser.diode_control.Diode_Laser"><code class="xref py py-class docutils literal notranslate"><span class="pre">Diode_Laser</span></code></a> to test the power transmission of your setup. You must make sure you have the proper hardware configuration before getting started. Your laser and power meter should be connected and communicating with the computer. You should place the power meter sensor in the laser beam path, usually in the same location that your sample would typically be placed. Make sure the beam is properly isolated and proper laser safety is being followed. When the <a class="reference internal" href="_autosummary/catalight.equipment.run_diode_calibration.main.html#catalight.equipment.run_diode_calibration.main" title="catalight.equipment.run_diode_calibration.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> function is called with the appropriate parameters, the system will sweep through laser current settings (range defined by <code class="docutils literal notranslate"><span class="pre">current_range</span></code> parameter), measure the laser power until the 20 most recent sample fall within the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter, then perform a linear fit to the resulting current vs power curve. The resulting fit parameters are saved in the diode_laser directory next to the <a class="reference internal" href="_autosummary/catalight.equipment.diode_laser.diode_control.html#module-catalight.equipment.diode_laser.diode_control" title="catalight.equipment.diode_laser.diode_control"><code class="xref py py-mod docutils literal notranslate"><span class="pre">diode_control</span></code></a> file.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p class="linemarker linemarker-9">This module will automatically sweep the laser power, potentially through very high power settings. Take appropriate safety precautions.</p>
+</div>
+<figure class="align-default" id="id1">
+<img alt="_images/calibration_plot.svg" src="_images/calibration_plot.svg" /><figcaption>
+<p><span class="caption-text">Example of the output plot and fit from running <a class="reference internal" href="_autosummary/catalight.equipment.run_diode_calibration.html#module-catalight.equipment.run_diode_calibration" title="catalight.equipment.run_diode_calibration"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.equipment.run_diode_calibration</span></code></a></span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-16">This module uses the same “run_” notation as the <a class="reference internal" href="data_analysis.html#helpers"><span class="std std-ref">UI supported modules in the analysis package</span></a>, but does not yet have a “get_user_inputs()” function. <a class="reference internal" href="developer_guide.html#future"><span class="std std-ref">This will be a future update</span></a>.</p>
+</div>
 </section>
 <section id="gc-delay-measurement">
 <h1>GC delay measurement<a class="headerlink" href="#gc-delay-measurement" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-20">The <a class="reference internal" href="_autosummary/catalight.equipment.gc_delay_tester.html#module-catalight.equipment.gc_delay_tester" title="catalight.equipment.gc_delay_tester"><code class="xref py py-mod docutils literal notranslate"><span class="pre">catalight.equipment.gc_delay_tester</span></code></a> module allows the user to check the time it takes to reach steady state gas flow to the GC. Gas flow is initiated by the <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System" title="catalight.equipment.alicat_MFC.gas_control.Gas_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gas_System</span></code></a> and chromatograms produced by the  <a class="reference internal" href="_autosummary/catalight.equipment.sri_gc.gc_control.GC_Connector.html#catalight.equipment.sri_gc.gc_control.GC_Connector" title="catalight.equipment.sri_gc.gc_control.GC_Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">GC_Connector</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">catalight.equipment</span> <span class="kn">import</span> <span class="n">gc_delay_tester</span>
+<span class="c1"># Example usage:</span>
+<span class="c1"># User Inputs:</span>
+<span class="c1"># ------------</span>
+<span class="n">main_dir</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\Peak489Win10\GCDATA&#39;</span>  <span class="c1"># Save location</span>
+<span class="n">delay_times</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">55</span><span class="p">]</span>  <span class="c1"># In minutes</span>
+<span class="n">flows</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>  <span class="c1"># Total gas flow rate in sccm</span>
+<span class="n">gas_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;C2H4&#39;</span><span class="p">,</span> <span class="s1">&#39;C2H2&#39;</span><span class="p">,</span> <span class="s1">&#39;H2&#39;</span><span class="p">,</span> <span class="s1">&#39;Ar&#39;</span><span class="p">]</span>  <span class="c1"># Input Gasses</span>
+<span class="n">comp_list_on</span> <span class="o">=</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">])</span>  <span class="c1"># Composition to use for testing</span>
+<span class="n">comp_list_off</span> <span class="o">=</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># Composition to flush system</span>
+<span class="n">ctrl_file</span> <span class="o">=</span> <span class="s1">&#39;users/path/to/ctrl_file&#39;</span>
+<span class="c1"># Function call</span>
+<span class="n">gc_delay_tester</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">main_dir</span><span class="p">,</span> <span class="n">delay_times</span><span class="p">,</span> <span class="n">flows</span><span class="p">,</span>
+                     <span class="n">gas_list</span><span class="p">,</span> <span class="n">comp_list_on</span><span class="p">,</span> <span class="n">comp_list_off</span><span class="p">,</span> <span class="n">ctrl_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id2">
+<img alt="_images/gc_delay_test.svg" src="_images/gc_delay_test.svg" /><figcaption>
+<p><span class="caption-text">A subset of the results from the experiment run by the code above, plotted using the <a class="reference internal" href="_autosummary/catalight.analysis.run_plot_chromatograms_stacked.html#module-catalight.analysis.run_plot_chromatograms_stacked" title="catalight.analysis.run_plot_chromatograms_stacked"><code class="xref py py-mod docutils literal notranslate"><span class="pre">run_plot_chromatograms_stacked</span></code></a> module.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="pressure-drop-measurement">
+<h1>Pressure drop measurement<a class="headerlink" href="#pressure-drop-measurement" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-45">The <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_pressure()</span></code></a> method within the <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System" title="catalight.equipment.alicat_MFC.gas_control.Gas_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gas_System</span></code></a> class allows the user to test the pressure drop across the reactor using the builtin pressure sensors of the MFC. A single MFC is used for both flowing inert gas measuring the pressure. The user supplies a list of total flow rates to sweep through and the system measures the pressure at each point after waiting 1 minute. Repeat measurements are made every minute at each setpoint based on the number provided to the <code class="docutils literal notranslate"><span class="pre">num_samples</span></code> <code class="docutils literal notranslate"><span class="pre">kwarg</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">catalight.equipment.alicat_MFC.gas_control</span> <span class="kn">import</span> <span class="n">Gas_System</span>
+
+<span class="n">gas_controller</span> <span class="o">=</span> <span class="n">Gas_System</span><span class="p">()</span>
+<span class="c1"># MFC used for testing is last mfc w/ gas set to either Ar or N2</span>
+<span class="n">gas_controller</span><span class="o">.</span><span class="n">set_gasses</span><span class="p">([</span><span class="s1">&#39;Ar&#39;</span><span class="p">,</span> <span class="s1">&#39;C2H2, &#39;</span><span class="n">C2H2</span><span class="s1">&#39;, C2H2&#39;</span><span class="p">])</span>
+<span class="n">test_points</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">output_path</span> <span class="o">=</span> <span class="s1">&#39;path/to/users/data&#39;</span>
+<span class="n">gas_controller</span><span class="o">.</span><span class="n">test_pressure</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">test_points</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default" id="id3">
+<img alt="_images/flow_test.svg" src="_images/flow_test.svg" /><figcaption>
+<p><span class="caption-text">Example graph output by code above. Note, there is a small bug in current version that causes the legends to overlap. This was fixed in a vector graphics editting software here.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id4">
+<img alt="_images/pressure_drop_vs_flow.svg" src="_images/pressure_drop_vs_flow.svg" /><figcaption>
+<p><span class="caption-text">The data from multiple samples collected using <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_pressure()</span></code></a> and plotted as a pressure vs flow rate.</span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 <section id="mfc-port-connection-tester">
-<h1>MFC Port Connection Tester<a class="headerlink" href="#mfc-port-connection-tester" title="Permalink to this heading"></a></h1>
+<h1>MFC port connection tester<a class="headerlink" href="#mfc-port-connection-tester" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-68"><a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.connection_tester.html#module-catalight.equipment.alicat_MFC.connection_tester" title="catalight.equipment.alicat_MFC.connection_tester"><code class="xref py py-mod docutils literal notranslate"><span class="pre">connection_tester</span></code></a> is a command line tool that sweeps through every COM port on a PC and every letter of the alphabet searching for alicat MFC connections. If you don’t know which ports your MFCs are connected to, this script will find those connection and print a summary at the end of the search. The script takes several minutes to complete, but only needs to be run once. The results can then be used to change the address parameters of the <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.gas_control.Gas_System.html#catalight.equipment.alicat_MFC.gas_control.Gas_System" title="catalight.equipment.alicat_MFC.gas_control.Gas_System"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gas_System</span></code></a> init method which defines the systems MFC locations.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example output of <a class="reference internal" href="_autosummary/catalight.equipment.alicat_MFC.connection_tester.html#module-catalight.equipment.alicat_MFC.connection_tester" title="catalight.equipment.alicat_MFC.connection_tester"><code class="xref py py-mod docutils literal notranslate"><span class="pre">connection_tester</span></code></a></span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Beginning search: This process will take several minutes
+COM4 A is not MFC
+COM4 B is not MFC
+        ⋮
+COM5 Y is not MFC
+COM5 Z is not MFC
+Search concluded. Results:
+COM10 D is flow controller
+COM8 C is flow controller
+COM11 E is flow meter
+COM9 B is flow controller
+COM6 A is flow controller
+</pre></div>
+</div>
+</div>
 </section>
 <section id="heater-performance-measurements">
-<h1>Heater Performance measurements<a class="headerlink" href="#heater-performance-measurements" title="Permalink to this heading"></a></h1>
+<h1>Heater performance measurements<a class="headerlink" href="#heater-performance-measurements" title="Permalink to this heading"></a></h1>
+<p class="linemarker linemarker-88">The <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater" title="catalight.equipment.harrick_watlow.heater_control.Heater"><code class="xref py py-class docutils literal notranslate"><span class="pre">Heater</span></code></a> class has a <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance" title="catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_heater_performance()</span></code></a> method which applies various heating rates to the reactor while constantly measuring the temperature reading of the system. A csv and plot.svg file are saved for each heat rate tested. The output data is a DataFrame with columns: [time, set point, temperature]. Data is logged at 3 second intervals.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p class="linemarker linemarker-91"><a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance" title="catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance"><code class="xref py py-meth docutils literal notranslate"><span class="pre">test_heater_performance()</span></code></a> utilizes <a class="reference internal" href="_autosummary/catalight.equipment.harrick_watlow.heater_control.Heater.html#catalight.equipment.harrick_watlow.heater_control.Heater.ramp" title="catalight.equipment.harrick_watlow.heater_control.Heater.ramp"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ramp()</span></code></a> with the <code class="docutils literal notranslate"><span class="pre">record</span></code> parameter set to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example usage of the test_heater_performance method:</span><a class="headerlink" href="#id6" title="Permalink to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">heater</span> <span class="o">=</span> <span class="n">Heater</span><span class="p">()</span>
+<span class="n">data_fol</span> <span class="o">=</span> <span class="s1">&#39;path/to/users/folder&#39;</span>
+<span class="n">rates</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">T_max</span> <span class="o">=</span> <span class="mi">140</span>
+<span class="n">heater</span><span class="o">.</span><span class="n">test_heater_performance</span><span class="p">(</span><span class="n">data_fol</span><span class="p">,</span> <span class="n">rates</span><span class="p">,</span> <span class="n">T_max</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<figure class="align-default" id="id7">
+<img alt="_images/30_heater_test.svg" src="_images/30_heater_test.svg" /><figcaption>
+<p><span class="caption-text">An exact output of the code above.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id8">
+<img alt="_images/heater_tests_compiled.svg" src="_images/heater_tests_compiled.svg" /><figcaption>
+<p><span class="caption-text">The results of mutliple ramp rate tests compiled into a single graph with some additional code.</span><a class="headerlink" href="#id8" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
 </section>
 
 

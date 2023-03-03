@@ -26,7 +26,7 @@ def list_matching_files(main_dirs, target, suffix):
 
     Returns the full path of all files within the give folder path that contain
     the phrase 'target' and ends with 'suffix'. This function crawls the ENTIRE
-    directory provided, inclusing all subfolders down to bottom depth.
+    directory provided, including all sub-folders down to bottom depth.
 
     Parameters
     ----------
@@ -108,7 +108,7 @@ def build_results_dict(file_list, data_labels, reactant, target):
         in the calibration file exactly.
     target : str
         String identity of the target to use when calculating selectivity. Must
-        match what exists in the calibration file exacly.
+        match what exists in the calibration file exactly.
 
     Returns
     -------
@@ -129,7 +129,7 @@ def build_results_dict(file_list, data_labels, reactant, target):
         for n in range(len(file_list)):
             file_list[n] = os.path.join(file_list[n], 'expt_log.txt')
     elif file_list[0].endswith('expt_log.txt'):
-        # Atleast first file is ok to move on
+        # At least first file is ok to move on
         pass
     else:
         msg = 'Item 1 of file_list is not experiment log or experiment folder'
@@ -157,7 +157,7 @@ def get_run_number(filename):
         returns number suffix if present from file name.
 
     """
-    parts = filename.split('.')  # Seperate filename at each period
+    parts = filename.split('.')  # Separate filename at each period
     # Second to last part always has run num
     run_num_part = parts[len(parts) - 2]
     # \d digit; + however many; $ at end
@@ -288,7 +288,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
     expt : Experiment
         Experiment object for already run calibration experiment
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
     figsize : tuple, optional
@@ -322,9 +322,9 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
     n_rows = len(calchemIDs) // 3
     n_cols = -(-len(calchemIDs) // n_rows)  # Gives Ceiling
-    # Initilize run num plot
+    # Initialize run num plot
     fig_run_num, run_num_plots = plt.subplots(n_rows, n_cols)
-    # Initilize ppm vs expected ppm plot
+    # Initialize ppm vs expected ppm plot
     fig_calibration, calibration_plots = plt.subplots(n_rows, n_cols)
 
     calgas_flow = np.array([])
@@ -371,7 +371,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
             # to linear fit of counts vs ppm (flip axes)
             m = 1 / m
             err_m = err_m
-            # Propogate error using error propogation formula
+            # Propagate error using error propagation formula
             b = b / m
             err_b = sqrt(err_b**2 + b**2 * err_m**2) / m
 
@@ -447,7 +447,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     expt : Experiment
         Experiment object for desired analysis.
     calDF : pandas.DataFrame
-        Formated DataFrame containing gc calibration data.
+        Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
     basecorrect : bool, optional
@@ -591,7 +591,7 @@ def calculate_X_and_S(expt, reactant, target_molecule):
         in the calibration file exactly.
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
-        match what exists in the calibration file exacly.
+        match what exists in the calibration file exactly.
 
     Returns
     -------
@@ -601,8 +601,8 @@ def calculate_X_and_S(expt, reactant, target_molecule):
 
     Notes
     -----
-    Conversion and error are calculated in fraction assumming a total mole
-    balance of 1. Error calculations are based off the error propogation
+    Conversion and error are calculated in fraction assuming a total mole
+    balance of 1. Error calculations are based off the error propagation
     formula, resulting in the equations below:
     .. math::
 
@@ -647,12 +647,12 @@ def calculate_X_and_S(expt, reactant, target_molecule):
     err_Cr = std[reactant]  # Error in reactant concentration
     err_Ctar = std[target_molecule]  # Error in target molecule concentration
 
-    # Computs Conversion and Selectivity
+    # Computes Conversion and Selectivity
     X = (1 - C_reactant / C_tot)  # conversion assuming mol bal of 1
     S = (C_tar / (C_tot * X))  # Selectivity
     S = S.fillna(0)
 
-    # Compute total errors using error propogation formula
+    # Compute total errors using error propagation formula
     X_err = np.sqrt((err_Cr/C_tot)**2
                     + (err_Ctot * C_reactant/C_tot**2)**2)
     # Simple Formula. Gives different numbers but should be same...

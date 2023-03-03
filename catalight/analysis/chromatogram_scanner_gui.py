@@ -1,5 +1,5 @@
 """
-Graphical User Interface for scanning through chromatogroms within a directory.
+Graphical User Interface for scanning through chromatograms within a directory.
 
 @authors: Claire Carlin, Briley Bourgeois
 """
@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
         self.graphWidget.setTitle('Run 0:', color="k", size="18pt")
 
     def set_graph_style(self):
-        """Update graph appearence."""
+        """Update graph appearance."""
         # graph styling things
         self.graphWidget.addLegend(labelTextColor="k", labelTextSize="14pt")
         self.graphWidget.setBackground('w')
@@ -124,7 +124,7 @@ class MainWindow(QMainWindow):
         self.pen2 = pg.mkPen(color=(0, 153, 51), width=1)
 
     def update_plot(self):
-        """Update plot with current listwidget item, if present."""
+        """Update plot with current listWidget item, if present."""
         if not self.listWidget.currentItem():
             print('No Items')
             self.data_line.clear()
