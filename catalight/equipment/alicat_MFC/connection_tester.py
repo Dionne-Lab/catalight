@@ -14,24 +14,25 @@ from string import ascii_uppercase as alphabet
 import serial.tools.list_ports
 from alicat import FlowController, FlowMeter
 
-comports = list(serial.tools.list_ports.comports())
-positive_cases = []
+if __name__ == '__main__':
+    comports = list(serial.tools.list_ports.comports())
+    positive_cases = []
 
-print('Beginning search: This process will take several minutes')
-for port in comports:
-    port_name = port.name
-    for address_name in alphabet:
-        test_case_str = (port_name + ' ' + address_name)
-        if FlowController.is_connected(port_name, address=address_name):
-            print(test_case_str + ' is flow controller')
-            positive_cases.append(test_case_str + ' is flow controller\n')
-            break
-        elif FlowMeter.is_connected(port_name, address=address_name):
-            print(test_case_str + ' is flow meter')
-            positive_cases.append(test_case_str + ' is flow meter\n')
-            break
-        else: 
-            print(test_case_str + ' is not MFC')
-            
-print('Search concluded. Results:')
-print(*positive_cases)
+    print('Beginning search: This process will take several minutes')
+    for port in comports:
+        port_name = port.name
+        for address_name in alphabet:
+            test_case_str = (port_name + ' ' + address_name)
+            if FlowController.is_connected(port_name, address=address_name):
+                print(test_case_str + ' is flow controller')
+                positive_cases.append(test_case_str + ' is flow controller\n')
+                break
+            elif FlowMeter.is_connected(port_name, address=address_name):
+                print(test_case_str + ' is flow meter')
+                positive_cases.append(test_case_str + ' is flow meter\n')
+                break
+            else:
+                print(test_case_str + ' is not MFC')
+
+    print('Search concluded. Results:')
+    print(*positive_cases)
