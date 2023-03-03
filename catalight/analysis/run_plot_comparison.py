@@ -120,4 +120,4 @@ if __name__ == "__main__":
     plt.close('all')
     file_list, data_labels, response_dict = get_user_inputs()
     main(file_list, data_labels, **response_dict)
-    # Test comment
+    # Test comment2
