@@ -1,4 +1,4 @@
-catalight.analysis.user\_inputs.MyDelegate
+﻿catalight.analysis.user\_inputs.MyDelegate
 ==========================================
 
 .. currentmodule:: catalight.analysis.user_inputs
@@ -19,11 +19,6 @@ catalight.analysis.user\_inputs.MyDelegate
    
    
 
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
    
    
    

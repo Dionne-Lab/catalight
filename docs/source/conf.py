@@ -15,15 +15,12 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-
-pyproject = toml["tool"]["poetry"]
-
-project = pyproject["name"]
-version = pyproject["version"]
-release = pyproject["version"]
-author = pyproject["authors"]
+project = toml['project']["name"]
+version = toml['project']["version"]
+release = toml['project']["version"]
+author = ', '.join([entry['name'] for entry in toml['project']["authors"]])
 #project = 'catalight'
-#copyright = '2022, Briley Bourgeois, Claire Carlin'
+copyright = '2022, Briley Bourgeois, Claire Carlin'
 #author = 'Briley Bourgeois, Claire Carlin'
 #release = '0.1.1'
 
@@ -71,3 +68,27 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org/stable/", None),
     "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
 }
+
+autodoc_mock_imports = [
+    'alicat',
+    'matplotlib',
+    'mcculw',
+    'numpy',
+    'pandas',
+    'psutil',
+    'pycaw',
+    'pyqtgraph',
+    'scipy',
+    'pyserial',
+    'pyttsx3',
+    'comtypes',
+    'pythonnet',
+    'pywin32',
+    'pywatlow',
+    'win32com',
+    'PyQt5',
+    'clr',
+    'serial',
+    'Peaksimple',
+    'win32gui'
+]

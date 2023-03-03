@@ -1,4 +1,4 @@
-catalight.analysis.user\_inputs.DataExtractor
+﻿catalight.analysis.user\_inputs.DataExtractor
 =============================================
 
 .. currentmodule:: catalight.analysis.user_inputs
@@ -26,11 +26,6 @@ catalight.analysis.user\_inputs.DataExtractor
    
    
 
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
    
    
    

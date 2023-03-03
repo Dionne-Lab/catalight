@@ -1,4 +1,4 @@
-catalight.analysis.user\_inputs.DirectorySelector
+﻿catalight.analysis.user\_inputs.DirectorySelector
 =================================================
 
 .. currentmodule:: catalight.analysis.user_inputs
@@ -20,11 +20,6 @@ catalight.analysis.user\_inputs.DirectorySelector
    
    
 
-   
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
    
    
    

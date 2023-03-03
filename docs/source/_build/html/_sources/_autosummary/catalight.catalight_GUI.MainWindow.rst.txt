@@ -1,4 +1,4 @@
-catalight.catalight\_GUI.MainWindow
+﻿catalight.catalight\_GUI.MainWindow
 ===================================
 
 .. currentmodule:: catalight.catalight_GUI
@@ -50,12 +50,5 @@ catalight.catalight\_GUI.MainWindow
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~MainWindow.change_color_signal
-      ~MainWindow.progress_signal
    
    
