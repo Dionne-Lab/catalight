@@ -327,7 +327,7 @@ inputs for the rest of the codebase, but this feature is untested!!!</p>
 <p class="linemarker linemarker-3">A key property directing much of the behavior of the class.For example,
 the run_experiment() method is guided by the expt_type provided. New
 values must be entered into the _expt_list attribute and the
-appropriate class methods must be editted to account for new
+appropriate class methods must be edited to account for new
 experimental capabilities.
 Updates <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.ind_var" title="catalight.equipment.experiment_control.Experiment.ind_var"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ind_var</span></code></a> when called.
 Converts ‘Active Status’ in <a class="reference internal" href="#catalight.equipment.experiment_control.Experiment.expt_list" title="catalight.equipment.experiment_control.Experiment.expt_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">expt_list</span></code></a> to True.</p>
@@ -451,7 +451,7 @@ Update using <a class="reference internal" href="#catalight.equipment.experiment
 <span class="sig-name descname"><span class="pre">run_experiment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.run_experiment" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Directs connected equipment to run experiment based on attributes.</p>
 <p class="linemarker linemarker-3">Most critical method of the class/package. This method directs the
-equipiment to actually carry out the experiment based on the assigned
+equipment to actually carry out the experiment based on the assigned
 attribute values for the object instance. This method currently works
 by using a series of if-statements to determine the experiment type
 and take the corresponding actions.</p>
@@ -580,7 +580,7 @@ One element if constant or multiple for sweep. Initial value of [0.0].</p>
 <span class="sig-name descname"><span class="pre">update_eqpt_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eqpt_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.experiment_control.Experiment.update_eqpt_list" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Assign equipment objects as attributes of Experiment object.</p>
 <p class="linemarker linemarker-3">Takes eqpt_list as tuple in format
-(gc controller, laser controller, gas controler, heater)
+(gc controller, laser controller, gas controller, heater)
 and assigns each component to experiment object
 updates sample rate by given value in gc_control and updates heater
 ramp rate by the rate specified in experiment object</p>

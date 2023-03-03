@@ -57,7 +57,7 @@ The :meth:`~catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure`
 
 .. figure:: _static/images/flow_test.svg
 
-    Example graph output by code above. Note, there is a small bug in current version that causes the legends to overlap. This was fixed in a vector graphics editting software here.
+    Example graph output by code above. Note, there is a small bug in current version that causes the legends to overlap. This was fixed in a vector graphics editing software here.
 
 .. figure:: _static/images/pressure_drop_vs_flow.svg
 
@@ -105,4 +105,4 @@ The :class:`~catalight.equipment.harrick_watlow.heater_control.Heater` class has
 
 .. figure:: _static/images/heater_tests_compiled.svg
 
-    The results of mutliple ramp rate tests compiled into a single graph with some additional code.
+    The results of multiple ramp rate tests compiled into a single graph with some additional code.

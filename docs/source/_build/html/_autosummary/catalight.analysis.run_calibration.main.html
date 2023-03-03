@@ -135,7 +135,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expt</strong> (<a class="reference internal" href="catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment" title="catalight.equipment.experiment_control.Experiment"><em>Experiment</em></a>) – Experiment object for already run calibration experiment</p></li>
-<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formated DataFrame containing gc calibration data.
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formatted DataFrame containing gc calibration data.
 Specific to control file used!
 Format [ChemID, slope, intercept, start, end, ppm]</p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
@@ -147,8 +147,8 @@ figsize suggestions:
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-17"><strong>run_num_plots</strong> (<em>matplotlib.pyplot.axis</em>) – Axis handle for “run_num” plot</p></li>
-<li><p class="linemarker linemarker-18"><strong>cal_plots</strong> (<em>matplotlib.pyplot.axis</em>) – Axis handle for plots showing expected ppm vs measured counts</p></li>
+<li><p class="linemarker linemarker-17"><em>matplotlib.axes._axes.Axes</em> – Axis handle for “run_num” plot</p></li>
+<li><p class="linemarker linemarker-18"><em>matplotlib.axes._axes.Axes</em> – Axis handle for plots showing expected ppm vs measured counts</p></li>
 </ul>
 </p>
 </dd>
