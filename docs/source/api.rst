@@ -6,5 +6,4 @@ API
     :template: custom-module-template.rst
     :recursive:
 
-
     catalight
