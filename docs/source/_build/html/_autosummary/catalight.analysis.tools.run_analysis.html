@@ -139,7 +139,7 @@ experimental condition, and a 2D matrix of errors (1 standard deviation)</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expt</strong> (<a class="reference internal" href="catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment" title="catalight.equipment.experiment_control.Experiment"><em>Experiment</em></a>) – Experiment object for desired analysis.</p></li>
-<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formated DataFrame containing gc calibration data.
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formatted DataFrame containing gc calibration data.
 Specific to control file used!
 Format [ChemID, slope, intercept, start, end]</p></li>
 <li><p><strong>basecorrect</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Indicates whether or not to baseline correct individual gc data.
@@ -149,11 +149,11 @@ The default is ‘True’.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-20"><strong>concentrations</strong> (<em>numpy.ndarray</em>) – 3D matrix of concentrations for each molecule, gc collection,
+<li><p class="linemarker linemarker-20"><em>numpy.ndarray</em> – 3D matrix of concentrations for each molecule, gc collection,
 and condition
-[Condition x [Timestamps, ChemID] x run number</p></li>
-<li><p class="linemarker linemarker-23"><strong>avg</strong> (<em>pandas.DataFrame</em>) – average concentration for each molecule and experiment condition</p></li>
-<li><p class="linemarker linemarker-24"><strong>std</strong> (<em>pandas.DataFrame</em>) – one standard deviation of concentration measurements</p></li>
+[Condition x [Timestamps, ChemID] x run number]</p></li>
+<li><p class="linemarker linemarker-23"><em>pandas.DataFrame</em> – average concentration for each molecule and experiment condition</p></li>
+<li><p class="linemarker linemarker-24"><em>pandas.DataFrame</em> – one standard deviation of concentration measurements</p></li>
 </ul>
 </p>
 </dd>

@@ -134,7 +134,7 @@
 <p class="linemarker linemarker-3">Plots and saves “run_num”, “ppm”, and “X and S” for given experiment.
 run_num: ppm concentration as a function of run number
 ppm: average ppm concentration w/ error for each experiment condition
-X and S: Plots the average convertion and selectivity as a function of
+X and S: Plots the average conversion and selectivity as a function of
 experimental condition</p>
 <p class="linemarker linemarker-9">If savedata=True, will save figures as both .svg and .pickle</p>
 <dl class="field-list simple">
@@ -142,13 +142,13 @@ experimental condition</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expt</strong> (<a class="reference internal" href="catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment" title="catalight.equipment.experiment_control.Experiment"><em>Experiment</em></a>) – Experiment object which has data and has been analyzed
 (i.e. has avg_conc.csv etc.)</p></li>
-<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formated DataFrame containing gc calibration data.
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formatted DataFrame containing gc calibration data.
 Specific to control file used!
 Format [ChemID, slope, intercept, start, end]</p></li>
 <li><p><strong>reactant</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of reactant molecule to track. Must match what exists
 in the calibration file exactly.</p></li>
 <li><p><strong>target_molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of the target to use when calculating selectivity. Must
-match what exists in the calibration file exacly.</p></li>
+match what exists in the calibration file exactly.</p></li>
 <li><p><strong>mole_bal</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – Code will perform a mole balance for the element provided.
 The default is ‘c’. (i.e. carbon balance)</p></li>
 <li><p><strong>figsize</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
@@ -162,9 +162,9 @@ hours instead of minutes. The default is 2.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-38"><strong>ax1</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.axis.html#matplotlib.pyplot.axis" title="(in Matplotlib v3.7.0)"><code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.pyplot.axis()</span></code></a>) – Axis handle for “run_num” plot</p></li>
-<li><p class="linemarker linemarker-39"><strong>ax2</strong> (<cite>matplotlib.pyplot.axis</cite>) – Axis handle for “ppm” plot</p></li>
-<li><p class="linemarker linemarker-40"><strong>ax3</strong> (<em>matplotlib.pyplot.axis</em>) – Axis handle for “X and S” plot</p></li>
+<li><p class="linemarker linemarker-38">tuple(<a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axes</span></code></a>,</p></li>
+<li><p class="linemarker linemarker-39"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axes</span></code></a>,</p></li>
+<li><p class="linemarker linemarker-40"><a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Axes</span></code></a>) – (ax1, ax2, ax3) Axis handles for “run_num”,  “ppm”, and “X and S” plots</p></li>
 </ul>
 </p>
 </dd>

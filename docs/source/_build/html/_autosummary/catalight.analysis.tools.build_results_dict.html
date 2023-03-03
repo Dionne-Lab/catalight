@@ -130,25 +130,28 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="catalight.analysis.tools.build_results_dict">
 <span class="sig-prename descclassname"><span class="pre">catalight.analysis.tools.</span></span><span class="sig-name descname"><span class="pre">build_results_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reactant</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.analysis.tools.build_results_dict" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Generate a results dictionary containing [X, S, err] for given datasets.</p>
+<dd><p class="linemarker linemarker-1">Generate a results dictionary of X/S and data labels for paths given.</p>
+<p class="linemarker linemarker-3">Results dict contains [X, S, X Error, S Error] for given datasets and
+labels typically for use with plotting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file_list</strong> (<em>list of str</em>) – List of file paths to experiment folders then used to initiate
-experiment objects and calculate conversion and selectivity.</p></li>
+<li><p><strong>file_list</strong> (<em>list of str</em>) – List of file paths to experiment folders or experiment log paths then
+used to initiate experiment objects and calculate conversion and
+selectivity.</p></li>
 <li><p><strong>data_labels</strong> (<em>list of str</em>) – List of data labels used for generating plot legends.</p></li>
 <li><p><strong>reactant</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of reactant molecule to track. Must match what exists
 in the calibration file exactly.</p></li>
 <li><p><strong>target</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of the target to use when calculating selectivity. Must
-match what exists in the calibration file exacly.</p></li>
+match what exists in the calibration file exactly.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>results_dict</strong> – Dictionary of results (produced by calculate_X_and_S) in the form
+<dd class="field-even"><p>Dictionary of results (produced by calculate_X_and_S) in the form
 {data label: result}
 where data label is a string with the desired legend label and
 result is a pandas.DataFrame with column headers
-[‘Conversion’, ‘Selectivity’, ‘Error’]
+[‘Conversion’, ‘Selectivity’, ‘X Error’, ‘S Error’]
 This function is most easily used in conjunction with DataExtractor
 such as in the run_plot_comparison script.</p>
 </dd>

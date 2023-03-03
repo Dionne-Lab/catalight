@@ -125,8 +125,13 @@
              
   <section id="module-catalight.equipment.alicat_MFC.connection_tester">
 <span id="catalight-equipment-alicat-mfc-connection-tester"></span><h1>catalight.equipment.alicat_MFC.connection_tester<a class="headerlink" href="#module-catalight.equipment.alicat_MFC.connection_tester" title="Permalink to this heading"></a></h1>
-<p class="linemarker linemarker-1">Created on Wed Jan 19 15:32:48 2022</p>
-<p class="linemarker linemarker-3">&#64;author: DLAB</p>
+<p class="linemarker linemarker-1">Port connection tester module returns the comport name/address of MFCs.</p>
+<p class="linemarker linemarker-3">Utilizes the is_connected method of the alicat module’s FlowController and
+FlowMeter classes. Usual serial module to list all comports on computer, then
+sweeps through every alphabetic letter in alphabet to checking for MFC
+connections. Each comport loop breaks if a MFC is found. Prints summary at end.</p>
+<p class="linemarker linemarker-8">Created on Wed Jan 19 15:32:48 2022
+&#64;author: Briley Bourgeois</p>
 </section>
 
 

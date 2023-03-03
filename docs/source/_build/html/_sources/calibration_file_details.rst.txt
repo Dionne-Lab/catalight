@@ -6,10 +6,10 @@ Important Requirements:
 
 * **The Chem ID column must contain strings which match the alicat gas library** if the user wishes to perform calibration with the catalight GUI. If this isn't possible, the user can perform a composition sweep using the fill gas of the mixture, but this will reduce the precision of the MFC control.
 * **The elution times for each peak must be determined by the user** and entered into the calibration file. One way to do this is to look at the peaks inside peaksimple and mark the locations using the peaksimple component system. Opening the component file will then show the start and end times for each peak, which can be copied into a calibration file for use with catalight.
-* **The GC control file must be tweaked by the user to acheive optimal results.** The catalight package does not attempt to alter the GC settings, though automated condition screening could programmed using the :class:`~catalight.equipment.sri_gc.gc_control.GC_Connector` class and editting the different system files used by the GC (i.e. the .tem and .evt files).
+* **The GC control file must be tweaked by the user to achieve optimal results.** The catalight package does not attempt to alter the GC settings, though automated condition screening could programmed using the :class:`~catalight.equipment.sri_gc.gc_control.GC_Connector` class and editing the different system files used by the GC (i.e. the .tem and .evt files).
 
 
-When first running the calibration experiment, the role of the calibration file is to build a custom CalGas mixture to be used by the MFC for accurate gas control. As such, the only important entries are the Chem ID column (must match gas library on MFC) and the expected concentractions (ppm column).
+When first running the calibration experiment, the role of the calibration file is to build a custom CalGas mixture to be used by the MFC for accurate gas control. As such, the only important entries are the Chem ID column (must match gas library on MFC) and the expected concentrations (ppm column).
 
 .. note::
     The data in the calibration file is accessed by the column name. The locations can technically vary, but the names of the columns must remain exact.
@@ -19,7 +19,7 @@ When first running the calibration experiment, the role of the calibration file 
 
     In this file, all components of the calibration gas are listed with their concentration in ppm provided. The elution times are also included for illustration, but these columns do not need to be filled prior to running a calibration experiment.
 
-For some gas mixtures and hardware configurations, total peak seperation isn't possible. This can be handled by combining the peaks into one name and treating the resulting measured concentration as a sum of the components.
+For some gas mixtures and hardware configurations, total peak separation isn't possible. This can be handled by combining the peaks into one name and treating the resulting measured concentration as a sum of the components.
 
 .. figure:: _static/images/calibration_peaksimple.png
     :width: 800

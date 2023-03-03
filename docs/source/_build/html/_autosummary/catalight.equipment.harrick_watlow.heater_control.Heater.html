@@ -194,11 +194,11 @@ on heater, printing output</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="catalight.equipment.harrick_watlow.heater_control.Heater.max_temp">
 <span class="sig-name descname"><span class="pre">max_temp</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">450</span></em><a class="headerlink" href="#catalight.equipment.harrick_watlow.heater_control.Heater.max_temp" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Max temp in C; 450C reduces lifetime 900C is real max. To change,
-use Heater.max_temp = new_value</p>
+<dd><p class="linemarker linemarker-1">Max temp in C; 450C reduces lifetime 900C is real max.
+To change, use Heater.max_temp = new_value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-4">#</p>
+<dd class="field-odd"><p class="linemarker linemarker-4"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a> or <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -221,7 +221,7 @@ heater performance.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-16"><em>pandas.DataFrame, when record=True</em> – pandas dataframe with columns [‘time’, ‘set point’, ‘temperature’]
+<li><p class="linemarker linemarker-16"><em>pandas.DataFrame, when record=True</em> – pandas.DataFrame with columns [‘time’, ‘set point’, ‘temperature’]
 recorded during the experiment.</p></li>
 <li><p class="linemarker linemarker-18"><em>matplotlib.pyplot.figure, when record=True</em> – figure handle for ramp rate plot</p></li>
 <li><p class="linemarker linemarker-19"><em>matplotlib.pyplot.axis, when record=True</em> – axis handle for ramp rate plot</p></li>
@@ -288,9 +288,9 @@ Always lets heater cool to &lt; 30C between runs.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>savepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Full path to directory in which to save data.</p></li>
-<li><p><strong>rates</strong> (<em>list of int</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – List of heater ramp rates to test e.g. [5, 10, 15, 20]</p></li>
-<li><p><strong>T_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – Maximum temperature setpoint to use for testing</p></li>
-<li><p><strong>T_min</strong> (<em>int of float</em><em>, </em><em>optional</em>) – Starting setpoint to use for testing. The default is 30.</p></li>
+<li><p><strong>rates</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>]</em>) – (deg C/min) List of heater ramp rates to test e.g. [5, 10, 15, 20]</p></li>
+<li><p><strong>T_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a>) – (deg C) Maximum temperature setpoint to use for testing</p></li>
+<li><p><strong>T_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – (deg C) Starting setpoint to use for testing. The default is 30.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>

@@ -382,7 +382,7 @@ class Experiment:
         with open(os.path.join(expt_path, 'expt_log.txt'), 'w+') as log:
             log_entry = [
                 'Experiment Date = ' + self.date,
-                'Experiment Start = ' + self.start_time,
+                'Experiment Start = ' + str(self.start_time),
                 'Experiment Type = ' + self.expt_type,
                 'Experiment Name = ' + self.expt_name,
                 'Sample Name = ' + self.sample_name,
@@ -427,7 +427,7 @@ class Experiment:
                 if re.search('Experiment Date =', line):
                     self._date = data
                 elif re.search('Experiment Start =', line):
-                    self._start_time = data
+                    self._start_time = literal_eval(data)
                 elif re.search('Experiment Type =', line):
                     self.expt_type = data
                 elif re.search('Experiment Name =', line):

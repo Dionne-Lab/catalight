@@ -325,7 +325,7 @@ corrected using baseline_correct()</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>y</strong> – Counts for a single peak converted into ppm based on calDF</p>
+<dd class="field-even"><p>Counts for a single peak converted into ppm based on calDF</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a></p>
@@ -361,7 +361,7 @@ outside of those listed in calDF.</p>
 <dd><p class="linemarker linemarker-1">Determine run number from filename.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>run_number</strong> – run number extracted from filename</p>
+<dd class="field-odd"><p>run number extracted from filename</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)">int</a></p>
@@ -377,10 +377,12 @@ outside of those listed in calDF.</p>
 to read GC .ASC files</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>containing time (min) and signal (arb units)</p>
+<dd class="field-odd"><p>(timestamp, [Elution Time, GC Signal])
+First element is timestamp in time since epoch. Second element is
+pandas.DataFrame containing ‘Time’ (min) and ‘Signal’ (arb units)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.DataFrame</a></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)">float</a>, <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)">pandas.DataFrame</a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -390,10 +392,10 @@ to read GC .ASC files</p>
 <span class="sig-name descname"><span class="pre">integrate_peak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#catalight.analysis.gcdata.GCData.integrate_peak" title="Permalink to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Find the area under the peak using a trapezoidal method.</p>
 <p class="linemarker linemarker-3">Calculate for each peak identified using bounds from integration_inds.
-Integrates peak trapezoidally in units of seconds*signalintensity.</p>
+Integrates peak trapezoidal in units of seconds*signal intensity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>counts</strong> – counts rounded using np.around()</p>
+<dd class="field-odd"><p>counts rounded using np.around()</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>numpy.int32</p>
@@ -411,8 +413,8 @@ Output in the same (time) order as the apex_ind array with the location
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p><ul class="simple">
-<li><p class="linemarker linemarker-7"><strong>left index</strong> (<em>numpy.ndarray of int</em>) – Left bounds of integration.</p></li>
-<li><p class="linemarker linemarker-8"><strong>right index</strong> (<em>numpy.ndrray of int</em>) – Right bounds of integration.</p></li>
+<li><p class="linemarker linemarker-7"><em>numpy.ndarray of int</em> – Left bounds of integration.</p></li>
+<li><p class="linemarker linemarker-8"><em>numpy.ndrray of int</em> – Right bounds of integration.</p></li>
 </ul>
 </p>
 </dd>

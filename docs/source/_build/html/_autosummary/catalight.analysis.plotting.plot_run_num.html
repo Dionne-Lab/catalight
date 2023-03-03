@@ -136,7 +136,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>expt</strong> (<a class="reference internal" href="catalight.equipment.experiment_control.Experiment.html#catalight.equipment.experiment_control.Experiment" title="catalight.equipment.experiment_control.Experiment"><em>Experiment</em></a>) – Experiment object which has data and has been analyzed
 (i.e. has avg_conc.csv etc.)</p></li>
-<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formated DataFrame containing gc calibration data.
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formatted DataFrame containing gc calibration data.
 Specific to control file used!
 Format [ChemID, slope, intercept, start, end]</p></li>
 <li><p><strong>switch_to_hours</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – Time in hours when the output should switch units to
@@ -144,11 +144,10 @@ hours instead of minutes. The default is 2.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-14"><strong>fig</strong> (<em>matplotlib.pyplot.figure</em>) – Figure handle for “run_num” plot</p></li>
-<li><p class="linemarker linemarker-15"><strong>ax</strong> (<em>matplotlib.pyplot.axis</em>) – Axis handle for “run_num” plot</p></li>
-</ul>
-</p>
+<dd class="field-even"><p>Figure and Axis handle for “run_num” plot</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a>(<a class="reference external" href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="(in Matplotlib v3.7.0)">matplotlib.figure.Figure</a>, <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="(in Matplotlib v3.7.0)">matplotlib.axes._axes.Axes</a>)</p>
 </dd>
 </dl>
 </dd></dl>

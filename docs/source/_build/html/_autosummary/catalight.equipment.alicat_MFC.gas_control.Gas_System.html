@@ -176,8 +176,8 @@ the “connection_tester.py” file</p>
 <tr class="row-odd"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.alicat_MFC.gas_control.Gas_System.shut_down" title="catalight.equipment.alicat_MFC.gas_control.Gas_System.shut_down"><code class="xref py py-obj docutils literal notranslate"><span class="pre">shut_down</span></code></a>()</p></td>
 <td><p class="linemarker linemarker-1">Set MFC with Ar or N2 running to 1 sccm and others to 0.</p></td>
 </tr>
-<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_pressure</span></code></a>(path[, num_samples])</p></td>
-<td><p class="linemarker linemarker-1">Ramp flot rate, measure pressure, plot results, save.</p></td>
+<tr class="row-even"><td><p class="linemarker linemarker-1"><a class="reference internal" href="#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_pressure</span></code></a>(savepath, flows[, num_samples])</p></td>
+<td><p class="linemarker linemarker-1">Ramp flow rate, measure pressure, plot results, save.</p></td>
 </tr>
 </tbody>
 </table>
@@ -259,7 +259,7 @@ for the official list of possible gasses.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mfc</strong> (<em>alicat.FlowController</em><em> | </em><em>alicat.FlowMeter</em>) – Mass flow controller or meter to update with calgas</p></li>
-<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formated DataFrame containing gc calibration data.
+<li><p><strong>calDF</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v1.5.3)"><em>pandas.DataFrame</em></a>) – Formatted DataFrame containing gc calibration data.
 Specific to control file used!
 Format [ChemID, slope, intercept, start, end]</p></li>
 <li><p><strong>fill_gas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Inert gas dilutant for calibration gas tank. The default is ‘Ar’.</p></li>
@@ -327,16 +327,17 @@ TODO: add limit for tot_flow for each MFC</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure">
-<span class="sig-name descname"><span class="pre">test_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="Permalink to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Ramp flot rate, measure pressure, plot results, save.</p>
+<span class="sig-name descname"><span class="pre">test_pressure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">savepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure" title="Permalink to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Ramp flow rate, measure pressure, plot results, save.</p>
 <p class="linemarker linemarker-3">Ramp flow rate from 5-50 sccm in steps of 5, measure pressure every
 minute for num_samples times. Waits 1 min before first collection.
 Plots results on yyplot w/ time on x-axis, and pressure and flow on y.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to folder to save the results in.</p></li>
-<li><p><strong>num_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of samples to collect at each flow rate. Default is 5.</p></li>
+<li><p><strong>savepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Path to folder to save the results in.</p></li>
+<li><p><strong>flows</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>]</em>) – Flow rate setpoints to sweep through when testing pressure build up</p></li>
+<li><p><strong>num_samples</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of samples to collect at each flow rate. Default is 5.</p></li>
 </ul>
 </dd>
 </dl>

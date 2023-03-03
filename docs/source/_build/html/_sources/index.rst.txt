@@ -20,16 +20,16 @@ We've designed catalight with modularity in mind. We want to enable interested l
 .. toctree::
    :maxdepth: 5
    :caption: Introduction:
-   
+
    intro
 
 .. toctree::
    :maxdepth: 5
    :caption: User Guide:
-   
+
    user_guide
 
-.. toctree:: 
+.. toctree::
    :maxdepth: 5
    :caption: Development Guide:
 
@@ -38,11 +38,11 @@ We've designed catalight with modularity in mind. We want to enable interested l
 .. toctree::
    :maxdepth: 5
    :caption: Examples:
-   
+
    examples
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
    :caption: Documentation
 
    api

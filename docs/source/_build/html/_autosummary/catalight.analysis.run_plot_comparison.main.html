@@ -140,7 +140,7 @@ experiment objects and calculate conversion and selectivity.</p></li>
 <li><p><strong>reactant</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of reactant molecule to track. Must match what
 exists in the calibration file exactly.</p></li>
 <li><p><strong>target_molecule</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – String identity of the target_molecule to use when calculating
-selectivity. Must match what exists in the calibration file exacly.</p></li>
+selectivity. Must match what exists in the calibration file exactly.</p></li>
 <li><p><strong>plot_XandS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – True plots comparison plots of conversion and selectivity individually
 as a function of the independent variable. Ind. Var. should be the same
 between all provided values.</p></li>
@@ -154,8 +154,11 @@ figsize suggestions:
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p class="linemarker linemarker-27"><em>((figX, axX), (figS, axS))</em> – if plot_XandS == True, returns fig and ax handles for two plots</p></li>
-<li><p class="linemarker linemarker-28"><em>fig, ax</em> – if plot_XvsS == True, returns fig and ax handles for selectivity vs
+<li><p class="linemarker linemarker-27"><em>tuple(tuple, tuple)</em> – ((figX, axX), (figS, axS)) if plot_XandS == True,
+returns fig and ax handles for two plots</p></li>
+<li><p class="linemarker linemarker-29"><em>matplotlib.figure.Figure</em> – if plot_XvsS == True, returns fig handle for selectivity vs
+conversion plot</p></li>
+<li><p class="linemarker linemarker-31"><em>matplotlib.axes._axes.Axes</em> – if plot_XvsS == True, returns ax handle for selectivity vs
 conversion plot</p></li>
 </ul>
 </p>
