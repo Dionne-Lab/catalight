@@ -6,3 +6,4 @@
 __pycache__/
 *.py[cod]
 docs/build/
+docs/source/_build/

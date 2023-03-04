@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: catalight
-Version: 0.1.3
+Version: 0.1.4
 Summary: Photoreactor system automation, data handling, and analysis.
 Author-email: Briley Bourgeois <bbourge6@stanford.edu>, Claire Carlin <cccarlin@stanford.edu>
 Project-URL: Homepage, https://github.com/Dionne-Lab/catalight
@@ -25,6 +25,9 @@ To date, catalight is compatible with Alicat mass flow controllers, heater syste
 
 **ReadtheDocs Page:**
 https://catalight.readthedocs.io/en/latest/
+
+**PyPI Page:**
+https://pypi.org/project/catalight/
 
 
 D-Lab Hardware Configuration:
