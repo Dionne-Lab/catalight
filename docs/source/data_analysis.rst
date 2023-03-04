@@ -25,12 +25,12 @@ The :mod:`~catalight.analysis.plotting` module groups functions used for plottin
 
 The most standard function in the module is :func:`~catalight.analysis.plotting.plot_expt_summary` which is usually the first plotting function called after running an experiment in conjunction with the :func:`~catalight.analysis.tools.run_analysis` functions from the :mod:`~catalight.analysis.tools` module. The :func:`~catalight.analysis.plotting.plot_expt_summary` functions calls 3 separate plotting functions, :func:`~catalight.analysis.plotting.plot_run_num`, :func:`~catalight.analysis.plotting.plot_ppm`, :func:`~catalight.analysis.plotting.plot_X_and_S` which we group together because they are often called back to back. Lets step through the output of each of these to better understand how normal analysis is done.
 
-.. figure:: _static/images/run_num_plot.svg
+.. figure:: _static/images/plotting_run_num_plot.svg
     :width: 800
 
     :func:`~catalight.analysis.plotting.plot_run_num` produces the GC counts in ppm as a function of time based on the provided calibration file. This is the output of the reactor as seen by the GC.
 
-.. figure:: _static/images/avg_conc_plot.svg
+.. figure:: _static/images/plotting_avg_conc_plot.svg
     :width: 800
 
     :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
@@ -38,7 +38,7 @@ The most standard function in the module is :func:`~catalight.analysis.plotting.
 .. note::
     The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.
 
-.. figure:: _static/images/Conv_Sel_plot.svg
+.. figure:: _static/images/plotting_Conv_Sel_plot.svg
     :width: 800
 
     Finally, :func:`~catalight.analysis.plotting.plot_X_and_S` utilizes the :func:`~catalight.analysis.tools.calculate_X_and_S` function to convert the average molecular concentrations from the previous graph into conversion and selectivity plots.
@@ -47,12 +47,12 @@ If the ``savedata`` parameter of the :func:`~catalight.analysis.plotting.plot_ex
 
 The three plotting functions called by :func:`~catalight.analysis.plotting.plot_expt_summary` can be called independently through scripting as well, and additional plotting tool are available within the :mod:`~catalight.analysis.plotting` module. :func:`~catalight.analysis.plotting.multiplot_X_and_S` and :func:`~catalight.analysis.plotting.multiplot_X_vs_S` functions are used to plot comparisons between individual experiments and can be most easily accessed using the :class:`~catalight.analysis.user_inputs.DataExtractor` dialog, covered in the :ref:`analysis.user_inputs<ui>` and :ref:`Helper scripts<helpers>` subsections.
 
-.. figure:: _static/images/avg_conc_plot.svg
+.. figure:: _static/images/plotting_XandS.svg
     :width: 800
 
     :func:`~catalight.analysis.plotting.multiplot_X_and_S` produces two plots, showing conversion (selectivity) as a function of the independent variable. As such, only experiments of a single type can be compared using this function.
 
-.. figure:: _static/images/avg_conc_plot.svg
+.. figure:: _static/images/plotting_XvsS.svg
     :width: 800
 
     :func:`~catalight.analysis.plotting.multiplot_X_vs_S` produces a single plot, showing the selectivity as a function of conversion for the given experiments. This function can take in experiments with different independent variables, and is a good tool for comparing thermal and light driven reactions.
