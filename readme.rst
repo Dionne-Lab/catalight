@@ -12,6 +12,9 @@ To date, catalight is compatible with Alicat mass flow controllers, heater syste
 **ReadtheDocs Page:**
 https://catalight.readthedocs.io/en/latest/
 
+**PyPI Page:**
+https://pypi.org/project/catalight/
+
 
 D-Lab Hardware Configuration:
 
