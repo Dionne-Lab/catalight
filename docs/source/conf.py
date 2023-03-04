@@ -19,8 +19,9 @@ project = toml['project']["name"]
 version = toml['project']["version"]
 release = toml['project']["version"]
 author = ', '.join([entry['name'] for entry in toml['project']["authors"]])
-#project = 'catalight'
 copyright = '2022, Briley Bourgeois, Claire Carlin'
+# These are grabbed from toml now.
+#project = 'catalight'
 #author = 'Briley Bourgeois, Claire Carlin'
 #release = '0.1.1'
 

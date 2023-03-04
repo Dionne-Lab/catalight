@@ -9,10 +9,11 @@ Catalight is tool set developed by scientists at Stanford to help automate photo
 
 To date, catalight is compatible with Alicat mass flow controllers, heater systems controlled by Watlow components, Measurement Computing data acquisition boards (used for communication with (ThorLabs laser diode drivers), NewPort 843-R power meter, and SRI gas chromatographs. Support for additional hardware is planned for the future, including FTIR data collection and analysis and NKT Photonics lasers. We strongly encourage interested users to consider contributing to the project by adding new device support and helping expand the catalight functionality.
 
-**Link to ReadtheDocs Page Coming Soon**
-----------------------------------------
+**ReadtheDocs Page:**
+https://catalight.readthedocs.io/en/latest/
+
+
+D-Lab Hardware Configuration:
 
 .. figure:: https://github.com/Dionne-Lab/catalight/raw/main/docs/source/_static/images/overview.png
     :width: 800
-
-    D-Lab Hardware Configuration
