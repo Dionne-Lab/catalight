@@ -1,8 +1,12 @@
 import os
 import sys
+import tomli
+with open("../../pyproject.toml", "rb") as f:
+    toml = tomli.load(f)
+
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 
-print(sys.path)
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -11,10 +15,15 @@ print(sys.path)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'catalight'
+project = toml['project']["name"]
+version = toml['project']["version"]
+release = toml['project']["version"]
+author = ', '.join([entry['name'] for entry in toml['project']["authors"]])
 copyright = '2022, Briley Bourgeois, Claire Carlin'
-author = 'Briley Bourgeois, Claire Carlin'
-release = '0.0.1'
+# These are grabbed from toml now.
+#project = 'catalight'
+#author = 'Briley Bourgeois, Claire Carlin'
+#release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -60,3 +69,27 @@ intersphinx_mapping = {
     "matplotlib": ("https://matplotlib.org/stable/", None),
     "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
 }
+
+autodoc_mock_imports = [
+    'alicat',
+    'matplotlib',
+    'mcculw',
+    'numpy',
+    'pandas',
+    'psutil',
+    'pycaw',
+    'pyqtgraph',
+    'scipy',
+    'pyserial',
+    'pyttsx3',
+    'comtypes',
+    'pythonnet',
+    'pywin32',
+    'pywatlow',
+    'win32com',
+    'PyQt5',
+    'clr',
+    'serial',
+    'Peaksimple',
+    'win32gui'
+]
