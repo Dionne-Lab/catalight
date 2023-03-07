@@ -357,13 +357,13 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
         if force_zero:  # Add point (0, 0) w/ infinitesimal error
             x_data = np.append(0, expected_ppm)
             y_data = np.append(0, avg[chemical].to_numpy())
-            y_err = np.append(1e-19, std[chemical].to_numpy())
+            y_err = np.append(1, std[chemical].to_numpy())
         else:
             x_data = expected_ppm
             y_data = avg[chemical].to_numpy()
             y_err = std[chemical].to_numpy()
         try:
-            y_err[y_err == 0] = 1e-19  # Set "zero" error to small number.
+            y_err[y_err == 0] = 1  # Set "zero" error to small number.
             p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1 / y_err)
             m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
 
