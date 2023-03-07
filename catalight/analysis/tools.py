@@ -363,6 +363,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
             y_data = avg[chemical].to_numpy()
             y_err = std[chemical].to_numpy()
         try:
+            y_err[y_err == 0] = 1e-19  # Set "zero" error to small number.
             p, V = np.polyfit(x_data, y_data, 1, cov=True, w=1 / y_err)
             m, b, err_m, err_b = (*p, np.sqrt(V[0][0]), np.sqrt(V[1][1]))
 
