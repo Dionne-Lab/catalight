@@ -393,6 +393,11 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
             ax_calibration.text(.02, .75, label,
                                 horizontalalignment='left',
                                 transform=ax_calibration.transAxes, fontsize=8)
+            # If fit fails, set all values to zero
+            m = 0
+            b = 0
+            err_m = 0
+            err_b = 0
         new_calibration.loc[chemical, 'slope':'err_intercept'] = [m, err_m,
                                                                   b, err_b]
 
