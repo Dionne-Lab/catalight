@@ -54,7 +54,7 @@ class Experiment:
              ['power_sweep',    'power', False,   'mW'],  # noqa
              ['comp_sweep',  'gas_comp', False, 'frac'],  # noqa
              ['flow_sweep',  'tot_flow', False, 'sccm'],  # noqa
-             ['calibration', 'gas_comp', False,  'ppm'],  # noqa
+             ['calibration', 'gas_comp', False, 'frac'],  # noqa
              ['stability_test',  'temp', False,  'min']], # noqa
             columns=['Expt Name',
                      'Independent Variable',

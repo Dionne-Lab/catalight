@@ -254,7 +254,7 @@ A major benefit of using catalight for experiment automation is that data saving
 
 Auxiliary tools
 ===============
-We also have other stuff!
+Auxiliary tools are several helper functions developed for characterizing behavior related to catalysis experiments, but not involved in the experiments themselves. For example, we have a tool box for laser power calibration.
 
 .. toctree::
 

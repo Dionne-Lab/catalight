@@ -559,7 +559,7 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
     elif expt.expt_type == 'stability_test':
         pass  # Already Float
 
-    else:  # Convert filenames to float w/o units.
+    else:  # Convert folder name to float w/o units.
         condition = condition.str.replace(r'\D', '', regex=True).astype(float)
 
     # Results
