@@ -54,7 +54,7 @@ class Experiment:
              ['power_sweep',    'power', False,   'mW'],  # noqa
              ['comp_sweep',  'gas_comp', False, 'frac'],  # noqa
              ['flow_sweep',  'tot_flow', False, 'sccm'],  # noqa
-             ['calibration', 'gas_comp', False,  'ppm'],  # noqa
+             ['calibration', 'gas_comp', False, 'frac'],  # noqa
              ['stability_test',  'temp', False,  'min']], # noqa
             columns=['Expt Name',
                      'Independent Variable',
@@ -438,7 +438,7 @@ class Experiment:
                     self.temp = literal_eval(data)
                 elif re.search('Power', line):
                     self.power = literal_eval(data)
-                elif re.search('Gas \d+ type', line):  # \d+ is 1 or more digit
+                elif re.search(r'Gas \d+ type', line):  # \d+ is 1+ digits
                     # Get left side of '=' sign
                     gas_str = line.split('=')[0].strip(' \n')
                     # Pull number from left side
@@ -852,7 +852,8 @@ class Experiment:
             t2 = time.time()
             t_passed = round(t2 - t1)  # GC can take a while to respond
             for i in range(int(self.t_steady_state * 60 - t_passed)):
-                time.sleep(1)  # Break sleep in bits so keyboard interrupt works
+                time.sleep(1)
+                # Break sleep in bits so keyboard interrupt works
 
             print('Starting Collection: '
                   + time.strftime("%H:%M:%S", time.localtime()))
