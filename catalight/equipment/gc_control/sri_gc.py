@@ -22,8 +22,7 @@ import Peaksimple  # Need add assembly before import. # noqa # type: ignore
 
 # TODO some control file needs to be placed within package to work w/ any user.
 # the default won't run from the repo for some reason
-default_ctrl_file = ("C:\\Peak489Win10\\CONTROL_FILE\\"
-                     "HayN_C2H2_Hydrogenation\\C2H2_Hydro_HayN_TCD_off.CON")
+default_ctrl_file = os.path.join(dir_path, 'DEFAULT.CON')
 
 
 class GC_Connector():
@@ -317,10 +316,11 @@ if __name__ == "__main__":
     data_path = 'C:\\Peak489Win10\\GCDATA\\20221117_CodeTest'
     gc1.sample_set_size = 2
     gc1.update_ctrl_file(data_path)
-    gc1.peaksimple.SetRunning(1, True)
-    time.sleep(10)
-    for n in range(0, 31):
-        print(time.ctime(), '---', gc1.peaksimple.IsRunning(1))
-        # IsRunning returns false inbetween runs. Returns True during run
-        time.sleep(60)
-    print('Finished')
+    gc1.peaksimple.IsConnected()
+    # gc1.peaksimple.SetRunning(1, True)
+    # time.sleep(10)
+    # for n in range(0, 31):
+    #     print(time.ctime(), '---', gc1.peaksimple.IsRunning(1))
+    #     # IsRunning returns false inbetween runs. Returns True during run
+    #     time.sleep(60)
+    # print('Finished')
