@@ -52,7 +52,7 @@ class GC_Connector():
 
         self.sample_set_size = 4
         """
-        int:  Number of GC collection for each time peaksimple.setRunning()
+        int:  Number of GC collection for each time set_running()
         is called. Can be changed per experiment by editing
         :attr:`Experiment.sample_set_size
         <catalight.equipment.experiment_control.Experiment.sample_set_size>`
@@ -62,6 +62,7 @@ class GC_Connector():
         # ---------------
         self.connect()
         self._sample_rate = 0  # Dummy value, reset when ctrl file loaded
+        self._min_sample_rate = 0  # Dummy value, reset when ctrl file loaded
         # Sends ctrl file to GC, updates self w/ new data
         print('Loading', ctrl_file)
         self.load_ctrl_file()
@@ -72,7 +73,7 @@ class GC_Connector():
     min_sample_rate = property(lambda self: self._min_sample_rate)
     """float, read-only: (min) Minimum setpoint for sample_rate.
     Sum of Channel 1 Time and Channel 1 Posttime from GC control file.
-    Value automatically updates when :meth:`read_ctrl_file` is called."""
+    Value automatically updates when :meth:`read_gc_settings` is called."""
 
     # Setting sample rate changes when connected to GC
     @property
@@ -97,15 +98,15 @@ class GC_Connector():
 
     # Methods:
     # --------
-    def update_ctrl_file(self, data_file_path):
+    def update_gc_settings(self, data_file_path):
         """
         Write over the currently loaded ctrl file to update settings.
 
-        Goes line by line through the control file defined by ctrl_file attr
-        and rewrites the line to set appropriate options. Ensures postrun cycle
-        & repeat, autoincrement, and save image, data, & results are all
-        turned on. Updates data file path to that provided. Sets postrun repeat
-        to sample_set_size.
+        Updates data file path to that provided. Sets postrun repeat
+        to sample_set_size. Goes line by line through the control file defined
+        by ctrl_file attr and rewrites the line to set appropriate options.
+        Ensures postrun cycle & repeat, autoincrement, and save image, data,
+        & results are all turned on.
 
         Parameters
         ----------
@@ -185,9 +186,9 @@ class GC_Connector():
                 print('Write Error: GC Not Connected')
                 break
         time.sleep(5)  # I think peaksimple is cranky when rushed
-        self.read_ctrl_file()
+        self.read_gc_settings()
 
-    def read_ctrl_file(self):
+    def read_gc_settings(self):
         """
         Read loaded control file and updates object with values from file.
 
@@ -213,6 +214,16 @@ class GC_Connector():
 
             if self.sample_rate < self.min_sample_rate:
                 self.sample_rate = self.min_sample_rate
+
+    def set_running(self):
+        """
+        Start data collection. Make sure correct GC settings are loaded first.
+
+        Wraps over peaksimple set running function. Will set channel 1 running
+        by default. This could be made flexible in the future if ever needed.
+        I think most SRI GC interactions are controlled by channel 1 though.
+        """
+        self.peaksimple.SetRunning(1, True)
 
     def is_running(self, max_tries=3):
         """
@@ -315,9 +326,9 @@ if __name__ == "__main__":
     gc1 = GC_Connector()
     data_path = 'C:\\Peak489Win10\\GCDATA\\20221117_CodeTest'
     gc1.sample_set_size = 2
-    gc1.update_ctrl_file(data_path)
+    gc1.update_gc_settings(data_path)
     gc1.peaksimple.IsConnected()
-    # gc1.peaksimple.SetRunning(1, True)
+    # gc1.set_running()
     # time.sleep(10)
     # for n in range(0, 31):
     #     print(time.ctime(), '---', gc1.peaksimple.IsRunning(1))

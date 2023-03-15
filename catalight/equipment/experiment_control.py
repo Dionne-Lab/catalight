@@ -848,7 +848,7 @@ class Experiment:
             t1 = time.time()
             while self._gc_control.is_running():
                 time.sleep(10)  # Don't update ctrl file while running
-            self._gc_control.update_ctrl_file(path)
+            self._gc_control.update_gc_settings(path)
             t2 = time.time()
             t_passed = round(t2 - t1)  # GC can take a while to respond
             for i in range(int(self.t_steady_state * 60 - t_passed)):
@@ -858,7 +858,7 @@ class Experiment:
             print('Starting Collection: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             print('Starting Temp = ', self._heater.read_temp(), ' C')
-            self._gc_control.peaksimple.SetRunning(1, True)
+            self._gc_control.set_running()
             # t_collect ends on last gc pull
             t_collect = self.sample_rate * (self.sample_set_size - 1) * 60
 
