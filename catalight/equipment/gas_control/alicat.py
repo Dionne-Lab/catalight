@@ -137,11 +137,11 @@ class Gas_System:
         gas_series = pd.Series(percents, gas_list)
         gas_series = gas_series.groupby(level=0).sum()  # sums duplicates
         gas_dict = gas_series.to_dict()
-        gas_dict = {x:y for x,y in gas_dict.items() if y != 0}
+        gas_dict = {x: y for x, y in gas_dict.items() if y != 0}
 
         # Uses create_mix method to write to gas slot 236,
         # first custom gas slot on MFC
-        if len(gas_dict)>1: # if more than 1 gas, creates mix
+        if len(gas_dict) > 1:  # if more than 1 gas, creates mix
             self.mfc_E.create_mix(mix_no=236, name='output',
                                   gases=gas_dict)
             self.mfc_E.set_gas(236)

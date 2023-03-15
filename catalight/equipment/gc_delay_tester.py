@@ -16,8 +16,8 @@ import os
 import time
 from datetime import date
 
-from catalight.equipment.alicat_MFC.gas_control import Gas_System
-from catalight.equipment.sri_gc.gc_control import GC_Connector
+from catalight.equipment.gas_control.alicat import Gas_System
+from catalight.equipment.gc_control.sri_gc import GC_Connector
 
 
 def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off,

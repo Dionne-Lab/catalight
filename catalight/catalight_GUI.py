@@ -18,10 +18,10 @@ import numpy as np
 import pandas as pd
 import psutil
 from alicat import FlowController
-from catalight.equipment.alicat_MFC.gas_control import Gas_System
-from catalight.equipment.diode_laser.diode_control import Diode_Laser
-from catalight.equipment.harrick_watlow.heater_control import Heater
-from catalight.equipment.sri_gc.gc_control import GC_Connector
+from catalight.equipment.gas_control.alicat import Gas_System
+from catalight.equipment.light_sources.diode_control import Diode_Laser
+from catalight.equipment.heating.watlow import Heater
+from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
 
 import matplotlib.pyplot as plt

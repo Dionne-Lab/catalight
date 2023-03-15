@@ -9,8 +9,8 @@ Created on Tue Feb 22 23:15:23 2022
 """
 import numpy as np
 import pandas as pd
-from catalight.equipment.diode_laser.diode_control import Diode_Laser
-from catalight.equipment.power_meter.power_meter_ctrl import NewportMeter
+from catalight.equipment.light_sources.diode_control import Diode_Laser
+from catalight.equipment.power_meter.newport import NewportMeter
 
 
 def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
