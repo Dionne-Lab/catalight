@@ -1,7 +1,7 @@
-catalight.equipment.harrick\_watlow.heater\_control
-===================================================
+catalight.equipment.heating.watlow
+==================================
 
-.. automodule:: catalight.equipment.harrick_watlow.heater_control
+.. automodule:: catalight.equipment.heating.watlow
    
    
    

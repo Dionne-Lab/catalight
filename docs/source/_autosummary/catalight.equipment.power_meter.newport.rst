@@ -1,7 +1,7 @@
-catalight.equipment.power\_meter.power\_meter\_ctrl
-===================================================
+catalight.equipment.power\_meter.newport
+========================================
 
-.. automodule:: catalight.equipment.power_meter.power_meter_ctrl
+.. automodule:: catalight.equipment.power_meter.newport
    
    
    

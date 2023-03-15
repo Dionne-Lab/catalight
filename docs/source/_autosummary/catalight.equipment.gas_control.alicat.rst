@@ -1,7 +1,7 @@
-catalight.equipment.alicat\_MFC.gas\_control
-============================================
+catalight.equipment.gas\_control.alicat
+=======================================
 
-.. automodule:: catalight.equipment.alicat_MFC.gas_control
+.. automodule:: catalight.equipment.gas_control.alicat
    
    
    

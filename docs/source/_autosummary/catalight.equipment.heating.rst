@@ -1,7 +1,7 @@
-catalight.equipment.diode\_laser
-================================
+catalight.equipment.heating
+===========================
 
-.. automodule:: catalight.equipment.diode_laser
+.. automodule:: catalight.equipment.heating
    
    
    
@@ -27,5 +27,5 @@ catalight.equipment.diode\_laser
    :template: custom-module-template.rst
    :recursive:
 
-   catalight.equipment.diode_laser.diode_control
+   catalight.equipment.heating.watlow
 

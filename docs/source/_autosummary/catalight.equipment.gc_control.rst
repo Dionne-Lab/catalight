@@ -1,7 +1,7 @@
-catalight.equipment.alicat\_MFC
+catalight.equipment.gc\_control
 ===============================
 
-.. automodule:: catalight.equipment.alicat_MFC
+.. automodule:: catalight.equipment.gc_control
    
    
    
@@ -27,6 +27,6 @@ catalight.equipment.alicat\_MFC
    :template: custom-module-template.rst
    :recursive:
 
-   catalight.equipment.alicat_MFC.connection_tester
-   catalight.equipment.alicat_MFC.gas_control
+   catalight.equipment.gc_control.peaksimple_control_demo
+   catalight.equipment.gc_control.sri_gc
 

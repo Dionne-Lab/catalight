@@ -1,7 +1,7 @@
-catalight.equipment.power\_meter
+catalight.equipment.gas\_control
 ================================
 
-.. automodule:: catalight.equipment.power_meter
+.. automodule:: catalight.equipment.gas_control
    
    
    
@@ -27,5 +27,5 @@ catalight.equipment.power\_meter
    :template: custom-module-template.rst
    :recursive:
 
-   catalight.equipment.power_meter.newport
+   catalight.equipment.gas_control.alicat
 

@@ -1,7 +1,7 @@
-﻿catalight.equipment.sri\_gc.gc\_control.GC\_Connector
+catalight.equipment.gc\_control.sri\_gc.GC\_Connector
 =====================================================
 
-.. currentmodule:: catalight.equipment.sri_gc.gc_control
+.. currentmodule:: catalight.equipment.gc_control.sri_gc
 
 .. autoclass:: GC_Connector
    :members:

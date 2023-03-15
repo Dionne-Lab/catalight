@@ -1,7 +1,7 @@
-catalight.equipment.sri\_gc.gc\_control
+catalight.equipment.gc\_control.sri\_gc
 =======================================
 
-.. automodule:: catalight.equipment.sri_gc.gc_control
+.. automodule:: catalight.equipment.gc_control.sri_gc
    
    
    

@@ -34,10 +34,10 @@ class Experiment:
         List of equipment objects. Calls :py:meth:`update_eqpt_list`,
         if provided.
         Order of list should be:
-        (:py:class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`,
-        :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`,
-        :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System`,
-        :class:`~catalight.equipment.harrick_watlow.heater_control.Heater`)
+        (:py:class:`~catalight.equipment.gc_control.sri_gc.GC_Connector`,
+        :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser`,
+        :class:`~catalight.equipment.gas_control.alicat.Gas_System`,
+        :class:`~catalight.equipment.heating.watlow.Heater`)
     """
 
     def __init__(self, eqpt_list=False):
@@ -719,10 +719,10 @@ class Experiment:
         Parameters
         ----------
         eqpt_list: list[object]
-            (:py:class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`,
-            :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`,
-            :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System`,
-            :class:`~catalight.equipment.harrick_watlow.heater_control.Heater`)
+            (:py:class:`~catalight.equipment.gc_control.sri_gc.GC_Connector`,
+            :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser`,
+            :class:`~catalight.equipment.gas_control.alicat.Gas_System`,
+            :class:`~catalight.equipment.heating.watlow.Heater`)
         """
         # eqpt_list needs to be tuple
         self._gc_control = eqpt_list[0]

@@ -1,7 +1,7 @@
-catalight.equipment.diode\_laser.diode\_control.Diode\_Laser
-============================================================
+catalight.equipment.light\_sources.diode\_control.Diode\_Laser
+==============================================================
 
-.. currentmodule:: catalight.equipment.diode_laser.diode_control
+.. currentmodule:: catalight.equipment.light_sources.diode_control
 
 .. autoclass:: Diode_Laser
    :members:

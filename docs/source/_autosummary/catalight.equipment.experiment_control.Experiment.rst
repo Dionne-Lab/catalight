@@ -1,4 +1,4 @@
-﻿catalight.equipment.experiment\_control.Experiment
+catalight.equipment.experiment\_control.Experiment
 ==================================================
 
 .. currentmodule:: catalight.equipment.experiment_control

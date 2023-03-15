@@ -1,7 +1,7 @@
-catalight.equipment.alicat\_MFC.gas\_control.Gas\_System
-========================================================
+catalight.equipment.gas\_control.alicat.Gas\_System
+===================================================
 
-.. currentmodule:: catalight.equipment.alicat_MFC.gas_control
+.. currentmodule:: catalight.equipment.gas_control.alicat
 
 .. autoclass:: Gas_System
    :members:
