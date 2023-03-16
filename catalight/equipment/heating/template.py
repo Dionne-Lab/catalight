@@ -1,8 +1,7 @@
 """
-Contains the Heater class which connect to Watlow heating system.
+Example for abstract heater class.
 
-Also contains convert_temp helper function used within class.
-
+Essentially, "self.controller" needs to be replaced throughout for non Watlow.
 Created on Tue Feb  8 14:06:48 2022.
 @author: Briley Bourgeois
 """
@@ -58,7 +57,11 @@ class Heater:
 
     def __init__(self):
         """Connect to watlow, print current state."""
+        # ---------------------------------------------------------------------
+        # # TODO: Update to device specific connection!
         self.controller = Watlow(port='COM5', address=1)
+        # ---------------------------------------------------------------------
+
         self.is_busy = False  #: Used to block access from other threads
         print('Heater Initializing...')
         print('Current temperature = ' + str(self.read_temp()) + ' C')
@@ -84,10 +87,17 @@ class Heater:
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
+
+        # ---------------------------------------------------------------------
+        # TODO: Update to device specific
         temp = self.controller.read()['data']
+        # ---------------------------------------------------------------------
+
         self.is_busy = False
+
         if temp_units.upper() != 'F':
             temp = convert_temp('F', temp_units, temp)
+
         return round(temp, 3)
 
     def read_setpoint(self, temp_units='C'):
@@ -108,10 +118,17 @@ class Heater:
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
+
+        # ---------------------------------------------------------------------
+        # TODO: Update to device specific
         setpoint = self.controller.readSetpoint()['data']
+        # ---------------------------------------------------------------------
+
         self.is_busy = False
+
         if temp_units.upper() != 'F':
             setpoint = convert_temp('F', temp_units, setpoint)
+
         return round(setpoint, 3)
 
     def shut_down(self):
@@ -119,7 +136,12 @@ class Heater:
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
+
+        # ---------------------------------------------------------------------
+        # TODO: Update to device specific command to set to 0
         self.controller.write(0)
+        # ---------------------------------------------------------------------
+
         self.is_busy = False
 
     def disconnect(self):
@@ -128,7 +150,12 @@ class Heater:
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
+
+        # ---------------------------------------------------------------------
+        # TODO: Update to device specific connection sever!
         self.controller.close()
+        # ---------------------------------------------------------------------
+
         self.is_busy = False
 
     def ramp(self, T2, T1=None, temp_units='C', record=False):
@@ -189,7 +216,12 @@ class Heater:
             while self.is_busy:
                 time.sleep(0)
             self.is_busy = True
+
+            # -----------------------------------------------------------------
+            # TODO: Update to device specific command!!
             self.controller.write(temp)  # write to controller
+            # -----------------------------------------------------------------
+
             self.is_busy = False
             time.sleep(60 / refresh_rate)  # wait
 
@@ -252,7 +284,4 @@ class Heater:
 
 if __name__ == "__main__":
     # Example Usage
-    heater = Heater()
-    heater.ramp(20)
-    print(heater.read_setpoint())
-    print(heater.read_temp())
+    pass
