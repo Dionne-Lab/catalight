@@ -100,7 +100,8 @@ class MainWindow(QMainWindow):
                                                     datacorr.signal,
                                                     pen=self.pen2,
                                                     name="corrected")
-        self.data_line_corr.clear()
+        #self.data_line_corr.clear()
+        self.graphWidget.removeItem(self.data_line_corr)
         self.graphWidget.setTitle('Run 0:', color="k", size="18pt")
 
     def set_graph_style(self):
@@ -127,9 +128,10 @@ class MainWindow(QMainWindow):
         """Update plot with current listWidget item, if present."""
         if not self.listWidget.currentItem():
             print('No Items')
-            self.data_line.clear()
-            self.data_line_corr.clear()
-            self.graphWidget.setTitle('')
+            self.graphWidget.clear() # CCC was thinking we could clear everything instead of individually clearing things?
+            #self.data_line.clear()
+            #self.data_line_corr.clear()
+            #self.graphWidget.setTitle('')
             return
 
         path = self.listWidget.currentItem().text()
@@ -158,10 +160,14 @@ class MainWindow(QMainWindow):
                                   data.signal[right_idx],
                                   'ro', label='right')
         if self.bc_box.isChecked():
+            if self.data_line_corr not in self.graphWidget.listDataItems() :
+                self.graphWidget.addItem(self.data_line_corr)
+
             self.data_line_corr.setData(datacorr.time, datacorr.signal,
                                         pen=self.pen2, name="corrected")
         else:
-            self.data_line_corr.clear()
+            #self.data_line_corr.clear()
+            self.graphWidget.removeItem(self.data_line_corr)
 
 
 if __name__ == "__main__":
