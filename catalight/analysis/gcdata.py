@@ -245,7 +245,7 @@ class GCData:
         Returns
         -------
         numpy.ndarray
-            counts for all peaks, rounded using np.around()
+            counts for all peaks, rounded to three decimal places using np.around()
         """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
@@ -253,7 +253,7 @@ class GCData:
                                  x=60 * self.time[self.lind[i]:self.rind[i]])
             if counts[i] == 0:
                 counts[i] = 1
-        return np.around(counts)
+        return np.around(counts,decimals=3)
 
     def get_concentrations(self, calDF):
         """
