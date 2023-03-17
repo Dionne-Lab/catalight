@@ -244,8 +244,8 @@ class GCData:
 
         Returns
         -------
-        numpy.int32
-            counts rounded using np.around()
+        numpy.ndarray
+            counts for all peaks, rounded using np.around()
         """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
