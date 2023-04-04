@@ -53,6 +53,7 @@ def list_matching_files(main_dirs, target, suffix):
                         & (target.lower() in filename.lower())):
                     filepath = os.path.join(dirpath, filename)
                     filepath_list.append(filepath)
+    # TODO sort filepath_list?
     return filepath_list
 
 
