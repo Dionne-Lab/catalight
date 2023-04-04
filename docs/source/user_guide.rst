@@ -3,23 +3,23 @@ How it works
 .. figure:: _static/images/code_overview.png
     :width: 800
 
-    A graphical representation of the basic experimental process. Equipment is initialized and passed to experiment objects. Experiments are defines, then run one by one. Data analysis can be performed after experiments are completed.
+    A graphical representation of the basic experimental process. Equipment is initialized and passed to experiment objects. Experiments are defined, then run one by one. Data analysis can be performed after experiments are completed.
 
-Before launching into any code or GUI programs, lets talk a bit about the philisophy behind catalight.
+Before launching into any code or GUI programs, lets talk a bit about the philosophy behind catalight.
 The heart of catalight is the :class:`~catalight.equipment.experiment_control.Experiment` class. An instance of the :class:`~catalight.equipment.experiment_control.Experiment` class can be thought of as a literal experiment you'd like to perform. These python objects, once fully initialized, contain all of the instructions to send to equipment and actuate a desired experimental procedure.
 
 .. admonition:: The Basic Process Outline
 
-    a. The user initializes the desired equipment.
-    b. That equipment is passed to each instance of :class:`~catalight.equipment.experiment_control.Experiment`, either on creation or after.
-    c. The user provides each instance of Experiment with the desired experimental parameters.
-    d. When ready, the user calls the :meth:`~catalight.equipment.experiment_control.Experiment.run_experiment()` method for each Experiment instance. We refer to multiple experiments as a "study"
+    1. The user initializes the desired equipment.
+    2. That equipment is passed to each instance of :class:`~catalight.equipment.experiment_control.Experiment`, either on creation of the experiment object or later.
+    3. The user provides each instance of :class:`~catalight.equipment.experiment_control.Experiment` with the desired experimental parameters.
+    4. When ready, the user calls the :meth:`~catalight.equipment.experiment_control.Experiment.run_experiment()` method for each Experiment instance. We refer to multiple experiments as a "study"
 
        * The experiment proceeds in a series of steps, looping through the independent variable values provided
        * The equipment is set to the appropriate condition, waits for steady state, then collects data
-       * Collected data is saved in a consisten heirarchy after each data collection step
+       * Collected data is saved in a consistent heirarchy after each data collection step
        * On completion, the equipment is set to a safe condition
-    e. If there are more Experiment objects in the study, the next one starts. Otherwise the program finishes and the user can run data analysis using the tools in the analysis subpackage.
+    5. If there are more :class:`~catalight.equipment.experiment_control.Experiment` objects in the study, the next one starts. Otherwise the program finishes and the user can run data analysis using the tools in the analysis subpackage.
 
 **Thats the majority of what you need to know!** The rest of this package is comprised of tools for interacting with the Experiment object and resulting data. The :ref:`usage section <gui>` describes how the user can create and modify experiment objects either using the GUI interface or through scripting. Both are equally valid. Scripting provides more flexibility and is easier to change when trying to get the project up and running on your own equipment. The GUI version can be easier to use provided you can configure it for your specific instrument. A major benefit of the GUI interface is the ability to control the equipment manually and in real-time. This is extremely helpful when refilling the reactor, for example, as you can control the gas flow conveniently.
 
@@ -82,7 +82,7 @@ Usage
 
 Scripting
 ---------
-The entire packages was initially designed with scripted interfacing in mind. All available tools can be accessed in this way, and the interested user will likely find scripted control easier to integrate with new hardware than changing the GUI's source code to accomadate new equipment.
+The entire package was initially designed with scripted interfacing in mind. All available tools can be accessed in this way, and the interested user will likely find scripted control easier to integrate with new hardware than changing the GUI's source code to accommodate new equipment.
 
 Here, we show a few examples of what scripted interaction looks like. In this first section, we define some helpful functions to be used later in the main script.
 
@@ -114,7 +114,7 @@ Here, we show a few examples of what scripted interaction looks like. In this fi
                 shut_down(eqpt_list)
                 raise
 
-Next, we need to call these functions, create experiments objects, and define them accordingly. Acceptable experiments types are defined in the current version of :attr:`Experiment.expt_list <catalight.equipment.experiment_control.Experiment.expt_list>`:
+Next, we need to call these functions, create experiment objects, and define them accordingly. Acceptable experiment types are defined in the current version of :attr:`Experiment.expt_list <catalight.equipment.experiment_control.Experiment.expt_list>`:
 
 +------------------+----------------------+---------------+--------+
 | Expt Name        | Independent Variable | Active Status | Units  |
@@ -127,12 +127,12 @@ Next, we need to call these functions, create experiments objects, and define th
 +------------------+----------------------+---------------+--------+
 | 'flow_sweep'     | 'tot_flow'           | False         | 'sccm' |
 +------------------+----------------------+---------------+--------+
-| 'calibration'    | 'gas_comp'           | False         | 'ppm'  |
+| 'calibration'    | 'gas_comp'           | False         | 'frac' |
 +------------------+----------------------+---------------+--------+
 | 'stability_test' |  'temp'              | False         | 'min'  |
 +------------------+----------------------+---------------+--------+
 
-.. note:: Active status here is used during internal operations to denote which experiment is currently being run.
+.. note:: "Active Status" here is used during internal operations to denote which experiment is currently being run.
 
 .. code-block:: python
 
@@ -165,7 +165,7 @@ Next, we need to call these functions, create experiments objects, and define th
         P_c2h2 = 0.01*np.ones(len(P_h2))
         # Ar serves as the fill gas
         P_Ar = 1-P_c2h2-P_h2
-        # Concatonenate arrays, convert to list of list
+        # Concatonenate arrays, convert to list of lists
         expt2.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
         expt2.tot_flow = [50]
         expt2.sample_name = sample_name
@@ -176,17 +176,17 @@ Next, we need to call these functions, create experiments objects, and define th
         run_study(expt_list, eqpt_list)
         shut_down(eqpt_list)
 
-Thats it! Define as many experiments as you'd like, supplying a list or list of list according to the independent variable defined by the eqpt_list attribute.
+That's it! Define as many experiments as you'd like, supplying a list or list of lists according to the independent variable defined by the eqpt_list attribute.
 
 .. _gui:
 
 Graphical user interface
 ------------------------
-A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editting can be avoided by simply redefining what equipment is imported to the GUI module. See :doc:`the development guide </developer_guide>` for more details on making your changes to the codebase.
+A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editing can be avoided by simply redefining what equipment is imported to the GUI module. See :doc:`the development guide </developer_guide>` for more details on making your changes to the codebase.
 
-.. warning:: If running the gui with Spyder change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.
+.. warning:: If running the GUI with Spyder, change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.
 
-There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (:mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "run\_" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
+There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (e.g. :mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "run\_" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
 
 .. figure:: _static/images/gui_live_view.png
     :width: 800
@@ -194,23 +194,23 @@ There are two main types of GUIs present within catalight. Files containing the 
     The GUI always opens in the live view showing status indicators for which equipment connected succesfully as well as current readouts of the equipment.
 
 .. warning::
-    The current version does not actively check for hardware changes. If and instrument is unplugged, the code won't know until you press the reconnect button or an error is thrown
+    The current version does not actively check for hardware changes. If an instrument is unplugged, the code won't know until you press the reconnect button or an error is thrown.
 
 .. figure:: _static/images/gui_manual_control.png
     :width: 800
 
-    The manual control tab can be used to modulate the connected hardware in real time. Enter the desired values and hit the "apply" button to set those conditions. The equipment will be controlled in a seperate thread, and access to this tab will be blocked while the equipiment is going to the desired state. The "reset" button returns the edittable values to their previous state.
+    The manual control tab can be used to modulate the connected hardware in real time. Enter the desired values and hit the "apply" button to set those conditions. The equipment will be controlled in a seperate thread, and access to this tab will be blocked while the equipiment is going to the desired state. The "reset" button returns the editable values to their previous state.
 
 .. tip::
-    You can shut down equipment control of the study by pressing the emergency stop button in the bottom right
+    You can shut down equipment control during the study by pressing the emergency stop button in the bottom right. This should cancel the current command sent to each piece of equipment, and call that object shut down process.
 
 .. figure:: _static/images/gui_study_overview.png
     :width: 800
 
-    The study overview tab is the starting point for developing a study. Append new experiments to your study by clicking the "Add Experiment" button. These can always be deleted with the "Delete" button. Enter study wide values such as the sample name, weight, control file, and calibration file (for running calibrations). To edit an experiment, click on it in the list and edit the selected experiment on the experiment tab. When all experiments have been updated, click the "Start Study" button to run all experiments in order.
+    The study overview tab is the starting point for developing a study. Append new experiments to your study by clicking the "Add Experiment" button. These can always be deleted with the "Delete" button. Enter study-wide values such as the sample name, weight, control file, and calibration file (for running calibrations). To edit an experiment, click on it in the list and edit the selected experiment on the experiment tab. When all experiments have been updated, click the "Start Study" button to run all experiments in order.
 
 .. warning::
-    The minimum for GC sample time is only set when the control file is loaded. It it good practice to load your desired control file at the beginning.
+    The minimum for GC sample time is only set when the control file is loaded. It is good practice to load your desired control file at the beginning.
 
 .. figure:: _static/images/gui_experiment_design.png
     :width: 800
@@ -218,13 +218,13 @@ There are two main types of GUIs present within catalight. Files containing the 
     The experiment tab allows the user to edit the experimental parameters desired. When appropriate values are entered, a preview of the experiment will be plotted on the right hand side of the screen. This preview will also remain on the study tab to allow you to easily scan between experiments. Save previews using the tool bar on the bottom of the figure window.
 
 .. tip::
-    Limits on edittable widgets can be set in the :meth:`~catalight.catalight_GUI.MainWindow.set_form_limits` method of the catalight GUI MainWindow.
+    Limits on editable widgets can be set in the :meth:`~catalight.catalight_GUI.MainWindow.set_form_limits` method of the catalight GUI MainWindow.
 
 .. _equipment:
 
 Equipment specific guides
 =========================
-The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments in the first place. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature "Watlow.write()". We further create the :class:`~catalight.equipment.heating.watlow.Heater` to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don't go over a user defined maximum temperature, ramping the setpoint instead of heating immediatly, and others convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().
+The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. As an example, we connect to the Watlow heater using the Watlow class from pywatlow. This class has a function to set temperature "Watlow.write()". We further create the :class:`~catalight.equipment.heating.watlow.Heater` to wrap over this and use Heater.ramp() to set temperatures instead which has advantages of checking we don't go over a user defined maximum temperature, ramping the setpoint instead of heating immediately, and other convenience options. Inside of Heater.ramp(), we eventually still use Watlow.write()! To continue with the analogy, this section is then meant to describe Watlow.write() and the examples section will describe Heater.ramp().
 
 .. figure:: _static/images/equipment_connections.svg
     :width: 800
@@ -232,7 +232,7 @@ The purpose of this section is to demonstrate the connection process for specifi
     An overview of the connections used in the D-Lab system setup. Text in green indicates an installable python package, blue represents external programs, and black is hardware.
 
 .. Warning::
-    The following sections describing programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).
+    The following sections describe programatically interfacing with potentially dangerous equipment. This needs to be done carefully! Start with small tests of your equipment with some manual safety precautions in place (i.e.block laser beams, know where physical power switches are for heaters, know where the off valves for gas supply lines are).
 
 **Guides:**
 
@@ -242,7 +242,7 @@ The purpose of this section is to demonstrate the connection process for specifi
 
 Data analysis
 =============
-A major benefit of using catalight for experiment automation is that data saving can be standardized with ease. This make data processing much easier, and we've developped a subpacke to catalight called :mod:`~catalight.analysis` to automate much of the data processing work flow. In the :doc:`data analysis<data_analysis>` page, we cover the different aspects of the analysis subpackage.
+A major benefit of using catalight for experiment automation is that data saving can be standardized with ease. This make data processing much easier, and we've developed a subpackage to catalight called :mod:`~catalight.analysis` to automate much of the data processing work flow. In the :doc:`data analysis<data_analysis>` page, we cover the different aspects of the analysis subpackage.
 
 .. toctree::
     :maxdepth: 2

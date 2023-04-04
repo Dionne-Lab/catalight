@@ -1,4 +1,4 @@
-catalight.equipment.heating
+﻿catalight.equipment.heating
 ===========================
 
 .. automodule:: catalight.equipment.heating
@@ -27,5 +27,6 @@ catalight.equipment.heating
    :template: custom-module-template.rst
    :recursive:
 
+   catalight.equipment.heating.template
    catalight.equipment.heating.watlow
 

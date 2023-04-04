@@ -1,4 +1,4 @@
-catalight.equipment.light\_sources
+﻿catalight.equipment.light\_sources
 ==================================
 
 .. automodule:: catalight.equipment.light_sources
@@ -28,4 +28,5 @@ catalight.equipment.light\_sources
    :recursive:
 
    catalight.equipment.light_sources.diode_control
+   catalight.equipment.light_sources.template
 

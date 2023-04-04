@@ -1,4 +1,4 @@
-catalight.equipment.gc\_control
+﻿catalight.equipment.gc\_control
 ===============================
 
 .. automodule:: catalight.equipment.gc_control
@@ -29,4 +29,5 @@ catalight.equipment.gc\_control
 
    catalight.equipment.gc_control.peaksimple_control_demo
    catalight.equipment.gc_control.sri_gc
+   catalight.equipment.gc_control.template
 

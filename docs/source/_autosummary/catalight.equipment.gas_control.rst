@@ -1,4 +1,4 @@
-catalight.equipment.gas\_control
+﻿catalight.equipment.gas\_control
 ================================
 
 .. automodule:: catalight.equipment.gas_control
@@ -28,4 +28,5 @@ catalight.equipment.gas\_control
    :recursive:
 
    catalight.equipment.gas_control.alicat
+   catalight.equipment.gas_control.template
 
