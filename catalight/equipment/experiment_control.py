@@ -34,10 +34,10 @@ class Experiment:
         List of equipment objects. Calls :py:meth:`update_eqpt_list`,
         if provided.
         Order of list should be:
-        (:py:class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`,
-        :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`,
-        :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System`,
-        :class:`~catalight.equipment.harrick_watlow.heater_control.Heater`)
+        (:py:class:`~catalight.equipment.gc_control.sri_gc.GC_Connector`,
+        :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser`,
+        :class:`~catalight.equipment.gas_control.alicat.Gas_System`,
+        :class:`~catalight.equipment.heating.watlow.Heater`)
     """
 
     def __init__(self, eqpt_list=False):
@@ -719,10 +719,10 @@ class Experiment:
         Parameters
         ----------
         eqpt_list: list[object]
-            (:py:class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`,
-            :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`,
-            :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System`,
-            :class:`~catalight.equipment.harrick_watlow.heater_control.Heater`)
+            (:py:class:`~catalight.equipment.gc_control.sri_gc.GC_Connector`,
+            :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser`,
+            :class:`~catalight.equipment.gas_control.alicat.Gas_System`,
+            :class:`~catalight.equipment.heating.watlow.Heater`)
         """
         # eqpt_list needs to be tuple
         self._gc_control = eqpt_list[0]
@@ -848,7 +848,7 @@ class Experiment:
             t1 = time.time()
             while self._gc_control.is_running():
                 time.sleep(10)  # Don't update ctrl file while running
-            self._gc_control.update_ctrl_file(path)
+            self._gc_control.update_gc_settings(path)
             t2 = time.time()
             t_passed = round(t2 - t1)  # GC can take a while to respond
             for i in range(int(self.t_steady_state * 60 - t_passed)):
@@ -858,7 +858,7 @@ class Experiment:
             print('Starting Collection: '
                   + time.strftime("%H:%M:%S", time.localtime()))
             print('Starting Temp = ', self._heater.read_temp(), ' C')
-            self._gc_control.peaksimple.SetRunning(1, True)
+            self._gc_control.set_running()
             # t_collect ends on last gc pull
             t_collect = self.sample_rate * (self.sample_set_size - 1) * 60
 

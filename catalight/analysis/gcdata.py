@@ -150,7 +150,7 @@ class GCData:
         numpy.ndarray
             All peak locations (as integer indices NOT times)
         """
-        apex_ind, _ = scisig.find_peaks(self.signal, prominence=4)
+        apex_ind, _ = scisig.find_peaks(self.signal, prominence=0.2)
         return apex_ind
 
     def integration_inds(self):
@@ -186,7 +186,7 @@ class GCData:
         return lind.astype(int), rind.astype(int)
 
     @staticmethod
-    def _half_index_search(dat, tol=0.5):
+    def _half_index_search(dat, tol=0.1):
         """
         Support function for integration_inds to search for integration bounds.
 
@@ -244,8 +244,8 @@ class GCData:
 
         Returns
         -------
-        numpy.int32
-            counts rounded using np.around()
+        numpy.ndarray
+            counts for all peaks, rounded to three decimal places using np.around()
         """
         counts = np.zeros(self.numpeaks)
         for i in range(0, self.numpeaks):
@@ -253,7 +253,7 @@ class GCData:
                                  x=60 * self.time[self.lind[i]:self.rind[i]])
             if counts[i] == 0:
                 counts[i] = 1
-        return np.around(counts)
+        return np.around(counts,decimals=3)
 
     def get_concentrations(self, calDF):
         """
@@ -278,7 +278,7 @@ class GCData:
         """
         # TODO Unknown peaks could be added
         # to calibration dataframe for reference
-        self.integration_inds()
+        #self.integration_inds()
         # Creates empty series where index are ChemIDs from Cal file
         conc = pd.Series(0.0, index=['timestamp', *calDF.index.to_list()])
         conc['timestamp'] = self.timestamp
@@ -327,7 +327,7 @@ class GCData:
         plt.gca().tick_params(which='minor', width=1.5, length=3)
 
         plt.figure
-        self.integration_inds()
+        #self.integration_inds()
         [left_idx, right_idx] = (np.rint(self.lind).astype('int'),
                                  np.rint(self.rind).astype('int'))
         # Plot signal

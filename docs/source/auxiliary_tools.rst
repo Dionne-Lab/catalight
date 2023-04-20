@@ -1,9 +1,9 @@
 Laser calibration
 -----------------
 .. warning::
-    This module will change in nature in future versions. Currently it is setup to perform calibrations only on a :class:`~catalight.equipment.power_meter.power_meter_ctrl.NewportMeter` and :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser`, but these features will be generalized in the future to support generic power meters and lasers.
+    This module will change in nature in future versions. Currently it is setup to perform calibrations only on a :class:`~catalight.equipment.power_meter.newport.NewportMeter` and :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser`, but these features will be generalized in the future to support generic power meters and lasers.
 
-The :mod:`catalight.equipment.run_diode_calibration` module is an extremely useful tool for running calibrations on your laser system. This module imports a :class:`~catalight.equipment.power_meter.power_meter_ctrl.NewportMeter` and :class:`~catalight.equipment.diode_laser.diode_control.Diode_Laser` to test the power transmission of your setup. You must make sure you have the proper hardware configuration before getting started. Your laser and power meter should be connected and communicating with the computer. You should place the power meter sensor in the laser beam path, usually in the same location that your sample would typically be placed. Make sure the beam is properly isolated and proper laser safety is being followed. When the :func:`~catalight.equipment.run_diode_calibration.main` function is called with the appropriate parameters, the system will sweep through laser current settings (range defined by ``current_range`` parameter), measure the laser power until the 20 most recent sample fall within the ``tolerance`` parameter, then perform a linear fit to the resulting current vs power curve. The resulting fit parameters are saved in the diode_laser directory next to the :mod:`~catalight.equipment.diode_laser.diode_control` file.
+The :mod:`catalight.equipment.run_diode_calibration` module is an extremely useful tool for running calibrations on your laser system. This module imports a :class:`~catalight.equipment.power_meter.newport.NewportMeter` and :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser` to test the power transmission of your setup. You must make sure you have the proper hardware configuration before getting started. Your laser and power meter should be connected and communicating with the computer. You should place the power meter sensor in the laser beam path, usually in the same location that your sample would typically be placed. Make sure the beam is properly isolated and proper laser safety is being followed. When the :func:`~catalight.equipment.run_diode_calibration.main` function is called with the appropriate parameters, the system will sweep through laser current settings (range defined by ``current_range`` parameter), measure the laser power until the 20 most recent sample fall within the ``tolerance`` parameter, then perform a linear fit to the resulting current vs power curve. The resulting fit parameters are saved in the diode_laser directory next to the :mod:`~catalight.equipment.light_sources.diode_control` file.
 
 .. danger::
     This module will automatically sweep the laser power, potentially through very high power settings. Take appropriate safety precautions.
@@ -17,7 +17,7 @@ The :mod:`catalight.equipment.run_diode_calibration` module is an extremely usef
 
 GC delay measurement
 --------------------
-The :mod:`catalight.equipment.gc_delay_tester` module allows the user to check the time it takes to reach steady state gas flow to the GC. Gas flow is initiated by the :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` and chromatograms produced by the  :class:`~catalight.equipment.sri_gc.gc_control.GC_Connector`
+The :mod:`catalight.equipment.gc_delay_tester` module allows the user to check the time it takes to reach steady state gas flow to the GC. Gas flow is initiated by the :class:`~catalight.equipment.gas_control.alicat.Gas_System` and chromatograms produced by the  :class:`~catalight.equipment.gc_control.sri_gc.GC_Connector`
 
 .. code-block::
 
@@ -42,11 +42,11 @@ The :mod:`catalight.equipment.gc_delay_tester` module allows the user to check t
 
 Pressure drop measurement
 -------------------------
-The :meth:`~catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure` method within the :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` class allows the user to test the pressure drop across the reactor using the builtin pressure sensors of the MFC. A single MFC is used for both flowing inert gas measuring the pressure. The user supplies a list of total flow rates to sweep through and the system measures the pressure at each point after waiting 1 minute. Repeat measurements are made every minute at each setpoint based on the number provided to the ``num_samples`` ``kwarg``.
+The :meth:`~catalight.equipment.gas_control.alicat.Gas_System.test_pressure` method within the :class:`~catalight.equipment.gas_control.alicat.Gas_System` class allows the user to test the pressure drop across the reactor using the builtin pressure sensors of the MFC. A single MFC is used for both flowing inert gas measuring the pressure. The user supplies a list of total flow rates to sweep through and the system measures the pressure at each point after waiting 1 minute. Repeat measurements are made every minute at each setpoint based on the number provided to the ``num_samples`` ``kwarg``.
 
 .. code-block::
 
-    from catalight.equipment.alicat_MFC.gas_control import Gas_System
+    from catalight.equipment.gas_control.alicat import Gas_System
 
     gas_controller = Gas_System()
     # MFC used for testing is last mfc w/ gas set to either Ar or N2
@@ -61,11 +61,11 @@ The :meth:`~catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure`
 
 .. figure:: _static/images/pressure_drop_vs_flow.svg
 
-    The data from multiple samples collected using :meth:`~catalight.equipment.alicat_MFC.gas_control.Gas_System.test_pressure` and plotted as a pressure vs flow rate.
+    The data from multiple samples collected using :meth:`~catalight.equipment.gas_control.alicat.Gas_System.test_pressure` and plotted as a pressure vs flow rate.
 
 MFC port connection tester
 --------------------------
-:mod:`~catalight.equipment.alicat_MFC.connection_tester` is a command line tool that sweeps through every COM port on a PC and every letter of the alphabet searching for alicat MFC connections. If you don't know which ports your MFCs are connected to, this script will find those connection and print a summary at the end of the search. The script takes several minutes to complete, but only needs to be run once. The results can then be used to change the address parameters of the :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` init method which defines the systems MFC locations.
+:mod:`~catalight.equipment.alicat_MFC.connection_tester` is a command line tool that sweeps through every COM port on a PC and every letter of the alphabet searching for alicat MFC connections. If you don't know which ports your MFCs are connected to, this script will find those connection and print a summary at the end of the search. The script takes several minutes to complete, but only needs to be run once. The results can then be used to change the address parameters of the :class:`~catalight.equipment.gas_control.alicat.Gas_System` init method which defines the systems MFC locations.
 
 .. code-block:: text
     :caption: Example output of :mod:`~catalight.equipment.alicat_MFC.connection_tester`
@@ -85,10 +85,10 @@ MFC port connection tester
 
 Heater performance measurements
 -------------------------------
-The :class:`~catalight.equipment.harrick_watlow.heater_control.Heater` class has a :meth:`~catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance` method which applies various heating rates to the reactor while constantly measuring the temperature reading of the system. A csv and plot.svg file are saved for each heat rate tested. The output data is a DataFrame with columns: [time, set point, temperature]. Data is logged at 3 second intervals.
+The :class:`~catalight.equipment.heating.watlow.Heater` class has a :meth:`~catalight.equipment.heating.watlow.Heater.test_heater_performance` method which applies various heating rates to the reactor while constantly measuring the temperature reading of the system. A csv and plot.svg file are saved for each heat rate tested. The output data is a DataFrame with columns: [time, set point, temperature]. Data is logged at 3 second intervals.
 
 .. note::
-    :meth:`~catalight.equipment.harrick_watlow.heater_control.Heater.test_heater_performance` utilizes :meth:`~catalight.equipment.harrick_watlow.heater_control.Heater.ramp` with the ``record`` parameter set to ``True``.
+    :meth:`~catalight.equipment.heating.watlow.Heater.test_heater_performance` utilizes :meth:`~catalight.equipment.heating.watlow.Heater.ramp` with the ``record`` parameter set to ``True``.
 
 .. code-block::
     :caption: Example usage of the test_heater_performance method:

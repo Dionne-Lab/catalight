@@ -92,7 +92,6 @@ class MainWindow(QMainWindow):
         path = self.listWidget.item(0).text()
         data = GCData(path, basecorrect=False)
         datacorr = GCData(path, basecorrect=True)
-
         # Plot pulled data
         self.data_line = self.graphWidget.plot(data.time, data.signal,
                                                pen=self.pen1, name="raw")
@@ -100,7 +99,13 @@ class MainWindow(QMainWindow):
                                                     datacorr.signal,
                                                     pen=self.pen2,
                                                     name="corrected")
-        self.data_line_corr.clear()
+        self.data_line_left = self.graphWidget.plot([0],[0],pen=None, symbol='o', name="left indices")
+        self.data_line_right = self.graphWidget.plot([0],[0],pen=None, symbol='o', name="right indices")
+        self.data_line_apex = self.graphWidget.plot([0],[0],pen=None, symbol='o', name="apex indices")
+        self.graphWidget.removeItem(self.data_line_corr)
+        self.graphWidget.removeItem(self.data_line_left)
+        self.graphWidget.removeItem(self.data_line_right)
+        self.graphWidget.removeItem(self.data_line_apex)
         self.graphWidget.setTitle('Run 0:', color="k", size="18pt")
 
     def set_graph_style(self):
@@ -127,9 +132,7 @@ class MainWindow(QMainWindow):
         """Update plot with current listWidget item, if present."""
         if not self.listWidget.currentItem():
             print('No Items')
-            self.data_line.clear()
-            self.data_line_corr.clear()
-            self.graphWidget.setTitle('')
+            self.graphWidget.clear()
             return
 
         path = self.listWidget.currentItem().text()
@@ -145,23 +148,42 @@ class MainWindow(QMainWindow):
         self.data_line.setData(data.time, data.signal,
                                pen=self.pen1, name="raw")
         if self.int_box.isChecked():
-            data.integration_inds()
-            [left_idx, right_idx] = (np.rint(data.lind).astype('int'),
-                                     np.rint(data.rind).astype('int'))
-            self.graphWidget.plot(data.time[data.apex_ind],
-                                  data.signal[data.apex_ind],
-                                  'bo', label='apex')
-            self.graphWidget.plot(data.time[left_idx],
-                                  data.signal[left_idx],
-                                  'go', label='left')
-            self.graphWidget.plot(data.time[right_idx],
-                                  data.signal[right_idx],
-                                  'ro', label='right')
+            if self.bc_box.isChecked():
+                data_ind = datacorr
+            else:
+                data_ind = data
+            if self.data_line_left not in self.graphWidget.listDataItems():
+                self.graphWidget.addItem(self.data_line_left)
+                self.graphWidget.addItem(self.data_line_right)
+                self.graphWidget.addItem(self.data_line_apex)
+
+            [left_idx, right_idx] = (np.rint(data_ind.lind).astype('int'), np.rint(data_ind.rind).astype('int'))
+            apex_idx = data.apex_ind
+            self.data_line_left.setData(data_ind.time[left_idx], data_ind.signal[left_idx],
+                                        pen=None,symbolBrush=(216,27,96),
+                                        symbol='o',symbolSize = 6,
+                                        name="left indices")
+            self.data_line_right.setData(data_ind.time[right_idx], data_ind.signal[right_idx],
+                                        pen=None,symbolBrush=(42,164,56),
+                                        symbol='o',symbolSize = 6)
+            self.data_line_apex.setData(data_ind.time[apex_idx], data_ind.signal[apex_idx],
+                                        pen=None,symbolBrush=(76,206,241),
+                                        symbol='o',symbolSize = 6)
+
+        else:
+            self.graphWidget.removeItem(self.data_line_left)
+            self.graphWidget.removeItem(self.data_line_right)
+            self.graphWidget.removeItem(self.data_line_apex)
+
         if self.bc_box.isChecked():
+            if self.data_line_corr not in self.graphWidget.listDataItems() :
+                self.graphWidget.addItem(self.data_line_corr)
+
             self.data_line_corr.setData(datacorr.time, datacorr.signal,
                                         pen=self.pen2, name="corrected")
         else:
-            self.data_line_corr.clear()
+            #self.data_line_corr.clear()
+            self.graphWidget.removeItem(self.data_line_corr)
 
 
 if __name__ == "__main__":

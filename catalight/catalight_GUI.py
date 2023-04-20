@@ -18,10 +18,10 @@ import numpy as np
 import pandas as pd
 import psutil
 from alicat import FlowController
-from catalight.equipment.alicat_MFC.gas_control import Gas_System
-from catalight.equipment.diode_laser.diode_control import Diode_Laser
-from catalight.equipment.harrick_watlow.heater_control import Heater
-from catalight.equipment.sri_gc.gc_control import GC_Connector
+from catalight.equipment.gas_control.alicat import Gas_System
+from catalight.equipment.light_sources.diode_control import Diode_Laser
+from catalight.equipment.heating.watlow import Heater
+from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
 
 import matplotlib.pyplot as plt
@@ -167,7 +167,7 @@ class MainWindow(QMainWindow):
                 attr = attribute_list[key]
                 if isinstance(attr, FlowController):
                     self.gas_controller.set_calibration_gas(attr, calDF,
-                                                             fill_gas='Ar')
+                                                            fill_gas='Ar')
 
             self.setGasAType.insertItem(0, 'CalGas')
             self.setGasBType.insertItem(0, 'CalGas')
@@ -622,7 +622,7 @@ class MainWindow(QMainWindow):
                 if (stop > start) and (step > 0):
                     ind_var = np.arange(start, stop, step)
                 else:
-                    return(False)
+                    return False
 
                 ind_var = ind_var / 100  # convert from % to frac
                 comp_list[ind_var_row - 1] = ind_var.tolist()
@@ -973,6 +973,7 @@ class MainWindow(QMainWindow):
         # self.threadpool.disconnect()
         self.shut_down()
 
+
 class EmittingStream():
     """
     Capture console print statements and broadcast within the GUI.
@@ -1003,9 +1004,11 @@ class EmittingStream():
         """Force print to terminal without buffering"""
         self.terminal.flush()
 
+
 class WorkerSignal(QObject):
     """Provide signals for interacting w/ worker threads."""
     finished = pyqtSignal()
+
 
 class Worker(QRunnable):
     """

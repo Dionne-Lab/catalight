@@ -3,7 +3,7 @@ The main toolboxes
 The :mod:`catalight.analysis` sub-package contains a number of helpful tools to assist with data analysis. There are 4 types of modules found within the sub-package:
 
 * **Toolboxes ---**
-  Compiled functions grouped by function to help with common tasks
+  Compiled functions grouped by purpose to help with common tasks
 
 * **Data classes ---**
   Modules containing classes to act on specific data types
@@ -21,22 +21,22 @@ We will discuss the contents of each type of files within this section, and addi
 
 analysis.plotting
 ^^^^^^^^^^^^^^^^^
-The :mod:`~catalight.analysis.plotting` module groups functions used for plotting a variety of data types and formats. The :func:`~catalight.analysis.plotting.set_plot_style` function controls the appearance of all output functions, and adjust some plot visuals automatically based on the plot dimensions requested.
+The :mod:`~catalight.analysis.plotting` module groups functions used for plotting a variety of data types and formats. The :func:`~catalight.analysis.plotting.set_plot_style` function controls the appearance of all output functions, and adjusts some plot visuals automatically based on the plot dimensions requested.
 
-The most standard function in the module is :func:`~catalight.analysis.plotting.plot_expt_summary` which is usually the first plotting function called after running an experiment in conjunction with the :func:`~catalight.analysis.tools.run_analysis` functions from the :mod:`~catalight.analysis.tools` module. The :func:`~catalight.analysis.plotting.plot_expt_summary` functions calls 3 separate plotting functions, :func:`~catalight.analysis.plotting.plot_run_num`, :func:`~catalight.analysis.plotting.plot_ppm`, :func:`~catalight.analysis.plotting.plot_X_and_S` which we group together because they are often called back to back. Lets step through the output of each of these to better understand how normal analysis is done.
+The most standard function in the module is :func:`~catalight.analysis.plotting.plot_expt_summary` which is usually the first plotting function called (in conjunction with the :func:`~catalight.analysis.tools.run_analysis` functions from the :mod:`~catalight.analysis.tools` module) after running an experiment. The :func:`~catalight.analysis.plotting.plot_expt_summary` functions calls 3 separate plotting functions, :func:`~catalight.analysis.plotting.plot_run_num`, :func:`~catalight.analysis.plotting.plot_ppm`, :func:`~catalight.analysis.plotting.plot_X_and_S` which we group together because they are often called back to back. Lets step through the output of each of these to better understand how normal analysis is done.
 
 .. figure:: _static/images/plotting_run_num_plot.svg
     :width: 800
 
-    :func:`~catalight.analysis.plotting.plot_run_num` produces the GC counts in ppm as a function of time based on the provided calibration file. This is the output of the reactor as seen by the GC.
+    :func:`~catalight.analysis.plotting.plot_run_num` produces the GC counts in ppm as a function of time based on the provided :ref:`calibration file <calibration>`. This is the output of the reactor as seen by the GC.
 
 .. figure:: _static/images/plotting_avg_conc_plot.svg
     :width: 800
 
-    :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In red, it also plots the mole balance based on the element the user provides to the function. The regular expressions (re) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
+    :func:`~catalight.analysis.plotting.plot_ppm` plots the average concentration for each experimental step. In green, it also plots the mole balance based on the element the user provides to the function. The regular expressions (:mod:`re`) package is used to parse chemical names for the total number of atoms matching the requested mole balance element.
 
 .. note::
-    The X tick labels here contain units. This is done on purpose to notify the user that these values are strings! The values are kept as strings universally to handle the more complex output of composition sweeps.
+    The X tick labels will sometimes contain units to indicate to the user that the values are strings instead of floats. This should only be the case for composition sweep experiments in which the "true" independent variable (e.g. reactant ratio vs reactants pressure) is hard guess automatically.
 
 .. figure:: _static/images/plotting_Conv_Sel_plot.svg
     :width: 800
@@ -63,13 +63,13 @@ Many users will want to customize plot style from the default styles printed by 
 
 analysis.user_inputs
 ^^^^^^^^^^^^^^^^^^^^
-Where the :mod:`~catalight.analysis.plotting` toolbox provides many experiment plotting options, the :mod:`~catalight.analysis.user_inputs` toolbox provides tools for requesting plot options from the user. This toolbox is particularly helpful to super users that would like to develop simple GUIs to aid less experienced team members with data analysis tasks.
+Where the :mod:`~catalight.analysis.plotting` toolbox provides many features for creating plot of experimental data through code, the :mod:`~catalight.analysis.user_inputs` toolbox provides tools for requesting plotting instructions from the user. This toolbox is particularly helpful to super users that would like to develop simple GUIs to aid less experienced team members with data analysis tasks. The GUIs in the :mod:`~catalight.analysis` subpackage use :mod:`~catalight.analysis.user_inputs` to request plotting instructions and :mod:`~catalight.analysis.plotting` to generate the plots.
 
 Selecting data
 """"""""""""""
 The :class:`~catalight.analysis.user_inputs.DirectorySelector` and :class:`~catalight.analysis.user_inputs.DataExtractor` classes were developed to aid with the selection of data to be plotted/analyzed. :class:`~catalight.analysis.user_inputs.DirectorySelector` is the more simple of the two, and is just a wrapper over a normal :class:`~PyQt5.QtWidget.QFileDialog`. In this case the file dialog is changed from the native dialog to the QT version so that multi directory selection can be enabled. The advantage of this is the user can select multiple folder to analyze (the disadvantage is the dialog looks worse).
 
-To use the user's selection in other code, call the :meth:`~catalight.analysis.user_inputs.DirectorySelector.get_output()` method. The following example demonstrates how to open the UI, allow the user to make a selection, and return the selection as a list called ``"expt_dirs"``
+To use the user's selection in other code, call the :meth:`~catalight.analysis.user_inputs.DirectorySelector.get_output()` method. The following example demonstrates how to open the GUI, allow the user to make a selection, and return the selection as a list called ``"expt_dirs"``. ``"expt_dirs"`` can then be used in additional code to run analysis over the directories the user is interested in. Here we just print the selection.
 
 .. code::
 
@@ -78,7 +78,12 @@ To use the user's selection in other code, call the :meth:`~catalight.analysis.u
   if data_dialog.exec_() == QDialog.Accepted:
     expt_dirs = data_dialog.get_output()
 
-The :class:`~catalight.analysis.user_inputs.DataExtractor` is a bit more complex than :class:`~catalight.analysis.user_inputs.DirectorySelector` as it allows containing certain files and add custom labels to these directories for use in plotting.
+  for dir in expt_dirs:
+    # Run further analysis with user's GUI selection
+    print('Target Directory = ')
+    print(dir)
+
+The :class:`~catalight.analysis.user_inputs.DataExtractor` is a bit more complex than :class:`~catalight.analysis.user_inputs.DirectorySelector` as it allows selecting specific files/folders and adding custom labels to these data sets for use in plotting.
 
 The use of this class is very similar to :class:`~catalight.analysis.user_inputs.DirectorySelector`. Notice that the output of the :meth:`~catalight.analysis.user_inputs.DataExtractor.get_output` methods is now a tuple returning both a list of files and matching data labels.
 
@@ -95,7 +100,7 @@ The use of this class is very similar to :class:`~catalight.analysis.user_inputs
     The output of the code above after selecting a folder containing avg_conc.csv files (the default search target)
 
 
-The get_user_inputs() function of both :mod:`~catalight.analysis.run_change_xdata` and :mod:`~catalight.analysis.run_plot_comparison` utilizes the exact code above. :mod:`~catalight.analysis.run_plot_chromatograms_stacked` on the other hand alters the init parameter when instantiating the :class:`~catalight.analysis.user_inputs.DataExtractor` class. The parameter '' instructs the UI to search for any file and the '.asc' enforces that the file must have a '.asc' extension. Finally ``data_depth=0`` instructs the dialog to return file paths from its get_output() method rather than directories. This format is used to allow the user to select individual chromatograph data files for plotting.
+The get_user_inputs() function of both :mod:`~catalight.analysis.run_change_xdata` and :mod:`~catalight.analysis.run_plot_comparison` utilizes the exact code above. :mod:`~catalight.analysis.run_plot_chromatograms_stacked` on the other hand alters the init parameter when instantiating the :class:`~catalight.analysis.user_inputs.DataExtractor` class. The parameter '' (empty string) instructs the GUI to search for any file and the '.asc' enforces that the file must have a '.asc' extension. Finally ``data_depth=0`` instructs the dialog to return file paths from its get_output() method rather than directories. This format is used to allow the user to select individual chromatograph data files for plotting.
 
 .. code::
 
@@ -111,7 +116,7 @@ The get_user_inputs() function of both :mod:`~catalight.analysis.run_change_xdat
 
 Plotting instructions
 """""""""""""""""""""
-Using a combinations of regular file dialogs and the custom dialogs presented in the previous section, the user is now able to select many different data types in a UI. This section describes tool built to help when the user needs to enter more information than just which data they would like to plot. Many of the functions called in the various :ref:`helper tools<helpers>` take a number of arguments. Many of these arguments repeat across different functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` was developed to reuse as much code as possible while customizing a UI specifically for the options required in particular functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` mixes and matches its GUI elements programmatically based on the :class:`~catalight.analysis.user_inputs.PlotOptionList` provided to it on instantiation. The :class:`~catalight.analysis.user_inputs.PlotOptionList` is a data class containing all of the default plot options each wrapped up in another data class called :class:`~catalight.analysis.user_inputs.Option`.
+Using a combinations of regular file dialogs and the custom dialogs presented in the previous section, the user is now able to select many different data types in a GUI. This section describes tools built to help when the user needs to enter more information than just which data they would like to plot. Many of the functions called in the various :ref:`helper tools<helpers>` take a number of arguments. Many of these arguments repeat across different functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` was developed to reuse as much code as possible while customizing a GUI specifically for the options required in particular functions. The :class:`~catalight.analysis.user_inputs.PlotOptionsDialog` mixes and matches its GUI elements programmatically based on the :class:`~catalight.analysis.user_inputs.PlotOptionList` provided to it on instantiation. The :class:`~catalight.analysis.user_inputs.PlotOptionList` is a data class containing all of the default plot options each wrapped up in another data class called :class:`~catalight.analysis.user_inputs.Option`.
 
 :class:`~catalight.analysis.user_inputs.Option` contains the following format:
 
@@ -292,7 +297,7 @@ Running a calibration
 ---------------------
 Within catalight, calibrations are handled using external csv files. These are imported as a :class:`pandas.DataFrame`, usually referred to in the code as "calDF". We primarily handle calibrations and integration outside of peaksimple to offer more control over the process and automation of analysis. For users that would prefer to utilize peaksimple for calibration, the results files output from peaksimple are saved in the same location as the ascii files.
 
-Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize :func:`catalight.analysis.tools.analyze_cal_data` to analyze the collected data. The :mod:`catalight.analysis.run_calibration` module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it's :attr:`~catalight.equipment.experiment_control.Experiment.expt_type` attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The :class:`~catalight.equipment.alicat_MFC.gas_control.Gas_System` class provides a :meth:`~catalight.equipment.alicat_MFC.gas_control.Gas_System.set_calibration_gas` method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called separately if scripting.
+Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize :func:`catalight.analysis.tools.analyze_cal_data` to analyze the collected data. The :mod:`catalight.analysis.run_calibration` module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it's :attr:`~catalight.equipment.experiment_control.Experiment.expt_type` attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The :class:`~catalight.equipment.gas_control.alicat.Gas_System` class provides a :meth:`~catalight.equipment.gas_control.alicat.Gas_System.set_calibration_gas` method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called separately if scripting.
 
 In addition to performing the physical calibration experiment, the user needs to provide a calibration file describing the input gas. More information about the calibration file can be found in the :doc:`/calibration_file_details` section.
 

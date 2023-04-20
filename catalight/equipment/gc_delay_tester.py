@@ -16,8 +16,8 @@ import os
 import time
 from datetime import date
 
-from catalight.equipment.alicat_MFC.gas_control import Gas_System
-from catalight.equipment.sri_gc.gc_control import GC_Connector
+from catalight.equipment.gas_control.alicat import Gas_System
+from catalight.equipment.gc_control.sri_gc import GC_Connector
 
 
 def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off,
@@ -76,14 +76,14 @@ def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off,
             filename = (str(delay) + '_min_delay')
             filepath = os.path.join(flow_dir, filename)
             os.makedirs(filepath, exist_ok=True)
-            gc.update_ctrl_file(filepath)  # Changes save path
+            gc.update_gc_settings(filepath)  # Changes save path
             gas_control.set_flows(comp_list_on, tot_flow)  # Flow Target Gas
 
             for second in range(int(delay * 60)):
                 time.sleep(1)  # 1 second at a time so script can be stopped
 
             # Turn on gc and pause a minute to be safe
-            gc.peaksimple.SetRunning(1, True)
+            gc.set_running()
             time.sleep(60)
             # Clear out gas line
             gas_control.set_flows(comp_list_off, flush_flowrate)

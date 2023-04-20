@@ -9,10 +9,11 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-from catalight.equipment.alicat_MFC.gas_control import Gas_System
-from catalight.equipment.diode_laser.diode_control import Diode_Laser
-from catalight.equipment.harrick_watlow.heater_control import Heater
-from catalight.equipment.sri_gc.gc_control import GC_Connector
+
+from catalight.equipment.gas_control.alicat import Gas_System
+from catalight.equipment.light_sources.diode_control import Diode_Laser
+from catalight.equipment.heating.watlow import Heater
+from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
 
 
@@ -22,6 +23,7 @@ def initialize_equipment():
     gas_controller = Gas_System()
     heater = Heater()
     return (gc_connector, laser_controller, gas_controller, heater)
+
 
 def calculate_time(expt_list):
     start_time = time.time()
@@ -40,12 +42,14 @@ def calculate_time(expt_list):
     end_time = time.strftime('%b-%d at %I:%M%p', end_time)
     print('experiment will end on %s' % (end_time))
 
+
 def shut_down(eqpt_list):
     print('Shutting Down Equipment')
     gc_connector, laser_controller, gas_controller, heater = eqpt_list
     laser_controller.shut_down()
     heater.shut_down()
     gas_controller.shut_down()
+
 
 def run_study(expt_list, eqpt_list):
     for expt in expt_list:
@@ -56,6 +60,7 @@ def run_study(expt_list, eqpt_list):
         except:
             shut_down(eqpt_list)
             raise
+
 
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()

@@ -9,13 +9,12 @@ Created on Thu Jun 23 22:42:55 2022
 References
 ----------
 # noqa
-(1) https://github.com/napari/magicgui/issues/9
-(2) https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection
-(3) https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder
-(4) https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog
-(5) https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel
-(6) https://www.youtube.com/watch?v=dqg0L7Qw3ko
-(7) https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python
+(1) https://stackoverflow.com/questions/28544425/pyqt-qfiledialog-multiple-directory-selection
+(2) https://stackoverflow.com/questions/38746002/pyqt-qfiledialog-directly-browse-to-a-folder
+(3) https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog
+(4) https://stackoverflow.com/questions/38609516/hide-empty-parent-folders-qtreeview-qfilesystemmodel
+(5) https://www.youtube.com/watch?v=dqg0L7Qw3ko
+(6) https://stackoverflow.com/questions/52592977/how-to-return-variables-from-pyqt5-ui-to-main-function-python
 """
 from __future__ import annotations
 import os

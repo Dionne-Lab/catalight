@@ -1,4 +1,4 @@
-﻿catalight.analysis.user\_inputs.PlotOptionsDialog
+catalight.analysis.user\_inputs.PlotOptionsDialog
 =================================================
 
 .. currentmodule:: catalight.analysis.user_inputs

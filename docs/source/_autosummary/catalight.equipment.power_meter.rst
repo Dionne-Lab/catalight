@@ -27,6 +27,5 @@ catalight.equipment.power\_meter
    :template: custom-module-template.rst
    :recursive:
 
-   catalight.equipment.power_meter.demo
-   catalight.equipment.power_meter.power_meter_ctrl
+   catalight.equipment.power_meter.newport
 

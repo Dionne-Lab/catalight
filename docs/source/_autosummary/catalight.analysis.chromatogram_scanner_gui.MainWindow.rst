@@ -1,4 +1,4 @@
-﻿catalight.analysis.chromatogram\_scanner\_gui.MainWindow
+catalight.analysis.chromatogram\_scanner\_gui.MainWindow
 ========================================================
 
 .. currentmodule:: catalight.analysis.chromatogram_scanner_gui
