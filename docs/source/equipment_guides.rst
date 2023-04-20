@@ -1,3 +1,5 @@
+The purpose of this section is to demonstrate the connection process for specific pieces of equipment. This is less so a tutorial on how to use different code interfaces, and more about how we connect to the hardware in the first place. This section will describe the required python packages, external software, and source code edits necessary to connect to instruments. In nearly every circumstance, this initial connection is then wrapped by a new python class which provides slightly more convenient functions that can then interface with the rest of the package. Look out for the **"Making the Connection"** tips that describe the requirements for using each specific instrument!
+
 .. _alicat_doc:
 
 Alicat MFCs
@@ -60,7 +62,11 @@ We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=
 
 Power meter
 -----------
-This will be updated whenever the MKS website system comes back online.
+A power meter is programmatically controlled in order to run laser power calibrations. We currently use the :download:`Newport 843-R-USB <../../manuals/newport_powermeter/843-R-843-R-USB-User-Manual-rev-1.34-2.pdf>` accessed via :download:`Newports' PMManager's COM object <../../manuals/newport_powermeter/OphirLMMeasurement COM Object.doc>`. This method should also allow the user to control the `1919-R <https://www.newport.com/p/1919-R>`_, `843-R-USB <https://www.newport.com/p/843-R-USB>`_ , `844-PE-USB <https://www.newport.com/p/844-PE-USB>`_ , 845-PE-RS, `1938-R <https://www.newport.com/p/7Z01705>`_, and `2938-R <https://www.newport.com/p/7Z01706>`_ models with no additional changes, but these models have not been tested. Additional commands could be accessed via the provided COM object if desired. See the :download:`user commands manual <../../manuals/newport_powermeter/manual_newport _user_commands.pdf>` for more information.
+
+.. admonition:: Making the Connection
+
+    A version of Newport's PMManager COM object is required and needs to be installed in order to use the :class:`~catalight.equipment.power_meter.newport.NewportMeter` class. This can be installed from `<https://www.newport.com/t/PMManager-power-meter-application-software>`_. Installing the full PMManager software includes the COM object, and no additional code changes should be needed after the installation.
 
 .. _sri_gc_doc:
 
