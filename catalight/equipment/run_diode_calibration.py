@@ -66,6 +66,8 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
         power_readings = np.array([-1000])  # Set unreal number
         while error > tolerance:
             power_readings = np.append(power_readings, power_meter.read()[1])
+
+            # If error is high and theres more than 20 readings, remove first
             if len(power_readings) > 20:
                 power_readings = np.delete(power_readings, 0)
                 std = np.std(power_readings)
