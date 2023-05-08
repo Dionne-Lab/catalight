@@ -92,5 +92,6 @@ autodoc_mock_imports = [
     'clr',
     'serial',
     'Peaksimple',
-    'win32gui'
+    'win32gui',
+    'nkt_tools'
 ]
