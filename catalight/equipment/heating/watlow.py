@@ -81,11 +81,16 @@ class Heater:
             Current temperature in requested units.
 
         """
+        temp = None
         while self.is_busy:
             time.sleep(0)
+
         self.is_busy = True
-        temp = self.controller.read()['data']
+        # Occasionlly controller.read seems to return None
+        while temp is None:
+            temp = self.controller.read()['data']
         self.is_busy = False
+
         if temp_units.upper() != 'F':
             temp = convert_temp('F', temp_units, temp)
         return round(temp, 3)
