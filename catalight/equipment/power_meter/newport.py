@@ -38,10 +38,15 @@ class NewportMeter:
 
     def change_wavelength(self, wavelength):
         """Change to desired wavelength, modifies slot 4 if wavelength DNE."""
+        # Get available wavelengths saved to device
         wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
         wavelength = str(wavelength)
-        if wavelength not in wavelengths:
+        if wavelength not in wavelengths:  # check for desired option
+            # change saved wavelength 4 to desired one
             self.OphirCOM.ModifyWavelength(self.DeviceHandle, 0, 4, wavelength)
+            # update available wavelength list
+            wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
+        # Get location of desired wavelength
         idx = wavelengths.index(wavelength)
         self.OphirCOM.SetWavelength(self.DeviceHandle, 0, idx)
 
