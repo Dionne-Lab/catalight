@@ -66,14 +66,16 @@ class NewportMeter:
         reading : float
             Power reading in mW
         """
+        data = [[], []]
         self.OphirCOM.SetRange(self.DeviceHandle, 0, 0)  # set range to auto
-        self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
-        time.sleep(averaging_time)  # collect data during pause
-        data = self.OphirCOM.GetData(self.DeviceHandle, 0)
+        while len(data[0]) == 0:  # Prevent empty data set
+            self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
+            time.sleep(averaging_time)  # collect data during pause
+            self.OphirCOM.StopAllStreams()  # stop measuring
+            data = self.OphirCOM.GetData(self.DeviceHandle, 0)
         # average the readout, convert units to mW
         reading = sum(list(data[0])) / len(data[0]) * 1000
         timestamp = time.time()  # get time
-        self.OphirCOM.StopAllStreams()  # stop measuring
         return(timestamp, reading)
 
     def shut_down(self):
