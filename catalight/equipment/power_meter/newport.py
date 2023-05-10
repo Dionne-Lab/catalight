@@ -69,10 +69,16 @@ class NewportMeter:
         data = [[], []]
         self.OphirCOM.SetRange(self.DeviceHandle, 0, 0)  # set range to auto
         while len(data[0]) == 0:  # Prevent empty data set
-            self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
-            time.sleep(averaging_time)  # collect data during pause
-            self.OphirCOM.StopAllStreams()  # stop measuring
-            data = self.OphirCOM.GetData(self.DeviceHandle, 0)
+            for attempt in range(4):
+                try:  #Tries again in case of bad read (up to 4 times)
+                    self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
+                    time.sleep(averaging_time)  # collect data during pause
+                    self.OphirCOM.StopAllStreams()  # stop measuring
+                    data = self.OphirCOM.GetData(self.DeviceHandle, 0)
+                    break
+                except Exception as e:
+                    print('Error Found', e)
+                    continue
         # average the readout, convert units to mW
         reading = sum(list(data[0])) / len(data[0]) * 1000
         timestamp = time.time()  # get time
