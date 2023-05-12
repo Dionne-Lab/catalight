@@ -60,7 +60,7 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
     data = pd.DataFrame(columns=['Power', 'error'])
     print('Running Calibration...')
 
-    for current in range(current_range):
+    for current in range(*current_range):
         diode.set_current(current)
         error = 100
         power_readings = np.array([-1000])  # Set unreal number
@@ -94,7 +94,7 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
     diode.update_calibration(p[0], p[1])
     diode.shut_down()
     fig = ax.get_figure()
-    fig.savefig('diode_laser/calibration_plot.svg', format="svg")
+    fig.savefig('light_sources/diode_calibration_plot.svg', format="svg")
     print(label)
     return fig, ax
 
