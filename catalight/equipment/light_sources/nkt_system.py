@@ -10,16 +10,69 @@ from ctypes import POINTER, cast
 from threading import Timer
 
 import numpy as np
+import pandas as pd
 import pyttsx3
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from nkt_tools import (extreme, varia)
 
 # Sets path when file is imported
 package_dir = os.path.dirname(os.path.abspath(__file__))
-calibration_path = os.path.join(package_dir, 'nkt_calibration.csv')
-# TODO: Update calibration path w/ lightsource name
+calibration_path = os.path.join(package_dir, 'nkt_calibration.pkl')
 
-class Template_Laser():
+def predict_power(calibration, power, center, bandwidth):
+    """_summary_
+    650 nm center with 45 nm bandwidth:
+    627.5 [628-638, 638-648, 648-658, 658-668] 669, 670, 671, 672, 672.5
+    Parameters
+    ----------
+    center : _type_
+        _description_
+    bandwidth : _type_
+        _description_
+    data : _type_
+        _description_
+
+    Returns
+    -------
+    _type_
+        _description_
+    """
+    mask = ((calibration.index > center - bandwidth/2)
+            & (calibration.index <= center + bandwidth/2))
+    roi = calibration[mask]
+
+    # Duplicate the first row until the desired size is reached
+    while len(roi) < bandwidth:
+        if roi.index[0] == calibration.index[0]:
+            roi = pd.concat([roi, roi.iloc[0:1]], ignore_index=True)
+        else:
+            roi = pd.concat([roi, roi.iloc[-1:]], ignore_index=True)
+    p = np.array(roi['fit params'].to_list())
+    V = roi['covariance matrix']
+    degree = p.shape[1]-1
+    x = power  # The x values for interpolation
+    powers = np.arange(degree, -1, -1)  # The power to raise x to [x^2, x^1...]
+    # If x [a, b, c, d...] is an array,
+    # we want to raise each value to each power [n, n-1, ... 2, 1, 0]
+    # [[a^2, a^1, a^0],
+    #  [b^2, b^1, b^0],
+    #     ...
+    #  [d^2, d^1, d^0]]
+    x_powers = np.power.outer(x, powers)
+    y = p @ x_powers.T
+    prediction = y.sum(axis=0)
+    #x_error = np.sqrt(x_powers.dot(V).dot(x_powers))
+    return prediction
+
+
+def determine_setpoint(calibration, power_requested, center, bandwidth):
+    setpoints = np.arange(10, 100.1, 0.1)
+    values = predict_power(calibration, setpoints, center, bandwidth)
+    best_value = setpoints[np.abs(values-power_requested).argmin()]
+    return best_value
+
+class NKT_System():
     """
     Vi
     """
@@ -28,11 +81,11 @@ class Template_Laser():
         # Set public attr
         self.is_busy = False  #: Used to block access from multiple threads
 
-        self._calibration = [0, 0]
-
         # Set non-public attr
-
+        self._calibration = [0, 0]
         self._P_set = 0
+        self._laser = extreme.Extreme()
+        self._bandpass = varia.Varia()
 
         self.read_calibration()
 
@@ -48,10 +101,49 @@ class Template_Laser():
                                      CLSCTX_ALL, None)
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
-        # Turn power to zero on initialization
-        self.set_power(0)
-
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+
+    @property
+    def central_wavelength(self):
+        """
+        U
+        """
+        return self._central_wavelength
+
+    @central_wavelength.setter
+    def central_wavelength(self, value):
+        short_setpoint = value - self.bandwidth/2
+        long_setpoint = value + self.bandwidth/2
+        if (short_setpoint <= 400) and (long_setpoint >= 800):
+            self._laser.set_emission(False)
+            self._bandpass.short_setpoint = short_setpoint
+            self._bandpass.long_setpoint = long_setpoint
+            self._central_wavelength = value
+            self.set_power(self._P_set)
+            self._laser.set_emission(True)
+        else:
+            print('Wavelength conditions outside range!')
+
+    @property
+    def bandwidth(self):
+        """
+        U
+        """
+        return self._bandwidth
+
+    @bandwidth.setter
+    def bandwidth(self, value):
+        short_setpoint = self.central_wavelength - value/2
+        long_setpoint = self.central_wavelength + value/2
+        if (short_setpoint <= 400) and (long_setpoint >= 800):
+            self._laser.set_emission(False)
+            self._bandpass.short_setpoint = short_setpoint
+            self._bandpass.long_setpoint = long_setpoint
+            self._bandwidth = value
+            self.set_power(self._P_set)
+            self._laser.set_emission(True)
+        else:
+            print('Wavelength conditions outside range!')
 
     def set_power(self, P_set):
         """
@@ -82,13 +174,9 @@ class Template_Laser():
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
-
-        # ---------------------------------------------------------------------
-        # TODO Device specific set power command
-        # Check manual to see if device power should be ramped slowly
-        # See diode_control for example
-        # ---------------------------------------------------------------------
-
+        setpoint = determine_setpoint(self._calibration, P_set,
+                                      self.central_wavelength, self.bandwidth)
+        self._laser.set_power(setpoint)
         self.is_busy = False
         self._P_set = P_set
         print('\n', time.ctime())
@@ -98,35 +186,23 @@ class Template_Laser():
         # TODO Print setpoint current and/or power
         # ---------------------------------------------------------------------
 
-    def get_output_power(self):
-        """
-        Get output power based on current measured and saved calibration.
-
-        Returns
-        -------
-        P : float or int
-            Power [mW] rounded to 3 decimal points
-        """
-        I = self.get_output_current()  # noqa I==current
-        P = round(self.I_to_P(I), 3)
-        return P
-
     def print_output(self):
         """Print the output current and power to console."""
-        I = self.get_output_current()  # noqa I==current
-        P = self.get_output_power()
-        print('Measured Laser output = %7.2f mW / %7.2f mA' % (P, I))
-
+        print('NKT power reading not supported')
+        bandpass = (self._bandpass.short_setpoint,
+                    self._bandpass.long_setpoint)
+        print('Extreme/Fianium Setpoint = %4.1f %%' % self._laser.power_level)
+        print('Varia Filter set for %4.1f nm - %4.1f nm' % bandpass)
+        print('Expected System Output = %4.1f mW' % self._P_set)
 
     def shut_down(self):
-        """Set power of laser to 0 by setting DAQ Voltage to 0."""
+        """Set power of laser to 0 by... """
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
 
-        # ---------------------------------------------------------------------
-        # TODO turn off device in a way that doesn't rely on calibration
-        # ---------------------------------------------------------------------
+        self._laser.set_emission(False)
+        self._laser.set_power(12)
 
         self.is_busy = False
 
@@ -144,23 +220,7 @@ class Template_Laser():
         intercept : float
             Y intercept of linear calibration (mA)
         """
-        # open and write to calibration file
-        with open(calibration_path, 'r+') as old_cal_file:
-            new_cal_file = []
-
-            for line in old_cal_file:  # read values after '=' line by line
-                if re.search('m = ', line):
-                    line = ('m = ' + str(slope) + ' \n')
-                elif re.search('b = ', line):
-                    line = ('b = ' + str(intercept) + ' \n')
-                elif re.search('date = ', line):
-                    line = ('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
-
-                new_cal_file += line
-
-            old_cal_file.seek(0)  # Starting from beginning line
-            old_cal_file.writelines(new_cal_file)
-        self.read_calibration()
+        pass
 
     def read_calibration(self):
         """
@@ -168,20 +228,10 @@ class Template_Laser():
 
         Also prints out calibration date and values to console.
         """
-        with open(calibration_path, 'r') as calibration:
-
-            for line in calibration:  # read values after '=' line by line
-                if re.search('m = ', line):
-                    self._calibration[0] = float(
-                        line.split('=')[-1].strip(' \n'))
-                elif re.search('b = ', line):
-                    self._calibration[1] = float(
-                        line.split('=')[-1].strip(' \n'))
-                elif re.search('date = ', line):
-                    print('Last laser calibration was:')
-                    print(line)
-        print(f'Power = {self._calibration[0]}*Current'
-              f'+ {self._calibration[1]}\n')
+        self._calibration = pd.read_pickle(calibration_path)
+        t = os.path.getmtime(calibration_path)
+        print('Last laser calibration was:')
+        print(dt.datetime.fromtimestamp(t).strftime('%Y-%m-%d'))
 
     def time_warning(self, time_left):
         """

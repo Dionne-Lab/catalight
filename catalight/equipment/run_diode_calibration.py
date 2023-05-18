@@ -7,6 +7,7 @@ powered by MCC DAQ.
 Created on Tue Feb 22 23:15:23 2022
 @author: Briley Bourgeois
 """
+import os
 import numpy as np
 import pandas as pd
 from catalight.equipment.light_sources.diode_control import Diode_Laser
@@ -94,7 +95,9 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
     diode.update_calibration(p[0], p[1])
     diode.shut_down()
     fig = ax.get_figure()
-    fig.savefig('light_sources/diode_calibration_plot.svg', format="svg")
+    folder = os.path.dirname(__file__)
+    savepath = os.path.join(folder, 'light_sources/diode_calibration_plot.svg')
+    fig.savefig(savepath, format="svg")
     print(label)
     return fig, ax
 
