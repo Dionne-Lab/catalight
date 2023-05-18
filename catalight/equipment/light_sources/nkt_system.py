@@ -86,6 +86,10 @@ class NKT_System():
         self._P_set = 0
         self._laser = extreme.Extreme()
         self._bandpass = varia.Varia()
+        self._bandwidth = (self._bandpass.long_setpoint
+                           - self._bandpass.short_setpoint)
+        self._central_wavelength = (self._bandpass.long_setpoint
+                                    + self._bandpass.short_setpoint)/2
 
         self.read_calibration()
 
