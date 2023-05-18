@@ -180,6 +180,7 @@ class NKT_System():
         self.is_busy = True
         setpoint = determine_setpoint(self._calibration, P_set,
                                       self.central_wavelength, self.bandwidth)
+        print('Setpoint = ', setpoint)
         self._laser.set_power(setpoint)
         self.is_busy = False
         self._P_set = P_set
