@@ -97,7 +97,7 @@ def generate_data(calibration, num_measurements, laser, powermeter):
         if setpoint != 0:
             laser.central_wavelength = center
             laser.bandwidth = bandwidth
-            laser.setpower(requested_power)
+            laser.set_power(requested_power)
             time.sleep(30)
             measured_power = make_measurement(powermeter)
             data.append([center, bandwidth, requested_power, measured_power])
@@ -123,4 +123,7 @@ if __name__ == '__main__':
     results.plot(ax=ax, x='requested_power', y='measured_power', style='o')
     ax.plot(np.linspace(0, results['requested_power'].max(), 4),
             np.linspace(0, results['requested_power'].max(), 4), '--')
+    results.to_csv('calibration_verification.csv')
+    fig.savefig('calibration_verification.svg')
+    fig.savefig('calibration_verification.png')
     plt.show()
