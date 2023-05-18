@@ -20,6 +20,7 @@ from nkt_tools import (extreme, varia)
 package_dir = os.path.dirname(os.path.abspath(__file__))
 calibration_path = os.path.join(package_dir, 'nkt_calibration.pkl')
 
+
 def predict_power(calibration, power, center, bandwidth):
     """_summary_
     650 nm center with 45 nm bandwidth:
@@ -69,8 +70,13 @@ def predict_power(calibration, power, center, bandwidth):
 def determine_setpoint(calibration, power_requested, center, bandwidth):
     setpoints = np.arange(10, 100.1, 0.1)
     values = predict_power(calibration, setpoints, center, bandwidth)
-    best_value = setpoints[np.abs(values-power_requested).argmin()]
-    return best_value
+    optimal_index = np.abs(values-power_requested).argmin()
+    if (optimal_index == 0) or (optimal_index == (len(values))):
+        optimal_value = 0
+    else:
+        optimal_value = setpoints[optimal_index]
+    return round(optimal_value, 1)
+
 
 class NKT_System():
     """
