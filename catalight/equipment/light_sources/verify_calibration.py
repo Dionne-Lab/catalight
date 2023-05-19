@@ -34,16 +34,18 @@ def generate_data(calibration, num_measurements, laser, powermeter):
     while len(data) < num_measurements:
         bandwidth = get_random_with_precision(10, 50, 1)
         center = get_random_with_precision(400+bandwidth/2, 800-bandwidth/2, 1)
-        requested_power = random.uniform(1, bandwidth*4)
+        requested_power = random.uniform(1, bandwidth*2)
         setpoint = nkt_system.determine_setpoint(calibration, requested_power,
                                                  center, bandwidth)
         if setpoint != 0:
             laser.central_wavelength = center
+            powermeter.change_wavelength(int(center))
             laser.bandwidth = bandwidth
             laser.set_power(requested_power)
             time.sleep(30)
             measured_power = make_measurement(powermeter)
             data.append([center, bandwidth, requested_power, measured_power])
+            print('Measuring at: ', [center, bandwidth, requested_power, measured_power])
         else:
             print('skipping point', [center, bandwidth, requested_power, measured_power])
 
