@@ -23,6 +23,8 @@ class Template_Laser():
     """
     Vi
     """
+    is_tunable = False
+    """bool: Defines whether laser class is tunable."""
 
     def __init__(self):
         # Set public attr
