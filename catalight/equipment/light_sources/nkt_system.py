@@ -112,44 +112,19 @@ class NKT_System():
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+    central_wavelength = property(lambda self: self._central_wavelength)
+    bandwidth = property(lambda self: self._bandwidth)
 
-    @property
-    def central_wavelength(self):
-        """
-        U
-        """
-        return self._central_wavelength
+    def set_bandpass(self, center, width):
 
-    @central_wavelength.setter
-    def central_wavelength(self, value):
-        short_setpoint = value - self.bandwidth/2
-        long_setpoint = value + self.bandwidth/2
-        if (short_setpoint <= 400) and (long_setpoint >= 800):
+        short_setpoint = center - width/2
+        long_setpoint = center + width/2
+        if (short_setpoint >= 400) and (long_setpoint <= 800):
             self._laser.set_emission(False)
             self._bandpass.short_setpoint = short_setpoint
             self._bandpass.long_setpoint = long_setpoint
-            self._central_wavelength = value
-            self.set_power(self._P_set)
-            self._laser.set_emission(True)
-        else:
-            print('Wavelength conditions outside range!')
-
-    @property
-    def bandwidth(self):
-        """
-        U
-        """
-        return self._bandwidth
-
-    @bandwidth.setter
-    def bandwidth(self, value):
-        short_setpoint = self.central_wavelength - value/2
-        long_setpoint = self.central_wavelength + value/2
-        if (short_setpoint <= 400) and (long_setpoint >= 800):
-            self._laser.set_emission(False)
-            self._bandpass.short_setpoint = short_setpoint
-            self._bandpass.long_setpoint = long_setpoint
-            self._bandwidth = value
+            self._central_wavelength = center
+            self._bandwidth = width
             self.set_power(self._P_set)
             self._laser.set_emission(True)
         else:
