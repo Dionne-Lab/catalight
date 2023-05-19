@@ -50,12 +50,13 @@ class Experiment:
         # careful bug checking needs to be performed everywhere expt.ind_var
         # is used.
         self._expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', False,    'K'],  # noqa
-             ['power_sweep',    'power', False,   'mW'],  # noqa
-             ['comp_sweep',  'gas_comp', False, 'frac'],  # noqa
-             ['flow_sweep',  'tot_flow', False, 'sccm'],  # noqa
-             ['calibration', 'gas_comp', False, 'frac'],  # noqa
-             ['stability_test',  'temp', False,  'min']], # noqa
+            [['temp_sweep',             'temp', False,    'K'],  # noqa
+             ['power_sweep',           'power', False,   'mW'],  # noqa
+             ['wavelength_sweep', 'wavelength', False,   'nm'],  # noqa
+             ['comp_sweep',         'gas_comp', False, 'frac'],  # noqa
+             ['flow_sweep',         'tot_flow', False, 'sccm'],  # noqa
+             ['calibration',        'gas_comp', False, 'frac'],  # noqa
+             ['stability_test',         'temp', False,  'min']], # noqa
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
@@ -67,6 +68,8 @@ class Experiment:
         # Descriptions below in property definitions
         self._temp = [273.0]
         self._power = [0.0]
+        self._wavelength = None
+        self._bandwidth = None
         self._tot_flow = [0.0]
         self._gas_comp = [[0.0, 50.0, 0.0, 0.0]]
         self._gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
@@ -230,6 +233,20 @@ class Experiment:
     One element if constant or multiple for sweep. Initial value of [0.0].
     """
 
+    wavelength = property(fget=_attr_getter('_wavelength'),
+                          fset=_num_setter('_wavelength'))
+    """
+    list[float]: List of center wavelengths (nm) to step through during expt.
+    One element if constant or multiple for sweep. Initial value of [None].
+    """
+
+    bandwidth = property(fget=_attr_getter('_bandwidth'),
+                         fset=_num_setter('_bandwidth'))
+    """
+    list[float]: List of bandwidths (nm) to step through during expt.
+    One element if constant or multiple for sweep. Initial value of [None].
+    """
+
     tot_flow = property(fget=_attr_getter('_tot_flow'),
                         fset=_num_setter('_tot_flow'))
     """
@@ -390,13 +407,17 @@ class Experiment:
                 + str(self.temp),
                 'Power [' + self.expt_list['Units'][1] + '] = '
                 + str(self.power),
+                'Wavelength [' + self.expt_list['Units'][2] + '] = '
+                + str(self.wavelength),
+                'Bandwidth [' + self.expt_list['Units'][2] + '] = '
+                + str(self.bandwidth),
                 'Gas 1 type = ' + self.gas_type[0],
                 'Gas 2 type = ' + self.gas_type[1],
                 'Gas 3 type = ' + self.gas_type[2],
                 'Gas 4 type = ' + self.gas_type[3],
-                'Gas Composition [' + self.expt_list['Units'][2]
+                'Gas Composition [' + self.expt_list['Units'][3]
                 + '] = ' + str(self.gas_comp),
-                'Total Flow [' + self.expt_list['Units'][3]
+                'Total Flow [' + self.expt_list['Units'][4]
                 + '] = ' + str(self.tot_flow)
             ]
             log.write('\n'.join(log_entry))
@@ -438,6 +459,10 @@ class Experiment:
                     self.temp = literal_eval(data)
                 elif re.search('Power', line):
                     self.power = literal_eval(data)
+                elif re.search('Wavelength', line):
+                    self._wavelength = literal_eval(data)
+                elif re.search('Bandwidth', line):
+                    self._bandwidth = literal_eval(data)
                 elif re.search(r'Gas \d+ type', line):  # \d+ is 1+ digits
                     # Get left side of '=' sign
                     gas_str = line.split('=')[0].strip(' \n')
@@ -471,11 +496,16 @@ class Experiment:
         None.
         """
         # Defines all settings to be included in path name and adds units
-        expt_settings = pd.Series(
-            [str(self.temp[0]), str(self.power[0]),
-             '_'.join([str(m) + n for m, n in zip(self.gas_comp[0],
-                                                  self.gas_type)]),
-             str(self.tot_flow[0])]) + self.expt_list['Units'][0:4]
+        gasses = '_'.join([str(m) + n for m, n in zip(self.gas_comp[0],
+                                                      self.gas_type)])
+
+        expt_settings = pd.Series([str(self.temp[0]),
+                                   str(self.power[0]),
+                                   str(self.wavelength[0]),
+                                   gasses,
+                                   str(self.tot_flow[0])])
+        # Add units to each item
+        expt_settings = expt_settings + self.expt_list['Units'][0:5]
 
         # Only select fixed variable for path name
         fixed_vars = expt_settings[self.expt_list['Independent Variable']
@@ -746,15 +776,16 @@ class Experiment:
         conditions. Will also check that the temperature is not more than
         10 degrees C above the first setpoint.
         The order is:
-        1. Set temperature
-        2. Give 1 minute time warning for laser
-        3. Set initial laser power
-        4. Set gas type
-        5. Set gas flows
-        6. Wait 2 minutes
-        7. Print gas flows
-        8. Update gc sample set size
-        9. Update date, time, and update log
+        1.  Set temperature
+        2.  Give 1 minute time warning for laser
+        3.  Set initial laser power
+        4.  Check is laser is tunable, updates wavelength accordingly
+        5.  Set gas type
+        6.  Set gas flows
+        7.  Wait 2 minutes
+        8.  Print gas flows
+        9.  Update gc sample set size
+        10. Update date, time, and update log
         """
         unit = self.expt_list['Units'][0]
         self._heater.ramp(self.temp[0], temp_units=unit)
@@ -772,6 +803,10 @@ class Experiment:
             time.sleep(60)
 
         self._laser_control.set_power(self.power[0])
+        if self._laser_control.is_tunable:
+            self._laser_control.set_wavelength(self.wavelength[0],
+                                               self.bandwidth[0])
+
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         time.sleep(120)  # Wait for gas to steady out
@@ -829,6 +864,8 @@ class Experiment:
                 self._heater.ramp(step, temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
+            elif self.expt_type == 'wavelength_sweep':
+                self._laser_control.set_wavelength(step, self.bandwidth)
             elif self.expt_type in ['comp_sweep', 'calibration']:
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()

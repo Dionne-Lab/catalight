@@ -80,8 +80,16 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
 
 class NKT_System():
     """
-    Vi
+    This class wraps together the Varia and Extreme classes of nkt_tools.
+
+    The methods contained within are compatible with the rest of catalight.
+    Not that this class is not compatible with NKT hardware different from
+    an Extreme/Fianium laser connected to a Varia. Users with other hardwawre
+    will need to develop their own plug in, but a guide was developed to
+    demonstrate how the NKT_System and nkt_tool was written and integrated.
     """
+    is_tunable = False
+    """bool: Defines whether laser class is tunable. NKT system is."""
 
     def __init__(self):
         # Set public attr
@@ -116,7 +124,22 @@ class NKT_System():
     bandwidth = property(lambda self: self._bandwidth)
 
     def set_bandpass(self, center, width):
+        """
+        Updates the bandpass setting of the connected Varia.
 
+        The setting provided must ensure the bandpass doesn't extend past 400
+        or 800 nm. The code will check and abort adjustment if the check fails.
+        This method will also update the power setpoint of the NKT laser such
+        that the emission after adjusting the wavelength is consistent with the
+        last requested output power.
+
+        Parameters
+        ----------
+        center : int or float
+            [nm] Central wavelength to be used when tuning bandpass filter.
+        width : int or float
+            [nm] Bandpass width.
+        """
         short_setpoint = center - width/2
         long_setpoint = center + width/2
         if (short_setpoint >= 400) and (long_setpoint <= 800):
@@ -135,15 +158,14 @@ class NKT_System():
 
     def set_power(self, P_set):
         """
-        Send signal to DAQ to reach desired P_set value based on calibration.
+        Estimates a power setpoint for NKT laser based on calibration.
 
-        The necessary current is sent based on a externally performed
-        calibration.
+        Takes into account current bandpass filter settings to predict the
+        power setpoint needed to achieve the requested emitted power.
+
         * Raises speaker volume
         * Sends voice warning
-        * Prints time to complete ramp
-        * ramps from current setpoint to P_set at 650 mA/min to avoid equipment damage
-        * Redefined _P_set along the way, printing status at each step
+        * Redefined _P_set
         * Calls print_output() on completion
 
 
@@ -176,7 +198,7 @@ class NKT_System():
         # ---------------------------------------------------------------------
 
     def print_output(self):
-        """Print the output current and power to console."""
+        """Print the bandpass settings, power setpoint, and expected power."""
         bandpass = (self._bandpass.short_setpoint,
                     self._bandpass.long_setpoint)
         print('Extreme/Fianium Setpoint = %4.1f %%' % self._laser.power_level)
@@ -184,7 +206,8 @@ class NKT_System():
         print('Expected System Output = %4.1f mW' % self._P_set)
 
     def shut_down(self):
-        """Set power of laser to 0 by... """
+        """Set power of laser to 0 by turning off emission.
+        Also lowers setpoint power to 12%."""
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
