@@ -125,7 +125,10 @@ class NKT_System():
             self._bandpass.long_setpoint = long_setpoint
             self._central_wavelength = center
             self._bandwidth = width
-            self.set_power(self._P_set)
+            # Reset Power setpoint [%] to keep constant output in mW
+            setpoint = determine_setpoint(self._calibration, self.P_set,
+                                          center, width)
+            self._laser.set_power(setpoint)
             self._laser.set_emission(True)
         else:
             print('Wavelength conditions outside range!')
@@ -174,7 +177,6 @@ class NKT_System():
 
     def print_output(self):
         """Print the output current and power to console."""
-        print('NKT power reading not supported')
         bandpass = (self._bandpass.short_setpoint,
                     self._bandpass.long_setpoint)
         print('Extreme/Fianium Setpoint = %4.1f %%' % self._laser.power_level)
