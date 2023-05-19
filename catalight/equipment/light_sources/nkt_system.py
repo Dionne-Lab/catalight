@@ -71,7 +71,7 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
     setpoints = np.arange(10, 100.1, 0.1)
     values = predict_power(calibration, setpoints, center, bandwidth)
     optimal_index = np.abs(values-power_requested).argmin()
-    if (optimal_index == 0) or (optimal_index == (len(values))):
+    if (optimal_index == 0) or (optimal_index == (len(values))-1):
         optimal_value = 0
     else:
         optimal_value = setpoints[optimal_index]
