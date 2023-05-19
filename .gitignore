@@ -8,3 +8,5 @@ __pycache__/
 docs/build/
 docs/source/_build/
 .vscode
+*.CON
+*.txt
