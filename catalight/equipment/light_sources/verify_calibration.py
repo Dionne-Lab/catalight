@@ -38,16 +38,15 @@ def generate_data(calibration, num_measurements, laser, powermeter):
         setpoint = nkt_system.determine_setpoint(calibration, requested_power,
                                                  center, bandwidth)
         if setpoint != 0:
-            laser.central_wavelength = center
             powermeter.change_wavelength(int(center))
-            laser.bandwidth = bandwidth
+            laser.set_bandpass(center, bandwidth)
             laser.set_power(requested_power)
-            time.sleep(30)
+            time.sleep(60)
             measured_power = make_measurement(powermeter)
             data.append([center, bandwidth, requested_power, measured_power])
             print('Measuring at: ', [center, bandwidth, requested_power, measured_power])
         else:
-            print('skipping point', [center, bandwidth, requested_power, measured_power])
+            print('skipping point', [center, bandwidth, requested_power])
 
     df = pd.DataFrame(data, columns=['center', 'bandwidth',
                                      'requested_power', 'measured_power'])
@@ -61,7 +60,7 @@ if __name__ == '__main__':
     path = (r"G:\Shared drives\Ensemble Photoreactor"
             r"\Reactor Baseline Experiments\nkt_calibration\nkt_calibration.pkl")
     calibration = pd.read_pickle(path)
-    results = generate_data(calibration, 10, laser, meter)
+    results = generate_data(calibration, 50, laser, meter)
     fig, ax = plt.subplots()
     results.plot(ax=ax, x='requested_power', style='o')
     fig, ax = plt.subplots()
