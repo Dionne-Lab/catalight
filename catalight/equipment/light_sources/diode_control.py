@@ -29,6 +29,8 @@ class Diode_Laser():
     a specified power from the laser. The user must perform a calibration of
     the system prior to using this class!
     """
+    is_tunable = False
+    """bool: Defines whether laser class is tunable. Diode is not."""
 
     def __init__(self):
         # Set public attr
