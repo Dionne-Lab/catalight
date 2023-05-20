@@ -1,13 +1,13 @@
 """
-Created on Fri Jan  7 16:59:01 2022
-Study control file: test main script before the development of a fully integrated GUI
+This script is set up to run an apparent activation energy experiment.
 
-@author: brile
+The user should edit for the exact values to sweep over that they require.
+The loop sweeps over central wavelength and laser power, then runs a
+temperature sweep over for each of those conditions.
 """
 import os
 import time
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from catalight.equipment.gas_control.alicat import Gas_System
@@ -18,7 +18,9 @@ from catalight.equipment.experiment_control import Experiment
 
 
 def initialize_equipment():
-    gc_connector = GC_Connector(r"C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN_TCD_off.CON")
+    ctrl_file = (r"C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation"
+                 r"\C2H2_Hydro_HayN_TCD_off.CON")
+    gc_connector = GC_Connector(ctrl_file)
     laser_controller = NKT_System()
     gas_controller = Gas_System()
     heater = Heater()
@@ -53,40 +55,41 @@ def shut_down(eqpt_list):
 
 def run_study(expt_list, eqpt_list):
     for expt in expt_list:
-
         try:
             expt.run_experiment()
-
-        except:
+        except Exception as e:
             shut_down(eqpt_list)
-            raise
+            raise (e)
 
 
 if __name__ == "__main__":
-    #eqpt_list = initialize_equipment()
-    eqpt_list = None
-    plt.close('all')
-    sample_name = 'dummy_sample'
+    eqpt_list = initialize_equipment()  # Initialize equipment
+    # Create folder to save data into
+    sample_name = '20230511_Au95Pd5_4wt'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
-    main_fol = os.path.join(r"C:\Users\brile\Documents\Temp Files", sample_name)
     os.makedirs(main_fol, exist_ok=True)
-    expt_list = []
-    for wavelength in range(450, 800+1, 50):
-        for power in range(0, 100+1, 25):
+
+    # sample_name = 'dummy_sample'
+    # eqpt_list = None
+    # main_fol = os.path.join(r"C:\Users\brile\Documents\Temp Files", sample_name)
+    # os.makedirs(main_fol, exist_ok=True)
+
+    for wavelength in range(475, 675+1, 50):
+        for power in range(0, 60+1, 20):
             expt = Experiment(eqpt_list)
-            expt.temp = list(np.arange(300, 340+1, 10))
+            expt.expt_type = 'temp_sweep'
+            expt.temp = list(np.arange(300, 330+1, 10))
             expt.wavelength = [wavelength]
             expt.power = [power]
             expt.bandwidth = [50]
-            expt.gas_type = ['C2H2', 'Ar', 'H2']
-            expt.gas_comp = [[0.01, 1-0.06, 0.05]]
+            expt.gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
+            expt.gas_comp = [[0.01, 1-0.06, 0.05, 0]]
             expt.tot_flow = [50]
             expt.sample_name = sample_name
-            expt_list.append(expt)
             expt.create_dirs(main_fol)
-
-
-
-    # calculate_time(expt_list)
-    # run_study(expt_list, eqpt_list)
-    # shut_down(eqpt_list)
+            try:
+                expt.run_experiment()
+            except Exception as e:
+                shut_down(eqpt_list)
+                raise (e)
+    shut_down(eqpt_list)
