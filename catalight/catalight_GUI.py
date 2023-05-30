@@ -45,7 +45,9 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        loadUi(r'.\gui_components\\reactorUI.ui', self)
+        fol = os.path.dirname(__file__)
+        ui_path = os.path.join(fol, 'gui_components/reactorUI.ui')
+        loadUi(ui_path, self)
 
         # Initilize GUI
         try:
