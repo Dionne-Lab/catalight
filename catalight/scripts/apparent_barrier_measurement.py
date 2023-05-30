@@ -19,7 +19,7 @@ from catalight.equipment.experiment_control import Experiment
 
 def initialize_equipment():
     ctrl_file = (r"C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation"
-                 r"\C2H2_Hydro_HayN_TCD_off.CON")
+                 r"\20221106_C2H2_Hydro_HayN_TCD_off.CON")
     gc_connector = GC_Connector(ctrl_file)
     laser_controller = NKT_System()
     gas_controller = Gas_System()
@@ -65,7 +65,7 @@ def run_study(expt_list, eqpt_list):
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()  # Initialize equipment
     # Create folder to save data into
-    sample_name = '20230511_Au95Pd5_4wt'
+    sample_name = '20230504_Au95Pd5_4wt'
     main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
     os.makedirs(main_fol, exist_ok=True)
 
@@ -82,9 +82,11 @@ if __name__ == "__main__":
             expt.wavelength = [wavelength]
             expt.power = [power]
             expt.bandwidth = [50]
-            expt.gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
-            expt.gas_comp = [[0.01, 1-0.06, 0.05, 0]]
+            expt.gas_type = ['Ar', 'C2H2', 'H2', 'N2']
+            expt.gas_comp = [[1-0.06, 0.01, 0.05, 0]]
             expt.tot_flow = [50]
+            expt.sample_set_size = 3
+            expt.steady_state_time = 20
             expt.sample_name = sample_name
             expt.create_dirs(main_fol)
             try:
