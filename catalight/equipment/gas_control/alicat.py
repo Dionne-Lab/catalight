@@ -10,6 +10,7 @@ import time
 import numpy as np
 import pandas as pd
 from alicat import FlowController, FlowMeter
+import catalight.config as cfg
 
 
 class Gas_System:
@@ -28,11 +29,20 @@ class Gas_System:
         based on their specific setup. This process can be assisted by using
         the "connection_tester.py" file
         """
-        self.mfc_A = FlowController(port='COM6', address='A')
-        self.mfc_B = FlowController(port='COM9', address='B')
-        self.mfc_C = FlowController(port='COM8', address='C')
-        self.mfc_D = FlowController(port='COM10', address='D')
-        self.mfc_E = FlowMeter(port='COM11', address='E')
+        self.mfc_A = FlowController(port=cfg.mfc_list[0]['port'],
+                                    address=cfg.mfc_list[0]['unit'])
+
+        self.mfc_B = FlowController(port=cfg.mfc_list[1]['port'],
+                                    address=cfg.mfc_list[1]['unit'])
+
+        self.mfc_C = FlowController(port=cfg.mfc_list[2]['port'],
+                                    address=cfg.mfc_list[2]['unit'])
+
+        self.mfc_D = FlowController(port=cfg.mfc_list[3]['port'],
+                                    address=cfg.mfc_list[3]['unit'])
+
+        self.mfc_E = FlowMeter(port=cfg.mfc_list[4]['port'],
+                               address=cfg.mfc_list[4]['unit'])
         self.is_busy = False
 
     def set_gasses(self, gas_list):

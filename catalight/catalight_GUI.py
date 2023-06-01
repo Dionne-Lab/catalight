@@ -23,6 +23,7 @@ from catalight.equipment.light_sources.diode_control import Diode_Laser
 from catalight.equipment.heating.watlow import Heater
 from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
+import catalight.config as cfg
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import \
@@ -51,7 +52,7 @@ class MainWindow(QMainWindow):
 
         # Initilize GUI
         try:
-            peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+            peaksimple = self.open_peaksimple(cfg.peaksimple_path)
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 

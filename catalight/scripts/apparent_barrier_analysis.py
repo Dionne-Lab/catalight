@@ -41,6 +41,6 @@ for expt in expts:
 plt.tight_layout()
 data = pd.DataFrame(data_list, columns=['Power', 'Wavelength', 'Barrier'])
 fig = plt.figure()
-ax = Axes3D(fig)
+ax = fig.add_subplot(111, projection='3d')
 surf = ax.plot_trisurf(data['Power'], data['Wavelength'], data['Barrier'])
 plt.show()

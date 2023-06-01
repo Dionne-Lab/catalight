@@ -13,6 +13,7 @@ import time
 import numpy as np
 import pandas as pd
 from pywatlow.watlow import Watlow
+import catalight.config as cfg
 
 
 def convert_temp(old_unit, new_unit, temp):
@@ -58,7 +59,8 @@ class Heater:
 
     def __init__(self):
         """Connect to watlow, print current state."""
-        self.controller = Watlow(port='COM5', address=1)
+        self.controller = Watlow(port=cfg.heater_address['port'],
+                                 address=cfg.heater_address['address'])
         self.is_busy = False  #: Used to block access from other threads
         print('Heater Initializing...')
         print('Current temperature = ' + str(self.read_temp()) + ' C')
