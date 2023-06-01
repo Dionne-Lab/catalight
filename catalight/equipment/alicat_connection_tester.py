@@ -23,11 +23,11 @@ if __name__ == '__main__':
         port_name = port.name
         for address_name in alphabet:
             test_case_str = (port_name + ' ' + address_name)
-            if FlowController.is_connected(port_name, address=address_name):
+            if FlowController.is_connected(port_name, unit=address_name):
                 print(test_case_str + ' is flow controller')
                 positive_cases.append(test_case_str + ' is flow controller\n')
                 break
-            elif FlowMeter.is_connected(port_name, address=address_name):
+            elif FlowMeter.is_connected(port_name, unit=address_name):
                 print(test_case_str + ' is flow meter')
                 positive_cases.append(test_case_str + ' is flow meter\n')
                 break
