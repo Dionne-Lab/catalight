@@ -1,4 +1,4 @@
-﻿catalight.equipment.gc\_control.sri\_gc.GC\_Connector
+catalight.equipment.gc\_control.sri\_gc.GC\_Connector
 =====================================================
 
 .. currentmodule:: catalight.equipment.gc_control.sri_gc

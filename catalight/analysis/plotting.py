@@ -23,7 +23,7 @@ def set_plot_style(figsize=(6.5, 4.5)):
 
     Parameters
     ----------
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -78,17 +78,17 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
         match what exists in the calibration file exactly.
-    mole_bal : str, optional
+    mole_bal : `str`, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)
-    figsize : tuple, optional
+    figsize : `tuple`, optional
          Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
          figsize suggestions:
          1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
          1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    savedata : bool, optional
+    savedata : `bool`, optional
         Indicates whether or not to save data. The default is 'True'.
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -143,7 +143,7 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -196,10 +196,10 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    mole_bal : str, optional
+    mole_bal : `str`, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -329,7 +329,7 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
         ['Conversion', 'Selectivity', 'Error']
         This function is most easily used in conjunction with DataExtractor
         such as in the run_plot_comparison script.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -397,7 +397,7 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
         ['Conversion', 'Selectivity', 'Error']
         This function is most easily used in conjunction with DataExtractor
         such as in the run_plot_comparison script.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);

@@ -71,7 +71,7 @@ class GC_Connector():
     # ----------
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
-    """float, read-only: (min) Minimum setpoint for sample_rate.
+    """`float`, read-only: (min) Minimum setpoint for sample_rate.
     Sum of Channel 1 Time and Channel 1 Posttime from GC control file.
     Value automatically updates when :meth:`read_gc_settings` is called."""
 
@@ -162,7 +162,7 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 3.
 
         Raises
@@ -198,7 +198,7 @@ class GC_Connector():
 
         Returns
         -------
-        None.
+        None
 
         """
         with open(self.ctrl_file, 'r+') as ctrl_file:
@@ -231,7 +231,7 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 3.
 
         Raises
@@ -267,7 +267,7 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 1.
 
         Raises
@@ -277,7 +277,7 @@ class GC_Connector():
 
         Returns
         -------
-        None.
+        None
 
         """
         for attempt in range(1, max_tries + 1):
@@ -305,12 +305,12 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 1.
 
         Returns
         -------
-        None.
+        None
 
         """
         try:

@@ -57,7 +57,7 @@ def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off,
 
     Returns
     -------
-    None.
+    None
 
     """
     expt_dir = os.path.join(main_dir,

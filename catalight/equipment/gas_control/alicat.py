@@ -56,7 +56,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         # Custom mixes cannot be indexed by name in alicat package
@@ -99,7 +99,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -126,7 +126,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -212,7 +212,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         while self.is_busy:
@@ -328,7 +328,7 @@ class Gas_System:
             Path to folder to save the results in.
         flows : list[int or float]
             Flow rate setpoints to sweep through when testing pressure build up
-        num_samples : int, optional
+        num_samples : `int`, optional
             Number of samples to collect at each flow rate. Default is 5.
         """
         print('Testing Pressure Build-up...')

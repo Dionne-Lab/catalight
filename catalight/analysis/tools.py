@@ -243,7 +243,7 @@ def get_timepassed(concentrations, switch_to_hours=2, expt=None):
         3D matrix of concentrations for each molecule, gc collection,
         and condition
         [Condition x [Timestamps, ChemID] x run number
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -292,12 +292,12 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
         1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    force_zero : bool, optional
+    force_zero : `bool`, optional
         Add point (x=0, y=0) to data set. The default is True.
 
     Returns
@@ -456,10 +456,10 @@ def run_analysis(expt, calDF, basecorrect='True', savedata='True'):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    basecorrect : bool, optional
+    basecorrect : `bool`, optional
         Indicates whether or not to baseline correct individual gc data.
         The default is 'True'.
-    savedata : bool, optional
+    savedata : `bool`, optional
         Indicates whether or not to save data. The default is 'True'.
 
     Returns

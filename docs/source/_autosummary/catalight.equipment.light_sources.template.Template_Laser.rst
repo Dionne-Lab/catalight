@@ -36,6 +36,7 @@ catalight.equipment.light\_sources.template.Template\_Laser
    .. autosummary::
    
       ~Template_Laser.P_set
+      ~Template_Laser.is_tunable
       ~Template_Laser.is_busy
    
    

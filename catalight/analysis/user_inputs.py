@@ -42,7 +42,7 @@ class DirectorySelector(QFileDialog):
 
     Parameters
     ----------
-    starting_dir : str, optional
+    starting_dir : `str`, optional
         Path in which to start search. The default is None.
 
     """
@@ -209,7 +209,7 @@ class PlotOptionList():
 
         Returns
         -------
-        None.
+        None
 
         """
         for key, value in option_toggle_dict.items():
@@ -221,7 +221,7 @@ class PlotOptionList():
 
         Parameters
         ----------
-        get_all : bool, optional
+        get_all : `bool`, optional
             Setting to True returns values for hidden GUI elements.
             The default is False.
 
@@ -301,7 +301,7 @@ class PlotOptionsDialog(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         for option in self.options:
@@ -341,13 +341,13 @@ class DataExtractor(QDialog):
 
     Parameters
     ----------
-    starting_dir : str, optional
-        Main directory to initialize gui in. The default is None.
-    target : str, optional
+    starting_dir : `str`, optional
+        Main directory to initialize gui in. The default is None
+    target : `str`, optional
         String to identify as "has data". The default is 'avg_conc'.
-    suffix : str, optional
+    suffix : `str`, optional
         File type to search for. The default is '.csv'.
-    data_depth : int, optional
+    data_depth : `int`, optional
         Depth between data and path to return. The default is 2.
         For example,
 
@@ -361,7 +361,7 @@ class DataExtractor(QDialog):
 
     Returns
     -------
-    None.
+    None
     """
 
     def __init__(self, starting_dir=None, target='avg_conc',
@@ -470,7 +470,7 @@ class DataExtractor(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         selector = DirectorySelector(self.starting_dir)

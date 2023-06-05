@@ -46,6 +46,7 @@ catalight.equipment.light\_sources.diode\_control.Diode\_Laser
       ~Diode_Laser.ao_info
       ~Diode_Laser.ao_range
       ~Diode_Laser.daq_dev_info
+      ~Diode_Laser.is_tunable
       ~Diode_Laser.k_mod
       ~Diode_Laser.is_busy
       ~Diode_Laser.board_num

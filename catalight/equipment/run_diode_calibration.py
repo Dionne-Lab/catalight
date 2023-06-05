@@ -33,13 +33,13 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
 
     Parameters
     ----------
-    current_range : tuple, optional
+    current_range : `tuple`, optional
         (I_min, I_max, step) tuple sent to range(). Used to control the testing
         range. Current cycled from I_min to I_max in steps.
         The default is (150, 800, 35).
-    wavelength : int or float, optional
+    wavelength : `int` or `float`, optional
         Wavelength of diode. The default is 450.
-    tolerance : int or float, optional
+    tolerance : `int` or `float`, optional
         Tolerance for each data point in percent. Sampling will continue until
         20 points have been collected and the standard deviation is less than
         the requested tolerance. Default sampling time is 0.5 seconds/point.

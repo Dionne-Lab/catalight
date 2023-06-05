@@ -1,4 +1,4 @@
-﻿catalight.equipment.gc\_control
+catalight.equipment.gc\_control
 ===============================
 
 .. automodule:: catalight.equipment.gc_control

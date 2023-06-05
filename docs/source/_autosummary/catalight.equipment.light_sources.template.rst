@@ -1,4 +1,4 @@
-﻿catalight.equipment.light\_sources.template
+catalight.equipment.light\_sources.template
 ===========================================
 
 .. automodule:: catalight.equipment.light_sources.template

@@ -56,7 +56,7 @@ class NewportMeter:
 
         Parameters
         ----------
-        averaging_time : float or int, optional
+        averaging_time : `float` or `int`, optional
             Time to collect dataset in seconds. The default is 0.5.
 
         Returns

@@ -377,7 +377,7 @@ class MainWindow(QMainWindow):
 
         Returns
         -------
-        None.
+        None
 
         """
         values = self.values_from_spinboxes(spinboxes)

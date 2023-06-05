@@ -74,7 +74,7 @@ class Heater:
 
         Parameters
         ----------
-        temp_units : str, optional
+        temp_units : `str`, optional
             (C, K, or F) units to return temp in. The default is 'C'.
 
         Returns
@@ -103,7 +103,7 @@ class Heater:
 
         Parameters
         ----------
-        temp_units : str, optional
+        temp_units : `str`, optional
             (C, K, or F) units to return temp in. The default is 'C'.
 
         Returns
@@ -230,12 +230,12 @@ class Heater:
             (deg C/min) List of heater ramp rates to test e.g. [5, 10, 15, 20]
         T_max : int or float
             (deg C) Maximum temperature setpoint to use for testing
-        T_min : int or float, optional
+        T_min : `int` or `float`, optional
             (deg C) Starting setpoint to use for testing. The default is 30.
 
         Returns
         -------
-        None.
+        None
 
         """
         self.ramp(20)  # Start from 'off'

@@ -219,17 +219,19 @@ class Diode_Laser():
 
         Parameters
         ----------
-        I : current you'd like to convert [mA]
+        I : float
+            Current you'd like to convert [mA]
 
         Returns
         -------
-        P : Power [mW]
+        P : float
+            Power [mW]
 
         """
         m = self._calibration[0]
         b = self._calibration[1]
         P = I * m + b
-        return(P)
+        return (P)
 
     def P_to_I(self, P):
         """
@@ -377,9 +379,9 @@ class Diode_Laser():
 
         Parameters
         ----------
-        log_frequency : float or int, optional
+        log_frequency : `float` or `int`, optional
             (seconds) interval to record data with. The default is 0.1 sec.
-        save_path : str, optional
+        save_path : `str`, optional
             Full tile path to save data to. If None, saves in module directory
             with file name 'YYYYMMDDlaser_log.txt'. Appends int to end of file
             name if file name already exists.
