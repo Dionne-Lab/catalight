@@ -29,7 +29,7 @@ def get_user_inputs(starting_dir=None):
 
     Parameters
     ----------
-    starting_dir : str, optional
+    starting_dir : `str`, optional
         Directory to start file dialog in. The default is None.
 
     Returns
@@ -71,12 +71,12 @@ def main(file_list, data_labels, figsize=(6.5, 4.5), basecorrect=True):
         list of full filepaths to ".asc" files for GC data.
     data_labels : list of str
         List of data labels used for generating plot legends.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
         1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    basecorrect : bool, optional
+    basecorrect : `bool`, optional
         Indicates whether or not to baseline correct individual gc data.
         The default is 'True'.
 

@@ -19,6 +19,7 @@ package_dir = os.path.dirname(os.path.abspath(__file__))
 calibration_path = os.path.join(package_dir, 'nkt_calibration.csv')
 # TODO: Update calibration path w/ lightsource name
 
+
 class Template_Laser():
     """
     Vi
@@ -211,9 +212,9 @@ class Template_Laser():
 
         Parameters
         ----------
-        log_frequency : float or int, optional
+        log_frequency : `float` or `int`, optional
             (seconds) interval to record data with. The default is 0.1 sec.
-        save_path : str, optional
+        save_path : `str`, optional
             Full tile path to save data to. If None, saves in module directory
             with file name 'YYYYMMDDlaser_log.txt'. Appends int to end of file
             name if file name already exists.
@@ -275,9 +276,4 @@ class RepeatTimer(Timer):
 
 
 if __name__ == "__main__":
-    laser_controller = Diode_Laser()
-    laser_controller.start_logger()
-    laser_controller.time_warning(1)
-    laser_controller.print_output()
-    laser_controller.stop_logger()
-    laser_controller.shut_down()
+    print('test code')

@@ -35,7 +35,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         # Custom mixes cannot be indexed by name in alicat package
@@ -75,7 +75,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -99,7 +99,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -185,7 +185,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         while self.is_busy:

@@ -34,6 +34,7 @@ catalight.equipment.experiment\_control.Experiment
 
    .. autosummary::
    
+      ~Experiment.bandwidth
       ~Experiment.data_path
       ~Experiment.date
       ~Experiment.expt_list
@@ -49,6 +50,7 @@ catalight.equipment.experiment\_control.Experiment
       ~Experiment.start_time
       ~Experiment.temp
       ~Experiment.tot_flow
+      ~Experiment.wavelength
       ~Experiment.sample_set_size
       ~Experiment.t_buffer
       ~Experiment.t_steady_state

@@ -21,9 +21,9 @@ release = toml['project']["version"]
 author = ', '.join([entry['name'] for entry in toml['project']["authors"]])
 copyright = '2022, Briley Bourgeois, Claire Carlin'
 # These are grabbed from toml now.
-#project = 'catalight'
-#author = 'Briley Bourgeois, Claire Carlin'
-#release = '0.1.1'
+# project = 'catalight'
+# author = 'Briley Bourgeois, Claire Carlin'
+# release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -45,7 +45,7 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 exclude_patterns = ['catalight/data_analysis/IntegrationTesting.rst']
-
+nitpicky = True
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 todo_include_todos = True

@@ -34,7 +34,7 @@ class GCData:
         np array version of time axis from rawdata.
         If basecorrect=True, it will be baseline
         corrected using baseline_correct()
-    apex_ind : numppy.ndarray
+    apex_ind : numpy.ndarray
         indices of all peaks identified by apex_inds()
     numpeaks : int
         length of apex_ind
@@ -202,7 +202,7 @@ class GCData:
 
         Parameters
         ----------
-        tol: float, optional
+        tol: `float`, optional
             Tolerance in percent. Summing stops when change in sum is
             less than tol percent of the current area.
 

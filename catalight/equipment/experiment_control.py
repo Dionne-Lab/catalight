@@ -30,7 +30,7 @@ class Experiment:
 
     Parameters
     ----------
-    eqpt_list: list of objects, optional
+    eqpt_list: `list` of objects, optional
         List of equipment objects. Calls :py:meth:`update_eqpt_list`,
         if provided.
         Order of list should be:
@@ -138,7 +138,7 @@ class Experiment:
 
             Returns
             -------
-            None.
+            None
 
             """
             setattr(self, attr, value)
@@ -281,39 +281,39 @@ class Experiment:
     # Read only properties
     # --------------------
     date = property(lambda self: self._date)
-    """str, read-only: Update w/ :meth:`update_date` method. For logging"""
+    """`str`, read-only: Update w/ :meth:`update_date` method. For logging"""
 
     start_time = property(lambda self: self._start_time)
     """
-    str, read-only: Updates when :meth:`set_initial_conditions` method is
+    `str`, read-only: Updates when :meth:`set_initial_conditions` method is
     called. For logging. Used to calculate time_passed during analysis.
     Given by time.time() at the **end** of initial conditions steps.
     """
 
     ind_var = property(lambda self: self._ind_var)
     """
-    str, read-only: Describes the variable being modified. This gets updated
+    `str`, read-only: Describes the variable being modified. This gets updated
     when expt_type is updated based on what defined by :attr:`expt_list`.
     """
 
     expt_name = property(lambda self: self._expt_name)
-    """str, read-only: Creates name using the fixed variables for expt"""
+    """`str`, read-only: Creates name using the fixed variables for expt"""
 
     results_path = property(lambda self: self._results_path)
     """
-    str, read-only: Save location for analysis, defined relative to expt_log.
+    `str`, read-only: Save location for analysis, defined relative to expt_log.
     Update using :meth:`update_save_paths`
     """
 
     data_path = property(lambda self: self._data_path)
     """
-    str, read-only: Save location for raw data, defined relative to expt_log.
+    `str`, read-only: Save location for raw data, defined relative to expt_log.
     Update using :meth:`update_save_paths`
     """
 
     expt_list = property(lambda self: self._expt_list)
     """
-    pandas.DataFrame, read-only: This class attr defines the possible
+    `pandas.DataFrame`, read-only: This class attr defines the possible
     experiments. This is an important part of the class and should be altered
     with caution. Changing the units within this DF should allow different unit
     inputs for the rest of the codebase, but this feature is untested!!!
@@ -436,7 +436,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         with open(log_path, 'r') as log:
@@ -493,7 +493,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
         """
         # Defines all settings to be included in path name and adds units
         gasses = '_'.join([str(m) + n for m, n in zip(self.gas_comp[0],
@@ -522,7 +522,7 @@ class Experiment:
         ----------
         expt_path : str
             string to the full file path of the experiments dir.
-        should_exist : bool, optional
+        should_exist : `bool`, optional
             If updating based on existing log file, set to true.
             The default is True.
 
@@ -534,7 +534,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         # Defines path for saving results
@@ -569,7 +569,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         if self.expt_type == 'Undefined':
@@ -616,8 +616,8 @@ class Experiment:
 
         Parameters
         ----------
-        fig : matplotlib.pyplot.figure, optional
-            Can supply figure object to write plot to it. The default is None.
+        fig : `matplotlib.pyplot.figure`, optional
+            Can supply figure object to write plot to it. The default is None
 
         Returns
         -------

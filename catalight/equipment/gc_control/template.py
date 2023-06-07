@@ -38,7 +38,7 @@ class GC_Connector():
     # ----------
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
-    """float, read-only: (min) Minimum setpoint for sample_rate.
+    """`float`, read-only: (min) Minimum setpoint for sample_rate.
     Definition of this value may depend on GC type."""
 
     # Setting sample rate changes when connected to GC
@@ -105,7 +105,7 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 3.
 
         Raises
@@ -141,7 +141,7 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 1.
         """
         # See sri_gc for an example of connection w/ multiple attempts
@@ -153,12 +153,12 @@ class GC_Connector():
 
         Parameters
         ----------
-        max_tries : int, optional
+        max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 1.
 
         Returns
         -------
-        None.
+        None
 
         """
         try:

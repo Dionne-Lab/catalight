@@ -180,12 +180,12 @@ Namely, we will skip over:
 |  :func:`~catalight.analysis.tools.list_expt_obj`       | :func:`~catalight.analysis.tools.get_timepassed`  |
 +--------------------------------------------------------+---------------------------------------------------+
 
-:func:`~catalight.analysis.tools.run_analysis` is the main workhorse of the :mod:`~catalight.analysis` subpackage. This function takes in an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and a :ref:`calibration file<calibration>` (imported as a :class:`DataFrame <pandas.DataFrame>`) and produces a 3D numpy :class:`~numpy.array` of concentrations, and two 2D :class:`pandas DataFrames <pandas.DataFrame>` (avg_conc and std_conc). If ``savedata`` is entered as ``True``, the three outputs are saved in the experiment results folder (:ref:`See data structure diagram<data_folder>`)
+:func:`~catalight.analysis.tools.run_analysis` is the main workhorse of the :mod:`~catalight.analysis` subpackage. This function takes in an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and a :ref:`calibration file<calibration>` (imported as a :class:`DataFrame <pandas.DataFrame>`) and produces a 3D numpy :class:`~numpy.ndarray` of concentrations, and two 2D :class:`pandas DataFrames <pandas.DataFrame>` (avg_conc and std_conc). If ``savedata`` is entered as ``True``, the three outputs are saved in the experiment results folder (:ref:`See data structure diagram<data_folder>`)
 
 .. figure:: _static/images/concentrations_format.png
   :width: 800
 
-  The concentrations variable returned by the :func:`~catalight.analysis.tools.run_analysis` function is a 3D :class:`numpy array <numpy.array>` containing the timestamps and ppm values for every data point collected during an experiment.
+  The concentrations variable returned by the :func:`~catalight.analysis.tools.run_analysis` function is a 3D :class:`numpy array <numpy.ndarray>` containing the timestamps and ppm values for every data point collected during an experiment.
 
 .. figure:: _static/images/avg_std_dataframes.png
   :width: 800
@@ -226,7 +226,7 @@ A central idea underpinning the :mod:`~catalight.analysis` module is the :class:
 
 For the time being, the only data type supported by catalight is GCData, whose main behavior includes, extracting data from .asc files, finding peaks, integrating peaks, and converting those peaks to concentrations given some calibration data. All actions logically taken on a single data file are performed within this class. All actions which combine data from multiple files are performed else where (ex. :func:`~catalight.analysis.tools.run_analysis`).
 
-Usage of GCData is straight forward on the frontend. An instance of GCData is created by passing a path to an .asc file output by the GC and indicating if base correction is wanted. Some processing is run in the background, making data available as instance attributes of the new ``data`` object. Converting to concentrations is done by simply calling :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations`.
+Usage of GCData is straight forward on the frontend. An instance of GCData is created by passing a path to an .asc file output by the GC and indicating if base correction is wanted. Some processing is run in the background, making data available as instance attributes of the new ``data`` object. Converting to concentrations is done by simply calling :meth:`~catalight.analysis.gcdata.GCData.get_concentrations`.
 
 .. code-block::
 
@@ -237,29 +237,29 @@ Usage of GCData is straight forward on the frontend. An instance of GCData is cr
    :header-rows: 0
 
    * - 1
-     - :meth:`~catalight.analysis.gcdata.GC_Data.getrawdata`
+     - :meth:`~catalight.analysis.gcdata.GCData.getrawdata`
      - Pull data from .asc file. Returns timestamps and a DataFrame with signal vs elution time.
    * - 2
-     - :meth:`~catalight.analysis.gcdata.GC_Data.apex_inds`
+     - :meth:`~catalight.analysis.gcdata.GCData.apex_inds`
      - Find peaks.
    * - 3
-     - :meth:`~catalight.analysis.gcdata.GC_Data.integration_inds`
+     - :meth:`~catalight.analysis.gcdata.GCData.integration_inds`
      - Find integration bounds of peaks.
 
-.. list-table:: Methods called when running the :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations` method
+.. list-table:: Methods called when running the :meth:`~catalight.analysis.gcdata.GCData.get_concentrations` method
    :header-rows: 0
 
    * - 1
-     - :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations`
+     - :meth:`~catalight.analysis.gcdata.GCData.get_concentrations`
      - Main method called
    * - 2
-     - :meth:`~catalight.analysis.gcdata.GC_Data.integrate_peak`
+     - :meth:`~catalight.analysis.gcdata.GCData.integrate_peak`
      - Integrate the peaks based on the computed integration bounds.
    * - 3
-     - :meth:`~catalight.analysis.gcdata.GC_Data.convert_to_ppm`
+     - :meth:`~catalight.analysis.gcdata.GCData.convert_to_ppm`
      - Converts integrated peak counts to ppm based on calibration data for each molecule.
 
-Lastly, :class:`~catalight.analysis.gcdata.GC_Data` :meth:`~catalight.analysis.gcdata.GC_Data.plot_integration` is helpful for evaluating/troubleshooting the integration performance. This method plots the integration bounds and peak apex. To give a better few of how the data is being processed.
+Lastly, :class:`~catalight.analysis.gcdata.GCData` :meth:`~catalight.analysis.gcdata.GCData.plot_integration` is helpful for evaluating/troubleshooting the integration performance. This method plots the integration bounds and peak apex. To give a better few of how the data is being processed.
 
 .. _helpers:
 
