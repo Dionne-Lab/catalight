@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
                      self.gas_controller, self.heater]
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
-        main_fol = os.path.join(r'C:\Peak489Win10\GCDATA', sample_name)
+        main_fol = os.path.join(cfg.data_path, sample_name)
         os.makedirs(main_fol, exist_ok=True)
 
         for expt in expt_list:
