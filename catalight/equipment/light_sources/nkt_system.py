@@ -124,11 +124,6 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
                + 'Closest power at given conditions = %4.2f mW (%4.1f%%)\n' + RESET)
                % (power_requested, optimal_value, optimal_setpoint))
         warnings.warn(msg)
-    # if (optimal_index == 0) or (optimal_index == (len(values))-1):
-    #     optimal_value = 0
-    # else:
-    #     optimal_value = setpoints[optimal_index]
-    # optimal_value = setpoints[optimal_index]
     return round(optimal_setpoint, 1)
 
 

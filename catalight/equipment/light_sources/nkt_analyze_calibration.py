@@ -304,16 +304,6 @@ def benchmark(calibration, savedata=False):
                                                     wavelength, bandwidth)
             predicted_setpoints[power_setpoint][wavelength] = predicted_setpoint
 
-            # predicted_values.append(predict_power(calibration, power,
-            #                                       wavelength, bandwidth))
-
-        # axes[0].plot(data.index, predicted_values,
-        #             '.k', label='Prediction')
-        # axes[0].plot(data.index, data[power],
-        #             '.r', label='Reading')
-        # error = 100*abs((data[power] - predicted_values)
-        #                 / data[power])
-        # error_ax.plot(data.index, error, '.b')
     data.plot(ax=axes[0], style='.r', legend=False)
     predicted_values.plot(ax=axes[0], style='.k', legend=False)
     error = 100*abs((data - predicted_values) / data)
@@ -340,20 +330,9 @@ def benchmark(calibration, savedata=False):
 
     # Add the legend using the custom handles
     axes[0].legend(handles=legend_handles)
-    #axes[0].legend()
 
     # Inverse Test (What is power setpoint needed?)
     # ---------------------------------------------
-    # predicted_setpoints = []
-    # for index, row in data.iterrows():
-    #     prediction = determine_setpoint(calibration, row['Meter Reading'],
-    #                                     row['Wavelength'], 10)
-    #     predicted_setpoints.append(prediction)
-
-    # axes[1].plot(data['Wavelength'], predicted_setpoints,
-    #              '.k', label='Prediction')
-    # axes[1].plot(data['Wavelength'], 50*np.ones(len(data)),
-    #              '.r', label='Reading')
     predicted_setpoints.plot(ax=axes[1], style='.', legend=False)
     for column in predicted_setpoints.columns:
         axes[1].axhline(y=column, color='r', linestyle='--')
