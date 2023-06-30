@@ -1,11 +1,14 @@
 """
-Generic light source template.
-Some methods involving data logging and voice readout do not need to be editted
+NKT Extreme/Fianium laser + Varia.
+
+This module also includes some utility functions for working with the
+nkt_system.
 """
-import datetime as dt
 import os
 import re
 import time
+import warnings
+import datetime as dt
 from ctypes import POINTER, cast
 from threading import Timer
 
@@ -15,29 +18,42 @@ import pyttsx3
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from nkt_tools import (extreme, varia)
+from catalight.equipment.light_sources import (nkt_collect_calibration,
+                                               nkt_analyze_calibration,
+                                               nkt_verify_calibration)
+
 
 # Sets path when file is imported
 package_dir = os.path.dirname(os.path.abspath(__file__))
 calibration_path = os.path.join(package_dir, 'nkt_calibration.pkl')
 
 
-def predict_power(calibration, power, center, bandwidth):
-    """_summary_
-    650 nm center with 45 nm bandwidth:
-    627.5 [628-638, 638-648, 648-658, 658-668] 669, 670, 671, 672, 672.5
+def predict_power(calibration, power_setpoint, center, bandwidth):
+    """
+    Determine the power output (mW) expected from the given laser conditions.
+
+    Takes in calibration and bandpass filter info to estimate the laser power
+    output (in mW) that can be achieved  by the provided power_setpoint values.
+
     Parameters
     ----------
-    center : _type_
-        _description_
-    bandwidth : _type_
-        _description_
-    data : _type_
-        _description_
+    calibration : pandas.DataFrame
+        Calibration fits for nkt_laser system.
+        Fit parameters for each wavelength. Index is wavelength.
+        Columns are [fit params, relative error, covariance matrix]
+        Each item within the DataFrame is a list itself.
+    power_setpoint: int or float or list[float]
+        The power setpoint (in %) the user desires. This can also be supplied
+        as a pandas.DataFrame or numpy.array.
+    center : float or int
+        The central wavelength of the laser.
+    bandwidth : float or int
+        The bandwidth setting for the laser.
 
     Returns
     -------
-    _type_
-        _description_
+    float
+        The power output (in mW) expected from the given setpoint.
     """
     mask = ((calibration.index > center - bandwidth/2)
             & (calibration.index <= center + bandwidth/2))
@@ -52,7 +68,7 @@ def predict_power(calibration, power, center, bandwidth):
     p = np.array(roi['fit params'].to_list())
     V = roi['covariance matrix']
     degree = p.shape[1]-1
-    x = power  # The x values for interpolation
+    x = power_setpoint  # The x values for interpolation
     powers = np.arange(degree, -1, -1)  # The power to raise x to [x^2, x^1...]
     # If x [a, b, c, d...] is an array,
     # we want to raise each value to each power [n, n-1, ... 2, 1, 0]
@@ -68,14 +84,85 @@ def predict_power(calibration, power, center, bandwidth):
 
 
 def determine_setpoint(calibration, power_requested, center, bandwidth):
-    setpoints = np.arange(10, 100.1, 0.1)
+    """
+    Determine the power setpoint (%) needed to reach a certain output power.
+
+    Predicts the power output of the NKT over the full range of power
+    setpoints [12% - 100%]. Returns the power setpoint that should produce the
+    power output closest to the user supplied power_requested parameter.
+
+    Parameters
+    ----------
+    calibration : pandas.DataFrame
+        Calibration fits for nkt_laser system.
+        Fit parameters for each wavelength. Index is wavelength.
+        Columns are [fit params, relative error, covariance matrix]
+        Each item within the DataFrame is a list itself.
+    power_requested: int or float
+        The power setpoint (in mW) the user desires.
+    center : float or int
+        The central wavelength of the laser.
+    bandwidth : float or int
+        The bandwidth setting for the laser.
+
+    Returns
+    -------
+    float
+        Closest laser setpoint (%) to achieve the requested power output (mW)/
+        Automatically rounded to the nearest 0.1%.
+    """
+    setpoints = np.arange(12, 100.1, 0.1)
     values = predict_power(calibration, setpoints, center, bandwidth)
     optimal_index = np.abs(values-power_requested).argmin()
-    if (optimal_index == 0) or (optimal_index == (len(values))-1):
-        optimal_value = 0
-    else:
-        optimal_value = setpoints[optimal_index]
-    return round(optimal_value, 1)
+    optimal_setpoint = setpoints[optimal_index]
+    optimal_value = values[optimal_index]
+    if (abs(optimal_value - power_requested)) / power_requested > 0.02:
+        # Define color escape sequences
+        YELLOW = '\033[93m'
+        RESET = '\033[0m'
+        msg = ((YELLOW + '\nRequested NKT power = %4.2f mW\n'
+               + 'Closest power at given conditions = %4.2f mW (%4.1f%%)\n' + RESET)
+               % (power_requested, optimal_value, optimal_setpoint))
+        warnings.warn(msg)
+    # if (optimal_index == 0) or (optimal_index == (len(values))-1):
+    #     optimal_value = 0
+    # else:
+    #     optimal_value = setpoints[optimal_index]
+    # optimal_value = setpoints[optimal_index]
+    return round(optimal_setpoint, 1)
+
+
+def max_constant_power(calibration, bandwidth, wavelength_range):
+    """
+    Estimate the maximum power that can be acheived across a given range.
+
+    Predicts the maximum power that can be delivered across the wavelength
+    range for a given bandwidth, then returns the minimum value.
+
+    Parameters
+    ----------
+    calibration : pandas.DataFrame
+        Calibration fits for nkt_laser system.
+        Fit parameters for each wavelength. Index is wavelength.
+        Columns are [fit params, relative error, covariance matrix]
+        Each item within the DataFrame is a list itself.
+    bandwidth : float or int
+        Bandwidth to use for estimation
+    wavelength_range : list[float or int]
+        [lambda_min, lambda_max] center wavelength range to be tested.
+
+    Returns
+    -------
+    float
+        [mW] Maximum constant power for given parameters.
+    """
+    data = []
+    for wavelength in range(*wavelength_range):
+        value = predict_power(calibration, 100, wavelength, bandwidth)
+        data.append([wavelength, value])
+    results = pd.DataFrame(data, columns=['wavelength', 'max power'])
+    results.plot(x='wavelength', y='max power')
+    return results.min()
 
 
 class NKT_System():
@@ -244,6 +331,24 @@ class NKT_System():
         print('Last laser calibration was:')
         print(dt.datetime.fromtimestamp(t).strftime('%Y-%m-%d'))
 
+    def run_calibration(self, meter):
+        """
+        Perform a calibration experiment, analyze results, and verify quality.
+
+        Will run the scripts: nkt_collect_calibration, nkt_analyze_calibration,
+        and nkt_verify_calibration. Loads the collected calibration before
+        proceeding to verification experiment.
+
+        Parameters
+        ----------
+        meter : catalight.equipment.power_meter
+            Compatible power meter to use for calibration experiments.
+        """
+        nkt_collect_calibration.main(self._laser, self._bandpass, meter)
+        nkt_analyze_calibration.main()
+        self.read_calibration()  # Update to new calibration
+        nkt_verify_calibration.main(self, meter)
+
     def time_warning(self, time_left):
         """
         Play audio warning that laser will engage in time_left minutes.
@@ -334,9 +439,4 @@ class RepeatTimer(Timer):
 
 
 if __name__ == "__main__":
-    laser_controller = Diode_Laser()
-    laser_controller.start_logger()
-    laser_controller.time_warning(1)
-    laser_controller.print_output()
-    laser_controller.stop_logger()
-    laser_controller.shut_down()
+    print('test')

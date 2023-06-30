@@ -46,6 +46,7 @@ def set_plot_style(figsize=(6.5, 4.5)):
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
+    plt.rcParams['legend.fontsize'] = fontsize[0]-2
     # plt.rcParams['text.usetex'] = False
     plt.rcParams['svg.fonttype'] = 'none'
 
