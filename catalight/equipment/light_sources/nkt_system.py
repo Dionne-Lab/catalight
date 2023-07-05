@@ -18,9 +18,7 @@ import pyttsx3
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from nkt_tools import (extreme, varia)
-from catalight.equipment.light_sources import (nkt_collect_calibration,
-                                               nkt_analyze_calibration,
-                                               nkt_verify_calibration)
+import catalight.equipment.light_sources as optics_tools
 
 
 # Sets path when file is imported
@@ -79,7 +77,7 @@ def predict_power(calibration, power_setpoint, center, bandwidth):
     x_powers = np.power.outer(x, powers)
     y = p @ x_powers.T
     prediction = y.sum(axis=0)
-    #x_error = np.sqrt(x_powers.dot(V).dot(x_powers))
+    # x_error = np.sqrt(x_powers.dot(V).dot(x_powers))
     return prediction
 
 
@@ -203,7 +201,11 @@ class NKT_System():
 
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
     central_wavelength = property(lambda self: self._central_wavelength)
+    """
+    The center wavelength for the nkt laser, read-only. Set with set_bandpass()
+    """
     bandwidth = property(lambda self: self._bandwidth)
+    """The bandwidth for the nkt laser, read-only. Set with set_bandpass()"""
 
     def set_bandpass(self, center, width):
         """
@@ -336,13 +338,13 @@ class NKT_System():
 
         Parameters
         ----------
-        meter : catalight.equipment.power_meter
+        meter : catalight.equipment.power_meter.newport.NewportMeter
             Compatible power meter to use for calibration experiments.
         """
-        nkt_collect_calibration.main(self._laser, self._bandpass, meter)
-        nkt_analyze_calibration.main()
+        optics_tools.nkt_collect_calibration.main(self._laser, self._bandpass, meter)
+        optics_tools.nkt_analyze_calibration.main()
         self.read_calibration()  # Update to new calibration
-        nkt_verify_calibration.main(self, meter)
+        optics_tools.nkt_verify_calibration.main(self, meter)
 
     def time_warning(self, time_left):
         """

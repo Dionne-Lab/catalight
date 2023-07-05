@@ -68,7 +68,8 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
     "matplotlib": ("https://matplotlib.org/stable/", None),
-    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
+    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None),
+    "nkt_tools": ("https://nkt-tools.readthedocs.io/en/latest/", None)
 }
 
 autodoc_mock_imports = [

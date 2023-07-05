@@ -4,16 +4,26 @@
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1,
                      length=100, fill='█', printEnd="\r"):
     """
-    Call in a loop to create terminal progress bar
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    Call in a loop to create terminal progress bar.
+
+    Parameters
+    ----------
+    iteration : `int`
+        Current iteration.
+    total : `int`
+        Total iterations.
+    prefix : `str`, optional
+        Prefix string.
+    suffix : `str`, optional
+        Suffix string.
+    decimals : `int`, optional
+        Positive number of decimals in percent.
+    length : `int`, optional
+        Character length of the bar.
+    fill : `str`, optional
+        Bar fill character.
+    printEnd : `str`, optional
+        End character (e.g., "\\r", "\\r\\n").
     """
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration
                                                             / float(total)))

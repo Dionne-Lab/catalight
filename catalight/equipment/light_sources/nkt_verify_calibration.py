@@ -4,7 +4,7 @@ Random sampling experiment to test last run calibration performance.
 The main function of this script will coordinate an NKT system and compatible
 powermeter through a randomized verification experimtn in which the last run
 calibration is used to predict the power output of random laser conditions.
-Typically, this should be called by the nkt_system's run_calibration() method. 
+Typically, this should be called by the nkt_system's run_calibration() method.
 """
 
 import os
@@ -65,7 +65,7 @@ def generate_data(calibration, num_measurements, laser_system, powermeter):
         Number of random conditions to request for verfication
     laser_system : catalight.equipment.light_sources.nkt_system.NKT_System
         NKT System to run verification on
-    powermeter : catalight.equipment.power_meter
+    powermeter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter object
 
     Returns
@@ -115,7 +115,7 @@ def plot_verification(results, savedata=True):
     results : pandas.DataFrame
         Randomized power measurements with columns ['center', 'bandwidth',
         'requested_power', 'measured_power']
-    savedata : bool, optional
+    savedata : `bool`, optional
         Whether or not to save the csv, svg, png for test, by default True
 
     Returns

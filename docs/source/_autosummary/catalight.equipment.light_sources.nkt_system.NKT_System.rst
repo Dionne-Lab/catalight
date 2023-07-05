@@ -19,6 +19,7 @@ catalight.equipment.light\_sources.nkt\_system.NKT\_System
       ~NKT_System.log_power
       ~NKT_System.print_output
       ~NKT_System.read_calibration
+      ~NKT_System.run_calibration
       ~NKT_System.set_bandpass
       ~NKT_System.set_power
       ~NKT_System.shut_down

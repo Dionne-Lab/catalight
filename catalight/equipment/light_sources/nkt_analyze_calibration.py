@@ -102,7 +102,7 @@ def plot_correction(calibration_data, predicted_values,
         The predicted laser powers based on summing mW/nm values from cal data.
     corrected_values : pandas.DataFrame
         Calibration data adjusted to best match predicted values.
-    savedata : bool, optional
+    savedata : `bool`, optional
         Whether or not to save correction plot, by default False
     """
     set_plot_style((9, 6.65))  # use catalight default plotting style
@@ -215,7 +215,7 @@ def plot_fits(calibration_data, calibration, savedata=False):
         Fit parameters for each wavelength. Index is wavelength.
         Columns are [fit params, relative error, covariance matrix]
         Each item within the DataFrame is a list itself.
-    savedata : bool, optional
+    savedata : `bool`, optional
         Indicate whether to save results, by default False
     """
     print('Plotting Linear Fits...')
@@ -268,7 +268,7 @@ def benchmark(calibration, savedata=False):
         Fit parameters for each wavelength. Index is wavelength.
         Columns are [fit params, relative error, covariance matrix]
         Each item within the DataFrame is a list itself.
-    savedata : bool, optional
+    savedata : `bool`, optional
         Indicate whether to save results, by default False
     """
     set_plot_style((9, 6.65))  # use catalight default plotting style

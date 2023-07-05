@@ -14,6 +14,7 @@ catalight.equipment.light\_sources.nkt\_system
       :toctree:
    
       determine_setpoint
+      max_constant_power
       predict_power
    
    

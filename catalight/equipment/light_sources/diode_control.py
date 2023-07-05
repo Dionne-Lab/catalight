@@ -428,7 +428,7 @@ class RepeatTimer(Timer):
     ----------
     interval : float or int
         Time interval in seconds to call function.
-    function : func
+    function : `function`
         Functions to call
     args
         Arguments of function.

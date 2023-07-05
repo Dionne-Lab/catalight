@@ -165,7 +165,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float or int
+        comp_list : list[float or int]
             Composition list in either percents or fractions.
 
         Raises
@@ -175,7 +175,7 @@ class Gas_System:
 
         Returns
         -------
-        comp_list : list of float
+        list[float]
             Updated composition list as fractions
 
         """
@@ -324,9 +324,9 @@ class Gas_System:
 
         Parameters
         ----------
-        savepath : str
+        savepath : `str`
             Path to folder to save the results in.
-        flows : list[int or float]
+        flows : `list`[`int` or `float`]
             Flow rate setpoints to sweep through when testing pressure build up
         num_samples : `int`, optional
             Number of samples to collect at each flow rate. Default is 5.

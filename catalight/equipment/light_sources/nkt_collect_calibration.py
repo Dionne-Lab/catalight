@@ -26,11 +26,11 @@ def sweep_wavelengths(meter, bandpass, tolerance=10):
 
     Parameters
     ----------
-    meter : catalight.equipment.power_meter
+    meter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter for making power measurments
     bandpass : nkt_tools.varia
         Bandpass object for laser system
-    tolerance : int or float, optional
+    tolerance : `int` or `float`, optional
         Acceptable deviation in % between measurments, by default 10
 
     Returns
@@ -72,11 +72,11 @@ def make_measurement(meter, tolerance=2.5, num_measurements=20):
 
     Parameters
     ----------
-    meter : catalight.equipment.power_meter
+    meter : catalight.equipment.power_meter.newport.NewportMeter
         Some type of power meter supported by catalight
-    tolerance : float, optional
+    tolerance : `float`, optional
         acceptable standard deviation in percent, by default 2.5
-    num_measurements : int, optional
+    num_measurements : `int`, optional
         the number of measurements to average, by default 20
 
     Returns
@@ -176,7 +176,7 @@ def run_calibration(laser, bandpass, meter):
         NKT laser to calibrate
     bandpass : nkt_tools.varia.Varia
         Connected bandpass filter
-    meter : catalight.equipment.power_meter
+    meter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter to use for calibration measurements.
 
     Returns
@@ -217,7 +217,7 @@ def main(laser, bandpass, meter):
         NKT laser to calibrate
     bandpass : nkt_tools.varia.Varia
         Connected bandpass filter
-    meter : catalight.equipment.power_meter
+    meter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter to use for calibration measurements.
     """
 

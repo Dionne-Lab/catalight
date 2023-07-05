@@ -590,7 +590,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-            expt : catalight.equipment.Experiment
+            expt : catalight.equipment.experiment_control.Experiment
                 Experiment object containing the expt_type to be analyzed
         """
         # only actually updates ind var if number check out
@@ -764,7 +764,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        expt : catalight.equipment.experiment_control.Experiment, optional
+        expt : `catalight.equipment.experiment_control.Experiment`, optional
             Updates plot with contents of experiment if supplied.
             Scrubs plot if expt=None. The default is None.
         """
@@ -904,6 +904,17 @@ class MainWindow(QMainWindow):
             item.setDisabled(value)
 
     def change_label_color(self, label, new_color):
+        """
+        Convert the color of a QLabel using QSS notation.
+
+        Parameters
+        ----------
+        label : PyQt5.QtWidgets.QLabel
+            Label object to change color of.
+        new_color : str
+            QSS string for the color to change to.
+        """
+        # This can be abbreviated by just linking to this function...
         label.setStyleSheet('Color: ' + new_color)
 
     def open_peaksimple(self, path_name):
@@ -922,7 +933,7 @@ class MainWindow(QMainWindow):
 
         Returns
         -------
-        process : subprocess.process
+        process : subprocess.Popen
             returns a process object for peaksimple instance
         """
         for process in psutil.process_iter():
@@ -1022,7 +1033,7 @@ class Worker(QRunnable):
 
     Parameters
     ----------
-    callback : function
+    callback : `function`
         The function callback to run on this worker thread. Supplied args and
         kwargs will be passed through to the runner.
 
