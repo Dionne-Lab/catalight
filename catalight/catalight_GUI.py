@@ -437,7 +437,10 @@ class MainWindow(QMainWindow):
         self.manualGasCComp.valueChanged.connect(lambda: func(*args))
         self.manualGasDComp.valueChanged.connect(lambda: func(*args))
         self.progress_signal.connect(self.progressBar.setValue)
-        self.change_color_signal.connect(self.change_label_color)
+        self.change_color_signal.connect(lambda label,
+                                         color:
+                                         label.setStyleSheet('Color: ' + color)
+                                         )
 
     def init_figs(self):
         """
@@ -902,20 +905,6 @@ class MainWindow(QMainWindow):
 
         for item in group:
             item.setDisabled(value)
-
-    def change_label_color(self, label, new_color):
-        """
-        Convert the color of a QLabel using QSS notation.
-
-        Parameters
-        ----------
-        label : PyQt5.QtWidgets.QLabel
-            Label object to change color of.
-        new_color : str
-            QSS string for the color to change to.
-        """
-        # This can be abbreviated by just linking to this function...
-        label.setStyleSheet('Color: ' + new_color)
 
     def open_peaksimple(self, path_name):
         """
