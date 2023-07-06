@@ -190,15 +190,16 @@ class GCData:
         """
         Support function for integration_inds to search for integration bounds.
 
-        Determined where:
-        1. the change in signal is less than 0.5%
-            of the previous signal point (with averaging); or
-        2. the added intensity starts increasing
-            (i.e. when the ion is common to co-eluting compounds)
+        Determined where
 
-        adapted from pyMS function peak_sum_area
+            1. the change in signal is less than 0.5% of the previous
+            signal point (with averaging); or
+            2. the added intensity starts increasing (i.e. when the ion is
+            common to co-eluting compounds)
+
+        Adapted from pyMS function peak_sum_area
         by Andrew Isaac and Sean O'Callaghan
-        https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py
+        `<https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py>`_
 
         Parameters
         ----------

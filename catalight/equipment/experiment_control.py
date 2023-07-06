@@ -61,6 +61,13 @@ class Experiment:
                      'Independent Variable',
                      'Active Status',
                      'Units'])
+        """
+        This class attribute defines the possible experiments.
+
+        This is an important part of the class and should be altered with
+        caution. The active status element will change to True when the
+        expt_type has been defined.
+        """
 
         # Set default values of properties
         # --------------------------------
@@ -123,7 +130,7 @@ class Experiment:
 
         Returns
         -------
-        set_any : function
+        set_any : `function`
             update function for setting string properties
         """
 
@@ -162,7 +169,7 @@ class Experiment:
 
         Returns
         -------
-        set_any : function
+        set_any : `function`
             update function for setting string properties
 
         """

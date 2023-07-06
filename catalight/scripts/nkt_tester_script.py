@@ -19,7 +19,7 @@ def save_all(name, df, fig):
         Name of save file to be prepended with the date.
     df : pandas.DataFrame
         Dataframe to save as csv
-    fig : matplotlib.pyplot.Figure
+    fig : matplotlib.pyplot.figure
         Figure to save as svg, png, and pickle
     """
     date = dt.date.today().strftime('%Y%m%d')

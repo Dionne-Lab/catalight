@@ -19,7 +19,7 @@ class Gas_System:
     factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
                       'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
                       'N2', 'N2O', 'O2', 'C3H8', 'SF6', 'Xe']
-    #: Factory gas list saved to Alicat MFCs
+    """Factory gas list saved to Alicat MFCs"""
 
     def __init__(self):
         """
@@ -27,7 +27,7 @@ class Gas_System:
 
         The user needs to update the address and COM ports for each mfc
         based on their specific setup. This process can be assisted by using
-        the "connection_tester.py" file
+        the "alicat_connection_tester.py" file
         """
         self.mfc_A = FlowController(port=cfg.mfc_list[0]['port'],
                                     address=cfg.mfc_list[0]['unit'])

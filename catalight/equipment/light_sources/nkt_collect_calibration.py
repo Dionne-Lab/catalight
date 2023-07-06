@@ -28,7 +28,7 @@ def sweep_wavelengths(meter, bandpass, tolerance=10):
     ----------
     meter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter for making power measurments
-    bandpass : nkt_tools.varia
+    bandpass : nkt_tools.varia.Varia
         Bandpass object for laser system
     tolerance : `int` or `float`, optional
         Acceptable deviation in % between measurments, by default 10

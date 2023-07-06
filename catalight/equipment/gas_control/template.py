@@ -3,11 +3,11 @@ import time
 
 class Gas_System:
     """MFC control."""
-    # ToDo update based on specific model
+    # TODO update based on specific model
     factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
                       'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
                       'N2', 'N2O', 'O2', 'C3H8', 'SF6', 'Xe']
-    #: Factory gas list saved to Alicat MFCs
+    """Factory gas list saved to Alicat MFCs"""
 
     def __init__(self):
         """
@@ -15,13 +15,22 @@ class Gas_System:
 
         The user needs to update the address and COM ports for each mfc
         based on their specific setup. This process can be assisted by using
-        the "connection_tester.py" file
+        the "alicat_connection_tester.py" file
         """
-        self.mfc_A = FlowController(port='COM6', address='A')
-        self.mfc_B = FlowController(port='COM9', address='B')
-        self.mfc_C = FlowController(port='COM8', address='C')
-        self.mfc_D = FlowController(port='COM10', address='D')
-        self.mfc_E = FlowMeter(port='COM11', address='E')
+        self.mfc_A = FlowController(port=cfg.mfc_list[0]['port'],
+                                    address=cfg.mfc_list[0]['unit'])
+
+        self.mfc_B = FlowController(port=cfg.mfc_list[1]['port'],
+                                    address=cfg.mfc_list[1]['unit'])
+
+        self.mfc_C = FlowController(port=cfg.mfc_list[2]['port'],
+                                    address=cfg.mfc_list[2]['unit'])
+
+        self.mfc_D = FlowController(port=cfg.mfc_list[3]['port'],
+                                    address=cfg.mfc_list[3]['unit'])
+
+        self.mfc_E = FlowMeter(port=cfg.mfc_list[4]['port'],
+                               address=cfg.mfc_list[4]['unit'])
         self.is_busy = False
 
     def set_gasses(self, gas_list):

@@ -1011,6 +1011,10 @@ class EmittingStream():
 class WorkerSignal(QObject):
     """Provide signals for interacting w/ worker threads."""
     finished = pyqtSignal()
+    """
+    Basic pyqtSignal indicating worker thread called by worker thread to
+    indicate when the process is finished.
+    """
 
 
 class Worker(QRunnable):

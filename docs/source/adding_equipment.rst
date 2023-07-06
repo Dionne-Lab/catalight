@@ -4,7 +4,6 @@ Connection with the equipment:
 ------------------------------
 
 
-
 Integration to Catalight:
 -------------------------
 The connection between the computer and the hardware is done within its own package. This simplifies catalight by adding some modularity, and I **strongly** advise that developers adding new instruments to catalight develop the communications within a seperate package.

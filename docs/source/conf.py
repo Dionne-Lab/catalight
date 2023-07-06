@@ -39,7 +39,8 @@ extensions = [
     ]
 
 autosummary_generate = True
-autodoc_default_options = {'inherited-members': False}
+autodoc_default_options = {'inherited-members': False,
+                           'private-members': True}
 
 templates_path = ['_templates']
 source_suffix = '.rst'

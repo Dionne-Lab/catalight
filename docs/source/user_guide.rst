@@ -184,6 +184,12 @@ Graphical user interface
 ------------------------
 A graphical user interface has been developed for both the execution of experiments/hardware control and seperately the initialization of data analysis. In the current state, new user groups will need to edit some source code to utilize the GUI version of catalight, unless identical hardware is equipped. By exactly matching class methods, a great deal of code editing can be avoided by simply redefining what equipment is imported to the GUI module. See :doc:`the development guide </developer_guide>` for more details on making your changes to the codebase.
 
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+       <iframe src="https://www.youtube.com/embed/-8Cob1xNpf4?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Introduction to the GUI" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+
 .. warning:: If running the GUI with Spyder, change your settings to excecute in a external system terminal. Running through an IPython kernel can cause errors with threading in the current implementation.
 
 There are two main types of GUIs present within catalight. Files containing the phrase "GUI" (e.g. :mod:`catalight.catalight_GUI`) are meant to be used entirely as a UI by executing the script from an editor or the command line. Modules beginning with the phrase "run\_" contain a gui component and can be executed from the editor or command line as a script, but these files can also be used through scripting by calling their main() function. You can read more about the latter type in the :doc:`data analysis section <data_analysis>`.
@@ -243,6 +249,14 @@ The purpose of this section is to demonstrate the connection process for specifi
 Data analysis
 =============
 A major benefit of using catalight for experiment automation is that data saving can be standardized with ease. This make data processing much easier, and we've developed a subpackage to catalight called :mod:`~catalight.analysis` to automate much of the data processing work flow. In the :doc:`data analysis<data_analysis>` page, we cover the different aspects of the analysis subpackage.
+
+.. raw :: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/M1izA4k8QBw?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Initial Data Analysis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+
+Navigate through the guides below for more details:
 
 .. toctree::
     :maxdepth: 2

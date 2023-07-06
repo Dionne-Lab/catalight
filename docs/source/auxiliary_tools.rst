@@ -65,10 +65,10 @@ The :meth:`~catalight.equipment.gas_control.alicat.Gas_System.test_pressure` met
 
 MFC port connection tester
 --------------------------
-:mod:`~catalight.equipment.alicat_MFC.connection_tester` is a command line tool that sweeps through every COM port on a PC and every letter of the alphabet searching for alicat MFC connections. If you don't know which ports your MFCs are connected to, this script will find those connection and print a summary at the end of the search. The script takes several minutes to complete, but only needs to be run once. The results can then be used to change the address parameters of the :class:`~catalight.equipment.gas_control.alicat.Gas_System` init method which defines the systems MFC locations.
+:mod:`~catalight.equipment.alicat_connection_tester` is a command line tool that sweeps through every COM port on a PC and every letter of the alphabet searching for alicat MFC connections. If you don't know which ports your MFCs are connected to, this script will find those connection and print a summary at the end of the search. The script takes several minutes to complete, but only needs to be run once. The results can then be used to change the address parameters of the :class:`~catalight.equipment.gas_control.alicat.Gas_System` init method which defines the systems MFC locations.
 
 .. code-block:: text
-    :caption: Example output of :mod:`~catalight.equipment.alicat_MFC.connection_tester`
+    :caption: Example output of :mod:`~catalight.equipment.alicat_connection_tester`
 
     Beginning search: This process will take several minutes
     COM4 A is not MFC

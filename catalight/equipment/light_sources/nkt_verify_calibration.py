@@ -144,7 +144,7 @@ def main(laser_system, meter):
     ----------
     laser_system : catalight.equipment.light_sources.nkt_system.NKT_System
         NKT laser system (laser + varia)
-    meter : catalight.equipment.powermeter
+    meter : catalight.equipment.power_meter.newport.NewportMeter
         Compatible power meter used for measurements
     """
     folder = os.path.dirname(os.path.abspath(__file__))
