@@ -45,6 +45,8 @@ class Diode_Laser():
         self._I_max = 2000  #: (mA) Max current of current controller
         self._k_mod = self._I_max / 10  #: (mA/V)
         self._P_set = 0
+        self._wavelength_range = [450, 450]
+        self._bandwidth_range = [0, 0]
 
         # Initiate DAQ
         self._daq_dev_info = DaqDeviceInfo(self.board_num)
@@ -91,6 +93,10 @@ class Diode_Laser():
     ai_info = property(lambda self: self._ai_info)  #: Analog input info
     ai_range = property(lambda self: self._ai_range)  #: Analog input range
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+    wavelength_range = property(lambda self: self._wavelength_range)
+    """[min, max] Min/Max wavelength of tunable laser, read-only"""
+    bandwidth_range = property(lambda self: self._bandwidth_range)
+    """[min, max] Min/Max bandwidth of tunable laser, read-only"""
 
     def set_power(self, P_set):
         """

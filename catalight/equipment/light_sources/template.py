@@ -34,8 +34,10 @@ class Template_Laser():
         self._calibration = [0, 0]
 
         # Set non-public attr
-
         self._P_set = 0
+        #TODO Update for hardware
+        self._wavelength_range = [400, 800]
+        self._bandwidth_range = [10, 100]
 
         self.read_calibration()
 
@@ -55,6 +57,10 @@ class Template_Laser():
         self.set_power(0)
 
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+    wavelength_range = property(lambda self: self._wavelength_range)
+    """[min, max] Min/Max wavelength of tunable laser, read-only"""
+    bandwidth_range = property(lambda self: self._bandwidth_range)
+    """[min, max] Min/Max bandwidth of tunable laser, read-only"""
 
     def set_power(self, P_set):
         """

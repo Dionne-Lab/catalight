@@ -184,7 +184,8 @@ class NKT_System():
                            - self._bandpass.short_setpoint)
         self._central_wavelength = (self._bandpass.long_setpoint
                                     + self._bandpass.short_setpoint)/2
-
+        self._wavelength_range = [400, 800]
+        self._bandwidth_range = [10, 100]
         self.read_calibration()
 
         # Initiate a voice control object to send alert messages
@@ -206,6 +207,10 @@ class NKT_System():
     """
     bandwidth = property(lambda self: self._bandwidth)
     """The bandwidth for the nkt laser, read-only. Set with set_bandpass()"""
+    wavelength_range = property(lambda self: self._wavelength_range)
+    """[min, max] Min/Max wavelength of tunable laser, read-only"""
+    bandwidth_range = property(lambda self: self._bandwidth_range)
+    """[min, max] Min/Max bandwidth of tunable laser, read-only"""
 
     def set_bandpass(self, center, width):
         """
