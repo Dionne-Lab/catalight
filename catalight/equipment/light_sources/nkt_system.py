@@ -253,6 +253,20 @@ class NKT_System():
         # TODO Print setpoint current and/or power
         # ---------------------------------------------------------------------
 
+    def get_output_power(self):
+        """
+        Get output power based on laser setpoint and saved calibration.
+
+        Returns
+        -------
+        P : float or int
+            Power [mW] rounded to 3 decimal points
+        """
+        setpoint = self._laser.power_level  # noqa I==current
+        P = predict_power(self.calibration, setpoint,
+                          self.central_wavelength, self.bandwidth)
+        return (P)
+
     def print_output(self):
         """Print the bandpass settings, power setpoint, and expected power."""
         bandpass = (self._bandpass.short_setpoint,
