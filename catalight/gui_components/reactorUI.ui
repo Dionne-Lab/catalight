@@ -1065,38 +1065,21 @@ Stop</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_63">
-              <property name="text">
-               <string>Power (mW)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="manualPower">
-              <property name="toolTip">
-               <string>The desired power to set for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="tunable_laser_label5">
               <property name="text">
                <string>Central Wavelength (nm)</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="tunable_laser_label6">
               <property name="text">
                <string>Bandwidth (nm)</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="5" column="1">
              <widget class="QDoubleSpinBox" name="manualCenter">
               <property name="toolTip">
                <string>If using a tunable laser (i.e. NKT), sets the central wavelength for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
@@ -1121,7 +1104,7 @@ Stop</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="6" column="1">
              <widget class="QDoubleSpinBox" name="manualBandwidth">
               <property name="toolTip">
                <string>If using a tunable laser (i.e. NKT), sets the bandwidth for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
@@ -1140,17 +1123,54 @@ Stop</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="tunable_laser_label4">
               <property name="text">
                <string>Max Power at Center/Width (mW):</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QLabel" name="label_max_power_2">
               <property name="text">
                <string>---</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <property name="spacing">
+               <number>50</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_63">
+                <property name="text">
+                 <string>Power (mW)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="set_in_percent">
+                <property name="text">
+                 <string>set in %</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="manualPower">
+              <property name="toolTip">
+               <string>The desired power to set for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -2279,8 +2299,18 @@ Stop</string>
            <string>Equipment Status:</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_12" columnstretch="1,5">
-           <item row="3" column="0">
-            <widget class="LedIndicator" name="gas_Status" native="true">
+           <property name="verticalSpacing">
+            <number>9</number>
+           </property>
+           <item row="2" column="0">
+            <widget class="LedIndicator" name="heater_Status" native="true">
+             <property name="styleSheet">
+              <string notr="true">background-color:black</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="LedIndicator" name="laser_Status" native="true">
              <property name="styleSheet">
               <string notr="true">background-color:black</string>
              </property>
@@ -2290,30 +2320,6 @@ Stop</string>
             <widget class="LedIndicator" name="gc_Status" native="true">
              <property name="styleSheet">
               <string notr="true">background-color:black</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="LedIndicator" name="laser_Status" native="true">
-             <property name="styleSheet">
-              <string notr="true">background-color:black</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="LedIndicator" name="heater_Status" native="true">
-             <property name="styleSheet">
-              <string notr="true">background-color:black</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QPushButton" name="eqpt_ReconnectBut">
-             <property name="toolTip">
-              <string>Restart the hardware connection process. If using Peaksimple, please close the software before reconnecting</string>
-             </property>
-             <property name="text">
-              <string>Reconnect</string>
              </property>
             </widget>
            </item>
@@ -2331,6 +2337,16 @@ Stop</string>
              </property>
             </widget>
            </item>
+           <item row="6" column="0" colspan="2">
+            <widget class="QPushButton" name="eqpt_ReconnectBut">
+             <property name="toolTip">
+              <string>Restart the hardware connection process. If using Peaksimple, please close the software before reconnecting</string>
+             </property>
+             <property name="text">
+              <string>Reconnect</string>
+             </property>
+            </widget>
+           </item>
            <item row="2" column="1">
             <widget class="QLabel" name="label_24">
              <property name="text">
@@ -2338,10 +2354,17 @@ Stop</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1">
+           <item row="5" column="1">
             <widget class="QComboBox" name="laser_selection_box">
              <property name="toolTip">
               <string>Select the desired laser to use.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="LedIndicator" name="gas_Status" native="true">
+             <property name="styleSheet">
+              <string notr="true">background-color:black</string>
              </property>
             </widget>
            </item>
@@ -2444,7 +2467,6 @@ Stop</string>
   <tabstop>consoleOutput</tabstop>
   <tabstop>manualTemp</tabstop>
   <tabstop>manualRamp</tabstop>
-  <tabstop>manualPower</tabstop>
   <tabstop>manualGasAComp</tabstop>
   <tabstop>manualGasBComp</tabstop>
   <tabstop>manualGasCComp</tabstop>

@@ -512,6 +512,7 @@ class MainWindow(QMainWindow):
             self.laser_Status.setChecked(1)
         else:
             self.laser_Status.setChecked(0)
+        self.set_form_limits()
 
     def set_form_limits(self):
         """
@@ -564,6 +565,9 @@ class MainWindow(QMainWindow):
             self.tunable_laser_label4.setEnabled(laser.is_tunable)
             self.tunable_laser_label5.setEnabled(laser.is_tunable)
             self.tunable_laser_label6.setEnabled(laser.is_tunable)
+            self.set_in_percent.setEnabled(laser.is_tunable)
+            if not laser.is_tunable:  # Uncheck box for fixed laser
+                self.set_in_percent.setChecked(False)
 
     # Updating Tabs/Objects:
     # ----------------------
@@ -1057,7 +1061,10 @@ class MainWindow(QMainWindow):
             # change text color to red while updating
             self.current_power_setpoint1.setStyleSheet('Color: red')
             self.current_power_setpoint2.setStyleSheet('Color: red')
-            self.laser_controller.set_power(self.manualPower.value())
+            if self.set_in_percent.isChecked():
+                self.laser_controller._laser.set_power(self.manualPower.value())
+            else:
+                self.laser_controller.set_power(self.manualPower.value())
             # Change text color back to white after update
             self.current_power_setpoint1.setStyleSheet('Color: white')  # noqa
             self.current_power_setpoint2.setStyleSheet('Color: white')  # noqa
