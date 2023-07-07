@@ -192,13 +192,13 @@ class Diode_Laser():
                                                   self._ai_range, Vin_value)
             # Convert to relevant output numbers
             V = Vin_eng_units_value
-            I = round(V * self._k_mod, 3) #noqa I==current
+            I = round(V * self._k_mod, 3)  # noqa I==current
         else:
             print('DAQ Read Not Supported')
-            I = 0 #noqa I==current
+            I = 0  # noqa I==current
 
         self.is_busy = False
-        return(abs(I))
+        return (abs(I))
 
     def get_output_power(self):
         """
@@ -209,17 +209,17 @@ class Diode_Laser():
         P : float or int
             Power [mW] rounded to 3 decimal points
         """
-        I = self.get_output_current() #noqa I==current
+        I = self.get_output_current()  # noqa I==current
         P = round(self.I_to_P(I), 3)
-        return(P)
+        return (P)
 
     def print_output(self):
         """Print the output current and power to console."""
-        I = self.get_output_current() #noqa I==current
+        I = self.get_output_current()  # noqa I==current
         P = self.get_output_power()
         print('Measured Laser output = %7.2f mW / %7.2f mA' % (P, I))
 
-    def I_to_P(self, I): #noqa I==current
+    def I_to_P(self, I):  # noqa I==current
         """
         converts a current to power based on read calibration
 
