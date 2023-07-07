@@ -75,8 +75,8 @@ class Experiment:
         # Descriptions below in property definitions
         self._temp = [273.0]
         self._power = [0.0]
-        self._wavelength = [None]
-        self._bandwidth = [None]
+        self._wavelength = [0]
+        self._bandwidth = [0]
         self._tot_flow = [0.0]
         self._gas_comp = [[0.0, 50.0, 0.0, 0.0]]
         self._gas_type = ['C2H2', 'Ar', 'H2', 'Ar']

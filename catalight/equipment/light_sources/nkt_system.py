@@ -124,40 +124,6 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
         warnings.warn(msg)
     return round(optimal_setpoint, 1)
 
-
-def max_constant_power(calibration, bandwidth, wavelength_range):
-    """
-    Estimate the maximum power that can be acheived across a given range.
-
-    Predicts the maximum power that can be delivered across the wavelength
-    range for a given bandwidth, then returns the minimum value.
-
-    Parameters
-    ----------
-    calibration : pandas.DataFrame
-        Calibration fits for nkt_laser system.
-        Fit parameters for each wavelength. Index is wavelength.
-        Columns are [fit params, relative error, covariance matrix]
-        Each item within the DataFrame is a list itself.
-    bandwidth : float or int
-        Bandwidth to use for estimation
-    wavelength_range : list[float or int]
-        [lambda_min, lambda_max] center wavelength range to be tested.
-
-    Returns
-    -------
-    float
-        [mW] Maximum constant power for given parameters.
-    """
-    data = []
-    for wavelength in range(*wavelength_range):
-        value = predict_power(calibration, 100, wavelength, bandwidth)
-        data.append([wavelength, value])
-    results = pd.DataFrame(data, columns=['wavelength', 'max power'])
-    results.plot(x='wavelength', y='max power')
-    return results.min()
-
-
 class NKT_System():
     """
     This class wraps together the Varia and Extreme classes of nkt_tools.
@@ -168,7 +134,7 @@ class NKT_System():
     will need to develop their own plug in, but a guide was developed to
     demonstrate how the NKT_System and nkt_tool was written and integrated.
     """
-    is_tunable = False
+    is_tunable = True
     """bool: Defines whether laser class is tunable. NKT system is."""
 
     def __init__(self):
@@ -231,7 +197,8 @@ class NKT_System():
         """
         short_setpoint = center - width/2
         long_setpoint = center + width/2
-        if (short_setpoint >= 400) and (long_setpoint <= 800):
+        if ((short_setpoint >= self.wavelength_range[0])
+                and (long_setpoint <= self.wavelength_range[1])):
             self._laser.set_emission(False)
             self._bandpass.short_setpoint = short_setpoint
             self._bandpass.long_setpoint = long_setpoint
@@ -350,6 +317,33 @@ class NKT_System():
         optics_tools.nkt_analyze_calibration.main()
         self.read_calibration()  # Update to new calibration
         optics_tools.nkt_verify_calibration.main(self, meter)
+
+    def max_constant_power(self, bandwidth, wavelength_range):
+        """
+        Estimate the maximum power that can be acheived across a given range.
+
+        Predicts the maximum power that can be delivered across the wavelength
+        range for a given bandwidth, then returns the minimum value.
+
+        Parameters
+        ----------
+        bandwidth : float or int
+            Bandwidth to use for estimation
+        wavelength_range : list[float or int]
+            [lambda_min, lambda_max] center wavelength range to be tested.
+
+        Returns
+        -------
+        float
+            [mW] Maximum constant power for given parameters.
+        """
+        data = []
+        for wavelength in range(*wavelength_range):
+            value = predict_power(self.calibration, 100, wavelength, bandwidth)
+            data.append([wavelength, value])
+        results = pd.DataFrame(data, columns=['wavelength', 'max power'])
+        results.plot(x='wavelength', y='max power')
+        return results.min()
 
     def time_warning(self, time_left):
         """
