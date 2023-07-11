@@ -78,6 +78,9 @@ After connecting your equipment and running experiments with either the GUI or s
 
 Usage
 =====
+
+Before getting started, make sure that your equipment is connecting correctly by editting the connection information found in the :mod:`config.py <catalight.config>` file. The easiest ways to confirm equipment connection is to initialize an equipment object in a script/notebook or start the catalight GUI and check the "Live View" tab.
+
 .. _scripting:
 
 Scripting

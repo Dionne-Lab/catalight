@@ -20,20 +20,20 @@ For proper gas monitoring, many mass flow controllers need to be supplied with t
 
 .. admonition:: Making the Connection
 
-    The COM ports for the individual MFC addresses are currently hard coded into the :class:`Gas_System.__init__ <catalight.equipment.gas_control.alicat.Gas_System.__init__>` method. New users need to edit these addresses in a forked version of the source code for successful connection. Additionally, the MFC count is hard coded for 4 MFCs and one output flow meter at the moment and code changes need to make a number of updates to the source code to change the MFC count. This will soon be updated such that the user only has to specify the number of MFCs in the init method. Eventually this will be replaced with a single configuration file. See :ref:`Areas for Future Development <future>` for more details. Additional software shouldn't be necessary.
+    As of v0.2.0, the COM ports for the individual MFC addresses are defined by the  :mod:`config.py <catalight.config>` file. New users need to edit these addresses in a forked version of the source code for successful connection. At the moment, the MFC count is hard coded for 4 MFCs and one output flow meter at the moment, and significant code changes to the source code are needed to change the MFC count. This will soon be updated such that the user only has to specify the number of MFCs in the config file. The :mod:`catalight.equipment.alicat_connection_tester` module can be used to aid in determining the MFC COM ports. If can be helpful to change the MFC address (A, B, C, etc) directly on the hardware prior to trying to interface through catalight. See :ref:`Areas for Future Development <future>` for more details. Additional software shouldn't be necessary.
 
 .. _harrick_doc:
 
 Harrick Heater/Watlow
 ---------------------
-`The Harrick reaction chamber <https://harricksci.com/praying-mantis-high-temperature-reaction-chambers/>`_'s `heating system <https://harricksci.com/temperature-controller-kit-110v/>`_ is controlled by a Watlow temperature controller. In place of using the `EZ-ZONE configurator software <https://www.watlow.com/products/controllers/software/ez-zone-configurator-software>`_, we utilize the `pywatlow package <https://pywatlow.readthedocs.io/en/latest/readme.html>`_ developed by Brendan Sweeny and Joe Reckwalder. Brendan has an excellent `write up <http://brendansweeny.com/posts/watlow>`_ describing the creation of the project. Our :class:`~catalight.equipment.heating.watlow.Heater` class simply add some additional utilities on top of the pywatlow project, such as unit conversions, and ramped heating. In theory, the :class:`~catalight.equipment.heating.watlow.Heater` class should work with any Watlow controlled heater, but we have only tested it with the Harrick system.
+`The Harrick reaction chamber <https://harricksci.com/praying-mantis-high-temperature-reaction-chambers/>`_'s `heating system <https://harricksci.com/temperature-controller-kit-110v/>`_ is controlled by a Watlow temperature controller. In place of using the `EZ-ZONE configurator software <https://www.watlow.com/products/controllers/software/ez-zone-configurator-software>`_, we utilize the `pywatlow package <https://pywatlow.readthedocs.io/en/latest/readme.html>`_ developed by Brendan Sweeny and Joe Reckwalder. Brendan has an excellent `write up <http://brendansweeny.com/posts/watlow>`_ describing the creation of the project. Our :class:`~catalight.equipment.heating.watlow.Heater` class simply add some additional utilities on top of the pywatlow project, such as unit conversions, and ramped heating. In theory, the :class:`~catalight.equipment.heating.watlow.Heater` class should work with any Watlow controlled heater, but we have only tested it with the Harrick system. Note that Harrick provides a calibration file for this equipment which should be installed using the EZ zone configurator. We have not confirmed that these calibrations port over succesfully into the the :class:`~catalight.equipment.heating.watlow.Heater` class.
 
 .. tip::
      Other parameters are accessible using pywatlow. See the "Operations" section of the :download:`manual <../../manuals/watlow_heater/manual_pmpmintegrated.pdf>` located in the catalight/equipment/harrick_watlow directory.
 
 .. admonition:: Making the Connection
 
-    The COM ports for the Watlow heater are currently hard coded into the :class:`Heater.__init__ <catalight.equipment.heating.watlow.Heater.__init__>` method. New users need to edit these addresses in a forked version of the source code for successful connection. Eventually this will be replaced with a single configuration file. See :ref:`Areas for Future Development <future>` for more details. Additional software should not be needed, though testing your connection with the EZ zone configurator software can be helpful for troubleshooting.
+    The COM ports for the Watlow heater are are defined by the  :mod:`config.py <catalight.config>` file. New users need to edit these addresses in a forked version of the source code for successful connection. Additional software should not be needed, though testing your connection with the EZ zone configurator software can be helpful for troubleshooting, and calibration.
 
 .. _thorlabs_diode_doc:
 
@@ -57,6 +57,19 @@ We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=
     :width: 800
 
     Screenshot of product page for the DAQ board used in D-Lab hardware configuration
+
+NKT Fianium/Extreme + Varia System
+----------------------------------
+.. Warning::
+    Lasers present serious safety hazards, even in lab environments. This is especially true when software is used to automatically control them. Always take abundant safety precautions to ensure laser beams are physically contained. Never assume the code is working properly. Don't rely on the software to turn the laser off and assume you can enter the laser lab without safety glasses on. Always be in the room when engaging the laser via code, and always use safety interlocks and message boards to alert other users that an unattended laser is active.
+
+Support for an NKT laser and the Varia tunable emission system is provided through the :class:`catalight.equipment.light_sources.nkt_system.NKT_System` class. The NKT connection is acheived through NKT's DLL interface. To simplify the interaction with the user, we developed this interface as a seperate python package, `nkt_tools <https://nkt-tools.readthedocs.io/en/latest/>`_, which is installed as a requirement of the catalight package. The DLL file is also included in the source files of :mod:`nkt_tools`, so no additional software should be needed to interface with the NKT system.
+
+The :mod:`nkt_tools` package provides a python interface for the NKT Varia and Extreme/Fianium individual, whereas the :class:`~catalight.equipment.light_sources.nkt_system.NKT_System` class bundles the Varia and laser into a single interface. In the first iteration of this tool (v0.2.0), the hardware is configured without an inline power meter and power management is handled by varying the power setpoint (in %) of the Fianium/Extreme. This type of power management alters the output spectrum of the laser, making the power output (in mW) non-linear. We try to circumvent this challenge by performing a calibration on the system (described below), but future users should consider utilizing a computer controlled neutral density filter or incorporating an inline power meter to monitor the NKT output. In the former case, the NKT could be set to 100% power output, and the delivered power (in mW) could be more easily calibrated since the output spectrum shouldn't change with an ND filter. In the latter case, a certain percent of the NKT laser could be monitored to inform the software of the delivered power, and a feedback loop can be written to better deliver the requested power.
+
+.. admonition:: Making the Connection
+
+    All of the connection needed for the NKT System should be handled automatically, and the user should only need to plug in their system to the computer. It is necessary to calibrate the NKT system prior to use.
 
 .. _newport_meter_doc:
 

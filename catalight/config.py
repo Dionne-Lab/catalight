@@ -1,4 +1,4 @@
-"""Configuration file containing hardware setup specifc information."""
+"""Configuration file containing hardware setup specific information."""
 
 data_path = r"C:\Users\dionn\GC\GC_Data"
 """This is the folder in which experimental data will be saved"""
