@@ -395,7 +395,7 @@ class MainWindow(QMainWindow):
             # If applicable, update bandpass settings
             if laser.is_tunable:
                 # Get current setpoints directly from bandpass filter
-                self.manualCenter.setValue(laser.center_wavelength)
+                self.manualCenter.setValue(laser.central_wavelength)
                 self.manualBandwidth.setValue(laser.bandwidth)
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
@@ -919,8 +919,8 @@ class MainWindow(QMainWindow):
                 self.current_center_2.setText('%.2f' % center)
                 self.current_bandwidth_1.setText('%.2f' % bandwidth)
                 self.current_bandwidth_2.setText('%.2f' % bandwidth)
-                self.current_center_setpoint1.setText('%.2f' % laser.center_wavelength)
-                self.current_center_setpoint2.setText('%.2f' % laser.center_wavelength)
+                self.current_center_setpoint1.setText('%.2f' % laser.central_wavelength)
+                self.current_center_setpoint2.setText('%.2f' % laser.central_wavelength)
                 self.current_bandwidth_setpoint1.setText('%.2f' % laser.bandwidth)
                 self.current_bandwidth_setpoint2.setText('%.2f' % laser.bandwidth)
 
