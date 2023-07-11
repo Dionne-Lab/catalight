@@ -543,7 +543,7 @@ class MainWindow(QMainWindow):
             self.manualCenter.setMinimum(lambda_min - bandwidth/2)
             self.manualCenter.setMaximum(lambda_max + bandwidth/2)
             self.manualBandwidth.setMinimum(laser.bandwidth_range[0])
-            self.manualBandWidth.setMaximum(laser.bandwidth_range[1])
+            self.manualBandwidth.setMaximum(laser.bandwidth_range[1])
 
             # Change bounds of laser control on expt design tab
             bandwidth = self.setBandwidth.value()
