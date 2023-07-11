@@ -124,6 +124,7 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
         warnings.warn(msg)
     return round(optimal_setpoint, 1)
 
+
 class NKT_System():
     """
     This class wraps together the Varia and Extreme classes of nkt_tools.
