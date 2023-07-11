@@ -550,13 +550,13 @@ class MainWindow(QMainWindow):
             self.setCenter.setMinimum(lambda_min - bandwidth/2)
             self.setCenter.setMaximum(lambda_max + bandwidth/2)
             self.setBandwidth.setMinimum(laser.bandwidth_range[0])
-            self.setBandWidth.setMaximum(laser.bandwidth_range[1])
+            self.setBandwidth.setMaximum(laser.bandwidth_range[1])
 
             # Enable/Disable tunable laser properties according to laser type
             self.manualCenter.setEnabled(laser.is_tunable)
             self.manualBandwidth.setEnabled(laser.is_tunable)
             self.setCenter.setEnabled(laser.is_tunable)
-            self.setBandWidth.setEnabled(laser.is_tunable)
+            self.setBandwidth.setEnabled(laser.is_tunable)
             self.label_max_power_1.setEnabled(laser.is_tunable)
             self.label_max_power_2.setEnabled(laser.is_tunable)
             self.tunable_laser_label1.setEnabled(laser.is_tunable)
