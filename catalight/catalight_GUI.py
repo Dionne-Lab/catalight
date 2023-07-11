@@ -510,8 +510,8 @@ class MainWindow(QMainWindow):
 
         if self.laser_controller:
             self.laser_Status.setChecked(1)
-            self.manualBandwidth = self.laser_controller.bandwidth
-            self.manualCenter = self.laser_controller.central_wavelength
+            self.manualBandwidth.setValue(self.laser_controller.bandwidth)
+            self.manualCenter.setValue(self.laser_controller.central_wavelength)
         else:
             self.laser_Status.setChecked(0)
         self.set_form_limits()
