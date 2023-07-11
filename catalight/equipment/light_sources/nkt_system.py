@@ -263,7 +263,7 @@ class NKT_System():
             Power [mW] rounded to 3 decimal points
         """
         setpoint = self._laser.power_level  # noqa I==current
-        P = predict_power(self.calibration, setpoint,
+        P = predict_power(self._calibration, setpoint,
                           self.central_wavelength, self.bandwidth)
         return (P)
 
@@ -353,7 +353,7 @@ class NKT_System():
         """
         data = []
         for wavelength in np.arange(*wavelength_range):
-            value = predict_power(self.calibration, 100, wavelength, bandwidth)
+            value = predict_power(self._calibration, 100, wavelength, bandwidth)
             data.append([wavelength, value])
         results = pd.DataFrame(data, columns=['wavelength', 'max power'])
         results.plot(x='wavelength', y='max power')
