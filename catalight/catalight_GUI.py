@@ -236,7 +236,7 @@ class MainWindow(QMainWindow):
             # Check if output is supported by DAQ
             if laser._ao_info.is_supported:
                 # Assign diode laser to first item in combobox
-                self.laser_selection_box.addItemData(0, laser)
+                self.laser_selection_box.setItemData(0, laser)
                 # Make sure diode is selected in box and change active laser
                 self.laser_selection_box.setCurrentIndex(0)
                 self.change_laser()
@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
         try:
             laser = NKT_System()
             # Assign nkt laser to first item in combobox
-            self.laser_selection_box.addItemData(1, laser)
+            self.laser_selection_box.setItemData(1, laser)
             # If previous laser didn't connect, set the nkt as active
             if not self.laser_Status.isChecked():
                 self.laser_selection_box.setCurrentIndex(1)
