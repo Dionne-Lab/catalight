@@ -15,5 +15,5 @@ mfc_list = [{'port': 'COM7', 'unit': 'A'},
             {'port': 'COM5', 'unit': 'E'}]
 """COM address info for mass flow controllers"""
 
-heater_address = {'port': 'COM9', 'address': '1'}
+heater_address = {'port': 'COM9', 'address': 1}
 """COM address info for heater"""

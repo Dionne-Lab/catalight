@@ -352,7 +352,7 @@ class NKT_System():
             [mW] Maximum constant power for given parameters.
         """
         data = []
-        for wavelength in range(*wavelength_range):
+        for wavelength in np.arange(*wavelength_range):
             value = predict_power(self.calibration, 100, wavelength, bandwidth)
             data.append([wavelength, value])
         results = pd.DataFrame(data, columns=['wavelength', 'max power'])

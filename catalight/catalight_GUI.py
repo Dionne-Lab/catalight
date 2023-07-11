@@ -393,7 +393,7 @@ class MainWindow(QMainWindow):
             laser = self.laser_controller
             self.manualPower.setValue(laser.get_output_power())
             # If applicable, update bandpass settings
-            if laser.is_tunable():
+            if laser.is_tunable:
                 # Get current setpoints directly from bandpass filter
                 self.manualCenter.setValue(laser.center_wavelength)
                 self.manualBandwidth.setValue(laser.bandwidth)
@@ -906,7 +906,7 @@ class MainWindow(QMainWindow):
             self.current_power_setpoint2.setText('%.2f' % laser.P_set)
 
             # If applicable, update bandpass settings
-            if laser.is_tunable():
+            if laser.is_tunable:
                 # Get current setpoints directly from bandpass filter
                 bandwidth = (laser._bandpass.long_setpoint
                              - laser._bandpass.short_setpoint)
