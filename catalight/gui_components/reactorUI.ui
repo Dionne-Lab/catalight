@@ -26,7 +26,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>style_guide/icon.png</normaloff>style_guide/icon.png</iconset>
+    <normaloff>../../../../../../.designer/backup/style_guide/icon.png</normaloff>../../../../../../.designer/backup/style_guide/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -1425,7 +1425,7 @@ Stop</string>
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>style_guide/drawing.svg</pixmap>
+           <pixmap>../../../../../../.designer/backup/style_guide/drawing.svg</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -1558,7 +1558,7 @@ Stop</string>
                 </widget>
                </item>
                <item row="3" column="2">
-                <widget class="QLabel" name="current_center_setpoint_1">
+                <widget class="QLabel" name="current_center_setpoint1">
                  <property name="text">
                   <string>-</string>
                  </property>
@@ -2396,7 +2396,7 @@ Stop</string>
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>style_guide/drawing.svg</pixmap>
+           <pixmap>../../../../../../.designer/backup/style_guide/drawing.svg</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
