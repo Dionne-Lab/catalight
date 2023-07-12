@@ -309,6 +309,9 @@ class MainWindow(QMainWindow):
         self.IndVar_start.valueChanged.connect(self.update_expt)
         self.IndVar_stop.valueChanged.connect(self.update_expt)
         self.IndVar_step.valueChanged.connect(self.update_expt)
+        self.IndVar_start.valueChanged.connect(self.update_power_estimate)
+        self.IndVar_stop.valueChanged.connect(self.update_power_estimate)
+        self.IndVar_step.valueChanged.connect(self.update_power_estimate)
         self.setGasAType.insertItems(0, Gas_System.factory_gasses)
         self.setGasBType.insertItems(0, Gas_System.factory_gasses)
         self.setGasCType.insertItems(0, Gas_System.factory_gasses)
@@ -460,7 +463,7 @@ class MainWindow(QMainWindow):
 
         Connect buttons within manual control tab to corresponding functions.
         Also initialize a timer that calls update_eqpt_status(), updating both
-        the manua_ctrl tab and live view
+        the manual_ctrl tab and live view
         """
         # Connect buttons in manual ctrl tab
         self.buttonBox.button(QDialogButtonBox.Apply).clicked \
@@ -508,13 +511,21 @@ class MainWindow(QMainWindow):
         self.laser_controller = self.laser_selection_box.currentData()
         """Currently active laser system"""
 
+        global update_flag
+        update_flag = False
+        self.set_form_limits()
         if self.laser_controller:
             self.laser_Status.setChecked(1)
             self.manualBandwidth.setValue(self.laser_controller.bandwidth)
             self.manualCenter.setValue(self.laser_controller.central_wavelength)
+            self.setBandwidth.setValue(self.laser_controller.bandwidth)
+            self.setCenter.setValue(self.laser_controller.central_wavelength)
+            self.update_power_estimate()
+            
         else:
             self.laser_Status.setChecked(0)
-        self.set_form_limits()
+        update_flag = True
+
 
     def set_form_limits(self):
         """
@@ -797,7 +808,7 @@ class MainWindow(QMainWindow):
 
         item = self.listWidget.currentItem()
         global update_flag
-        # If there is data in listWidget item and now in the middle of updating
+        # If there is data in listWidget item and not in the middle of updating
         if (item is not None) & update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
         else:
@@ -980,22 +991,23 @@ class MainWindow(QMainWindow):
         if ((self.IndVar_stop.value() > self.IndVar_start.value())
                 and (self.IndVar_step.value() > 0)
                 and (self.expt_types.currentText() == 'wavelength_sweep')):
-            centers = list(np.arange(self.IndVar_start.value(),
-                                     self.IndVar_stop.value() + 1,
-                                     self.IndVar_step.value()))
+            centers = [self.IndVar_start.value(),
+                       self.IndVar_stop.value()]
 
         else:  # Otherwise, use fixed value
-            centers = [self.setCenter.value()]  # Single value in list
+            centers = 2*[self.setCenter.value()]  # duplicate in list
 
-        bandwidth = self.setBandwidth.value()
-        power = laser.max_constant_power(bandwidth, centers)
-        self.label_max_power_1.setText(power)
-
-        # label_max_power_2:
-        centers = [self.manualCenter.value()]  # Single value in list
-        bandwidth = self.manualBandwidth.value()
-        power = laser.max_constant_power(bandwidth, centers)
-        self.label_max_power_2.setText(power)
+        global update_flag
+        if update_flag:
+            bandwidth = self.setBandwidth.value()
+            power = laser.max_constant_power(bandwidth, centers)
+            self.label_max_power_1.setText(('%4.0f' % power))
+    
+            # label_max_power_2:
+            centers = [self.manualCenter.value()]  # Single value in list
+            bandwidth = self.manualBandwidth.value()
+            power = laser.max_constant_power(bandwidth, centers)
+            self.label_max_power_2.setText(('%4.0f' % power))
 
     def manual_ctrl_eqpt(self):
         """

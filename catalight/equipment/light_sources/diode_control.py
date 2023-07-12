@@ -45,6 +45,8 @@ class Diode_Laser():
         self._I_max = 2000  #: (mA) Max current of current controller
         self._k_mod = self._I_max / 10  #: (mA/V)
         self._P_set = 0
+        self._bandwidth = 0
+        self._central_wavelength = 450
         self._wavelength_range = [450, 450]
         self._bandwidth_range = [0, 0]
 
@@ -97,6 +99,10 @@ class Diode_Laser():
     """[min, max] Min/Max wavelength of tunable laser, read-only"""
     bandwidth_range = property(lambda self: self._bandwidth_range)
     """[min, max] Min/Max bandwidth of tunable laser, read-only"""
+    central_wavelength = property(lambda self: self._central_wavelength)
+    """Current wavelength of laser, read-only"""
+    bandwidth = property(lambda self: self._bandwidth)
+    """Current bandwidth of laser, read-only"""
 
     def set_power(self, P_set):
         """

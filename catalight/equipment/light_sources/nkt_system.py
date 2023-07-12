@@ -56,7 +56,7 @@ def predict_power(calibration, power_setpoint, center, bandwidth):
     mask = ((calibration.index > center - bandwidth/2)
             & (calibration.index <= center + bandwidth/2))
     roi = calibration[mask]
-
+    #print(roi)
     # Duplicate the first row until the desired size is reached
     while len(roi) < bandwidth:
         if roi.index[0] == calibration.index[0]:
@@ -353,12 +353,13 @@ class NKT_System():
             [mW] Maximum constant power for given parameters.
         """
         data = []
-        for wavelength in np.arange(*wavelength_range):
+        lambda_min = wavelength_range[0]
+        lambda_max = wavelength_range[-1]
+        for wavelength in np.arange(lambda_min,lambda_max+0.01):
             value = predict_power(self._calibration, 100, wavelength, bandwidth)
-            data.append([wavelength, value])
-        results = pd.DataFrame(data, columns=['wavelength', 'max power'])
-        results.plot(x='wavelength', y='max power')
-        return results.min()
+            data.append(value)
+
+        return min(data)
 
     def time_warning(self, time_left):
         """
