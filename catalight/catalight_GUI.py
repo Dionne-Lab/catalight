@@ -1075,10 +1075,17 @@ class MainWindow(QMainWindow):
             # change text color to red while updating
             self.current_power_setpoint1.setStyleSheet('Color: red')
             self.current_power_setpoint2.setStyleSheet('Color: red')
+            
+            # If the user wants to control the % setpoint instead
             if self.set_in_percent.isChecked():
                 self.laser_controller._laser.set_power(self.manualPower.value())
+                # If user request 0% power, turn off emission
+                if self.set_in_percent.value() == 0:
+                    self.laser_controller._laser.set_emission(False)
+            # Otherwise set power using nkt_system methods
             else:
                 self.laser_controller.set_power(self.manualPower.value())
+                
             # Change text color back to white after update
             self.current_power_setpoint1.setStyleSheet('Color: white')  # noqa
             self.current_power_setpoint2.setStyleSheet('Color: white')  # noqa
