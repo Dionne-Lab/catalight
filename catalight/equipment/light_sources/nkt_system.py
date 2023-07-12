@@ -18,7 +18,9 @@ import pyttsx3
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from nkt_tools import (extreme, varia)
-import catalight.equipment.light_sources as optics_tools
+from catalight.equipment.light_sources import (nkt_collect_calibration,
+                                               nkt_analyze_calibration,
+                                               nkt_verify_calibration)
 
 
 # Sets path when file is imported
@@ -333,10 +335,10 @@ class NKT_System():
         meter : catalight.equipment.power_meter.newport.NewportMeter
             Compatible power meter to use for calibration experiments.
         """
-        optics_tools.nkt_collect_calibration.main(self._laser, self._bandpass, meter)
-        optics_tools.nkt_analyze_calibration.main()
+        nkt_collect_calibration.main(self._laser, self._bandpass, meter)
+        nkt_analyze_calibration.main()
         self.read_calibration()  # Update to new calibration
-        optics_tools.nkt_verify_calibration.main(self, meter)
+        nkt_verify_calibration.main(self, meter)
 
     def max_constant_power(self, bandwidth, wavelength_range):
         """
