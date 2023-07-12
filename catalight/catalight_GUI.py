@@ -278,6 +278,7 @@ class MainWindow(QMainWindow):
         Initializes widgets used for defining comp_sweep experiments.
         """
         self.expt_types.currentIndexChanged.connect(self.update_expt)
+        self.expt_types.currentIndexChanged.connect(self.set_form_limits)
         # On first run, this should populate expt drop down on GUI
         if self.expt_types.count() < len(Experiment().expt_list['Expt Name']):
             self.expt_types.addItem('Undefined')
@@ -290,6 +291,7 @@ class MainWindow(QMainWindow):
         # Tunable laser updates also connect w/ power estimation
         self.setCenter.valueChanged.connect(self.update_power_estimate)
         self.setBandwidth.valueChanged.connect(self.update_power_estimate)
+        self.setBandwidth.valueChanged.connect(self.set_form_limits)
         self.setFlow.valueChanged.connect(self.update_expt)
         self.setSampleRate.valueChanged.connect(self.update_expt)
         self.setSampleSize.valueChanged.connect(self.update_expt)
@@ -520,11 +522,11 @@ class MainWindow(QMainWindow):
             self.manualCenter.setValue(self.laser_controller.central_wavelength)
             self.setBandwidth.setValue(self.laser_controller.bandwidth)
             self.setCenter.setValue(self.laser_controller.central_wavelength)
-            self.update_power_estimate()
             
         else:
             self.laser_Status.setChecked(0)
         update_flag = True
+        self.update_power_estimate()
 
 
     def set_form_limits(self):
@@ -553,15 +555,15 @@ class MainWindow(QMainWindow):
 
             # Change bounds of laser control on manual ctrl tab
             bandwidth = self.manualBandwidth.value()
-            self.manualCenter.setMinimum(lambda_min - bandwidth/2)
-            self.manualCenter.setMaximum(lambda_max + bandwidth/2)
+            self.manualCenter.setMinimum(lambda_min + bandwidth/2)
+            self.manualCenter.setMaximum(lambda_max - bandwidth/2)
             self.manualBandwidth.setMinimum(laser.bandwidth_range[0])
             self.manualBandwidth.setMaximum(laser.bandwidth_range[1])
 
             # Change bounds of laser control on expt design tab
             bandwidth = self.setBandwidth.value()
-            self.setCenter.setMinimum(lambda_min - bandwidth/2)
-            self.setCenter.setMaximum(lambda_max + bandwidth/2)
+            self.setCenter.setMinimum(lambda_min + bandwidth/2)
+            self.setCenter.setMaximum(lambda_max - bandwidth/2)
             self.setBandwidth.setMinimum(laser.bandwidth_range[0])
             self.setBandwidth.setMaximum(laser.bandwidth_range[1])
 
@@ -581,7 +583,20 @@ class MainWindow(QMainWindow):
             self.set_in_percent.setEnabled(laser.is_tunable)
             if not laser.is_tunable:  # Uncheck box for fixed laser
                 self.set_in_percent.setChecked(False)
-
+        
+        # Change limits on independent variable spinboxes
+        if (self.expt_types.currentText() == 'wavelength_sweep'
+                and self.laser_Status.isChecked()):
+            self.IndVar_start.setMinimum(lambda_min + bandwidth/2)
+            self.IndVar_stop.setMinimum(lambda_min + bandwidth/2)
+            self.IndVar_start.setMaximum(lambda_max - bandwidth/2)
+            self.IndVar_stop.setMaximum(lambda_max - bandwidth/2)
+        else:
+            self.IndVar_start.setMinimum(0)
+            self.IndVar_stop.setMinimum(0)
+            self.IndVar_start.setMaximum(9999)
+            self.IndVar_stop.setMaximum(9999)
+            
     # Updating Tabs/Objects:
     # ----------------------
     def display_expt(self):
@@ -989,7 +1004,6 @@ class MainWindow(QMainWindow):
         # label_max_power_1:
         # If eligible wavelength sweep selected, show max power in range
         if ((self.IndVar_stop.value() > self.IndVar_start.value())
-                and (self.IndVar_step.value() > 0)
                 and (self.expt_types.currentText() == 'wavelength_sweep')):
             centers = [self.IndVar_start.value(),
                        self.IndVar_stop.value()]
@@ -1001,13 +1015,13 @@ class MainWindow(QMainWindow):
         if update_flag:
             bandwidth = self.setBandwidth.value()
             power = laser.max_constant_power(bandwidth, centers)
-            self.label_max_power_1.setText(('%4.0f' % power))
+            self.label_max_power_1.setText(('%4.0f mW' % power))
     
             # label_max_power_2:
             centers = [self.manualCenter.value()]  # Single value in list
             bandwidth = self.manualBandwidth.value()
             power = laser.max_constant_power(bandwidth, centers)
-            self.label_max_power_2.setText(('%4.0f' % power))
+            self.label_max_power_2.setText(('%4.0f mW' % power))
 
     def manual_ctrl_eqpt(self):
         """
@@ -1078,6 +1092,7 @@ class MainWindow(QMainWindow):
             
             # If the user wants to control the % setpoint instead
             if self.set_in_percent.isChecked():
+                self.laser_controller._laser.set_emission(True)
                 self.laser_controller._laser.set_power(self.manualPower.value())
                 # If user request 0% power, turn off emission
                 if self.set_in_percent.value() == 0:

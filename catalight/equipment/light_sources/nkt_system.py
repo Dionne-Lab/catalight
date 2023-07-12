@@ -360,6 +360,15 @@ class NKT_System():
         data = []
         lambda_min = wavelength_range[0]
         lambda_max = wavelength_range[-1]
+        lower_lim = self.wavelength_range[0]
+        upper_lim = self.wavelength_range[1]
+
+        # Do not proceed if the given range is invalid
+        if not (lower_lim <= lambda_min < upper_lim
+                and lower_lim < lambda_max <= upper_lim):
+            return 0
+            
+        # Predict power over given range, return smallest value
         for wavelength in np.arange(lambda_min,lambda_max+0.01):
             value = predict_power(self._calibration, 100, wavelength, bandwidth)
             data.append(value)
