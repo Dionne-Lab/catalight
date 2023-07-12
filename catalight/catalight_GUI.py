@@ -35,7 +35,8 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QComboBox,
                              QDialogButtonBox, QDoubleSpinBox, QFileDialog,
                              QLabel, QListWidgetItem, QMainWindow, QMessageBox,
-                             QPushButton, QSpinBox)
+                             QPushButton, QSpinBox, QDialog, QVBoxLayout,
+                             QProgressBar)
 from PyQt5.uic import loadUi
 matplotlib.use('Qt5Agg')
 
@@ -47,6 +48,9 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.loading_screen = LoadingScreen()
+        """Loading screen shown during initialization of system"""
+
         fol = os.path.dirname(__file__)
         ui_path = os.path.join(fol, 'gui_components/reactorUI.ui')
         loadUi(ui_path, self)
@@ -57,6 +61,8 @@ class MainWindow(QMainWindow):
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
+        self.update_flag = False
+        """True means system is currently updating in backend. Default False"""
         sys.stdout = EmittingStream(self.consoleOutput)
         self.timer = QTimer(self)
         self.threadpool = QThreadPool()
@@ -68,7 +74,11 @@ class MainWindow(QMainWindow):
         self.manual_ctrl_thread.setAutoDelete(False)
 
         # Initilize equipment
+        self.loading_screen.status_msg.setText('Initializing Equipment...')
+        self.loading_screen.progress_bar.setValue(10)
         self.init_equipment()
+        self.loading_screen.status_msg.setText('Initializing other tabs...')
+        self.loading_screen.progress_bar.setValue(90)
         self.init_study_tab()
         self.init_design_tab()
         self.init_manual_ctrl_tab()
@@ -79,6 +89,10 @@ class MainWindow(QMainWindow):
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
+        self.loading_screen.progress_bar.setValue(100)
+        self.loading_screen.close()
+        setup_style(self)
+        self.show()
 
     # TODO i don't think i'm using this method anymore?
     def normalOutputWritten(self, text):
@@ -204,18 +218,26 @@ class MainWindow(QMainWindow):
         """
         # Initialize Equipment
         # Try to connect to each device, mark indicator off on failed connect
+        self.loading_screen.status_msg.setText('Connecting to GC...')
+        self.loading_screen.progress_bar.setValue(20)
         try:
             self.gc_connector = GC_Connector()
             self.gc_Status.setChecked(1)
         except Exception as e:
             print(e)
             self.gc_Status.setChecked(0)
+
+        self.loading_screen.status_msg.setText('Connecting to gas system...')
+        self.loading_screen.progress_bar.setValue(50)
         try:
             self.gas_controller = Gas_System()
             self.gas_Status.setChecked(1)
         except Exception as e:
             print(e)
             self.gas_Status.setChecked(0)
+
+        self.loading_screen.status_msg.setText('Connecting to heater...')
+        self.loading_screen.progress_bar.setValue(60)
         try:
             self.heater = Heater()
             self.heater_Status.setChecked(1)
@@ -223,6 +245,8 @@ class MainWindow(QMainWindow):
             print(e)
             self.heater_Status.setChecked(0)
 
+        self.loading_screen.status_msg.setText('Connecting to lasers...')
+        self.loading_screen.progress_bar.setValue(70)
         # Make sure combobox is empty (in case restarting equipment)
         self.laser_selection_box.clear()
         # Create combo box options for diode and nkt lasers, connect signal
@@ -244,6 +268,7 @@ class MainWindow(QMainWindow):
             print(e)
             self.laser_Status.setChecked(0)
 
+        self.loading_screen.progress_bar.setValue(80)
         # Try to connect with NKT laser
         try:
             laser = NKT_System()
@@ -256,6 +281,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(e)
 
+        self.loading_screen.progress_bar.setValue(85)
         self.set_form_limits()
 
     def init_study_tab(self):
@@ -513,8 +539,7 @@ class MainWindow(QMainWindow):
         self.laser_controller = self.laser_selection_box.currentData()
         """Currently active laser system"""
 
-        global update_flag
-        update_flag = False
+        self.update_flag = False
         self.set_form_limits()
         if self.laser_controller:
             self.laser_Status.setChecked(1)
@@ -522,12 +547,11 @@ class MainWindow(QMainWindow):
             self.manualCenter.setValue(self.laser_controller.central_wavelength)
             self.setBandwidth.setValue(self.laser_controller.bandwidth)
             self.setCenter.setValue(self.laser_controller.central_wavelength)
-            
+
         else:
             self.laser_Status.setChecked(0)
-        update_flag = True
+        self.update_flag = True
         self.update_power_estimate()
-
 
     def set_form_limits(self):
         """
@@ -583,7 +607,7 @@ class MainWindow(QMainWindow):
             self.set_in_percent.setEnabled(laser.is_tunable)
             if not laser.is_tunable:  # Uncheck box for fixed laser
                 self.set_in_percent.setChecked(False)
-        
+
         # Change limits on independent variable spinboxes
         if (self.expt_types.currentText() == 'wavelength_sweep'
                 and self.laser_Status.isChecked()):
@@ -596,14 +620,14 @@ class MainWindow(QMainWindow):
             self.IndVar_stop.setMinimum(0)
             self.IndVar_start.setMaximum(9999)
             self.IndVar_stop.setMaximum(9999)
-            
+
     # Updating Tabs/Objects:
     # ----------------------
     def display_expt(self):
         """Update GUI display when new expt is selected in listWidget."""
         self.tabWidget.setUpdatesEnabled(False)
-        global update_flag
-        update_flag = False
+
+        self.update_flag = False
         item = self.listWidget.currentItem()
         expt = item.data(Qt.UserRole)
 
@@ -656,7 +680,7 @@ class MainWindow(QMainWindow):
         comp_total = sum(expt.gas_comp[0])  # Calculate gas comp total
         self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
-        update_flag = True
+        self.update_flag = True
 
     def update_expt(self):
         """
@@ -668,9 +692,9 @@ class MainWindow(QMainWindow):
         """
         # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
-        global update_flag
+
         # If there is data in listWidget item and now in the middle of updating
-        if (item is not None) & update_flag:
+        if (item is not None) & self.update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
             # set the attributes of expt object based on GUI entries
             if self.expt_types.currentText() == 'Undefined':
@@ -822,9 +846,9 @@ class MainWindow(QMainWindow):
                         widget.setHidden(True)
 
         item = self.listWidget.currentItem()
-        global update_flag
+
         # If there is data in listWidget item and not in the middle of updating
-        if (item is not None) & update_flag:
+        if (item is not None) & self.update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
         else:
             return
@@ -1011,12 +1035,11 @@ class MainWindow(QMainWindow):
         else:  # Otherwise, use fixed value
             centers = 2*[self.setCenter.value()]  # duplicate in list
 
-        global update_flag
-        if update_flag:
+        if self.update_flag:
             bandwidth = self.setBandwidth.value()
             power = laser.max_constant_power(bandwidth, centers)
             self.label_max_power_1.setText(('%4.0f mW' % power))
-    
+
             # label_max_power_2:
             centers = [self.manualCenter.value()]  # Single value in list
             bandwidth = self.manualBandwidth.value()
@@ -1089,7 +1112,7 @@ class MainWindow(QMainWindow):
             # change text color to red while updating
             self.current_power_setpoint1.setStyleSheet('Color: red')
             self.current_power_setpoint2.setStyleSheet('Color: red')
-            
+
             # If the user wants to control the % setpoint instead
             if self.set_in_percent.isChecked():
                 self.laser_controller._laser.set_emission(True)
@@ -1100,7 +1123,7 @@ class MainWindow(QMainWindow):
             # Otherwise set power using nkt_system methods
             else:
                 self.laser_controller.set_power(self.manualPower.value())
-                
+
             # Change text color back to white after update
             self.current_power_setpoint1.setStyleSheet('Color: white')  # noqa
             self.current_power_setpoint2.setStyleSheet('Color: white')  # noqa
@@ -1233,6 +1256,26 @@ class MainWindow(QMainWindow):
         self.shut_down()
 
 
+class LoadingScreen(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.setWindowTitle("Loading Catalight...")
+        self.setFixedSize(300, 150)
+        layout = QVBoxLayout(self)
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setAlignment(Qt.AlignCenter)
+
+        self.status_msg = QLabel("Loading")
+        self.status_msg.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(self.status_msg)
+        layout.addWidget(self.progress_bar)
+        setup_style(self)
+        self.show()
+
+
 class EmittingStream():
     """
     Capture console print statements and broadcast within the GUI.
@@ -1327,9 +1370,6 @@ def setup_style(app):
 if __name__ == "__main__":
     # Main
     plt.close('all')
-    update_flag = False
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
-    setup_style(app)
     sys.exit(app.exec_())
