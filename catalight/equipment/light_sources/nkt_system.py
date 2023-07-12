@@ -200,7 +200,6 @@ class NKT_System():
         long_setpoint = center + width/2
         if ((short_setpoint >= self.wavelength_range[0])
                 and (long_setpoint <= self.wavelength_range[1])):
-            self._laser.set_emission(False)
             self._bandpass.short_setpoint = short_setpoint
             self._bandpass.long_setpoint = long_setpoint
             self._central_wavelength = center
@@ -209,7 +208,7 @@ class NKT_System():
             setpoint = determine_setpoint(self._calibration, self.P_set,
                                           center, width)
             self._laser.set_power(setpoint)
-            self._laser.set_emission(True)
+            
         else:
             print('Wavelength conditions outside range!')
 
@@ -245,6 +244,12 @@ class NKT_System():
                                       self.central_wavelength, self.bandwidth)
         print('Setpoint = ', setpoint)
         self._laser.set_power(setpoint)
+        # NKT cannot be set to 0% so turn off emission is user requests 0 power
+        if P_set == 0:
+            self._laser.set_emission(False)
+        elif P_set > 0:  # Make sure emission is on
+            self._laser.set_emission(True)
+        
         self.is_busy = False
         self._P_set = P_set
         print('\n', time.ctime())
