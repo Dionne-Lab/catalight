@@ -44,7 +44,7 @@ def sweep_wavelengths(meter, bandpass, tolerance=10):
     end = int(800 - bandwidth/2)
     bandpass.short_setpoint = start
     bandpass.long_setpoint = start+bandwidth
-    time.sleep(10)
+    time.sleep(1)
     wavelengths = []
     avg_power = []
 
@@ -52,7 +52,7 @@ def sweep_wavelengths(meter, bandpass, tolerance=10):
         meter.change_wavelength(int(center))
         bandpass.short_setpoint = center - bandwidth/2
         bandpass.long_setpoint = center + bandwidth/2
-        time.sleep(0.5)
+        time.sleep(0.25)
         avg, std, error = make_measurement(meter, tolerance)
 
         printProgressBar(center-start, end-start, length=50, printEnd='')
@@ -88,7 +88,7 @@ def make_measurement(meter, tolerance=2.5, num_measurements=20):
     error = 100
     power_readings = np.array([])
     while (error > tolerance) or (len(power_readings) < num_measurements):
-        power_readings = np.append(power_readings, meter.read()[1])
+        power_readings = np.append(power_readings, meter.read(averaging_time=0.1)[1])
         print('Current Readout = %.2f mW' % power_readings[-1], end='\r')
         # If error is high and theres more than 20 readings, remove first
         if len(power_readings) > 20:
@@ -133,7 +133,7 @@ def growing_window_test(start, end, step, bandpass):
     else:  # Growing Right
         bandpass.short_setpoint = start
         bandpass.long_setpoint = start+step
-    tolerance = 10
+    tolerance = 2
     time.sleep(2)
     meter_readings = []
     cutin = []
@@ -191,7 +191,7 @@ def run_calibration(laser, bandpass, meter):
         laser.set_power(power)
         time.sleep(120)
         print('Starting %4.1f%% Power Sweep' % power)
-        wavelengths, avg_power = sweep_wavelengths(meter, bandpass)
+        wavelengths, avg_power = sweep_wavelengths(meter, bandpass, tolerance=2)
         data.append(avg_power)
 
     calibration = pd.DataFrame(data, columns=wavelengths, index=powers).T
