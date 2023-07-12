@@ -56,6 +56,8 @@ class MainWindow(QMainWindow):
         loadUi(ui_path, self)
 
         # Initilize GUI
+        self.loading_screen.status_msg.setText('Opening Peaksimple...')
+        self.loading_screen.progress_bar.setValue(5)
         try:
             peaksimple = self.open_peaksimple(cfg.peaksimple_path)
         except FileNotFoundError:
@@ -75,7 +77,7 @@ class MainWindow(QMainWindow):
 
         # Initilize equipment
         self.loading_screen.status_msg.setText('Initializing Equipment...')
-        self.loading_screen.progress_bar.setValue(10)
+        self.loading_screen.progress_bar.setValue(20)
         self.init_equipment()
         self.loading_screen.status_msg.setText('Initializing other tabs...')
         self.loading_screen.progress_bar.setValue(90)
@@ -219,7 +221,7 @@ class MainWindow(QMainWindow):
         # Initialize Equipment
         # Try to connect to each device, mark indicator off on failed connect
         self.loading_screen.status_msg.setText('Connecting to GC...')
-        self.loading_screen.progress_bar.setValue(20)
+        self.loading_screen.progress_bar.setValue(35)
         try:
             self.gc_connector = GC_Connector()
             self.gc_Status.setChecked(1)
@@ -229,6 +231,7 @@ class MainWindow(QMainWindow):
 
         self.loading_screen.status_msg.setText('Connecting to gas system...')
         self.loading_screen.progress_bar.setValue(50)
+        time.sleep(0.2)
         try:
             self.gas_controller = Gas_System()
             self.gas_Status.setChecked(1)
@@ -238,6 +241,7 @@ class MainWindow(QMainWindow):
 
         self.loading_screen.status_msg.setText('Connecting to heater...')
         self.loading_screen.progress_bar.setValue(60)
+        time.sleep(0.2)
         try:
             self.heater = Heater()
             self.heater_Status.setChecked(1)
@@ -247,6 +251,8 @@ class MainWindow(QMainWindow):
 
         self.loading_screen.status_msg.setText('Connecting to lasers...')
         self.loading_screen.progress_bar.setValue(70)
+        time.sleep(0.2)
+
         # Make sure combobox is empty (in case restarting equipment)
         self.laser_selection_box.clear()
         # Create combo box options for diode and nkt lasers, connect signal
