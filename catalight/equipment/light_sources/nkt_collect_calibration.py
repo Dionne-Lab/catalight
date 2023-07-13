@@ -237,6 +237,7 @@ def main(laser, bandpass, meter):
 
     # Collect growing window benchmark data
     print('Running growing window benchmark')
+    laser.set_power(50)
     growing_window_data = growing_window_test(550, 650, 10, bandpass)
     growing_window_data.to_csv('nkt_growing_window_test.csv')
     print('Finished benchmark measurements')

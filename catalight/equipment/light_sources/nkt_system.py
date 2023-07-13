@@ -240,10 +240,13 @@ class NKT_System():
         meter : catalight.equipment.power_meter.newport.NewportMeter
             Compatible power meter to use for calibration experiments.
         """
+        self._laser.set_emission(True)
         nkt_collect_calibration.main(self._laser, self._bandpass, meter)
         nkt_analyze_calibration.main()
         self.read_calibration()  # Update to new calibration
         nkt_verify_calibration.main(self, meter)
+        self.set_power(0)
+        self._laser.set_emission(False)
 
     def max_constant_power(self, bandwidth, wavelength_range):
         """
