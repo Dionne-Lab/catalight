@@ -449,7 +449,7 @@ def main():
     calibration = determine_fits(corrected_data)
     plot_fits(cal_data, calibration, savedata=True)
     benchmark(calibration, savedata=True)
-    calibration.to_pickle('nkt_calibration.pkl')
+    calibration.to_pickle(os.path.join(folder, 'nkt_calibration.pkl'))
 
 
 if __name__ == '__main__':
