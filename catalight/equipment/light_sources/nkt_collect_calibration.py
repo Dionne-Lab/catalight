@@ -48,7 +48,7 @@ def sweep_wavelengths(meter, bandpass, tolerance=10):
     wavelengths = []
     avg_power = []
 
-    for center in range(start, end, 1):
+    for center in range(start, end+1, 1):
         meter.change_wavelength(int(center))
         bandpass.short_setpoint = center - bandwidth/2
         bandpass.long_setpoint = center + bandwidth/2
@@ -99,7 +99,7 @@ def make_measurement(meter, tolerance=2.5, num_measurements=20):
     return (avg, std, error)
 
 
-def growing_window_test(start, end, step, bandpass):
+def growing_window_test(start, end, step, bandpass, meter):
     """
     Expands the bandwidth of the laser and records power at each step.
 
@@ -237,7 +237,7 @@ def main(laser, bandpass, meter):
 
     # Collect growing window benchmark data
     print('Running growing window benchmark')
-    growing_window_data = growing_window_test()
+    growing_window_data = growing_window_test(550, 650, 10, bandpass)
     growing_window_data.to_csv('nkt_growing_window_test.csv')
     print('Finished benchmark measurements')
     print('Finished collecting calibration data')
