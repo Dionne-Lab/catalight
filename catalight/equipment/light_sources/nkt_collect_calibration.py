@@ -90,7 +90,7 @@ def make_measurement(meter, tolerance=2.5, num_measurements=20):
     power_readings = np.array([])
     while (error > tolerance) or (len(power_readings) < num_measurements):
         power_readings = np.append(power_readings, meter.read(averaging_time=0.1)[1])
-        print('Current Readout = %.2f mW' % power_readings[-1], end='\r')
+        # print('Current Readout = %.2f mW' % power_readings[-1], end='\r')
         # If error is high and theres more than 20 readings, remove first
         if len(power_readings) > 20:
             power_readings = np.delete(power_readings, 0)
