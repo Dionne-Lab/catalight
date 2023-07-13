@@ -15,8 +15,8 @@ from scipy.optimize import curve_fit
 
 from catalight.cl_tools import printProgressBar
 from catalight.analysis.plotting import set_plot_style
-from catalight.equipment.light_sources.nkt_system import (predict_power,
-                                                          determine_setpoint)
+from catalight.equipment.light_sources.nkt_helper_funcs import (predict_power,
+                                                                determine_setpoint)
 
 
 def correction_model(x, a):

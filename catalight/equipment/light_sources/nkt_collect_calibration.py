@@ -244,7 +244,4 @@ def main(laser, bandpass, meter):
 
 
 if __name__ == '__main__':
-    meter = newport.NewportMeter()
-    nkt = nkt_system.NKT_System()
-    laser = nkt._laser
-    bandpass = nkt._varia
+    pass
