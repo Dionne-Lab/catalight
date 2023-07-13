@@ -128,9 +128,10 @@ def plot_verification(results, savedata=True):
     ax.plot(np.linspace(0, results['requested_power'].max(), 4),
             np.linspace(0, results['requested_power'].max(), 4), '--')
     if savedata:
-        results.to_csv('calibration_verification.csv')
-        fig.savefig('calibration_verification.svg')
-        fig.savefig('calibration_verification.png')
+        folder = os.path.dirname(os.path.abspath(__file__))
+        results.to_csv(os.path.join(folder, 'calibration_verification.csv'))
+        fig.savefig(os.path.join(folder, 'calibration_verification.svg'))
+        fig.savefig(os.path.join(folder, 'calibration_verification.png'))
     return (fig, ax)
 
 
