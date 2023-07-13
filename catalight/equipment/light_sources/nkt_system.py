@@ -107,6 +107,9 @@ class NKT_System():
         long_setpoint = center + width/2
         if ((short_setpoint >= self.wavelength_range[0])
                 and (long_setpoint <= self.wavelength_range[1])):
+            while self.is_busy:
+                time.sleep(0)
+            self.is_busy = True
             self._bandpass.short_setpoint = short_setpoint
             self._bandpass.long_setpoint = long_setpoint
             self._central_wavelength = center
@@ -115,7 +118,7 @@ class NKT_System():
             setpoint = determine_setpoint(self._calibration, self.P_set,
                                           center, width)
             self._laser.set_power(setpoint)
-
+            self.is_busy = False
         else:
             print('Wavelength conditions outside range!')
 
@@ -175,18 +178,26 @@ class NKT_System():
         P : float or int
             Power [mW] rounded to 3 decimal points
         """
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         setpoint = self._laser.power_level  # noqa I==current
+        self.is_busy = False
         P = predict_power(self._calibration, setpoint,
                           self.central_wavelength, self.bandwidth)
         return (P)
 
     def print_output(self):
         """Print the bandpass settings, power setpoint, and expected power."""
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
         bandpass = (self._bandpass.short_setpoint,
                     self._bandpass.long_setpoint)
         print('Extreme/Fianium Setpoint = %4.1f %%' % self._laser.power_level)
         print('Varia Filter set for %4.1f nm - %4.1f nm' % bandpass)
         print('Expected System Output = %4.1f mW' % self._P_set)
+        self.is_busy = False
 
     def shut_down(self):
         """Set power of laser to 0 by turning off emission.
