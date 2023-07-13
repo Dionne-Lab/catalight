@@ -71,6 +71,20 @@ The :mod:`nkt_tools` package provides a python interface for the NKT Varia and E
 
     All of the connection needed for the NKT System should be handled automatically, and the user should only need to plug in their system to the computer. It is necessary to calibrate the NKT system prior to use.
 
+Calibrating the NKT_System:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code:: python
+
+    from catalight.equipment.light_sources import nkt_system
+    from catalight.equipment.power_meter import newport
+
+
+    meter = newport.NewportMeter()
+    nkt = nkt_system.NKT_System()
+
+    nkt.run_calibration(meter)
+
 .. _newport_meter_doc:
 
 Power meter
