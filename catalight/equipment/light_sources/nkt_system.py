@@ -222,10 +222,13 @@ class NKT_System():
 
         Also prints out calibration date and values to console.
         """
-        self._calibration = pd.read_pickle(calibration_path)
-        t = os.path.getmtime(calibration_path)
-        print('Last laser calibration was:')
-        print(dt.datetime.fromtimestamp(t).strftime('%Y-%m-%d'))
+        try:
+            self._calibration = pd.read_pickle(calibration_path)
+            t = os.path.getmtime(calibration_path)
+            print('Last laser calibration was:')
+            print(dt.datetime.fromtimestamp(t).strftime('%Y-%m-%d'))
+        except FileNotFoundError:
+            print('No Calibration File Found!!')
 
     def run_calibration(self, meter):
         """
