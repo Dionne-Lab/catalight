@@ -811,8 +811,8 @@ class Experiment:
 
         self._laser_control.set_power(self.power[0])
         if self._laser_control.is_tunable:
-            self._laser_control.set_wavelength(self.wavelength[0],
-                                               self.bandwidth[0])
+            self._laser_control.set_bandpass(self.wavelength[0], 
+                                             self.bandwidth[0])
 
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
@@ -872,7 +872,7 @@ class Experiment:
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
             elif self.expt_type == 'wavelength_sweep':
-                self._laser_control.set_wavelength(step, self.bandwidth)
+                self._laser_control.set_bandpass(step, self.bandwidth)
             elif self.expt_type in ['comp_sweep', 'calibration']:
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()

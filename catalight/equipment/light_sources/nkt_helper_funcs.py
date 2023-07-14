@@ -86,6 +86,9 @@ def determine_setpoint(calibration, power_requested, center, bandwidth):
         Closest laser setpoint (%) to achieve the requested power output (mW)/
         Automatically rounded to the nearest 0.1%.
     """
+    if power_requested == 0:
+        return 0
+    
     setpoints = np.arange(12, 100.1, 0.1)
     values = predict_power(calibration, setpoints, center, bandwidth)
     optimal_index = np.abs(values-power_requested).argmin()

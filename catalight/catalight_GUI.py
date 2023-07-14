@@ -276,16 +276,16 @@ class MainWindow(QMainWindow):
 
         self.loading_screen.progress_bar.setValue(80)
         # Try to connect with NKT laser
-        try:
-            laser = NKT_System()
-            # Assign nkt laser to first item in combobox
-            self.laser_selection_box.setItemData(1, laser)
-            # If previous laser didn't connect, set the nkt as active
-            if not self.laser_Status.isChecked():
-                self.laser_selection_box.setCurrentIndex(1)
-                self.change_laser()
-        except Exception as e:
-            print(e)
+        # try:
+        #     laser = NKT_System()
+        #     # Assign nkt laser to first item in combobox
+        #     self.laser_selection_box.setItemData(1, laser)
+        #     # If previous laser didn't connect, set the nkt as active
+        #     if not self.laser_Status.isChecked():
+        #         self.laser_selection_box.setCurrentIndex(1)
+        #         self.change_laser()
+        # except Exception as e:
+        #     print(e)
 
         self.loading_screen.progress_bar.setValue(85)
         self.set_form_limits()
@@ -1121,11 +1121,8 @@ class MainWindow(QMainWindow):
 
             # If the user wants to control the % setpoint instead
             if self.set_in_percent.isChecked():
-                self.laser_controller._laser.set_emission(True)
-                self.laser_controller._laser.set_power(self.manualPower.value())
-                # If user request 0% power, turn off emission
-                if self.set_in_percent.value() == 0:
-                    self.laser_controller._laser.set_emission(False)
+                self.laser_controller.set_setpoint(self.manualPower.value())
+
             # Otherwise set power using nkt_system methods
             else:
                 self.laser_controller.set_power(self.manualPower.value())
@@ -1142,8 +1139,8 @@ class MainWindow(QMainWindow):
                 self.current_center_setpoint2.setStyleSheet('Color: red')
                 self.current_bandwidth_setpoint1.setStyleSheet('Color: red')
                 self.current_bandwidth_setpoint2.setStyleSheet('Color: red')
-                self.laser_controller.set_bandpass(self.manualCenter,
-                                                   self.manualBandwidth)
+                self.laser_controller.set_bandpass(self.manualCenter.value(),
+                                                   self.manualBandwidth.value())
                 # Change text color back to white after update
                 self.current_center_setpoint1.setStyleSheet('Color: white')
                 self.current_center_setpoint2.setStyleSheet('Color: white')

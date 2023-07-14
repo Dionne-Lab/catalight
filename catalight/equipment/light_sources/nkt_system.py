@@ -75,16 +75,44 @@ class NKT_System():
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
 
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
-    central_wavelength = property(lambda self: self._central_wavelength)
-    """
-    The center wavelength for the nkt laser, read-only. Set with set_bandpass()
-    """
-    bandwidth = property(lambda self: self._bandwidth)
-    """The bandwidth for the nkt laser, read-only. Set with set_bandpass()"""
     wavelength_range = property(lambda self: self._wavelength_range)
     """[min, max] Min/Max wavelength of tunable laser, read-only"""
     bandwidth_range = property(lambda self: self._bandwidth_range)
     """[min, max] Min/Max bandwidth of tunable laser, read-only"""
+
+    @property
+    def central_wavelength(self):
+        """
+        The center wavelength for the nkt laser, read-only. 
+        
+        Set with set_bandpass()
+        """
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+        
+        self._central_wavelength = (self._bandpass.long_setpoint
+                                    + self._bandpass.short_setpoint)/2
+        
+        self.is_busy = False
+        return self._central_wavelength
+        
+    @property
+    def bandwidth(self):
+        """
+        The bandwidth for the nkt laser, read-only. 
+        
+        Set with set_bandpass()
+        """
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+        
+        self._bandwidth = (self._bandpass.long_setpoint
+                           - self._bandpass.short_setpoint)
+        
+        self.is_busy = False
+        return self._bandwidth
 
     def set_bandpass(self, center, width):
         """
@@ -150,15 +178,19 @@ class NKT_System():
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
-        setpoint = determine_setpoint(self._calibration, P_set,
-                                      self.central_wavelength, self.bandwidth)
-        print('Setpoint = ', setpoint)
-        self._laser.set_power(setpoint)
+        
         # NKT cannot be set to 0% so turn off emission is user requests 0 power
         if P_set == 0:
             self._laser.set_emission(False)
+            
         elif P_set > 0:  # Make sure emission is on
             self._laser.set_emission(True)
+            
+            setpoint = determine_setpoint(self._calibration, P_set,
+                                          self.central_wavelength, 
+                                          self.bandwidth)
+            print('Setpoint = ', setpoint)
+            self._laser.set_power(setpoint)
 
         self.is_busy = False
         self._P_set = P_set
@@ -168,6 +200,68 @@ class NKT_System():
         # ---------------------------------------------------------------------
         # TODO Print setpoint current and/or power
         # ---------------------------------------------------------------------
+    
+    def set_setpoint(self, setpoint):
+        """
+        Sets power setpoint (in %) directly.
+
+        Parameters
+        ----------
+        setpoint : int or float
+            Desired laser output power in %
+        """
+        # TODO put check on max power
+        self.voice_control.setProperty('volume', 1.0)
+        # TODO can i make this try to be int
+        self.voice_control.say('Warning: Setting power to %6.2f percent' % setpoint)
+        self.voice_control.runAndWait()
+        self.voice_control.stop()
+
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+        
+        # NKT cannot be set to 0% so turn off emission is user requests 0 power
+        if setpoint == 0:
+            self._laser.set_emission(False)
+            
+        elif setpoint > 0:  # Make sure emission is on
+            self._laser.set_emission(True)
+            self._laser.set_power(setpoint)
+
+        self.is_busy = False
+
+        print('\n', time.ctime())
+        self.print_output()
+
+        # ---------------------------------------------------------------------
+        # TODO Print setpoint current and/or power
+        # ---------------------------------------------------------------------
+
+    def get_output_setpoint(self):
+        """
+        Get output power based on laser setpoint.
+
+        Returns
+        -------
+        setpoint : float or int
+            Power [%] rounded to nearest decimal point
+        """
+        while self.is_busy:
+            time.sleep(0)
+        self.is_busy = True
+        
+        if self._laser.emission_state == True:
+            setpoint = self._laser.power_level
+        elif self._laser.emission_state == False:
+            setpoint = 0
+        elif self._laser.emission_state == 'Unknown':
+            print('Unknown emission state')
+            setpoint = 0
+        
+        self.is_busy = False
+
+        return (setpoint)
 
     def get_output_power(self):
         """
@@ -181,11 +275,26 @@ class NKT_System():
         while self.is_busy:
             time.sleep(0)
         self.is_busy = True
-        setpoint = self._laser.power_level  # noqa I==current
+        
+        state = self._laser.emission_state
+        current_setpoint = self._laser.power_level
+        
         self.is_busy = False
-        P = predict_power(self._calibration, setpoint,
-                          self.central_wavelength, self.bandwidth)
-        return (P)
+        
+        if state == True:
+            setpoint = current_setpoint
+            P = predict_power(self._calibration, setpoint,
+                              self.central_wavelength, self.bandwidth)
+            return (P)
+            
+        elif state == False:
+            setpoint = 0
+            return 0
+        
+        elif state == 'Unknown':
+            print('Unknown emission state')
+            return
+        
 
     def print_output(self):
         """Print the bandpass settings, power setpoint, and expected power."""
