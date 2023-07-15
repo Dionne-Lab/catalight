@@ -133,6 +133,7 @@ class NKT_System():
         """
         short_setpoint = center - width/2
         long_setpoint = center + width/2
+        print("going into bandpass setting method, is_busy is - " + str(self.is_busy))
         if ((short_setpoint >= self.wavelength_range[0])
                 and (long_setpoint <= self.wavelength_range[1])):
             while self.is_busy:
@@ -187,8 +188,8 @@ class NKT_System():
             self._laser.set_emission(True)
             
             setpoint = determine_setpoint(self._calibration, P_set,
-                                          self.central_wavelength, 
-                                          self.bandwidth)
+                                          self._central_wavelength, 
+                                          self._bandwidth)
             print('Setpoint = ', setpoint)
             self._laser.set_power(setpoint)
 

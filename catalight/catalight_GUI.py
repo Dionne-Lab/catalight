@@ -66,7 +66,7 @@ class MainWindow(QMainWindow):
         self.update_flag = False
         """True means system is currently updating in backend. Default False"""
         sys.stdout = EmittingStream(self.consoleOutput)
-        self.timer = QTimer(self)
+
         self.threadpool = QThreadPool()
         # Pass the function to execute
         # Any other args, kwargs are passed to the run function
@@ -276,16 +276,16 @@ class MainWindow(QMainWindow):
 
         self.loading_screen.progress_bar.setValue(80)
         # Try to connect with NKT laser
-        # try:
-        #     laser = NKT_System()
-        #     # Assign nkt laser to first item in combobox
-        #     self.laser_selection_box.setItemData(1, laser)
-        #     # If previous laser didn't connect, set the nkt as active
-        #     if not self.laser_Status.isChecked():
-        #         self.laser_selection_box.setCurrentIndex(1)
-        #         self.change_laser()
-        # except Exception as e:
-        #     print(e)
+        try:
+            laser = NKT_System()
+            # Assign nkt laser to first item in combobox
+            self.laser_selection_box.setItemData(1, laser)
+            # If previous laser didn't connect, set the nkt as active
+            if not self.laser_Status.isChecked():
+                self.laser_selection_box.setCurrentIndex(1)
+                self.change_laser()
+        except Exception as e:
+            print(e)
 
         self.loading_screen.progress_bar.setValue(85)
         self.set_form_limits()
@@ -427,13 +427,13 @@ class MainWindow(QMainWindow):
             self.manualRamp.setValue(self.heater.ramp_rate)
 
         if self.laser_Status.isChecked():  # Initialize Values for Laser
-            laser = self.laser_controller
-            self.manualPower.setValue(laser.get_output_power())
+            
+            self.manualPower.setValue(self.laser_controller.get_output_power())
             # If applicable, update bandpass settings
-            if laser.is_tunable:
+            if self.laser_controller.is_tunable:
                 # Get current setpoints directly from bandpass filter
-                self.manualCenter.setValue(laser.central_wavelength)
-                self.manualBandwidth.setValue(laser.bandwidth)
+                self.manualCenter.setValue(self.laser_controller.central_wavelength)
+                self.manualBandwidth.setValue(self.laser_controller.bandwidth)
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
 
@@ -579,39 +579,39 @@ class MainWindow(QMainWindow):
             # TODO this should come from the gas_system object
 
         if self.laser_Status.isChecked():
-            laser = self.laser_controller  # Redefine to shorten following
-            lambda_min = laser.wavelength_range[0]
-            lambda_max = laser.wavelength_range[1]
+            
+            lambda_min = self.laser_controller.wavelength_range[0]
+            lambda_max = self.laser_controller.wavelength_range[1]
 
             # Change bounds of laser control on manual ctrl tab
             bandwidth = self.manualBandwidth.value()
             self.manualCenter.setMinimum(lambda_min + bandwidth/2)
             self.manualCenter.setMaximum(lambda_max - bandwidth/2)
-            self.manualBandwidth.setMinimum(laser.bandwidth_range[0])
-            self.manualBandwidth.setMaximum(laser.bandwidth_range[1])
+            self.manualBandwidth.setMinimum(self.laser_controller.bandwidth_range[0])
+            self.manualBandwidth.setMaximum(self.laser_controller.bandwidth_range[1])
 
             # Change bounds of laser control on expt design tab
             bandwidth = self.setBandwidth.value()
             self.setCenter.setMinimum(lambda_min + bandwidth/2)
             self.setCenter.setMaximum(lambda_max - bandwidth/2)
-            self.setBandwidth.setMinimum(laser.bandwidth_range[0])
-            self.setBandwidth.setMaximum(laser.bandwidth_range[1])
+            self.setBandwidth.setMinimum(self.laser_controller.bandwidth_range[0])
+            self.setBandwidth.setMaximum(self.laser_controller.bandwidth_range[1])
 
             # Enable/Disable tunable laser properties according to laser type
-            self.manualCenter.setEnabled(laser.is_tunable)
-            self.manualBandwidth.setEnabled(laser.is_tunable)
-            self.setCenter.setEnabled(laser.is_tunable)
-            self.setBandwidth.setEnabled(laser.is_tunable)
-            self.label_max_power_1.setEnabled(laser.is_tunable)
-            self.label_max_power_2.setEnabled(laser.is_tunable)
-            self.tunable_laser_label1.setEnabled(laser.is_tunable)
-            self.tunable_laser_label2.setEnabled(laser.is_tunable)
-            self.tunable_laser_label3.setEnabled(laser.is_tunable)
-            self.tunable_laser_label4.setEnabled(laser.is_tunable)
-            self.tunable_laser_label5.setEnabled(laser.is_tunable)
-            self.tunable_laser_label6.setEnabled(laser.is_tunable)
-            self.set_in_percent.setEnabled(laser.is_tunable)
-            if not laser.is_tunable:  # Uncheck box for fixed laser
+            self.manualCenter.setEnabled(self.laser_controller.is_tunable)
+            self.manualBandwidth.setEnabled(self.laser_controller.is_tunable)
+            self.setCenter.setEnabled(self.laser_controller.is_tunable)
+            self.setBandwidth.setEnabled(self.laser_controller.is_tunable)
+            self.label_max_power_1.setEnabled(self.laser_controller.is_tunable)
+            self.label_max_power_2.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label1.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label2.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label3.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label4.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label5.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label6.setEnabled(self.laser_controller.is_tunable)
+            self.set_in_percent.setEnabled(self.laser_controller.is_tunable)
+            if not self.laser_controller.is_tunable:  # Uncheck box for fixed self.laser_controller
                 self.set_in_percent.setChecked(False)
 
         # Change limits on independent variable spinboxes
@@ -957,28 +957,26 @@ class MainWindow(QMainWindow):
         manual control (1) and the live view (2) tabs
         """
         if self.laser_Status.isChecked():
-            laser = self.laser_controller
-            self.current_power_1.setText('%.2f' % laser.get_output_power())
-            self.current_power_2.setText('%.2f' % laser.get_output_power())
-            self.current_power_setpoint1.setText('%.2f' % laser.P_set)
-            self.current_power_setpoint2.setText('%.2f' % laser.P_set)
+            
+            self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
+            self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
+            self.current_power_setpoint1.setText('%.2f' % self.laser_controller.P_set)
+            self.current_power_setpoint2.setText('%.2f' % self.laser_controller.P_set)
 
             # If applicable, update bandpass settings
-            if laser.is_tunable:
+            if self.laser_controller.is_tunable:
                 # Get current setpoints directly from bandpass filter
-                bandwidth = (laser._bandpass.long_setpoint
-                             - laser._bandpass.short_setpoint)
-                center = (laser._bandpass.long_setpoint
-                          + laser._bandpass.short_setpoint)/2
+                bandwidth = (self.laser_controller.bandwidth)
+                center = (self.laser_controller.central_wavelength)
 
                 self.current_center_1.setText('%.2f' % center)
                 self.current_center_2.setText('%.2f' % center)
                 self.current_bandwidth_1.setText('%.2f' % bandwidth)
                 self.current_bandwidth_2.setText('%.2f' % bandwidth)
-                self.current_center_setpoint1.setText('%.2f' % laser.central_wavelength)
-                self.current_center_setpoint2.setText('%.2f' % laser.central_wavelength)
-                self.current_bandwidth_setpoint1.setText('%.2f' % laser.bandwidth)
-                self.current_bandwidth_setpoint2.setText('%.2f' % laser.bandwidth)
+                self.current_center_setpoint1.setText('%.2f' % self.laser_controller.central_wavelength)
+                self.current_center_setpoint2.setText('%.2f' % self.laser_controller.central_wavelength)
+                self.current_bandwidth_setpoint1.setText('%.2f' % self.laser_controller.bandwidth)
+                self.current_bandwidth_setpoint2.setText('%.2f' % self.laser_controller.bandwidth)
 
         if self.heater_Status.isChecked():
             self.current_temp_1.setText('%.2f' % self.heater.read_temp())
@@ -1026,9 +1024,7 @@ class MainWindow(QMainWindow):
         entered, estimates the power over that range.
         """
         # Only update power estimate for conencted tunable lasers
-        if self.laser_Status.isChecked() and self.laser_controller.is_tunable:
-            laser = self.laser_controller
-        else:
+        if not (self.laser_Status.isChecked() and self.laser_controller.is_tunable):
             return
 
         # label_max_power_1:
@@ -1043,13 +1039,13 @@ class MainWindow(QMainWindow):
 
         if self.update_flag:
             bandwidth = self.setBandwidth.value()
-            power = laser.max_constant_power(bandwidth, centers)
+            power = self.laser_controller.max_constant_power(bandwidth, centers)
             self.label_max_power_1.setText(('%4.0f mW' % power))
 
             # label_max_power_2:
             centers = [self.manualCenter.value()]  # Single value in list
             bandwidth = self.manualBandwidth.value()
-            power = laser.max_constant_power(bandwidth, centers)
+            power = self.laser_controller.max_constant_power(bandwidth, centers)
             self.label_max_power_2.setText(('%4.0f mW' % power))
 
     def manual_ctrl_eqpt(self):
