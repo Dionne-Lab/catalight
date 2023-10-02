@@ -299,11 +299,11 @@ def plot_X_and_S(expt, reactant, target_molecule):
     else:  # Older data calculated one Error
         X_err = results['Error'] * results['Conversion']
         S_err = results['Error'] * results['Selectivity']
-    X.plot(ax=ax, yerr=X_err, fmt='--ok')
-    S.plot(ax=ax, yerr=S_err, fmt='--^r')
+    X.plot(ax=ax, yerr=X_err, fmt='--ok', label='Conversion')
+    S.plot(ax=ax, yerr=S_err, fmt='--^r', label='Selectivity')
     ax.set_xlabel(expt.ind_var + ' [' + units + ']')
     ax.set_ylabel('Conv./Selec. [%]')
-    plt.legend(['Conversion', 'Selectivity'])
+    plt.legend()
     ax.set_ylim([0, 105])
     plt.tight_layout()
     return (fig, ax)
