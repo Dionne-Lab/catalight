@@ -18,7 +18,7 @@ from catalight.equipment.experiment_control import Experiment
 
 
 def initialize_equipment():
-    ctrl_file = (r"C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation"
+    ctrl_file = (r"C:\Users\dionn\GC\Control_Files\HayN_C2H2_Hydrogenation"
                  r"\20221106_C2H2_Hydro_HayN_TCD_off.CON")
     gc_connector = GC_Connector(ctrl_file)
     laser_controller = NKT_System()
@@ -65,28 +65,42 @@ def run_study(expt_list, eqpt_list):
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()  # Initialize equipment
     # Create folder to save data into
-    sample_name = '20230504_Au95Pd5_4wt'
-    main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
+    sample_name = '20230504_Au95Pd5_4wt_3mg'
+    main_fol = os.path.join(r"C:\Users\dionn\GC\GC_Data\20230925", sample_name)
     os.makedirs(main_fol, exist_ok=True)
 
-    # sample_name = 'dummy_sample'
-    # eqpt_list = None
-    # main_fol = os.path.join(r"C:\Users\brile\Documents\Temp Files", sample_name)
-    # os.makedirs(main_fol, exist_ok=True)
+    # Run a pre-experiment reduction
+    reduction = Experiment(eqpt_list)
+    reduction.expt_type = 'stability_test'
+    reduction.gas_type = ['Ar', 'C2H2', 'H2', 'Ar']
+    reduction.temp = [400+273]
+    reduction.gas_comp = [[0, 0, 0.05, 0.95]]
+    reduction.tot_flow = [50]
+    reduction.sample_rate = 30
+    reduction.sample_set_size = 4
+    reduction.t_steady_state = 30
+    reduction.sample_name = sample_name
+    reduction.create_dirs(main_fol)
+    try:
+        reduction.run_experiment()
+    except Exception as e:
+        shut_down(eqpt_list)
+        raise (e)
 
-    for wavelength in range(475, 675+1, 50):
+    # Main experiment
+    for wavelength in range(480, 680+1, 50):
         for power in range(0, 60+1, 20):
             expt = Experiment(eqpt_list)
             expt.expt_type = 'temp_sweep'
-            expt.temp = list(np.arange(300, 330+1, 10))
+            expt.temp = list(np.arange(340, 380+1, 10))
             expt.wavelength = [wavelength]
             expt.power = [power]
             expt.bandwidth = [50]
             expt.gas_type = ['Ar', 'C2H2', 'H2', 'N2']
             expt.gas_comp = [[1-0.06, 0.01, 0.05, 0]]
-            expt.tot_flow = [50]
-            expt.sample_set_size = 3
-            expt.steady_state_time = 20
+            expt.tot_flow = [10]
+            expt.sample_set_size = 4
+            expt.t_steady_state = 30
             expt.sample_name = sample_name
             expt.create_dirs(main_fol)
             try:
