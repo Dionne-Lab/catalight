@@ -872,7 +872,7 @@ class Experiment:
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
             elif self.expt_type == 'wavelength_sweep':
-                self._laser_control.set_bandpass(step, self.bandwidth)
+                self._laser_control.set_bandpass(step, self.bandwidth[0])
             elif self.expt_type in ['comp_sweep', 'calibration']:
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()
