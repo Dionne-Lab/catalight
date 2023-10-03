@@ -153,6 +153,7 @@ def main(laser_system, meter):
     calibration = pd.read_pickle(path)
     results = generate_data(calibration, 50, laser_system, meter)
     plot_verification(results)
+    print('Calibration verification finished')
 
 
 if __name__ == '__main__':

@@ -371,6 +371,7 @@ class NKT_System():
         nkt_verify_calibration.main(self, meter)
         self.set_power(0)
         self._laser.set_emission(False)
+        print("Calibration process complete!")
 
     def max_constant_power(self, bandwidth, wavelength_range):
         """
