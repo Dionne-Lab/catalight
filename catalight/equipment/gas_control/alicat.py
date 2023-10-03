@@ -361,16 +361,30 @@ class Gas_System:
                       % tuple(reading))
                 output.loc[sample_num] = reading
                 sample_num += 1
+                
+        test_mfc.set_flow_rate(1)  # set flow to minimum postrun
+        
         # Plot Results
+        # First fig is [Pressure, setpoint, flow rate] vs time
         ax1 = output.plot(x='time', y='pressure',
                           ylabel='Pressure (psia)', style='--ok')
         ax2 = ax1.twinx()
         ax2.spines['right'].set_position(('axes', 1.0))
         output.plot(ax=ax2, x='time',
                     y=['setpoint', 'flow rate'], ylabel='Flow Rate (sccm)')
-        fig = ax1.get_figure()
+        fig_vs_time = ax1.get_figure()
+
+        # Second fig is Pressure vs flow rate
+        ax3 = output.plot(x='flow rate', y='pressure',
+                          ylabel='Pressure (psia)', xlabel='Flow Rate (sccm)',
+                          style='--ok')
+        fig_vs_flow = ax3.get_figure()
+        
         # Save Results
-        fig.savefig(os.path.join(savepath, 'flow_test.svg'), format='svg')
+        fig_vs_time.savefig(os.path.join(savepath, 'flow_test_vs_time.svg'),
+                    format='svg')
+        fig_vs_flow.savefig(os.path.join(savepath, 'flow_test_vs_flow.svg'),
+                    format='svg')
         output.to_csv(os.path.join(savepath, 'flow_test.csv'))
 
 
