@@ -228,15 +228,15 @@ def main(laser, bandpass, meter):
     folder = os.path.dirname(os.path.abspath(__file__))
 
     # Collect calibration data, plot, and save
-    # print('Beginning collection of calibration data')
-    # print('Start Time = ', time.ctime())
-    # cal_data, cal_fig = run_calibration(laser, bandpass, meter)
-    # cal_data.to_csv(os.path.join(folder, 'nkt_calibration_data.csv'))
-    # cal_fig.savefig(os.path.join(folder, 'nkt_calibration_data.svg'))
-    # cal_fig.savefig(os.path.join(folder, 'nkt_calibration_data.png'))
-    # pickle.dump(cal_fig,
-    #             open(os.path.join(folder, 'nkt_calibration_data.pkl'), 'wb'))
-    # print('End Time = ', time.ctime())
+    print('Beginning collection of calibration data')
+    print('Start Time = ', time.ctime())
+    cal_data, cal_fig = run_calibration(laser, bandpass, meter)
+    cal_data.to_csv(os.path.join(folder, 'nkt_calibration_data.csv'))
+    cal_fig.savefig(os.path.join(folder, 'nkt_calibration_data.svg'))
+    cal_fig.savefig(os.path.join(folder, 'nkt_calibration_data.png'))
+    pickle.dump(cal_fig,
+                open(os.path.join(folder, 'nkt_calibration_data.pkl'), 'wb'))
+    print('End Time = ', time.ctime())
 
     # Collect growing window benchmark data
     print('Running growing window benchmark')
