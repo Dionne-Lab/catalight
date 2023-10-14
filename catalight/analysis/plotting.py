@@ -457,5 +457,4 @@ def open_pickled_fig(fig_path):
     plt.rcParams['svg.fonttype'] = 'none'
     fig = pickle.load(open(fig_path, 'rb'))
     ax = fig.get_axes()[0]
-    fig.show()  # Show the figure, edit it, etc.!
     return (fig, ax)

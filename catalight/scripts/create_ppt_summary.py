@@ -101,8 +101,15 @@ prs.slide_height = Inches(7.5)    # 16:9 height in inches
 # Walk through the main folder and its subdirectories
 #folders = sorted([folder for folder in os.listdir(main_folder) if os.path.isdir(os.path.join(main_folder, folder))])
 
-folderpaths = [folder for folder in os.listdir(main_folder) if os.path.isdir(os.path.join(main_folder, folder))]
-folderpaths = [os.path.join(main_folder, f) for f in folderpaths] # add path to each file
+# This one list the parent dir of all Results folders
+folderpaths = []
+for root, dirs, files in os.walk(main_folder):
+    if os.path.basename(root) == 'Results':
+        folderpaths.append(os.path.dirname(root))
+
+# These were just going through folder inside a main folder
+#folderpaths = [folder for folder in os.listdir(main_folder) if os.path.isdir(os.path.join(main_folder, folder))]
+#folderpaths = [os.path.join(main_folder, f) for f in folderpaths] # add path to each file
 folderpaths.sort(key=lambda x: os.path.getmtime(x))
 
 # Process folders in pairs
