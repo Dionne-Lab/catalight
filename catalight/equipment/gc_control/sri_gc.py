@@ -63,6 +63,13 @@ class GC_Connector():
         self.connect()
         self._sample_rate = 0  # Dummy value, reset when ctrl file loaded
         self._min_sample_rate = 0  # Dummy value, reset when ctrl file loaded
+        self._min_sample_buffer = 5
+        """
+        float: Min time to wait after ctrl file "Channel 1 time" finishes and
+        starting new run. The default is 5. This value + Channel 1 time sets
+        the min_sample_rate. To change sampling time, use self.sample_rate.
+        """
+
         # Sends ctrl file to GC, updates self w/ new data
         print('Loading', ctrl_file)
         self.load_ctrl_file()
@@ -72,18 +79,19 @@ class GC_Connector():
     # Makes min_sample_rate read only
     min_sample_rate = property(lambda self: self._min_sample_rate)
     """`float`, read-only: (min) Minimum setpoint for sample_rate.
-    Sum of Channel 1 Time and Channel 1 Posttime from GC control file.
+    Sum of Channel 1 Time from GC control file and self.min_sample_buffer.
     Value automatically updates when :meth:`read_gc_settings` is called."""
 
     # Setting sample rate changes when connected to GC
     @property
     def sample_rate(self):
         """
-        Time between setting collections in minutes.
+        Time between GC collections in minutes.
 
         The GC will collect data every sample_rate minutes when sample_set_size
         is set >1. If the min_sample_rate is less than the entered value,
         prints a warning and resets sample_rate to min_sample_rate.
+        Updates control file by calling load_ctrl_file().
         """
         return self._sample_rate
 
@@ -95,6 +103,7 @@ class GC_Connector():
             print('Minimum Sample Rate = %5.2f' % self.min_sample_rate)
             print('Sample rate set to minimum')
             self._sample_rate = self.min_sample_rate
+        self.load_ctrl_file()
 
     # Methods:
     # --------
@@ -106,7 +115,8 @@ class GC_Connector():
         to sample_set_size. Goes line by line through the control file defined
         by ctrl_file attr and rewrites the line to set appropriate options.
         Ensures postrun cycle & repeat, autoincrement, and save image, data,
-        & results are all turned on.
+        & results are all turned on. Updates Postrun cycle time to get total
+        sample time to match self.sample_time.
 
         Parameters
         ----------
@@ -134,6 +144,13 @@ class GC_Connector():
                     line = ('<CHANNEL 1 POSTRUN AUTOINCREMENT>=1\n')
                 elif re.search('<CHANNEL 1 POSTRUN SAVE IMAGE>=', line):
                     line = ('<CHANNEL 1 POSTRUN SAVE IMAGE>=1\n')
+
+                elif re.search('<CHANNEL 1 POSTRUN CYCLE TIME>=', line):
+                    ch1_time = self.min_sample_rate - self._min_sample_buffer
+                    post_time = self.sample_rate - ch1_time
+                    post_time = int(post_time * 1000)
+                    line = ('<CHANNEL 1 POSTRUN CYCLE TIME>='
+                            + str(post_time) + '\n')
 
                 elif re.search('<CHANNEL 2 FILE>=', line):
                     line = ('<CHANNEL 2 FILE>=TCD\n')
@@ -192,9 +209,9 @@ class GC_Connector():
         """
         Read loaded control file and updates object with values from file.
 
-        Currently updates min_sample_rate property by pulling run time postrun
-        cycle time from control file. Updates sample_rate if it is faster than
-        the new min_sample_rate
+        Currently updates min_sample_rate property by pulling run time from
+        control file and adding self.min_sample_buffer. Updates sample_rate if
+        it is faster than the new min_sample_rate.
 
         Returns
         -------
@@ -207,10 +224,7 @@ class GC_Connector():
                 if re.search('<CHANNEL 1 TIME>=', line):
                     run_time = int(line.split('=')[-1].strip(' \n'))
 
-                elif re.search('<CHANNEL 1 POSTRUN CYCLE TIME>=', line):
-                    post_time = int(line.split('=')[-1].strip(' \n'))
-
-            self._min_sample_rate = (run_time + post_time) / 1000
+            self._min_sample_rate = (run_time + self._min_sample_buffer) / 1000
 
             if self.sample_rate < self.min_sample_rate:
                 self.sample_rate = self.min_sample_rate
