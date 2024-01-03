@@ -146,7 +146,7 @@ class NKT_System():
             # Reset Power setpoint [%] to keep constant output in mW
             setpoint = determine_setpoint(self._calibration, self.P_set,
                                           center, width)
-            self._laser.set_power(setpoint)  #TODO this seems wrong!!!
+            self._laser.set_power(setpoint)  # Note this is power setpoint
             self.is_busy = False
         else:
             print('Wavelength conditions outside range!')
@@ -294,7 +294,6 @@ class NKT_System():
         elif state == 'Unknown':
             print('Unknown emission state')
             return
-
 
     def print_output(self):
         """Print the bandpass settings, power setpoint, and expected power."""

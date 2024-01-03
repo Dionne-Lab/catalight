@@ -1,4 +1,4 @@
-﻿catalight.config
+catalight.config
 ================
 
 .. automodule:: catalight.config

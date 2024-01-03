@@ -1,7 +1,7 @@
-catalight.catalight\_GUI
-========================
+catalight.catalight\_GUI\_v2
+============================
 
-.. automodule:: catalight.catalight_GUI
+.. automodule:: catalight.catalight_GUI_v2
    
    
    
@@ -13,6 +13,7 @@ catalight.catalight\_GUI
    .. autosummary::
       :toctree:
    
+      open_peaksimple
       setup_style
    
    
