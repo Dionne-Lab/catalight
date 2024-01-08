@@ -113,7 +113,7 @@ def main(file_list, data_labels, reactant, target_molecule,
         fig, ax = analysis.plotting.multiplot_X_vs_S(results_dict, figsize)
         plt.show()
         return fig, ax
-    print('Test if this line is executed')
+
 
 
 if __name__ == "__main__":
