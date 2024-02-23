@@ -65,15 +65,15 @@ def run_study(expt_list, eqpt_list):
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()  # Initialize equipment
     # Create folder to save data into
-    sample_name = '20230504_Au95Pd5_4wt_3mg'
-    main_fol = os.path.join(r"C:\Users\dionn\GC\GC_Data\20230925", sample_name)
+    sample_name = '20230504_Au95Pd5_4wt_4mg'
+    main_fol = os.path.join(r"C:\Users\dionn\GC\GC_Data\20231225", sample_name)
     os.makedirs(main_fol, exist_ok=True)
 
     # Run a pre-experiment reduction
     reduction = Experiment(eqpt_list)
     reduction.expt_type = 'stability_test'
     reduction.gas_type = ['Ar', 'C2H2', 'H2', 'Ar']
-    reduction.temp = [400+273]
+    reduction.temp = [300+273]
     reduction.gas_comp = [[0, 0, 0.05, 0.95]]
     reduction.tot_flow = [50]
     reduction.sample_rate = 30
@@ -98,7 +98,8 @@ if __name__ == "__main__":
             expt.bandwidth = [50]
             expt.gas_type = ['Ar', 'C2H2', 'H2', 'N2']
             expt.gas_comp = [[1-0.06, 0.01, 0.05, 0]]
-            expt.tot_flow = [10]
+            expt.tot_flow = [50]
+            expt.sample_rate = 30
             expt.sample_set_size = 4
             expt.t_steady_state = 30
             expt.sample_name = sample_name

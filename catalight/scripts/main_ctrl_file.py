@@ -12,14 +12,16 @@ import numpy as np
 
 from catalight.equipment.gas_control.alicat import Gas_System
 from catalight.equipment.light_sources.diode_control import Diode_Laser
+from catalight.equipment.light_sources.nkt_system import NKT_System
 from catalight.equipment.heating.watlow import Heater
 from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
 
 
 def initialize_equipment():
-    gc_connector = GC_Connector(r"C:\Peak489Win10\CONTROL_FILE\HayN_C2H2_Hydrogenation\C2H2_Hydro_HayN_TCD_off.CON")
-    laser_controller = Diode_Laser()
+    gc_connector = GC_Connector(r"C:\Users\dionn\GC\Control_Files\HayN_C2H2_Hydrogenation\20221106_C2H2_Hydro_HayN_TCD_off.CON")
+    #laser_controller = Diode_Laser()
+    laser_controller = NKT_System()
     gas_controller = Gas_System()
     heater = Heater()
     return (gc_connector, laser_controller, gas_controller, heater)
@@ -57,7 +59,9 @@ def run_study(expt_list, eqpt_list):
         try:
             expt.run_experiment()
 
-        except:
+        except Exception as e:
+            print('error')
+            print(e)
             shut_down(eqpt_list)
             raise
 
@@ -65,113 +69,112 @@ def run_study(expt_list, eqpt_list):
 if __name__ == "__main__":
     eqpt_list = initialize_equipment()
     plt.close('all')
-    sample_name = '20230202_Ag5Pd95_6wt%_3.45mg'
-    main_fol = os.path.join('C:\Peak489Win10\GCDATA', sample_name)
-    # os.makedirs(main_fol, exist_ok=True)
+    sample_name = '20230504_Au95Pd5_4wt%_5mg'
+    main_fol = os.path.join(r'C:\Users\dionn\GC\GC_Data\20240131', sample_name)
+    os.makedirs(main_fol, exist_ok=True)
 
+    # eqpt_list[2].set_gasses(['Ar','Air','Air','Air'])
+    # p_sweep_path = os.path.join(main_fol, 'prereduction')
     # os.makedirs(p_sweep_path, exist_ok=True)
-    # p_sweep_path = os.path.join("C:\Peak489Win10\GCDATA\pressure_tests", sample_name)
-    # os.makedirs(p_sweep_path, exist_ok=True)
-    # eqpt_list[2].test_pressure(p_sweep_path)
+    # flows = [1, 2, 4, 8, 16, 32, 50]
+    # eqpt_list[2].test_pressure(p_sweep_path, flows)
 
-    # expt1 = Experiment(eqpt_list)
-    # expt1.expt_type = 'temp_sweep'
-    # expt1.temp = list(np.arange(300, 401, 10))
-    # expt1.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt1.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # expt1.tot_flow = [50]
-    # expt1.sample_name = sample_name
-    # expt1.create_dirs(os.path.join(main_fol, 'prereduction'))
-
-    # expt2 = Experiment(eqpt_list)
-    # expt2.expt_type = 'power_sweep'
-    # expt2.temp = [300]
-    # expt2.power = list(np.arange(0, 301, 50))
-    # expt2.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt2.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # expt2.tot_flow = [50]
-    # expt2.sample_name = sample_name
-    # expt2.create_dirs(os.path.join(main_fol, 'prereduction'))
-
+    # # Run a pre-experiment reduction
     # reduction = Experiment(eqpt_list)
-    # reduction.sample_set_size = 12*21
     # reduction.expt_type = 'stability_test'
-    # reduction.temp = [295]
-    # reduction.gas_type = ['C2H2', 'Ar', 'H2']
-    # reduction.gas_comp = [[0, 1, 0]]
+    # reduction.gas_type = ['Ar', 'C2H2', 'H2', 'Ar']
+    # reduction.temp = [300+273]
+    # reduction.gas_comp = [[0, 0, 0.05, 0.95]]
     # reduction.tot_flow = [50]
+    # reduction.sample_rate = 30
+    # reduction.sample_set_size = 4
+    # reduction.t_steady_state = 30
     # reduction.sample_name = sample_name
     # reduction.create_dirs(main_fol)
 
-    # expt3 = Experiment(eqpt_list)
-    # expt3.expt_type = 'temp_sweep'
-    # expt3.temp = list(np.arange(300, 401, 10))
-    # expt3.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt3.gas_comp = [[0.1, 1-0.6, 0.5]]
-    # expt3.tot_flow = [50]
-    # expt3.sample_name = sample_name
-    # expt3.create_dirs(os.path.join(main_fol, 'postreduction'))
-
-    # expt4 = Experiment(eqpt_list)
-    # expt4.expt_type = 'power_sweep'
-    # expt4.temp = [300]
-    # expt4.power = list(np.arange(0, 301, 50))
-    # expt4.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt4.gas_comp = [[0.1, 1-0.6, 0.5]]
-    # expt4.tot_flow = [50]
-    # expt4.sample_name = sample_name
-    # expt4.create_dirs(os.path.join(main_fol, 'postreduction'))
-
     # stability_test = Experiment(eqpt_list)
-    # stability_test.sample_set_size = 6*42
     # stability_test.expt_type = 'stability_test'
-    # stability_test.temp = [373]
-    # stability_test.gas_type = ['C2H2', 'Ar', 'H2']
-    # stability_test.gas_comp = [[0.01, 1-0.06, 0.05]]
+    # stability_test.gas_type = ['Ar', 'C2H2', 'H2', 'Ar']
+    # stability_test.temp = [380]
+    # stability_test.gas_comp = [[1-0.06, 0.01, 0.05, 0]]
     # stability_test.tot_flow = [50]
+    # stability_test.sample_rate = 30
+    # test_time = 8 * 24 * 60  # 8 days converted to minutes
+    # stability_test.sample_set_size = test_time / stability_test.sample_rate
+    # stability_test.t_steady_state = 30
     # stability_test.sample_name = sample_name
     # stability_test.create_dirs(main_fol)
 
-    # expt5 = Experiment(eqpt_list)
-    # expt5.expt_type = 'temp_sweep'
-    # expt5.temp = list(np.arange(300, 401, 10))
-    # expt5.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt5.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # expt5.tot_flow = [50]
-    # expt5.sample_name = sample_name
-    # expt5.create_dirs(os.path.join(main_fol, 'postreduction'))
+    ratios = np.array([0.5, 1, 1.5, 2, 3, 4, 5, 10, 20])
+    P_c2h2 = 0.01 * np.ones(len(ratios))
+    P_c2h4 = 0.2 * np.ones(len(ratios))
+    P_h2 =  P_c2h2 * ratios
+    P_Ar = 1 - P_c2h2 - P_h2 - P_c2h4
+    gas_comp_list = np.stack([P_c2h4, P_c2h2, P_h2, P_Ar], axis=1).tolist()
+    gas_comp_list = np.round(gas_comp_list, 6)
+    
+    P_sweep_thermal = Experiment(eqpt_list)
+    P_sweep_thermal.expt_type = 'comp_sweep'
+    P_sweep_thermal.gas_type = ['C2H4', 'C2H2', 'H2', 'Ar']
+    P_sweep_thermal.temp = [380]
+    P_sweep_thermal.power = [0]
+    P_sweep_thermal.wavelength = [480]
+    P_sweep_thermal.bandwidth = [50]
+    P_sweep_thermal.gas_comp = gas_comp_list
+    P_sweep_thermal.tot_flow = [50]
+    P_sweep_thermal.sample_rate = 30
+    P_sweep_thermal.sample_set_size = 3
+    P_sweep_thermal.t_steady_state = 45
+    P_sweep_thermal.sample_name = sample_name
+    P_sweep_thermal.create_dirs(main_fol)
+    
+    # P_sweep_photo = Experiment(eqpt_list)
+    # P_sweep_photo.expt_type = 'comp_sweep'
+    # P_sweep_photo.gas_type = ['Ar', 'C2H2', 'H2', 'Ar']
+    # P_sweep_photo.temp = [360]
+    # P_sweep_photo.power = [60]
+    # P_sweep_photo.wavelength = [530]
+    # P_sweep_photo.bandwidth = [50]
+    # P_sweep_photo.gas_comp = gas_comp_list
+    # P_sweep_photo.tot_flow = [50]
+    # P_sweep_photo.sample_rate = 30
+    # P_sweep_photo.sample_set_size = 3
+    # P_sweep_photo.t_steady_state = 30
+    # P_sweep_photo.sample_name = sample_name
+    # P_sweep_photo.create_dirs(main_fol)
+    
+    barrier_thermal = Experiment(eqpt_list)
+    barrier_thermal.expt_type = 'temp_sweep'
+    barrier_thermal.temp = list(np.arange(340, 380+1, 10))
+    barrier_thermal.wavelength = [530]
+    barrier_thermal.power = [0]
+    barrier_thermal.bandwidth = [50]
+    barrier_thermal.gas_type = ['C2H4', 'C2H2', 'H2', 'Ar']
+    barrier_thermal.gas_comp = [[0.2, 0.01, 0.2, 1-0.41]]
+    barrier_thermal.tot_flow = [50]
+    barrier_thermal.sample_rate = 30
+    barrier_thermal.sample_set_size = 4
+    barrier_thermal.t_steady_state = 45
+    barrier_thermal.sample_name = sample_name
+    barrier_thermal.create_dirs(main_fol)
+    
+    # barrier_photo = Experiment(eqpt_list)
+    # barrier_photo.expt_type = 'temp_sweep'
+    # barrier_photo.temp = list(np.arange(340, 380+1, 10))
+    # barrier_photo.wavelength = [530]
+    # barrier_photo.power = [60]
+    # barrier_photo.bandwidth = [50]
+    # barrier_photo.gas_type = ['Ar', 'C2H2', 'H2', 'N2']
+    # barrier_photo.gas_comp = [[1-0.12, 0.02, 0.1, 0]]
+    # barrier_photo.tot_flow = [10]
+    # barrier_photo.sample_rate = 30
+    # barrier_photo.sample_set_size = 4
+    # barrier_photo.t_steady_state = 30
+    # barrier_photo.sample_name = sample_name
+    # barrier_photo.create_dirs(main_fol)
 
-    # expt6 = Experiment(eqpt_list)
-    # expt6.expt_type = 'power_sweep'
-    # expt6.temp = [300]
-    # expt6.power = list(np.arange(0, 301, 50))
-    # expt6.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt6.gas_comp = [[0.01, 1-0.06, 0.05]]
-    # expt6.tot_flow = [50]
-    # expt6.sample_name = sample_name
-    # expt6.create_dirs(os.path.join(main_fol, 'postreduction'))
-
-    # expt7 = Experiment(eqpt_list)
-    # expt7.expt_type = 'flow_sweep'
-    # expt7.temp = [340]
-    # expt7.gas_type = ['C2H2', 'Ar', 'H2']
-    # expt7.gas_comp = [[0.01, 1-0.03, 0.02]]
-    # expt7.tot_flow = list(np.arange(10, 60, 10))
-    # expt7.sample_name = sample_name
-    # expt7.create_dirs(os.path.join(main_fol, 'postreduction'))
-
-    # expt8 = Experiment(eqpt_list)
-    # expt8.expt_type = 'comp_sweep'
-    # expt8.temp = [340]
-    # P_h2 = 0.01*np.array([0.5, 1, 2, 5, 10, 15, 20, 30, 40])
-    # P_c2h2 = 0.01*np.ones(len(P_h2))
-    # P_Ar = 1-P_c2h2-P_h2
-    # expt8.gas_comp = np.stack([P_c2h2, P_Ar, P_h2], axis=1).tolist()
-    # expt8.tot_flow = [50]
-    # expt8.sample_name = sample_name
-    # expt8.create_dirs(os.path.join(main_fol, 'postreduction'))
-
-    # expt_list = [expt3, expt4, expt7]
+    # expt_list = [P_sweep_photo, P_sweep_thermal, barrier_photo, barrier_thermal]
+    expt_list = [P_sweep_thermal, barrier_thermal]
     # calculate_time(expt_list)
-    # run_study(expt_list, eqpt_list)
+    run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)
