@@ -93,6 +93,8 @@ def main(file_list, data_labels, figsize=(6.5, 4.5), basecorrect=True):
     for filename, data_label in zip(file_list, data_labels):
         data = GCData(filename, basecorrect)
         ax.plot(data.time, data.signal, label=data_label)
+    ax.set_xlabel("Time [min]")
+    ax.set_ylabel("Signal [a.u.]")
     plt.legend()
     plt.show()
     return fig, ax

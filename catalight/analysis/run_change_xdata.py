@@ -5,14 +5,39 @@ Created on Sat Mar 19 15:33:01 2022
 @author: Briley Bourgeois
 """
 import sys
+import re
+import os
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import catalight.analysis.tools as analysis_tools
+import catalight.analysis as analysis
 from PyQt5.QtWidgets import (QApplication, QFileDialog)
 from catalight.analysis.user_inputs import (DataExtractor,
-                                               PlotOptionsDialog,
-                                               PlotOptionList)
+                                            PlotOptionsDialog,
+                                            PlotOptionList)
+
+
+def parse_input(input_string):
+    """
+    Enter user input string to extract all numbers as floats and return
+    a list of those floats
+
+    Parameters
+    ----------
+    input_string : str
+        Users raw response for new x data from get_user_inputs
+
+    Returns
+    -------
+    list[float]
+        List of users float-like entries
+    """
+    # Regular expression to match floats
+    float_pattern = r'-?\d*\.?\d+'
+    # Find all float matches in the input string
+    floats = re.findall(float_pattern, input_string)
+    # Convert strings to floats
+    return [float(num) for num in floats]
 
 
 def get_user_inputs(starting_dir=None, cal_folder=None):
@@ -52,6 +77,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     data_dialog = DataExtractor(starting_dir)
     if data_dialog.exec_() == DataExtractor.Accepted:
         file_list, data_labels = data_dialog.get_output()
+        file_list = analysis.tools.list_matching_files(file_list, 'expt_log', '.txt')
 
     # Edit Options specifically for initial analysis dialog
     include_dict = {'xdata': True, 'units': True, 'reactant': True,
@@ -66,7 +92,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
     return file_list, calDF, response_dict
 
 
-def main(expt_paths, calDF, new_x, units, reactant, target_molecule,
+def main(expt_paths, calDF, xdata, units, reactant, target_molecule,
          mole_bal='c', figsize=(6.5, 4.5), savedata=False, switch_to_hours=2):
     """
     Change the x axis data for previously plotted experiments.
@@ -79,7 +105,7 @@ def main(expt_paths, calDF, new_x, units, reactant, target_molecule,
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    new_x : list
+    xdata : list
         Array of new data to be used inplace of old x axis
     units : str
         new units for new x axis data
@@ -111,16 +137,22 @@ def main(expt_paths, calDF, new_x, units, reactant, target_molecule,
     options = (calDF, reactant, target_molecule, mole_bal,
                figsize, savedata, switch_to_hours)
 
-    expts = analysis_tools.list_expt_obj(expt_paths)
+    expts = analysis.tools.list_expt_obj(expt_paths)
+    new_x = parse_input(xdata)
     for expt in expts:
         # Must have previously analyzed data
-        (results, avg, std) = analysis_tools.load_results(expt)
+        (results, avg, std) = analysis.tools.load_results(expt)
         # Redefine x axis and update units
-        avg.index = new_x
-        std.index = new_x
         expt.expt_list['Units'][2] = units
+        avg.index = pd.Index(new_x, name=units)
+        std.index = pd.Index(new_x, name=units)
+
+        # Save results as csv with new x axis
+        avg.to_csv(os.path.join(expt.results_path, 'avg_conc.csv'))
+        std.to_csv(os.path.join(expt.results_path, 'std_conc.csv'))
+
         # Replot data using new axes data
-        (ax1, ax2, ax3) = analysis_tools.plot_expt_summary(expt, *options)
+        (ax1, ax2, ax3) = analysis.plotting.plot_expt_summary(expt, *options)
 
 
 if __name__ == "__main__":

@@ -476,10 +476,8 @@ class DataExtractor(QDialog):
         selector = DirectorySelector(self.starting_dir)
         if selector.exec_() == QDialog.Accepted:
             expt_dirs = selector.get_output()
-        print(expt_dirs)
         filepaths = analysis_tools.list_matching_files(expt_dirs, self.target,
                                                        self.suffix)
-        print(filepaths)
         self.pathRoot = os.path.dirname(expt_dirs[0])
         # function populates tree items based on matching criteria specified
         self.populateTree(filepaths)
@@ -496,7 +494,6 @@ class DataExtractor(QDialog):
                                               self.getParentPath(item)))
                 data_labels.append((item.text(1)))
         self._output = (file_list, data_labels)
-        print(self._output)
         super(DataExtractor, self).accept()
 
     def cancel(self):

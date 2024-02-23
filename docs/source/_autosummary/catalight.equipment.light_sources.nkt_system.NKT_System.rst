@@ -16,12 +16,16 @@ catalight.equipment.light\_sources.nkt\_system.NKT\_System
    .. autosummary::
    
       ~NKT_System.__init__
+      ~NKT_System.get_output_power
+      ~NKT_System.get_output_setpoint
       ~NKT_System.log_power
+      ~NKT_System.max_constant_power
       ~NKT_System.print_output
       ~NKT_System.read_calibration
       ~NKT_System.run_calibration
       ~NKT_System.set_bandpass
       ~NKT_System.set_power
+      ~NKT_System.set_setpoint
       ~NKT_System.shut_down
       ~NKT_System.start_logger
       ~NKT_System.stop_logger
@@ -38,8 +42,10 @@ catalight.equipment.light\_sources.nkt\_system.NKT\_System
    
       ~NKT_System.P_set
       ~NKT_System.bandwidth
+      ~NKT_System.bandwidth_range
       ~NKT_System.central_wavelength
       ~NKT_System.is_tunable
+      ~NKT_System.wavelength_range
       ~NKT_System.is_busy
    
    

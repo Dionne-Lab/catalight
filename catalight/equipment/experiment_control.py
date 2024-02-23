@@ -195,7 +195,7 @@ class Experiment:
                 corresponding limits. These vary depending on attribute given.
             """
             if isinstance(value, np.ndarray):
-                value = list(value)
+                value = value.tolist()
 
             if not isinstance(value, list):
                 raise AttributeError(attr + ' must be list')
@@ -811,7 +811,7 @@ class Experiment:
 
         self._laser_control.set_power(self.power[0])
         if self._laser_control.is_tunable:
-            self._laser_control.set_bandpass(self.wavelength[0], 
+            self._laser_control.set_bandpass(self.wavelength[0],
                                              self.bandwidth[0])
 
         self._gas_control.set_gasses(self.gas_type)

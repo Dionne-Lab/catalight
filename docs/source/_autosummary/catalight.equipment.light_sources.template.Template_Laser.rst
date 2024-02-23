@@ -1,4 +1,4 @@
-catalight.equipment.light\_sources.template.Template\_Laser
+﻿catalight.equipment.light\_sources.template.Template\_Laser
 ===========================================================
 
 .. currentmodule:: catalight.equipment.light_sources.template
@@ -36,7 +36,9 @@ catalight.equipment.light\_sources.template.Template\_Laser
    .. autosummary::
    
       ~Template_Laser.P_set
+      ~Template_Laser.bandwidth_range
       ~Template_Laser.is_tunable
+      ~Template_Laser.wavelength_range
       ~Template_Laser.is_busy
    
    

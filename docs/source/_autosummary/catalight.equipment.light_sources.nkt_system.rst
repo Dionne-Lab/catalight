@@ -8,15 +8,6 @@ catalight.equipment.light\_sources.nkt\_system
 
    
    
-   .. rubric:: Functions
-
-   .. autosummary::
-      :toctree:
-   
-      determine_setpoint
-      max_constant_power
-      predict_power
-   
    
 
    

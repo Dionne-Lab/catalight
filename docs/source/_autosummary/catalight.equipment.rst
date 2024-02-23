@@ -28,6 +28,7 @@ catalight.equipment
    :recursive:
 
    catalight.equipment.alicat_connection_tester
+   catalight.equipment.eqpt_thread
    catalight.equipment.experiment_control
    catalight.equipment.gas_control
    catalight.equipment.gc_control

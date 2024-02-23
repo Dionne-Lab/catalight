@@ -128,7 +128,7 @@ Stop</string>
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabOverview">
        <property name="sizePolicy">
@@ -2430,7 +2430,7 @@ Stop</string>
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>23</height>
+     <height>34</height>
     </rect>
    </property>
   </widget>
