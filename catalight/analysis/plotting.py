@@ -223,6 +223,7 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
         if np.max(avg.index) > switch_to_hours:
             avg.index = avg.index / 60  # convert minutes to hours
             units = 'hr'
+            avg.index.name = 'Time' + units
 
     stoyk = pd.Series(0, index=calchemIDs)
     # use regex to determine number of carbons (or other) in molecule name
@@ -255,7 +256,10 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     avg.loc[:, ~undetected].plot(ax=ax, marker='o',
                                  yerr=std.loc[:, ~undetected])
     mol_count.plot(ax=ax, marker='o', yerr=mol_error)
-    ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    xlabel = avg.index.name
+    #ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    ax.set_xlabel(avg.index.name)
+
     ax.set_ylabel('Conc (ppm)')
     # ax.set_xticklabels(avg.iloc[0:len(x_data)], rotation=90)
     plt.tight_layout()
@@ -289,8 +293,9 @@ def plot_X_and_S(expt, reactant, target_molecule):
     # Initialize Conv and Selectivity plot
     fig, ax = plt.subplots()
     results = analysis_tools.calculate_X_and_S(expt, reactant, target_molecule)
-    units = (expt.expt_list['Units']
-             [expt.expt_list['Active Status']].to_string(index=False))
+    concentrations, avg, std = analysis_tools.load_results(expt)
+    # units = (expt.expt_list['Units']
+    #          [expt.expt_list['Active Status']].to_string(index=False))
     X = results['Conversion']
     S = results['Selectivity']
     if 'X Error' in results.columns:
@@ -301,7 +306,8 @@ def plot_X_and_S(expt, reactant, target_molecule):
         S_err = results['Error'] * results['Selectivity']
     X.plot(ax=ax, yerr=X_err, fmt='--ok', label='Conversion')
     S.plot(ax=ax, yerr=S_err, fmt='--^r', label='Selectivity')
-    ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    # ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    ax.set_xlabel(avg.index.name)
     ax.set_ylabel('Conv./Selec. [%]')
     plt.legend()
     ax.set_ylim([0, 105])
