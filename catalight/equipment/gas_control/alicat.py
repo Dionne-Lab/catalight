@@ -152,9 +152,15 @@ class Gas_System:
         # Uses create_mix method to write to gas slot 236,
         # first custom gas slot on MFC
         if len(gas_dict) > 1:  # if more than 1 gas, creates mix
-            self.mfc_E.create_mix(mix_no=236, name='output',
-                                  gases=gas_dict)
-            self.mfc_E.set_gas(236)
+            try:
+                self.mfc_E.create_mix(mix_no=236, name='output',
+                                      gases=gas_dict)
+                self.mfc_E.set_gas(236)
+            except Exception as e:
+                print(e)
+                print("Passed gas dict:\n", gas_dict)
+                print("Setting output gas to ", list(gas_dict)[0])
+                self.mfc_E.set_gas(list(gas_dict)[0])
         else:  # If only one gas, sets that as output
             self.mfc_E.set_gas(list(gas_dict)[0])
         self.is_busy = False
