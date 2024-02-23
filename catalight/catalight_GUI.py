@@ -1081,7 +1081,7 @@ class MainWindow(QMainWindow):
         self.progress_signal.emit(50)
 
         if self.laser_Status.isChecked():
-            # # Set Laser power
+           # # Set Laser power
             # # change text color to red while updating
             # # TODO I'm not sure why i ever set this up with signal instead of
             # # directly just changing the color.
@@ -1108,7 +1108,7 @@ class MainWindow(QMainWindow):
             #     self.change_color_signal.emit(self.current_center_setpoint1, 'white')
             #     self.change_color_signal.emit(self.current_center_setpoint2, 'white')
             #     self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'white')
-            #     self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'white')
+            #     self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'white') 
 
             # Set Laser power
             # change text color to red while updating
