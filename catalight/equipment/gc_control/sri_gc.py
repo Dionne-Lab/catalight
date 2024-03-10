@@ -91,7 +91,7 @@ class GC_Connector():
         The GC will collect data every sample_rate minutes when sample_set_size
         is set >1. If the min_sample_rate is less than the entered value,
         prints a warning and resets sample_rate to min_sample_rate.
-        Updates control file by calling load_ctrl_file().
+        Warning - Ctrl file must be loaded for changes to take effect!!
         """
         return self._sample_rate
 
@@ -103,7 +103,6 @@ class GC_Connector():
             print('Minimum Sample Rate = %5.2f' % self.min_sample_rate)
             print('Sample rate set to minimum')
             self._sample_rate = self.min_sample_rate
-        self.load_ctrl_file()
 
     # Methods:
     # --------

@@ -800,7 +800,7 @@ class Experiment:
         6.  Set gas flows
         7.  Wait 2 minutes
         8.  Print gas flows
-        9.  Update gc sample set size
+        9.  Update gc sample set size and sample rate
         10. Update date, time, and update log
         """
         unit = self.expt_list['Units'][0]
@@ -828,6 +828,7 @@ class Experiment:
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
+        self._gc_control.sample_rate = self.sample_rate
 
         # Update experiment start time and date, save to log.
         self.update_date()
