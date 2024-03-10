@@ -222,22 +222,49 @@ class GC_Connector():
             for line in ctrl_file:  # read values after '=' line by line
 
                 if re.search('<CHANNEL 1 TIME>=', line):
-                    run_time = int(line.split('=')[-1].strip(' \n'))
+                    run_time = int(line.split('=')[-1].strip(' \n'))/1000
 
-            self._min_sample_rate = (run_time + self._min_sample_buffer) / 1000
+            self._min_sample_rate = run_time + self._min_sample_buffer
 
             if self.sample_rate < self.min_sample_rate:
                 self.sample_rate = self.min_sample_rate
 
-    def set_running(self):
+    def set_running(self, max_tries=3):
         """
         Start data collection. Make sure correct GC settings are loaded first.
 
         Wraps over peaksimple set running function. Will set channel 1 running
         by default. This could be made flexible in the future if ever needed.
         I think most SRI GC interactions are controlled by channel 1 though.
+        
+        Parameters
+        ----------
+        max_tries : `int`, optional
+            Number of attempts to make before aborting. The default is 3.
+            
+         Raises
+         ------
+         Exception
+             Exception raised on calling SetRunning are suppressed up until
+             max_tries is reached.
         """
-        self.peaksimple.SetRunning(1, True)
+
+        for attempt in range(0, max_tries):
+            try:
+                self.peaksimple.SetRunning(1, True)
+                if attempt>0:
+                    print("Successful")
+                break
+            except Exception as e:
+                print(e)
+                if attempt < max_tries-1:
+                    print('Write error. Retrying...')
+                    time.sleep(1)
+                    continue
+                else:
+                    print('Cannot Resolve')
+                    raise e
+            
 
     def is_running(self, max_tries=3):
         """
