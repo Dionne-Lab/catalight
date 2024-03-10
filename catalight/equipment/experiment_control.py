@@ -586,9 +586,18 @@ class Experiment:
         self._update_expt_name()
         expt_path = os.path.join(sample_path, self.date + self.expt_type
                                  + '_' + self.expt_name)
-
+        # If dir already exists, append _#. Recursively ensure unique new dir
+        while os.path.isdir(expt_path):
+            match = re.match(r"^(.*?)_?(\d+)?$", expt_path)
+            if match.group(2):  # if ends with "_#"
+                prefix = match.group(1)  # Extract prefix
+                number = int(match.group(2))  # Extract number
+                new_number = str(number + 1)
+                expt_path = prefix + "_" + new_number  # iterate suffix
+            else:  # if no number at end, add _2
+                expt_path = expt_path + "_2"
+                
         self.update_save_paths(expt_path, should_exist=False)
-
         os.makedirs(self.results_path, exist_ok=True)
         step_num = 1
         if self.expt_type == 'stability_test':
