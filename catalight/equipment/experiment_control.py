@@ -817,11 +817,12 @@ class Experiment:
             self._laser_control.time_warning(1)
             # Wait for a minute before turning on laser for safety
             time.sleep(60)
-
-        self._laser_control.set_power(self.power[0])
+        
         if self._laser_control.is_tunable:
             self._laser_control.set_bandpass(self.wavelength[0],
                                              self.bandwidth[0])
+
+        self._laser_control.set_power(self.power[0])
 
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
