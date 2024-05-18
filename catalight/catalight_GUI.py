@@ -382,7 +382,7 @@ class MainWindow(QMainWindow):
             self.comp_sweep_widgets[i][2].currentIndexChanged.connect(self.update_expt)
             for j in [1, 3, 4, 5]:
                 self.comp_sweep_widgets[i][j].valueChanged.connect(self.update_expt)
-                self.comp_sweep_widgets[i][j].setMaximum(100)
+                self.comp_sweep_widgets[i][j].setMaximum(101)
 
     def init_manual_ctrl_tab(self):
         """
@@ -572,7 +572,7 @@ class MainWindow(QMainWindow):
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
         if self.heater_Status.isChecked():
-            self.manualTemp.setMaximum(450)
+            self.manualTemp.setMaximum(650)
 
         if self.gas_Status.isChecked():
             self.manualFlow.setMaximum(350)

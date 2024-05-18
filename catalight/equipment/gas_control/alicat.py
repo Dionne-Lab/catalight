@@ -185,12 +185,13 @@ class Gas_System:
             Updated composition list as fractions
 
         """
-
-        if sum(comp_list) == 100:  # convert % to fraction
+        comp_total = round(sum(comp_list), 2)
+        if comp_total == 100:  # convert % to fraction
             comp_list[:] = [x / 100 for x in comp_list]
+            comp_total = round(sum(comp_list), 2)
 
-        if (sum(comp_list) != 1) and (sum(comp_list) != 0):
-            raise AttributeError('Gas comp. must be list of list == 1')
+        if (comp_total != 1) and (comp_total != 0):
+            raise AttributeError('Gas comp. must be list == 1')
 
         return comp_list
 

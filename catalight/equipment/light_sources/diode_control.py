@@ -69,8 +69,6 @@ class Diode_Laser():
         # Initialize equipment
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
-        self.read_calibration()
-
         # Initiate a voice control object to send alert messages
         self.voice_control = pyttsx3.init()
         self.voice_control.setProperty('volume', 1.0)
@@ -82,9 +80,14 @@ class Diode_Laser():
         interface = devices.Activate(IAudioEndpointVolume._iid_,
                                      CLSCTX_ALL, None)
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
+        try:
+            self.read_calibration()
+            # Turn power to zero on initialization
+            self.set_power(0)
+        except FileNotFoundError:
+            print('Warning, no cabration found.')
 
-        # Turn power to zero on initialization
-        self.set_power(0)
+
 
     # Read Only Attributes
     I_max = property(lambda self: self._I_max)  #: (mA) Max current
@@ -292,21 +295,11 @@ class Diode_Laser():
             Y intercept of linear calibration (mA)
         """
         # open and write to calibration file
-        with open(calibration_path, 'r+') as old_cal_file:
-            new_cal_file = []
+        with open(calibration_path, 'w+') as cal_file:
+            cal_file.write('m = ' + str(slope) + ' \n')
+            cal_file.write('b = ' + str(intercept) + ' \n')
+            cal_file.write('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
 
-            for line in old_cal_file:  # read values after '=' line by line
-                if re.search('m = ', line):
-                    line = ('m = ' + str(slope) + ' \n')
-                elif re.search('b = ', line):
-                    line = ('b = ' + str(intercept) + ' \n')
-                elif re.search('date = ', line):
-                    line = ('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
-
-                new_cal_file += line
-
-            old_cal_file.seek(0)  # Starting from beginning line
-            old_cal_file.writelines(new_cal_file)
         self.read_calibration()
 
     def read_calibration(self):

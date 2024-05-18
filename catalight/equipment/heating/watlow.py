@@ -53,8 +53,8 @@ class Heater:
     on heater, printing output
     """
 
-    max_temp = 450
-    """int or float: Max temp in C; 450C reduces lifetime 900C is real max.
+    max_temp = 650
+    """int or float: Max temp in C; 650C reduces lifetime 900C is real max.
     To change, use Heater.max_temp = new_value"""
 
     def __init__(self):
