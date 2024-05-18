@@ -46,8 +46,11 @@ def rescale_plots(filepaths):
             # Move selecitivy line to second y axis. Adjust each y lims
             if line.get_label() == 'Conversion':
                 ydata = line.get_ydata()
-                #[min(ydata) - 3
-                ax.set_ylim([0, 5])
+                # ylim1 is either min -3 or 0 (whichever is greater)
+                # ylim2 is max of ydata + 5
+                ax.set_ylim([max([min(ydata) - 3, 0]),
+                             max(ydata) + 5])
+
             elif line.get_label() == 'Selectivity':
                 line.remove()
                 ax2.add_line(line)
@@ -63,6 +66,6 @@ def rescale_plots(filepaths):
 
 if __name__ == '__main__':
     main_dir = (r"G:\Shared drives\Photocatalysis Projects"
-                r"\catalight_experiments\20240131\20230504_Au95Pd5_4wt%_5mg")
+                r"\catalight_experiments\20240513_AuPd_stability")
     paths = get_file_paths(main_dir)
     rescale_plots(paths)

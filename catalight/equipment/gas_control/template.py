@@ -72,7 +72,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[float]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
         tot_flow : float
             Total flow to send.
@@ -103,7 +103,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[float]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
 
         Returns
@@ -147,7 +147,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float or int
+        comp_list : list[float or int]
             Composition list in either percents or fractions.
 
         Raises
@@ -157,7 +157,7 @@ class Gas_System:
 
         Returns
         -------
-        comp_list : list of float
+        comp_list : list[float]
             Updated composition list as fractions
 
         """

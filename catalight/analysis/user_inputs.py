@@ -82,7 +82,13 @@ class Option():
     label: str  #: String for constructing QLabel(label)
     tooltip: str  #: String for widget tooltip
     widget: QComboBox | QDoubleSpinBox | QLineEdit | QRadioButton
-    """Widget used for entering option values"""
+    """
+    Widget used for entering option values
+    - :class:`QComboBox`: Combo box widget.
+    - :class:`QDoubleSpinBox`: Double spin box widget.
+    - :class:`QLineEdit`: Line edit widget.
+    - :class:`QRadioButton`: Radio button widget.
+    """
 
 
 @dataclass

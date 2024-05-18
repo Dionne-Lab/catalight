@@ -30,7 +30,7 @@ def list_matching_files(main_dirs, target, suffix):
 
     Parameters
     ----------
-    main_dirs : list of str
+    main_dirs : list[str]
         List of string paths to main directories to crawl for data.
         Can be a list of one to search a single directory.
     target : str
@@ -98,11 +98,11 @@ def build_results_dict(file_list, data_labels, reactant, target):
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list[str]
         List of file paths to experiment folders or experiment log paths then
         used to initiate experiment objects and calculate conversion and
         selectivity.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     reactant : str
         String identity of reactant molecule to track. Must match what exists

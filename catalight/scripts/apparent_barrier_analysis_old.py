@@ -14,17 +14,80 @@ plt.rcParams['font.size'] = 8
 plt.rcParams['lines.markersize'] = 4
 
 
+def remove_dropped_frames(df, window_size=50, threshold=10):
+    # Assuming df is your DataFrame with a column 'surface_temperature'
+
+    # Calculate the rolling mean
+    df['rolling_mean'] = df['surface temperature'].rolling(window=window_size, center=True).mean()
+    df['rolling_std'] = df['surface temperature'].rolling(window=window_size, center=True).std()
+
+    # Calculate the difference between the original data and the rolling mean
+    df['diff'] = abs(df['surface temperature'] - df['rolling_mean']) / df['rolling_mean'] * 100
+
+    # Remove rows where the difference is above the threshold
+    df_cleaned = df[df['diff'] <= threshold].copy()
+
+    # Drop the auxiliary columns used for calculation
+    df_cleaned = df_cleaned.drop(['rolling_mean', 'diff'], axis=1)
+
+    # Display the cleaned DataFrame
+    return df_cleaned
+
+
+def add_surface_temps(expts, IR_data):
+    measurements = []
+    expt_start_times = []
+    surface_temps = []
+    for expt in expts:
+        T1 = 300
+        if expt.expt_type != "stability_test":
+            expt.sample_rate = 30  # Need to add to expt_log file
+            expt.t_steady_state = 30
+            expt.t_buffer = 5  # this shouldn't be right but seems like things are not going long enough
+            expt.surface_temp = []  # Create new empty attr
+            measurements.append(expt)
+            expt_start_times.append(expt.start_time)
+            measurement_range = 20*60
+            expt_length = (expt.t_steady_state
+                           + expt.sample_rate*(expt.sample_set_size-1)
+                           + expt.t_buffer)
+            ramp_time = 0
+            for plateau_ID, temp in enumerate(expt.temp):
+                T2 = temp
+                ramp_time += abs(T2-T1)/expt.heat_rate * 60
+                T1 = T2
+                t1 = (expt.start_time + ramp_time
+                    + 60*(expt.t_steady_state + plateau_ID*expt_length))
+                t2 = t1 + measurement_range
+                # t2 = t1 + expt_length*60
+                # Convert t1 and t2 to datetime objects
+                t1_datetime = pd.to_datetime(t1, unit='s')
+                t2_datetime = pd.to_datetime(t2, unit='s')
+
+                # Filter rows between t1 and t2
+                filtered_data = IR_data[
+                    (IR_data['abstime'] >= t1_datetime)
+                    & (IR_data['abstime'] <= t2_datetime)]
+                expt.surface_temp.append(filtered_data['surface temperature'].mean()+273)
+                surface_temps.extend([[t1_datetime, expt.surface_temp[-1]-273],
+                                    [t2_datetime, expt.surface_temp[-1]-273]])
+
+            print('for experiment: ', expt.expt_name)
+            print(expt.temp)
+            print(expt.surface_temp)
+
+
 def calc_rate(expt):
     results = analysis_tools.calculate_X_and_S(expt, reactant='C2H2',
                                                target_molecule='C2H4')
 
-    Yield = results['Conversion']/100 * results['Selectivity']/100
+    Yield = results['Conversion'] * results['Selectivity']
     mole_density = 1/22814  # mole/mL ethylene
     flow = expt.tot_flow[0] / 60  # flow in standard mL / sec
     rate_abs = Yield * flow * mole_density  # mole c2h4 / sec
     mass = 4  # mg
     wt_per = 0.04  # percent
-    rate = rate_abs/(mass * wt_per)*1e6  # umol/mg/sec
+    rate = rate_abs/(mass * wt_per)
     return rate
 
 
@@ -96,7 +159,7 @@ main_ax = fig.add_subplot(111, frameon=False)
 main_ax.tick_params(labelcolor='none', which='both',
                     top=False, bottom=False, left=False, right=False)
 main_ax.set_xlabel('1000/T [1/K]', fontsize=label_size)
-main_ax.set_ylabel('Rate [$\mu$mol/mg/s]', fontsize=label_size)
+main_ax.set_ylabel('Rate [mmol/mg/s]', fontsize=label_size)
 axes = axes.flatten()
 powers = [0, 20, 40, 60]
 
@@ -106,7 +169,7 @@ main_ax_WL = fig_WL.add_subplot(111, frameon=False)
 main_ax_WL.tick_params(labelcolor='none', which='both',
                     top=False, bottom=False, left=False, right=False)
 main_ax_WL.set_xlabel('1000/T [1/K]', fontsize=label_size)
-main_ax_WL.set_ylabel('Rate [$\mu$mol/mg/s]', fontsize=label_size)
+main_ax_WL.set_ylabel('Rate [mmol/mg/s]', fontsize=label_size)
 axes_WL = axes_WL.flatten()
 wavelengths = [480, 530, 580, 630, 680]
 
@@ -122,8 +185,8 @@ fig_single, axes_single = plt.subplots(2, 1, sharex=True, figsize=(full_width/2,
 # Remove vertical space between axes
 fig_single.subplots_adjust(hspace=0)
 axes_single[1].set_xlabel('1000/T [1/K]', fontsize=label_size)
-axes_single[0].set_ylabel('Rate [$\mu$mol/mg/s]', fontsize=label_size)
-axes_single[1].set_ylabel('Rate [$\mu$mol/mg/s]', fontsize=label_size)
+axes_single[0].set_ylabel('Rate [mmol/mg/s]', fontsize=label_size)
+axes_single[1].set_ylabel('Rate [mmol/mg/s]', fontsize=label_size)
 
 title_offset = 0.8
 
@@ -133,7 +196,7 @@ for expt in expts:
 
     rate = calc_rate(expt)
     T = np.array(expt.temp)
-    Ts = np.array(expt.surface_temps['mean'])
+    Ts = np.array(expt.surface_temps['max'])
 
     p, V = np.polyfit(1/Ts, np.log(rate), deg=1, cov=True)
     std_dev = np.sqrt(V.diagonal())
@@ -141,9 +204,6 @@ for expt in expts:
     R = 8.314 / 96400
     E = -p[0] * R
     A = np.exp(p[1])
-
-    if expt.power[0] == 0:
-        print(E, A)
 
     # Calculate predicted values
     predicted_ln_rate = np.polyval(p, 1/T)
@@ -159,13 +219,13 @@ for expt in expts:
 
     # Plot this experiment on power figure
     ax_ID = powers.index(expt.power[0])
-    data_line, = axes[ax_ID].plot(1000/Ts, rate, 'o', label=str(expt.wavelength[0])+' nm', color=color)
-    fit_line, = axes[ax_ID].plot(1000/Ts, np.exp(-E/R/Ts)*A, '--', color=color)
+    data_line, = axes[ax_ID].plot(1000/Ts, rate*1000, 'o', label=str(expt.wavelength[0])+' nm', color=color)
+    fit_line, = axes[ax_ID].plot(1000/Ts, np.exp(-E/R/Ts)*A*1000, '--', color=color)
     axes[ax_ID].set_title(str(expt.power[0]) + ' mW', y=title_offset)
 
     if expt.power[0] == 60:
-        data_line, = axes_single[0].plot(1000/Ts, rate, 'o', label=str(expt.wavelength[0])+' nm', color=color)
-        fit_line, = axes_single[0].plot(1000/Ts, np.exp(-E/R/Ts)*A, '--', color=color)
+        data_line, = axes_single[0].plot(1000/Ts, rate*1000, 'o', label=str(expt.wavelength[0])+' nm', color=color)
+        fit_line, = axes_single[0].plot(1000/Ts, np.exp(-E/R/Ts)*A*1000, '--', color=color)
 
     # Plot this experiment on temperature figure
     Taxes[ax_ID].plot(T, Ts, 'o', label=str(expt.wavelength[0])+' nm', color=color)
@@ -175,19 +235,19 @@ for expt in expts:
     color = color_dict['hex']
     # Plot this experiment on wavelength figure
     ax_ID = wavelengths.index(expt.wavelength[0])
-    data_line, = axes_WL[ax_ID].plot(1000/Ts, rate, 'o', label=str(expt.power[0])+' mW', color=color)
-    fit_line, = axes_WL[ax_ID].plot(1000/Ts, np.exp(-E/R/Ts)*A, '--', color=color)
+    data_line, = axes_WL[ax_ID].plot(1000/Ts, rate*1000, 'o', label=str(expt.power[0])+' mW', color=color)
+    fit_line, = axes_WL[ax_ID].plot(1000/Ts, np.exp(-E/R/Ts)*A*1000, '--', color=color)
     axes_WL[ax_ID].set_title(str(expt.wavelength[0]) + ' mW', y=title_offset)
 
     if expt.wavelength[0] == 530:
-        data_line, = axes_single[1].plot(1000/Ts, rate, 'o', label=str(expt.power[0])+' mW', color=color)
-        fit_line, = axes_single[1].plot(1000/Ts, np.exp(-E/R/Ts)*A, '--', color=color)
+        data_line, = axes_single[1].plot(1000/Ts, rate*1000, 'o', label=str(expt.power[0])+' mW', color=color)
+        fit_line, = axes_single[1].plot(1000/Ts, np.exp(-E/R/Ts)*A*1000, '--', color=color)
 
     data_list.append([expt.power[0], expt.wavelength[0], E])
 
 for ax in Taxes:
     ax.plot([330, 400], [330, 400], '--k')
-    ax.set_ylim([335, 425])
+    ax.set_ylim([335, 415])
     ax.set_xlim([335, 385])
     ax.legend(frameon=False)
     reorder_legend(ax)
@@ -201,8 +261,8 @@ for ax in axes_WL.tolist() + axes.tolist() + axes_single.tolist():
     ax.yaxis.set_minor_formatter(ScalarFormatter())
     ax.yaxis.set_major_locator(AutoLocator())
     ax.yaxis.set_minor_locator(AutoLocator())
-    ax.set_ylim([1.8, 9.5])
-    ax.set_xlim([2.36, 2.95])
+    ax.set_ylim([18, 95])
+    ax.set_xlim([2.45, 2.95])
 
 plt.tight_layout()
 fig.tight_layout()
@@ -220,9 +280,12 @@ data_list = np.array(data_list)
 sorted_indices = np.lexsort((data_list[:, 0], data_list[:, 1]))  # Get indices that would sort the array by the second column
 data_list = data_list[sorted_indices]      # Reorder the array using the sorted indices
 
+print(data_list)
 X = data_list[:, 0].reshape(len(wavelengths), len(powers))
 Y = data_list[:, 1].reshape(len(wavelengths), len(powers))
 Z = data_list[:, 2].reshape(len(wavelengths), len(powers))
+print(X)
+print(Y)
 surf = ax_3d.plot_surface(X, Y, Z, cmap='viridis', edgecolor='k')
 
 
@@ -239,8 +302,7 @@ ax_3d.set_proj_type('ortho')
 fig_3d.tight_layout()
 plt.show(block=False)
 
-save_fol = r"G:\Shared drives\Photocatalysis Projects\catalight_experiments\figures\20240513_barrier_expt_plots_meanT_conversion"
-os.makedirs(save_fol, exist_ok=True)
+save_fol = r"G:\Shared drives\Photocatalysis Projects\catalight_experiments\figures\20240425_barrier_expt_plots"
 fig_list = [fig, Tfig, fig_WL, fig_single, fig_3d]
 fig_names = ["power_dependence",
              "temp_differences",

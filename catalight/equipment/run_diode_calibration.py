@@ -104,4 +104,3 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
 
 if __name__ == "__main__":
     main()
-    plt.show()

@@ -34,9 +34,9 @@ def get_user_inputs(starting_dir=None):
 
     Returns
     -------
-    file_list : list of str
+    file_list : list[str]
         List of files selected by user.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels provided by user for plot legend.
     response_dict : dict
         Dictionary of user plot options.
@@ -67,9 +67,9 @@ def main(file_list, data_labels, figsize=(6.5, 4.5), basecorrect=True):
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list[str]
         list of full filepaths to ".asc" files for GC data.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
