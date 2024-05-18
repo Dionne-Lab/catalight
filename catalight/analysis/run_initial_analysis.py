@@ -28,7 +28,7 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
 
     Returns
     -------
-    expt_dirs : list of str
+    expt_dirs : list[str]
         Paths to main directories for running analysis.
     calDF : pandas.DataFrame
         Formatted DataFrame containing gc calibration data.
@@ -78,7 +78,7 @@ def main(main_dirs, calDF, reactant, target_molecule, mole_bal='c',
 
     Parameters
     ----------
-    main_dirs : list of str
+    main_dirs : list[str]
         Paths to main directories for running analysis. All expt_log.txt files
         within the main directory will be analyzed.
     calDF : pandas.DataFrame

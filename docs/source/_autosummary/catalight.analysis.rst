@@ -1,4 +1,4 @@
-catalight.analysis
+﻿catalight.analysis
 ==================
 
 .. automodule:: catalight.analysis
@@ -29,6 +29,7 @@ catalight.analysis
 
    catalight.analysis.chromatogram_scanner_gui
    catalight.analysis.gcdata
+   catalight.analysis.irdata
    catalight.analysis.make_empty_cal_expt
    catalight.analysis.plotting
    catalight.analysis.run_calibration

@@ -104,5 +104,8 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
 
 if __name__ == "__main__":
     main()
+<<<<<<< HEAD
     import matplotlib.pyplot as plt
     plt.show()
+=======
+>>>>>>> 6ce0f4448d73c75ee78aabd7408a5d520ef6c87a

@@ -25,10 +25,10 @@ def get_user_inputs(starting_dir=None):
 
     Returns
     -------
-    file_list : list of str
+    file_list : list[str]
         List of file paths to experiment folders then used to initiate
         experiment objects and calculate conversion and selectivity.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     response_dict : dict
         Dictionary of user plot options.
@@ -62,10 +62,10 @@ def main(file_list, data_labels, reactant, target_molecule,
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list[str]
         List of file paths to experiment folders then used to initiate
         experiment objects and calculate conversion and selectivity.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     reactant : str
         String identity of reactant molecule to track. Must match what

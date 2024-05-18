@@ -87,7 +87,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[float]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
         tot_flow : float
             Total flow to send.
@@ -121,7 +121,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[float]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
 
         Returns
@@ -368,9 +368,9 @@ class Gas_System:
                       % tuple(reading))
                 output.loc[sample_num] = reading
                 sample_num += 1
-                
+
         test_mfc.set_flow_rate(1)  # set flow to minimum postrun
-        
+
         # Plot Results
         # First fig is [Pressure, setpoint, flow rate] vs time
         ax1 = output.plot(x='time', y='pressure',
@@ -386,7 +386,7 @@ class Gas_System:
                           ylabel='Pressure (psia)', xlabel='Flow Rate (sccm)',
                           style='--ok')
         fig_vs_flow = ax3.get_figure()
-        
+
         # Save Results
         fig_vs_time.savefig(os.path.join(savepath, 'flow_test_vs_time.svg'),
                     format='svg')

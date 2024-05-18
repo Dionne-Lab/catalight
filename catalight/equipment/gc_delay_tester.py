@@ -35,17 +35,17 @@ def main(main_dir, delay_times, flows, gas_list, comp_list_on, comp_list_off,
     ----------
     main_dir : str
         Directory in which experiment directories will be created/saved
-    delay_times : list of float or int
+    delay_times : list[float or int]
         Time between setting comp_list_on and starting GC collection
-    flows : list of float or int
+    flows : list[float or int]
         Total gas flow rate in sccm.
     gas_list : list of str
         Input gasses into MFC.
         Example: ['C2H4', 'C2H2', 'H2', 'Ar']
-    comp_list_on : list of float or int
+    comp_list_on : list[float or int]
         Composition list for test mix.
         Example: [0, 0.1, 0, 0.9] sends 10% Gas B diluted by Gas D
-    comp_list_off : list of float or int
+    comp_list_off : list[float or int]
         Composition list for flush mix.
         Example: [0, 0, 0, 1] sends 100 gas D, which should be inert gas
     ctrl_file : str

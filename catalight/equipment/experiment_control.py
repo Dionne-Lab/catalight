@@ -185,7 +185,7 @@ class Experiment:
 
             Parameters
             ----------
-            value : list of float or numpy.ndarray
+            value : list[float] or numpy.ndarray
                 if np array is given, converts to list in beginning of func.
 
             Raises
@@ -425,7 +425,10 @@ class Experiment:
                 'Gas Composition [' + self.expt_list['Units'][3]
                 + '] = ' + str(self.gas_comp),
                 'Total Flow [' + self.expt_list['Units'][4]
-                + '] = ' + str(self.tot_flow)
+                + '] = ' + str(self.tot_flow),
+                'Sample Rate = ' + str(self.sample_rate),
+                'Time To Steady State = ' + str(self.t_steady_state),
+                'Buffer Time = ' + str(self.t_buffer)
             ]
             log.write('\n'.join(log_entry))
 
@@ -489,6 +492,12 @@ class Experiment:
                     self.gas_comp = literal_eval(data)
                 elif re.search('Total Flow', line):
                     self.tot_flow = literal_eval(data)
+                elif re.search('Sample Rate', line):
+                    self.sample_rate = literal_eval(data)
+                elif re.search('Time To Steady State', line):
+                    self.t_steady_state = literal_eval(data)
+                elif re.search('Buffer Time', line):
+                    self.t_buffer = literal_eval(data)
 
             expt_path = os.path.dirname(log_path)
             # Will throw error if no data folders

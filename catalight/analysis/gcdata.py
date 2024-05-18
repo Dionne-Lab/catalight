@@ -1,7 +1,7 @@
 """
 Gas chromatograph data and associated processing methods.
 
-GCData is meant to represent a gas chormatograph data file and associated
+GCData is meant to represent a gas chromatograph data file and associated
 data processing techniques. Individual data files are operated on
 by this class, then processed data for an experiment is
 compiled, analyzed, and plotted elsewhere.
@@ -43,7 +43,8 @@ class GCData:
     rind : numpy.ndarray
         indices of rightmost bound for integration for each peak identified
     """
-
+    # Dev note: don't replicate this doc style. See experiment_control
+    # for better rendering reference on doc style.
     def __init__(self, filepath, basecorrect=False):
         """
         Initialize the class with the attributes filename and data.

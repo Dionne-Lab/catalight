@@ -99,7 +99,7 @@ def main(expt_paths, calDF, xdata, units, reactant, target_molecule,
 
     Parameters
     ----------
-    expt_paths : list of str
+    expt_paths : list[str]
         List of full paths to expt_log.txt files.
     calDF : pandas.DataFrame
         Formatted DataFrame containing gc calibration data.
