@@ -10,6 +10,7 @@ Created on Tue Feb 22 23:15:23 2022
 import os
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 from catalight.equipment.light_sources.diode_control import Diode_Laser
 from catalight.equipment.power_meter.newport import NewportMeter
 
@@ -104,8 +105,4 @@ def main(current_range=(150, 800, 35), wavelength=450, tolerance=10):
 
 if __name__ == "__main__":
     main()
-<<<<<<< HEAD
-    import matplotlib.pyplot as plt
     plt.show()
-=======
->>>>>>> 6ce0f4448d73c75ee78aabd7408a5d520ef6c87a
