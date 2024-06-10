@@ -151,7 +151,7 @@ class GCData:
         numpy.ndarray
             All peak locations (as integer indices NOT times)
         """
-        apex_ind, _ = scisig.find_peaks(self.signal, prominence=0.2)
+        apex_ind, _ = scisig.find_peaks(self.signal, prominence=0.1, width=10)
         return apex_ind
 
     def integration_inds(self):
@@ -328,27 +328,28 @@ class GCData:
         plt.gca().tick_params(which='both', width=1.5, length=6)
         plt.gca().tick_params(which='minor', width=1.5, length=3)
 
-        plt.figure
+        fig, ax = plt.subplots()
         #self.integration_inds()
         [left_idx, right_idx] = (np.rint(self.lind).astype('int'),
                                  np.rint(self.rind).astype('int'))
         # Plot signal
-        plt.plot(self.time, self.signal, linewidth=2.5)
+        ax.plot(self.time, self.signal, linewidth=2.5)
         # Plot Derivative
         # plt.plot(time, 10*np.gradient(signal))
         # Plot peak and bounds
-        plt.plot(self.time[self.apex_ind], self.signal[self.apex_ind],
+        ax.plot(self.time[self.apex_ind], self.signal[self.apex_ind],
                  'bo', label='apex')
-        plt.plot(self.time[left_idx], self.signal[left_idx],
+        ax.plot(self.time[left_idx], self.signal[left_idx],
                  'go', label='left')
-        plt.plot(self.time[right_idx], self.signal[right_idx],
+        ax.plot(self.time[right_idx], self.signal[right_idx],
                  'ro', label='right')
 
-        plt.xlabel('Retention (min)', fontsize=18)
-        plt.ylabel('Signal (a.u.)', fontsize=18)
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
+        ax.set_xlabel('Retention (min)', fontsize=18)
+        ax.set_ylabel('Signal (a.u.)', fontsize=18)
+        ax.legend()
+        fig.tight_layout()
+        fig.show()
+        return fig, ax
 
     # Helper functions
     ###########################################################################

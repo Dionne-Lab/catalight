@@ -66,6 +66,6 @@ def rescale_plots(filepaths):
 
 if __name__ == '__main__':
     main_dir = (r"G:\Shared drives\Photocatalysis Projects"
-                r"\catalight_experiments\20240513_AuPd_stability")
+                r"\catalight_experiments\20240604")
     paths = get_file_paths(main_dir)
     rescale_plots(paths)
