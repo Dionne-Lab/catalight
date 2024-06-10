@@ -20,7 +20,6 @@ import psutil
 from alicat import FlowController
 from catalight.equipment.gas_control.alicat import Gas_System
 from catalight.equipment.light_sources.diode_control import Diode_Laser
-from catalight.equipment.light_sources.nkt_system import NKT_System
 from catalight.equipment.heating.watlow import Heater
 from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
@@ -257,7 +256,7 @@ class MainWindow(QMainWindow):
         self.laser_selection_box.clear()
         # Create combo box options for diode and nkt lasers, connect signal
         self.laser_selection_box.addItem("Diode Laser")
-        self.laser_selection_box.addItem("NKT Laser")
+        # self.laser_selection_box.addItem("NKT Laser")
         self.laser_selection_box.currentIndexChanged.connect(self.change_laser)
 
         # Try to connect with diode laser
@@ -275,17 +274,19 @@ class MainWindow(QMainWindow):
             self.laser_Status.setChecked(0)
 
         self.loading_screen.progress_bar.setValue(80)
-        # Try to connect with NKT laser
-        try:
-            laser = NKT_System()
-            # Assign nkt laser to first item in combobox
-            self.laser_selection_box.setItemData(1, laser)
-            # If previous laser didn't connect, set the nkt as active
-            if not self.laser_Status.isChecked():
-                self.laser_selection_box.setCurrentIndex(1)
-                self.change_laser()
-        except Exception as e:
-            print(e)
+
+        # 20240610 NKT has unresolvable multithreading issues that need rework
+        # # Try to connect with NKT laser
+        # try:
+        #     laser = NKT_System()
+        #     # Assign nkt laser to first item in combobox
+        #     self.laser_selection_box.setItemData(1, laser)
+        #     # If previous laser didn't connect, set the nkt as active
+        #     if not self.laser_Status.isChecked():
+        #         self.laser_selection_box.setCurrentIndex(1)
+        #         self.change_laser()
+        # except Exception as e:
+        #     print(e)
 
         self.loading_screen.progress_bar.setValue(85)
         self.set_form_limits()
@@ -427,7 +428,7 @@ class MainWindow(QMainWindow):
             self.manualRamp.setValue(self.heater.ramp_rate)
 
         if self.laser_Status.isChecked():  # Initialize Values for Laser
-            
+
             self.manualPower.setValue(self.laser_controller.get_output_power())
             # If applicable, update bandpass settings
             if self.laser_controller.is_tunable:
@@ -458,9 +459,9 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        spinboxes : list of PyQt5.QtWidgets.QSpinBoxes
+        spinboxes : list`[`PyQt5.QtWidgets.QSpinBoxes`]
             spinboxes to sum
-        qlabel : PyQt5.QtWidgets.QLabel
+        qlabel : `PyQt5.QtWidgets.QLabel`
             qlabel to write to
 
         Returns
@@ -579,7 +580,7 @@ class MainWindow(QMainWindow):
             # TODO this should come from the gas_system object
 
         if self.laser_Status.isChecked():
-            
+
             lambda_min = self.laser_controller.wavelength_range[0]
             lambda_max = self.laser_controller.wavelength_range[1]
 
@@ -957,7 +958,7 @@ class MainWindow(QMainWindow):
         manual control (1) and the live view (2) tabs
         """
         if self.laser_Status.isChecked():
-            
+
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_setpoint1.setText('%.2f' % self.laser_controller.P_set)
@@ -1081,34 +1082,34 @@ class MainWindow(QMainWindow):
         self.progress_signal.emit(50)
 
         if self.laser_Status.isChecked():
-           # # Set Laser power
-            # # change text color to red while updating
-            # # TODO I'm not sure why i ever set this up with signal instead of
-            # # directly just changing the color.
-            # # I think i can just delete this version after checking
-            # self.current_power_setpoint1.setStyleSheet('Color: red')
-            # self.change_color_signal.emit(self.current_power_setpoint1, 'red')
-            # self.change_color_signal.emit(self.current_power_setpoint2, 'red')
-            # self.laser_controller.set_power(self.manualPower.value())
-            # # Change text color back to white after update
-            # self.change_color_signal.emit(self.current_power_setpoint1, 'white')  # noqa
-            # self.change_color_signal.emit(self.current_power_setpoint2, 'white')  # noqa
-            # self.progress_signal.emit(65)
+            # Set Laser power
+            # change text color to red while updating
+            # TODO I'm not sure why i ever set this up with signal instead of
+            # directly just changing the color.
+            # I think i can just delete this version after checking
+            self.current_power_setpoint1.setStyleSheet('Color: red')
+            self.change_color_signal.emit(self.current_power_setpoint1, 'red')
+            self.change_color_signal.emit(self.current_power_setpoint2, 'red')
+            self.laser_controller.set_power(self.manualPower.value())
+            # Change text color back to white after update
+            self.change_color_signal.emit(self.current_power_setpoint1, 'white')  # noqa
+            self.change_color_signal.emit(self.current_power_setpoint2, 'white')  # noqa
+            self.progress_signal.emit(65)
 
-            # # If applicable, set laser wavelength/bandwidth
-            # if self.laser_controller.is_tunable:
-            #     # change text color to red while updating
-            #     self.change_color_signal.emit(self.current_center_setpoint1, 'red')
-            #     self.change_color_signal.emit(self.current_center_setpoint2, 'red')
-            #     self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'red')
-            #     self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'red')
-            #     self.laser_controller.set_bandpass(self.manualCenter,
-            #                                        self.manualBandwidth)
-            #     # Change text color back to white after update
-            #     self.change_color_signal.emit(self.current_center_setpoint1, 'white')
-            #     self.change_color_signal.emit(self.current_center_setpoint2, 'white')
-            #     self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'white')
-            #     self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'white') 
+            # If applicable, set laser wavelength/bandwidth
+            if self.laser_controller.is_tunable:
+                # change text color to red while updating
+                self.change_color_signal.emit(self.current_center_setpoint1, 'red')
+                self.change_color_signal.emit(self.current_center_setpoint2, 'red')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'red')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'red')
+                self.laser_controller.set_bandpass(self.manualCenter,
+                                                   self.manualBandwidth)
+                # Change text color back to white after update
+                self.change_color_signal.emit(self.current_center_setpoint1, 'white')
+                self.change_color_signal.emit(self.current_center_setpoint2, 'white')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'white')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'white')
 
             # Set Laser power
             # change text color to red while updating
@@ -1284,7 +1285,7 @@ class EmittingStream():
 
     Arguments
     ---------
-    textedit : PyQt5.QtWidgets.QLineEdit
+    textedit : :obj:`PyQt5.QtWidgets.QLineEdit`
         This should be a line edit box you want to populate w/ print statement.
     """
     def __init__(self, textedit):
