@@ -97,3 +97,8 @@ autodoc_mock_imports = [
     'win32gui',
     'nkt_tools'
 ]
+
+nitpick_ignore_regex = [('py:exc', 'Peaksimple.*'),
+                        (r'py:.*', r'PyQt5.*'),
+                        (r'py:.*', r'\bQ\w*')]
+linkcheck_ignore = [('py:*', 'PyQt5*')]

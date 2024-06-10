@@ -51,7 +51,7 @@ class Gas_System:
 
         Parameters
         ----------
-        gas_list : list of str
+        gas_list : list[`str`]
             [gasA, gasB, gasC, gasD] Each must be within factory gasses.
 
         Returns
@@ -87,7 +87,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list[float]
+        comp_list : list[`float`]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
         tot_flow : float
             Total flow to send.
@@ -121,7 +121,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list[float]
+        comp_list : list[`float`]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
 
         Returns
@@ -171,7 +171,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list[float or int]
+        comp_list : list[`float` or `int`]
             Composition list in either percents or fractions.
 
         Raises
@@ -181,7 +181,7 @@ class Gas_System:
 
         Returns
         -------
-        list[float]
+        list[`float`]
             Updated composition list as fractions
 
         """
@@ -239,7 +239,7 @@ class Gas_System:
 
         Returns
         -------
-        flow_dict : dict of dict
+        flow_dict : `dict` of `dict`
             {mfc: mfc.get()}
         """
         while self.is_busy:
@@ -294,7 +294,7 @@ class Gas_System:
 
         Parameters
         ----------
-        mfc : alicat.FlowController | alicat.FlowMeter
+        mfc : `alicat.FlowController` | `alicat.FlowMeter`
             Mass flow controller or meter to update with calgas
         calDF : pandas.DataFrame
             Formatted DataFrame containing gc calibration data.

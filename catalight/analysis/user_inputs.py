@@ -84,10 +84,10 @@ class Option():
     widget: QComboBox | QDoubleSpinBox | QLineEdit | QRadioButton
     """
     Widget used for entering option values
-    - :class:`QComboBox`: Combo box widget.
-    - :class:`QDoubleSpinBox`: Double spin box widget.
-    - :class:`QLineEdit`: Line edit widget.
-    - :class:`QRadioButton`: Radio button widget.
+    - :class:`PyQt5.QtWidgets.QComboBox`: Combo box widget.
+    - :class:`PyQt5.QtWidgets.QDoubleSpinBox`: Double spin box widget.
+    - :class:`PyQt5.QtWidgets.QLineEdit`: Line edit widget.
+    - :class:`PyQt5.QtWidgets.QRadioButton`: Radio button widget.
     """
 
 

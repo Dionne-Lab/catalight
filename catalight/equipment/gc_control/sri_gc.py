@@ -183,9 +183,9 @@ class GC_Connector():
 
         Raises
         ------
-        Peaksimple.ConnectionWriteFailedException:
+        ``Peaksimple.ConnectionWriteFailedException``
             Somewhat randomly occurring error usually fixed by reattempting.
-        Peaksimple.NoConnectionException:
+        ``Peaksimple.NoConnectionException``
             Communication to peaksimple lost. Likely need to reboot peaksimple.
         """
         print('Loading Control File...')
@@ -235,12 +235,12 @@ class GC_Connector():
         Wraps over peaksimple set running function. Will set channel 1 running
         by default. This could be made flexible in the future if ever needed.
         I think most SRI GC interactions are controlled by channel 1 though.
-        
+
         Parameters
         ----------
         max_tries : `int`, optional
             Number of attempts to make before aborting. The default is 3.
-            
+
          Raises
          ------
          Exception
@@ -263,7 +263,7 @@ class GC_Connector():
                 else:
                     print('Cannot Resolve')
                     raise e
-            
+
 
     def is_running(self, max_tries=3):
         """
@@ -312,7 +312,7 @@ class GC_Connector():
 
         Raises
         ------
-        Peaksimple.ConnectionFailedException
+        `Peaksimple.ConnectionFailedException`
             Connection to GC was unsuccessful.
 
         Returns
