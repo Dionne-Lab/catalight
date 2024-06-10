@@ -16,6 +16,11 @@ docs/source/_build/
 *.pickle
 *.SRI
 
+# include image files in doc source
+!docs/source/_static/*
+!docs/source/_static/*.svg
+!docs/source/_static/*.png
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
