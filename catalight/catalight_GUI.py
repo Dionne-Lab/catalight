@@ -2,7 +2,8 @@
 Graphical User Interface Module.
 
 Imports a GUI design created using QT Designer. Connects signals/slots and
-adds additional functionality.
+adds additional functionality. This version was built to support an NKT tunable
+laser, but that feature has been removed due to multithreading conflicts.
 
 Created on Sun Feb 20 18:45:10 2022.
 

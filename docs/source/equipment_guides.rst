@@ -4,6 +4,9 @@ The purpose of this section is to demonstrate the connection process for specifi
 
 Alicat MFCs
 -----------
+.. note::
+    The Alicat Python package was updated with a breaking change after implementation into the Catalight project. Version 0.4.1 is the last compatible version and has been hard pinned into the Catalight requirements file.
+    
 Alicat brand MFCs are accessed utilizing the Alicat python package developed by Patrick Fuller and Numat.
 
 | `numat/alicat: Python driver and command line tool for Alicat mass flow controllers. (github.com) <https://github.com/numat/alicat>`_

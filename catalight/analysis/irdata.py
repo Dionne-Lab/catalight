@@ -125,7 +125,7 @@ class IRData():
         experiment and the abstime column of the imported IR camera data to
         determine the time averaged surface temperature of catalyst.
 
-         All experiments will have a new attribute "surface_temps" added to
+        All experiments will have a new attribute "surface_temps" added to
         it. "surface_temps is a python :class:`~dict` with keys "max" and
         "min" the value for each key is a list of time averaged
         temperatures for each step of the experiment.
