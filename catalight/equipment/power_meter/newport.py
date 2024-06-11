@@ -36,14 +36,28 @@ class NewportMeter:
         else:
             print('No Sensor attached to {0} !!!'.format(self.Device))
 
-    def change_wavelength(self, wavelength):
+    def change_wavelength(self, wavelength, max_tries=4):
         """Change to desired wavelength, modifies slot 4 if wavelength DNE."""
-        wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
-        wavelength = str(wavelength)
-        if wavelength not in wavelengths:
-            self.OphirCOM.ModifyWavelength(self.DeviceHandle, 0, 4, wavelength)
-        idx = wavelengths.index(wavelength)
-        self.OphirCOM.SetWavelength(self.DeviceHandle, 0, idx)
+        for attempt in range(max_tries):
+            try:
+                # Get available wavelengths saved to device
+                wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
+                wavelength = str(wavelength)
+                if wavelength not in wavelengths:  # check for desired option
+                    # change saved wavelength 4 to desired one
+                    self.OphirCOM.ModifyWavelength(self.DeviceHandle, 0, 4, wavelength)
+                    # update available wavelength list
+                    wavelengths = self.OphirCOM.GetWavelengths(self.DeviceHandle, 0)[1]
+                # Get location of desired wavelength
+                idx = wavelengths.index(wavelength)
+                self.OphirCOM.SetWavelength(self.DeviceHandle, 0, idx)
+                break
+            except Exception as e:
+                print("Error changing wavelength... retrying")
+                if attempt == max_tries-1:
+                    raise(e)
+                continue
+        
 
     def read(self, averaging_time=0.5):
         """
@@ -51,7 +65,7 @@ class NewportMeter:
 
         Parameters
         ----------
-        averaging_time : float or int, optional
+        averaging_time : `float` or `int`, optional
             Time to collect dataset in seconds. The default is 0.5.
 
         Returns
@@ -61,14 +75,22 @@ class NewportMeter:
         reading : float
             Power reading in mW
         """
+        data = [[], []]
         self.OphirCOM.SetRange(self.DeviceHandle, 0, 0)  # set range to auto
-        self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
-        time.sleep(averaging_time)  # collect data during pause
-        data = self.OphirCOM.GetData(self.DeviceHandle, 0)
+        while len(data[0]) == 0:  # Prevent empty data set
+            for attempt in range(4):
+                try:  #Tries again in case of bad read (up to 4 times)
+                    self.OphirCOM.StartStream(self.DeviceHandle, 0)  # start measuring
+                    time.sleep(averaging_time)  # collect data during pause
+                    self.OphirCOM.StopAllStreams()  # stop measuring
+                    data = self.OphirCOM.GetData(self.DeviceHandle, 0)
+                    break
+                except Exception as e:
+                    print('Error Found', e)
+                    continue
         # average the readout, convert units to mW
         reading = sum(list(data[0])) / len(data[0]) * 1000
         timestamp = time.time()  # get time
-        self.OphirCOM.StopAllStreams()  # stop measuring
         return(timestamp, reading)
 
     def shut_down(self):

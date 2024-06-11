@@ -1,4 +1,4 @@
-﻿catalight.equipment.gas\_control
+catalight.equipment.gas\_control
 ================================
 
 .. automodule:: catalight.equipment.gas_control

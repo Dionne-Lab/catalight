@@ -20,15 +20,15 @@ def get_user_inputs(starting_dir=None):
 
     Parameters
     ----------
-    starting_dir : str, optional
+    starting_dir : `str`, optional
         Path to initialize file dialog in. The default is None.
 
     Returns
     -------
-    file_list : list of str
+    file_list : list[str]
         List of file paths to experiment folders then used to initiate
         experiment objects and calculate conversion and selectivity.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     response_dict : dict
         Dictionary of user plot options.
@@ -62,10 +62,10 @@ def main(file_list, data_labels, reactant, target_molecule,
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list[str]
         List of file paths to experiment folders then used to initiate
         experiment objects and calculate conversion and selectivity.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
     reactant : str
         String identity of reactant molecule to track. Must match what
@@ -80,7 +80,7 @@ def main(file_list, data_labels, reactant, target_molecule,
     plot_XvsS : bool
         True plots plot selectivity as a function of conversion for all
         provided experiments on one plot.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
          Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
          figsize suggestions:
          1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -113,7 +113,7 @@ def main(file_list, data_labels, reactant, target_molecule,
         fig, ax = analysis.plotting.multiplot_X_vs_S(results_dict, figsize)
         plt.show()
         return fig, ax
-    print('Test if this line is executed')
+
 
 
 if __name__ == "__main__":

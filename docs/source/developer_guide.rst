@@ -2,11 +2,17 @@ Providing feedback
 ------------------
 The development of v1 of catalight took over a year. While that was a tremendous learning opportunity, the length of time means there are undoubtedly details left out from this documentation that may be crucial for first time users. Please feel free to reach out to the authors with questions, and we strongly encourage feedback on the documentation. A lot of work went into developing this project, and we want other labs to benefit from this effort and do more productive research! The original authors self learned Python while developing this project. There very well may be aspects of the project that could be improved, so please reach out of fork our Github project if you see any other areas for improvement. Your questions/feedback are not only welcome, but encouraged!
 
+If an issue occurs while you are using the system, please open an issue on the `GitHub <https://github.com/Dionne-Lab/catalight/issues>`_ page! This helps other users not repeat common mistakes or issues and will hopefully serve as an easy way for the future community to collaborate on improving the toolbox!
+
 Developing equipment drivers
 ----------------------------
-catalight was built with modularity in mind. We do not want to make a code project that only allows the automation of a single lab setup! That being said, its not feasible to create a universal code package that is both user friendly and compatible with all equipment immediately. Drivers for specific pieces of equipment need to be written for users hoping to use other equipment types. Our :doc:`Equipment Specific Guides <equipment_guides>` section is meant to serve as both instructions for users attempting to connect the exact hardware we utilize in our lab and to serve as examples for users developing new equipment drivers.
+Catalight was built with modularity in mind. We do not want to make a code project that only allows the automation of a single lab setup! That being said, its not feasible to create a universal code package that is both user friendly and compatible with all equipment immediately. Drivers for specific pieces of equipment need to be written for users hoping to use other equipment types. Our :doc:`Equipment Specific Guides <equipment_guides>` section is meant to serve as both instructions for users attempting to connect the exact hardware we utilize in our lab and to serve as examples for users developing new equipment drivers.
 
-We ask that users developing new hardware (a) fork our Github to eventually merge improvements to the main project, (b) provide manuals for equipment within the catalight/equipment/"specific_equipment_folder" directory for the new piece of equipment developed, (c) write a :doc:`Equipment Specific Guides <equipment_guides>` to help other users utilize your code, and (d) write your specific driver utilizing the same function names as comparable equipment that has already been developed (see :ref:`Areas for future development <future>` for more thoughts on how abstract classes could be created to aid this process).
+We ask that users developing new hardware
+  (a) fork/branch our Github to eventually merge improvements to the main project,
+  (b) provide manuals for equipment within the manuals/"specific_equipment_folder" directory for the new piece of equipment developed,
+  (c) write a :doc:`Equipment Specific Guides <equipment_guides>` to help other users utilize your code, and
+  (d) write your specific driver utilizing the same function names as comparable equipment that has already been developed (see :ref:`Areas for future development <future>` for more thoughts on how abstract classes could be created to aid this process).
 
 An excellent example of a flexible automated lab design can be found in the `LightLab <https://lightlab.readthedocs.io/en/development/index.html>`_ package. catalight was developed by novice programmers to be (a) more specific in scope than LightLab and (b) utilize existing Python APIs in place of developing VISA-based drivers for equipment. The trade off is that catalight is a less flexible codebase that we hope is more user friendly for researchers working on photocatalysis experiment specifically, where as LightLab is a flexible project that seems best suited for optical characterization labs.
 
@@ -18,11 +24,11 @@ Our SRI GC connection is an example of approach 1. There is no Python interface 
 
 If the producer of your equipment does not provide a Python-specific programming interface to your equipment or its software (if it has software), you may need to interface with your equipment via some communication protocol, like VISA. Some examples of this includes The `pywatlow package <https://pywatlow.readthedocs.io/en/latest/readme.html>`_ and Brendan Sweeny's `write up <http://brendansweeny.com/posts/watlow>`_ on how he created it, the `alicat package <https://github.com/numat/alicat>`_ which uses pySerial to control MFCs, and the `LightLab <https://lightlab.readthedocs.io/en/development/index.html>`_ project which generalizes the development of VISA connections to lab equipment. Often, equipment without software or an existing API will have a programmer manual describing how to use serial/GPIB/VISA communication commands.
 
-Ideally, users that need to develop their own communication interfaces through some read/write commands via pySerial, pyVISA, and the like can write their python driver in a seperate package, publish it, and import it into the catalight package. It is much easier for users to use tools with more human readable commands like alicat.MassFlowController.set_flow() wrapping over the signals communication. Ease of use is exactly why we choose to use packages like alicat and pywatlow in the first place!!
+Ideally, users that need to develop their own communication interfaces through some read/write commands via pySerial, pyVISA, and the like can write their python driver in a seperate package, publish it, and import it into the catalight package. This is the method we chose for integrating the NKT system into catalight (`nkt_tools package <https://nkt-tools.readthedocs.io/en/latest/>`_), rather than writing the communication code directly in catalight. It is much easier for users to use tools with more human readable commands like alicat.MassFlowController.set_flow() wrapping over the signals communication. Ease of use is exactly why we choose to use packages like alicat and pywatlow in the first place!!
 
 Creating new experiment types
 -----------------------------
-Coming soon
+.. include:: adding_equipment.rst
 
 Making changes to the GUI
 -------------------------
@@ -61,10 +67,7 @@ The current iteration of the system has been designed with modularity in mind, b
 * **The toolbar in the GUI needs to displays realistic values from the actual data shown.** The main GUI creates a matplotlib figure with an interactive toolbar, but the x, y coordinates are set for the underlying sub-plot instead of the two front most half figures.
 
 * **Unit testing** will be an important feature for implementing pull requests on GitHub if new users try contributing to the project. These will be implemented in the future.
-* **Formalized error reporting** needs to be handled.
-* **Wavelength sweep experiments** will be implemented when NKT support is (soon)
 * **Stability test experiments should be implemented more clearly.** The current implementation of stability test is clunky. It looks confusing in the GUI and doesn't have a dedicated time ind_var. Fixing will require some refactoring.
-* **Add plot integration option to chromatogram_scanner_gui**
 * **Add option to lock scale on chromatogram_scanner_gui**, possibly by getting max value of all files
 * **Save control file used in expt_log.txt**
 * **Print console output to a new study_log.txt file**
@@ -72,6 +75,8 @@ The current iteration of the system has been designed with modularity in mind, b
 * **A tool can be built to scan experiment results**. A lot of data can be generated when experiments are run and analyzed automatically. Parsing through many folders of experiments and pulling out graphs is a hassle. A scanner gui can be built like the chromatogram_scanner_gui to scan through X and S plots.
 * **Add get_user_inputs function to run_diode_calibration**
 * **Generalize run_diode_calibration** to take in any laser/power meter
+* | **The NKT_System should be entirely rewritten for compatibility with the GUI.** There are major failures implementing the NKT system using PyQt. As far as I can tell, this is caused by some incompatibility with the way the DLL works. It seems to behave as though the NKT is creating a new event loop and bypassing the GUI threading. I tried creating a dedicated eqpt thread for the GUI but was never successful in correcting the issue. I have not sufficiently documented the attempted solutions and issues. The NKT was simply removed from the GUI as a result. The NKT works mostly without issue in the scripted version of the Catalight system, though there is still an occasional COM error that still needs to be documented and corrected.
+  | A possible fix to this issue could be to handle telegram creation and communication without the use of the DLL. This is outlined in the NKT SDK documentation, but would entail a significant coding project.
 
 Writing documentation
 ---------------------

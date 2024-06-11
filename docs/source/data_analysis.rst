@@ -57,7 +57,7 @@ The three plotting functions called by :func:`~catalight.analysis.plotting.plot_
 
     :func:`~catalight.analysis.plotting.multiplot_X_vs_S` produces a single plot, showing the selectivity as a function of conversion for the given experiments. This function can take in experiments with different independent variables, and is a good tool for comparing thermal and light driven reactions.
 
-Many users will want to customize plot style from the default styles printed by catalight. As such, whenever catalight takes a ``savedata`` parameter, figures are saved in a .pickle format. This allows the user to open the file as a :class:`matplotlib.pyplot.Figure` object and directly alter the plot elements. The :func:`~catalight.analysis.plotting.open_pickled_fig` function accepts the full path to a pickled figure file, shows the image, and returns figure and axis handles to be used for visual editing. When the :func:`~catalight.analysis.plotting.set_plot_style` function is called, catalight also sets :code:`plt.rcParams['svg.fonttype'] = 'none'` which allows .svg file text to be edited in vector editing software such as Inkscape. Many components of .svg type files can be edited outside of python for visual changes that can be reasonably be performed on a file by file basis (whereas multi-file changes are better done programmatically).
+Many users will want to customize plot style from the default styles printed by catalight. As such, whenever catalight takes a ``savedata`` parameter, figures are saved in a .pickle format. This allows the user to open the file as a :obj:`matplotlib.pyplot.figure` object and directly alter the plot elements. The :func:`~catalight.analysis.plotting.open_pickled_fig` function accepts the full path to a pickled figure file, shows the image, and returns figure and axis handles to be used for visual editing. When the :func:`~catalight.analysis.plotting.set_plot_style` function is called, catalight also sets :code:`plt.rcParams['svg.fonttype'] = 'none'` which allows .svg file text to be edited in vector editing software such as Inkscape. Many components of .svg type files can be edited outside of python for visual changes that can be reasonably be performed on a file by file basis (whereas multi-file changes are better done programmatically).
 
 .. _ui:
 
@@ -180,12 +180,12 @@ Namely, we will skip over:
 |  :func:`~catalight.analysis.tools.list_expt_obj`       | :func:`~catalight.analysis.tools.get_timepassed`  |
 +--------------------------------------------------------+---------------------------------------------------+
 
-:func:`~catalight.analysis.tools.run_analysis` is the main workhorse of the :mod:`~catalight.analysis` subpackage. This function takes in an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and a :ref:`calibration file<calibration>` (imported as a :class:`DataFrame <pandas.DataFrame>`) and produces a 3D numpy :class:`~numpy.array` of concentrations, and two 2D :class:`pandas DataFrames <pandas.DataFrame>` (avg_conc and std_conc). If ``savedata`` is entered as ``True``, the three outputs are saved in the experiment results folder (:ref:`See data structure diagram<data_folder>`)
+:func:`~catalight.analysis.tools.run_analysis` is the main workhorse of the :mod:`~catalight.analysis` subpackage. This function takes in an :class:`Experiment object <catalight.equipment.experiment_control.Experiment>` and a :ref:`calibration file<calibration>` (imported as a :class:`DataFrame <pandas.DataFrame>`) and produces a 3D numpy :class:`~numpy.ndarray` of concentrations, and two 2D :class:`pandas DataFrames <pandas.DataFrame>` (avg_conc and std_conc). If ``savedata`` is entered as ``True``, the three outputs are saved in the experiment results folder (:ref:`See data structure diagram<data_folder>`)
 
 .. figure:: _static/images/concentrations_format.png
   :width: 800
 
-  The concentrations variable returned by the :func:`~catalight.analysis.tools.run_analysis` function is a 3D :class:`numpy array <numpy.array>` containing the timestamps and ppm values for every data point collected during an experiment.
+  The concentrations variable returned by the :func:`~catalight.analysis.tools.run_analysis` function is a 3D :class:`numpy array <numpy.ndarray>` containing the timestamps and ppm values for every data point collected during an experiment.
 
 .. figure:: _static/images/avg_std_dataframes.png
   :width: 800
@@ -226,7 +226,7 @@ A central idea underpinning the :mod:`~catalight.analysis` module is the :class:
 
 For the time being, the only data type supported by catalight is GCData, whose main behavior includes, extracting data from .asc files, finding peaks, integrating peaks, and converting those peaks to concentrations given some calibration data. All actions logically taken on a single data file are performed within this class. All actions which combine data from multiple files are performed else where (ex. :func:`~catalight.analysis.tools.run_analysis`).
 
-Usage of GCData is straight forward on the frontend. An instance of GCData is created by passing a path to an .asc file output by the GC and indicating if base correction is wanted. Some processing is run in the background, making data available as instance attributes of the new ``data`` object. Converting to concentrations is done by simply calling :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations`.
+Usage of GCData is straight forward on the frontend. An instance of GCData is created by passing a path to an .asc file output by the GC and indicating if base correction is wanted. Some processing is run in the background, making data available as instance attributes of the new ``data`` object. Converting to concentrations is done by simply calling :meth:`~catalight.analysis.gcdata.GCData.get_concentrations`.
 
 .. code-block::
 
@@ -237,35 +237,41 @@ Usage of GCData is straight forward on the frontend. An instance of GCData is cr
    :header-rows: 0
 
    * - 1
-     - :meth:`~catalight.analysis.gcdata.GC_Data.getrawdata`
+     - :meth:`~catalight.analysis.gcdata.GCData.getrawdata`
      - Pull data from .asc file. Returns timestamps and a DataFrame with signal vs elution time.
    * - 2
-     - :meth:`~catalight.analysis.gcdata.GC_Data.apex_inds`
+     - :meth:`~catalight.analysis.gcdata.GCData.apex_inds`
      - Find peaks.
    * - 3
-     - :meth:`~catalight.analysis.gcdata.GC_Data.integration_inds`
+     - :meth:`~catalight.analysis.gcdata.GCData.integration_inds`
      - Find integration bounds of peaks.
 
-.. list-table:: Methods called when running the :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations` method
+.. list-table:: Methods called when running the :meth:`~catalight.analysis.gcdata.GCData.get_concentrations` method
    :header-rows: 0
 
    * - 1
-     - :meth:`~catalight.analysis.gcdata.GC_Data.get_concentrations`
+     - :meth:`~catalight.analysis.gcdata.GCData.get_concentrations`
      - Main method called
    * - 2
-     - :meth:`~catalight.analysis.gcdata.GC_Data.integrate_peak`
+     - :meth:`~catalight.analysis.gcdata.GCData.integrate_peak`
      - Integrate the peaks based on the computed integration bounds.
    * - 3
-     - :meth:`~catalight.analysis.gcdata.GC_Data.convert_to_ppm`
+     - :meth:`~catalight.analysis.gcdata.GCData.convert_to_ppm`
      - Converts integrated peak counts to ppm based on calibration data for each molecule.
 
-Lastly, :class:`~catalight.analysis.gcdata.GC_Data` :meth:`~catalight.analysis.gcdata.GC_Data.plot_integration` is helpful for evaluating/troubleshooting the integration performance. This method plots the integration bounds and peak apex. To give a better few of how the data is being processed.
+Lastly, :class:`~catalight.analysis.gcdata.GCData` :meth:`~catalight.analysis.gcdata.GCData.plot_integration` is helpful for evaluating/troubleshooting the integration performance. This method plots the integration bounds and peak apex. To give a better few of how the data is being processed.
 
 .. _helpers:
 
 Helper scripts
 --------------
 A number of executable scripts have been written to perform basic data analysis with graphical user inputs. Files prefixed with the phrase "run\_" indicate that the file can be executed in command line and UI prompts will help the user run the respective analysis instructions. Alternatively, all of these files can be called in separate, user-created scripts without executing the file entirely. Each "run" file in the analysis subpackage contains two function: "get_user_inputs()" and "main()". "get_user_inputs()" is designed to open UI dialogs, taking in user values for running analysis. This was done to make data processing as simple as possible for users without coding experience. "main()" is where the actual analysis gets performed. The main() functions typically have a large number of arguments, which may seem intimidating at first. This is mainly to increase flexibility, and many of these arguments can stay as their default values. If a user would like to run analysis in a scripted fashion, calling analysis.run/_"filename".main() with the desired arguments is a completely acceptable method! Of course, the user can bypass these helper functions all together for even more flexible data analysis options.
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/urjR0mDqkzE?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Using the Multiplot Tool" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
 
 .. list-table:: Helper functions in the :mod:`~catalight.analysis` package
    :header-rows: 0
@@ -295,6 +301,13 @@ Finally, the :mod:`~catalight.analysis.chromatogram_scanner_gui` module provides
 
 Running a calibration
 ---------------------
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/6VJg5W6GpIg?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Running a Calibration" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+
 Within catalight, calibrations are handled using external csv files. These are imported as a :class:`pandas.DataFrame`, usually referred to in the code as "calDF". We primarily handle calibrations and integration outside of peaksimple to offer more control over the process and automation of analysis. For users that would prefer to utilize peaksimple for calibration, the results files output from peaksimple are saved in the same location as the ascii files.
 
 Calibrations can be performed by flowing in a calibration standard gas mixture through one of the systems mass flow controllers. The user can perform a composition sweep using either the GUI or scripting and then utilize :func:`catalight.analysis.tools.analyze_cal_data` to analyze the collected data. The :mod:`catalight.analysis.run_calibration` module includes a GUI interface to help with this process. The Experiment class also contains a calibration experiment type, as seen in it's :attr:`~catalight.equipment.experiment_control.Experiment.expt_type` attribute. This is essentially the same as a composition sweep, but uses different naming conventions, warns GUI users to select a calibration file, and may be outfitted with additional function in later versions. The :class:`~catalight.equipment.gas_control.alicat.Gas_System` class provides a :meth:`~catalight.equipment.gas_control.alicat.Gas_System.set_calibration_gas` method to build a new custom mixture to control MFC flow with high precision. This method is utilized in the GUI, but needs to be called separately if scripting.

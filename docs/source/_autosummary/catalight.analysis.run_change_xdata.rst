@@ -15,6 +15,7 @@ catalight.analysis.run\_change\_xdata
    
       get_user_inputs
       main
+      parse_input
    
    
 

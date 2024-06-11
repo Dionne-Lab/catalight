@@ -1,7 +1,7 @@
 """
 Gas chromatograph data and associated processing methods.
 
-GCData is meant to represent a gas chormatograph data file and associated
+GCData is meant to represent a gas chromatograph data file and associated
 data processing techniques. Individual data files are operated on
 by this class, then processed data for an experiment is
 compiled, analyzed, and plotted elsewhere.
@@ -34,7 +34,7 @@ class GCData:
         np array version of time axis from rawdata.
         If basecorrect=True, it will be baseline
         corrected using baseline_correct()
-    apex_ind : numppy.ndarray
+    apex_ind : numpy.ndarray
         indices of all peaks identified by apex_inds()
     numpeaks : int
         length of apex_ind
@@ -43,7 +43,8 @@ class GCData:
     rind : numpy.ndarray
         indices of rightmost bound for integration for each peak identified
     """
-
+    # Dev note: don't replicate this doc style. See experiment_control
+    # for better rendering reference on doc style.
     def __init__(self, filepath, basecorrect=False):
         """
         Initialize the class with the attributes filename and data.
@@ -150,7 +151,7 @@ class GCData:
         numpy.ndarray
             All peak locations (as integer indices NOT times)
         """
-        apex_ind, _ = scisig.find_peaks(self.signal, prominence=0.2)
+        apex_ind, _ = scisig.find_peaks(self.signal, prominence=0.1, width=10)
         return apex_ind
 
     def integration_inds(self):
@@ -190,19 +191,20 @@ class GCData:
         """
         Support function for integration_inds to search for integration bounds.
 
-        Determined where:
-        1. the change in signal is less than 0.5%
-            of the previous signal point (with averaging); or
-        2. the added intensity starts increasing
-            (i.e. when the ion is common to co-eluting compounds)
+        Determined where
 
-        adapted from pyMS function peak_sum_area
+            1. the change in signal is less than 0.5% of the previous
+            signal point (with averaging); or
+            2. the added intensity starts increasing (i.e. when the ion is
+            common to co-eluting compounds)
+
+        Adapted from pyMS function peak_sum_area
         by Andrew Isaac and Sean O'Callaghan
-        https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py
+        `<https://github.com/ma-bio21/pyms/blob/master/pyms/Peak/Function.py>`_
 
         Parameters
         ----------
-        tol: float, optional
+        tol: `float`, optional
             Tolerance in percent. Summing stops when change in sum is
             less than tol percent of the current area.
 
@@ -326,27 +328,28 @@ class GCData:
         plt.gca().tick_params(which='both', width=1.5, length=6)
         plt.gca().tick_params(which='minor', width=1.5, length=3)
 
-        plt.figure
+        fig, ax = plt.subplots()
         #self.integration_inds()
         [left_idx, right_idx] = (np.rint(self.lind).astype('int'),
                                  np.rint(self.rind).astype('int'))
         # Plot signal
-        plt.plot(self.time, self.signal, linewidth=2.5)
+        ax.plot(self.time, self.signal, linewidth=2.5)
         # Plot Derivative
         # plt.plot(time, 10*np.gradient(signal))
         # Plot peak and bounds
-        plt.plot(self.time[self.apex_ind], self.signal[self.apex_ind],
+        ax.plot(self.time[self.apex_ind], self.signal[self.apex_ind],
                  'bo', label='apex')
-        plt.plot(self.time[left_idx], self.signal[left_idx],
+        ax.plot(self.time[left_idx], self.signal[left_idx],
                  'go', label='left')
-        plt.plot(self.time[right_idx], self.signal[right_idx],
+        ax.plot(self.time[right_idx], self.signal[right_idx],
                  'ro', label='right')
 
-        plt.xlabel('Retention (min)', fontsize=18)
-        plt.ylabel('Signal (a.u.)', fontsize=18)
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
+        ax.set_xlabel('Retention (min)', fontsize=18)
+        ax.set_ylabel('Signal (a.u.)', fontsize=18)
+        ax.legend()
+        fig.tight_layout()
+        fig.show()
+        return fig, ax
 
     # Helper functions
     ###########################################################################

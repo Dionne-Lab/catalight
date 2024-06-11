@@ -1,4 +1,4 @@
-﻿catalight.equipment.heating
+catalight.equipment.heating
 ===========================
 
 .. automodule:: catalight.equipment.heating

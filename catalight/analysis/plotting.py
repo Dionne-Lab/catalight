@@ -23,7 +23,7 @@ def set_plot_style(figsize=(6.5, 4.5)):
 
     Parameters
     ----------
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -46,6 +46,7 @@ def set_plot_style(figsize=(6.5, 4.5)):
     plt.rcParams['figure.figsize'] = figsize
     plt.rcParams['font.size'] = fontsize[0]
     plt.rcParams['axes.labelsize'] = fontsize[1]
+    plt.rcParams['legend.fontsize'] = fontsize[0]-2
     # plt.rcParams['text.usetex'] = False
     plt.rcParams['svg.fonttype'] = 'none'
 
@@ -78,17 +79,17 @@ def plot_expt_summary(expt, calDF, reactant, target_molecule, mole_bal='c',
     target_molecule : str
         String identity of the target to use when calculating selectivity. Must
         match what exists in the calibration file exactly.
-    mole_bal : str, optional
+    mole_bal : `str`, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)
-    figsize : tuple, optional
+    figsize : `tuple`, optional
          Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
          figsize suggestions:
          1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
          1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    savedata : bool, optional
+    savedata : `bool`, optional
         Indicates whether or not to save data. The default is 'True'.
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -143,7 +144,7 @@ def plot_run_num(expt, calDF, switch_to_hours=2):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -196,10 +197,10 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end]
-    mole_bal : str, optional
+    mole_bal : `str`, optional
         Code will perform a mole balance for the element provided.
         The default is 'c'. (i.e. carbon balance)
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -222,6 +223,7 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
         if np.max(avg.index) > switch_to_hours:
             avg.index = avg.index / 60  # convert minutes to hours
             units = 'hr'
+            avg.index.name = 'Time' + units
 
     stoyk = pd.Series(0, index=calchemIDs)
     # use regex to determine number of carbons (or other) in molecule name
@@ -254,7 +256,10 @@ def plot_ppm(expt, calDF, mole_bal='c', switch_to_hours=2):
     avg.loc[:, ~undetected].plot(ax=ax, marker='o',
                                  yerr=std.loc[:, ~undetected])
     mol_count.plot(ax=ax, marker='o', yerr=mol_error)
-    ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    xlabel = avg.index.name
+    #ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    ax.set_xlabel(avg.index.name)
+
     ax.set_ylabel('Conc (ppm)')
     # ax.set_xticklabels(avg.iloc[0:len(x_data)], rotation=90)
     plt.tight_layout()
@@ -288,8 +293,9 @@ def plot_X_and_S(expt, reactant, target_molecule):
     # Initialize Conv and Selectivity plot
     fig, ax = plt.subplots()
     results = analysis_tools.calculate_X_and_S(expt, reactant, target_molecule)
-    units = (expt.expt_list['Units']
-             [expt.expt_list['Active Status']].to_string(index=False))
+    concentrations, avg, std = analysis_tools.load_results(expt)
+    # units = (expt.expt_list['Units']
+    #          [expt.expt_list['Active Status']].to_string(index=False))
     X = results['Conversion']
     S = results['Selectivity']
     if 'X Error' in results.columns:
@@ -298,11 +304,12 @@ def plot_X_and_S(expt, reactant, target_molecule):
     else:  # Older data calculated one Error
         X_err = results['Error'] * results['Conversion']
         S_err = results['Error'] * results['Selectivity']
-    X.plot(ax=ax, yerr=X_err, fmt='--ok')
-    S.plot(ax=ax, yerr=S_err, fmt='--^r')
-    ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    X.plot(ax=ax, yerr=X_err, fmt='--ok', label='Conversion')
+    S.plot(ax=ax, yerr=S_err, fmt='--^r', label='Selectivity')
+    # ax.set_xlabel(expt.ind_var + ' [' + units + ']')
+    ax.set_xlabel(avg.index.name)
     ax.set_ylabel('Conv./Selec. [%]')
-    plt.legend(['Conversion', 'Selectivity'])
+    plt.legend()
     ax.set_ylim([0, 105])
     plt.tight_layout()
     return (fig, ax)
@@ -329,7 +336,7 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
         ['Conversion', 'Selectivity', 'Error']
         This function is most easily used in conjunction with DataExtractor
         such as in the run_plot_comparison script.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -366,13 +373,13 @@ def multiplot_X_and_S(results_dict, figsize=(6.5, 4.5)):
     axX.set_ylabel('Conversion [%]')
     axX.set_xlabel(xlabel)
     axX.set_ylim([0, 105])
-    plt.legend()
+    axX.legend()
     figX.tight_layout()
 
     axS.set_ylabel('Selectivity [%]')
     axS.set_xlabel(xlabel)
     axS.set_ylim([0, 105])
-    plt.legend()
+    axS.legend()
     figS.tight_layout()
     figX.show()
     figS.show()
@@ -397,7 +404,7 @@ def multiplot_X_vs_S(results_dict, figsize=(6.5, 4.5)):
         ['Conversion', 'Selectivity', 'Error']
         This function is most easily used in conjunction with DataExtractor
         such as in the run_plot_comparison script.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
@@ -456,5 +463,4 @@ def open_pickled_fig(fig_path):
     plt.rcParams['svg.fonttype'] = 'none'
     fig = pickle.load(open(fig_path, 'rb'))
     ax = fig.get_axes()[0]
-    fig.show()  # Show the figure, edit it, etc.!
     return (fig, ax)

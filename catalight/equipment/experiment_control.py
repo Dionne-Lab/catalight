@@ -30,7 +30,7 @@ class Experiment:
 
     Parameters
     ----------
-    eqpt_list: list of objects, optional
+    eqpt_list: `list` of objects, optional
         List of equipment objects. Calls :py:meth:`update_eqpt_list`,
         if provided.
         Order of list should be:
@@ -50,16 +50,24 @@ class Experiment:
         # careful bug checking needs to be performed everywhere expt.ind_var
         # is used.
         self._expt_list = pd.DataFrame(
-            [['temp_sweep',      'temp', False,    'K'],  # noqa
-             ['power_sweep',    'power', False,   'mW'],  # noqa
-             ['comp_sweep',  'gas_comp', False, 'frac'],  # noqa
-             ['flow_sweep',  'tot_flow', False, 'sccm'],  # noqa
-             ['calibration', 'gas_comp', False, 'frac'],  # noqa
-             ['stability_test',  'temp', False,  'min']], # noqa
+            [['temp_sweep',             'temp', False,    'K'],  # noqa
+             ['power_sweep',           'power', False,   'mW'],  # noqa
+             ['wavelength_sweep', 'wavelength', False,   'nm'],  # noqa
+             ['comp_sweep',         'gas_comp', False, 'frac'],  # noqa
+             ['flow_sweep',         'tot_flow', False, 'sccm'],  # noqa
+             ['calibration',        'gas_comp', False, 'frac'],  # noqa
+             ['stability_test',         'temp', False,  'min']], # noqa
             columns=['Expt Name',
                      'Independent Variable',
                      'Active Status',
                      'Units'])
+        """
+        This class attribute defines the possible experiments.
+
+        This is an important part of the class and should be altered with
+        caution. The active status element will change to True when the
+        expt_type has been defined.
+        """
 
         # Set default values of properties
         # --------------------------------
@@ -67,6 +75,8 @@ class Experiment:
         # Descriptions below in property definitions
         self._temp = [273.0]
         self._power = [0.0]
+        self._wavelength = [0]
+        self._bandwidth = [0]
         self._tot_flow = [0.0]
         self._gas_comp = [[0.0, 50.0, 0.0, 0.0]]
         self._gas_type = ['C2H2', 'Ar', 'H2', 'Ar']
@@ -120,7 +130,7 @@ class Experiment:
 
         Returns
         -------
-        set_any : function
+        set_any : `function`
             update function for setting string properties
         """
 
@@ -135,7 +145,7 @@ class Experiment:
 
             Returns
             -------
-            None.
+            None
 
             """
             setattr(self, attr, value)
@@ -159,7 +169,7 @@ class Experiment:
 
         Returns
         -------
-        set_any : function
+        set_any : `function`
             update function for setting string properties
 
         """
@@ -175,7 +185,7 @@ class Experiment:
 
             Parameters
             ----------
-            value : list of float or numpy.ndarray
+            value : list[float] or numpy.ndarray
                 if np array is given, converts to list in beginning of func.
 
             Raises
@@ -185,7 +195,7 @@ class Experiment:
                 corresponding limits. These vary depending on attribute given.
             """
             if isinstance(value, np.ndarray):
-                value = list(value)
+                value = value.tolist()
 
             if not isinstance(value, list):
                 raise AttributeError(attr + ' must be list')
@@ -230,6 +240,20 @@ class Experiment:
     One element if constant or multiple for sweep. Initial value of [0.0].
     """
 
+    wavelength = property(fget=_attr_getter('_wavelength'),
+                          fset=_num_setter('_wavelength'))
+    """
+    list[float]: List of center wavelengths (nm) to step through during expt.
+    One element if constant or multiple for sweep. Initial value of [None].
+    """
+
+    bandwidth = property(fget=_attr_getter('_bandwidth'),
+                         fset=_num_setter('_bandwidth'))
+    """
+    list[float]: List of bandwidths (nm) to step through during expt.
+    One element if constant or multiple for sweep. Initial value of [None].
+    """
+
     tot_flow = property(fget=_attr_getter('_tot_flow'),
                         fset=_num_setter('_tot_flow'))
     """
@@ -264,39 +288,39 @@ class Experiment:
     # Read only properties
     # --------------------
     date = property(lambda self: self._date)
-    """str, read-only: Update w/ :meth:`update_date` method. For logging"""
+    """`str`, read-only: Update w/ :meth:`update_date` method. For logging"""
 
     start_time = property(lambda self: self._start_time)
     """
-    str, read-only: Updates when :meth:`set_initial_conditions` method is
+    `str`, read-only: Updates when :meth:`set_initial_conditions` method is
     called. For logging. Used to calculate time_passed during analysis.
     Given by time.time() at the **end** of initial conditions steps.
     """
 
     ind_var = property(lambda self: self._ind_var)
     """
-    str, read-only: Describes the variable being modified. This gets updated
+    `str`, read-only: Describes the variable being modified. This gets updated
     when expt_type is updated based on what defined by :attr:`expt_list`.
     """
 
     expt_name = property(lambda self: self._expt_name)
-    """str, read-only: Creates name using the fixed variables for expt"""
+    """`str`, read-only: Creates name using the fixed variables for expt"""
 
     results_path = property(lambda self: self._results_path)
     """
-    str, read-only: Save location for analysis, defined relative to expt_log.
+    `str`, read-only: Save location for analysis, defined relative to expt_log.
     Update using :meth:`update_save_paths`
     """
 
     data_path = property(lambda self: self._data_path)
     """
-    str, read-only: Save location for raw data, defined relative to expt_log.
+    `str`, read-only: Save location for raw data, defined relative to expt_log.
     Update using :meth:`update_save_paths`
     """
 
     expt_list = property(lambda self: self._expt_list)
     """
-    pandas.DataFrame, read-only: This class attr defines the possible
+    `pandas.DataFrame`, read-only: This class attr defines the possible
     experiments. This is an important part of the class and should be altered
     with caution. Changing the units within this DF should allow different unit
     inputs for the rest of the codebase, but this feature is untested!!!
@@ -390,14 +414,21 @@ class Experiment:
                 + str(self.temp),
                 'Power [' + self.expt_list['Units'][1] + '] = '
                 + str(self.power),
+                'Wavelength [' + self.expt_list['Units'][2] + '] = '
+                + str(self.wavelength),
+                'Bandwidth [' + self.expt_list['Units'][2] + '] = '
+                + str(self.bandwidth),
                 'Gas 1 type = ' + self.gas_type[0],
                 'Gas 2 type = ' + self.gas_type[1],
                 'Gas 3 type = ' + self.gas_type[2],
                 'Gas 4 type = ' + self.gas_type[3],
-                'Gas Composition [' + self.expt_list['Units'][2]
+                'Gas Composition [' + self.expt_list['Units'][3]
                 + '] = ' + str(self.gas_comp),
-                'Total Flow [' + self.expt_list['Units'][3]
-                + '] = ' + str(self.tot_flow)
+                'Total Flow [' + self.expt_list['Units'][4]
+                + '] = ' + str(self.tot_flow),
+                'Sample Rate = ' + str(self.sample_rate),
+                'Time To Steady State = ' + str(self.t_steady_state),
+                'Buffer Time = ' + str(self.t_buffer)
             ]
             log.write('\n'.join(log_entry))
 
@@ -415,7 +446,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         with open(log_path, 'r') as log:
@@ -438,6 +469,10 @@ class Experiment:
                     self.temp = literal_eval(data)
                 elif re.search('Power', line):
                     self.power = literal_eval(data)
+                elif re.search('Wavelength', line):
+                    self._wavelength = literal_eval(data)
+                elif re.search('Bandwidth', line):
+                    self._bandwidth = literal_eval(data)
                 elif re.search(r'Gas \d+ type', line):  # \d+ is 1+ digits
                     # Get left side of '=' sign
                     gas_str = line.split('=')[0].strip(' \n')
@@ -457,6 +492,12 @@ class Experiment:
                     self.gas_comp = literal_eval(data)
                 elif re.search('Total Flow', line):
                     self.tot_flow = literal_eval(data)
+                elif re.search('Sample Rate', line):
+                    self.sample_rate = literal_eval(data)
+                elif re.search('Time To Steady State', line):
+                    self.t_steady_state = literal_eval(data)
+                elif re.search('Buffer Time', line):
+                    self.t_buffer = literal_eval(data)
 
             expt_path = os.path.dirname(log_path)
             # Will throw error if no data folders
@@ -468,14 +509,19 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
         """
         # Defines all settings to be included in path name and adds units
-        expt_settings = pd.Series(
-            [str(self.temp[0]), str(self.power[0]),
-             '_'.join([str(m) + n for m, n in zip(self.gas_comp[0],
-                                                  self.gas_type)]),
-             str(self.tot_flow[0])]) + self.expt_list['Units'][0:4]
+        gasses = '_'.join([str(m) + n for m, n in zip(self.gas_comp[0],
+                                                      self.gas_type)])
+
+        expt_settings = pd.Series([str(self.temp[0]),
+                                   str(self.power[0]),
+                                   str(self.wavelength[0]),
+                                   gasses,
+                                   str(self.tot_flow[0])])
+        # Add units to each item
+        expt_settings = expt_settings + self.expt_list['Units'][0:5]
 
         # Only select fixed variable for path name
         fixed_vars = expt_settings[self.expt_list['Independent Variable']
@@ -492,7 +538,7 @@ class Experiment:
         ----------
         expt_path : str
             string to the full file path of the experiments dir.
-        should_exist : bool, optional
+        should_exist : `bool`, optional
             If updating based on existing log file, set to true.
             The default is True.
 
@@ -504,7 +550,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         # Defines path for saving results
@@ -539,7 +585,7 @@ class Experiment:
 
         Returns
         -------
-        None.
+        None
 
         """
         if self.expt_type == 'Undefined':
@@ -549,9 +595,18 @@ class Experiment:
         self._update_expt_name()
         expt_path = os.path.join(sample_path, self.date + self.expt_type
                                  + '_' + self.expt_name)
-
+        # If dir already exists, append _#. Recursively ensure unique new dir
+        while os.path.isdir(expt_path):
+            match = re.match(r"^(.*?)_?(\d+)?$", expt_path)
+            if match.group(2):  # if ends with "_#"
+                prefix = match.group(1)  # Extract prefix
+                number = int(match.group(2))  # Extract number
+                new_number = str(number + 1)
+                expt_path = prefix + "_" + new_number  # iterate suffix
+            else:  # if no number at end, add _2
+                expt_path = expt_path + "_2"
+                
         self.update_save_paths(expt_path, should_exist=False)
-
         os.makedirs(self.results_path, exist_ok=True)
         step_num = 1
         if self.expt_type == 'stability_test':
@@ -586,8 +641,8 @@ class Experiment:
 
         Parameters
         ----------
-        fig : matplotlib.pyplot.figure, optional
-            Can supply figure object to write plot to it. The default is None.
+        fig : `matplotlib.pyplot.figure`, optional
+            Can supply figure object to write plot to it. The default is None
 
         Returns
         -------
@@ -746,15 +801,16 @@ class Experiment:
         conditions. Will also check that the temperature is not more than
         10 degrees C above the first setpoint.
         The order is:
-        1. Set temperature
-        2. Give 1 minute time warning for laser
-        3. Set initial laser power
-        4. Set gas type
-        5. Set gas flows
-        6. Wait 2 minutes
-        7. Print gas flows
-        8. Update gc sample set size
-        9. Update date, time, and update log
+        1.  Set temperature
+        2.  Give 1 minute time warning for laser
+        3.  Set initial laser power
+        4.  Check is laser is tunable, updates wavelength accordingly
+        5.  Set gas type
+        6.  Set gas flows
+        7.  Wait 2 minutes
+        8.  Print gas flows
+        9.  Update gc sample set size and sample rate
+        10. Update date, time, and update log
         """
         unit = self.expt_list['Units'][0]
         self._heater.ramp(self.temp[0], temp_units=unit)
@@ -770,13 +826,19 @@ class Experiment:
             self._laser_control.time_warning(1)
             # Wait for a minute before turning on laser for safety
             time.sleep(60)
+        
+        if self._laser_control.is_tunable:
+            self._laser_control.set_bandpass(self.wavelength[0],
+                                             self.bandwidth[0])
 
         self._laser_control.set_power(self.power[0])
+
         self._gas_control.set_gasses(self.gas_type)
         self._gas_control.set_flows(self.gas_comp[0], self.tot_flow[0])
         time.sleep(120)  # Wait for gas to steady out
         self._gas_control.print_flows()
         self._gc_control.sample_set_size = self.sample_set_size
+        self._gc_control.sample_rate = self.sample_rate
 
         # Update experiment start time and date, save to log.
         self.update_date()
@@ -829,6 +891,8 @@ class Experiment:
                 self._heater.ramp(step, temp_units=self.expt_list['Units'][0])
             elif self.expt_type == 'power_sweep':
                 self._laser_control.set_power(step)
+            elif self.expt_type == 'wavelength_sweep':
+                self._laser_control.set_bandpass(step, self.bandwidth[0])
             elif self.expt_type in ['comp_sweep', 'calibration']:
                 self._gas_control.set_flows(step, self.tot_flow[0])
                 self._gas_control.print_flows()

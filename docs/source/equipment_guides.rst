@@ -4,6 +4,9 @@ The purpose of this section is to demonstrate the connection process for specifi
 
 Alicat MFCs
 -----------
+.. note::
+    The Alicat Python package was updated with a breaking change after implementation into the Catalight project. Version 0.4.1 is the last compatible version and has been hard pinned into the Catalight requirements file.
+
 Alicat brand MFCs are accessed utilizing the Alicat python package developed by Patrick Fuller and Numat.
 
 | `numat/alicat: Python driver and command line tool for Alicat mass flow controllers. (github.com) <https://github.com/numat/alicat>`_
@@ -20,20 +23,20 @@ For proper gas monitoring, many mass flow controllers need to be supplied with t
 
 .. admonition:: Making the Connection
 
-    The COM ports for the individual MFC addresses are currently hard coded into the :class:`Gas_System.__init__ <catalight.equipment.gas_control.alicat.Gas_System.__init__>` method. New users need to edit these addresses in a forked version of the source code for successful connection. Additionally, the MFC count is hard coded for 4 MFCs and one output flow meter at the moment and code changes need to make a number of updates to the source code to change the MFC count. This will soon be updated such that the user only has to specify the number of MFCs in the init method. Eventually this will be replaced with a single configuration file. See :ref:`Areas for Future Development <future>` for more details. Additional software shouldn't be necessary.
+    As of v0.2.0, the COM ports for the individual MFC addresses are defined by the  :mod:`config.py <catalight.config>` file. New users need to edit these addresses in a forked version of the source code for successful connection. At the moment, the MFC count is hard coded for 4 MFCs and one output flow meter at the moment, and significant code changes to the source code are needed to change the MFC count. This will soon be updated such that the user only has to specify the number of MFCs in the config file. The :mod:`catalight.equipment.alicat_connection_tester` module can be used to aid in determining the MFC COM ports. If can be helpful to change the MFC address (A, B, C, etc) directly on the hardware prior to trying to interface through catalight. See :ref:`Areas for Future Development <future>` for more details. Additional software shouldn't be necessary.
 
 .. _harrick_doc:
 
 Harrick Heater/Watlow
 ---------------------
-`The Harrick reaction chamber <https://harricksci.com/praying-mantis-high-temperature-reaction-chambers/>`_'s `heating system <https://harricksci.com/temperature-controller-kit-110v/>`_ is controlled by a Watlow temperature controller. In place of using the `EZ-ZONE configurator software <https://www.watlow.com/products/controllers/software/ez-zone-configurator-software>`_, we utilize the `pywatlow package <https://pywatlow.readthedocs.io/en/latest/readme.html>`_ developed by Brendan Sweeny and Joe Reckwalder. Brendan has an excellent `write up <http://brendansweeny.com/posts/watlow>`_ describing the creation of the project. Our :class:`~catalight.equipment.heating.watlow.Heater` class simply add some additional utilities on top of the pywatlow project, such as unit conversions, and ramped heating. In theory, the :class:`~catalight.equipment.heating.watlow.Heater` class should work with any Watlow controlled heater, but we have only tested it with the Harrick system.
+`The Harrick reaction chamber <https://harricksci.com/praying-mantis-high-temperature-reaction-chambers/>`_'s `heating system <https://harricksci.com/temperature-controller-kit-110v/>`_ is controlled by a Watlow temperature controller. In place of using the `EZ-ZONE configurator software <https://www.watlow.com/products/controllers/software/ez-zone-configurator-software>`_, we utilize the `pywatlow package <https://pywatlow.readthedocs.io/en/latest/readme.html>`_ developed by Brendan Sweeny and Joe Reckwalder. Brendan has an excellent `write up <http://brendansweeny.com/posts/watlow>`_ describing the creation of the project. Our :class:`~catalight.equipment.heating.watlow.Heater` class simply add some additional utilities on top of the pywatlow project, such as unit conversions, and ramped heating. In theory, the :class:`~catalight.equipment.heating.watlow.Heater` class should work with any Watlow controlled heater, but we have only tested it with the Harrick system. Note that Harrick provides a calibration file for this equipment which should be installed using the EZ zone configurator. We have not confirmed that these calibrations port over succesfully into the the :class:`~catalight.equipment.heating.watlow.Heater` class.
 
 .. tip::
      Other parameters are accessible using pywatlow. See the "Operations" section of the :download:`manual <../../manuals/watlow_heater/manual_pmpmintegrated.pdf>` located in the catalight/equipment/harrick_watlow directory.
 
 .. admonition:: Making the Connection
 
-    The COM ports for the Watlow heater are currently hard coded into the :class:`Heater.__init__ <catalight.equipment.heating.watlow.Heater.__init__>` method. New users need to edit these addresses in a forked version of the source code for successful connection. Eventually this will be replaced with a single configuration file. See :ref:`Areas for Future Development <future>` for more details. Additional software should not be needed, though testing your connection with the EZ zone configurator software can be helpful for troubleshooting.
+    The COM ports for the Watlow heater are are defined by the  :mod:`config.py <catalight.config>` file. New users need to edit these addresses in a forked version of the source code for successful connection. Additional software should not be needed, though testing your connection with the EZ zone configurator software can be helpful for troubleshooting, and calibration.
 
 .. _thorlabs_diode_doc:
 
@@ -43,6 +46,8 @@ ThorLabs Laser Diode Driver
     Lasers present serious safety hazards, even in lab environments. This is especially true when software is used to automatically control them. Always take abundant safety precautions to ensure laser beams are physically contained. Never assume the code is working properly. Don't rely on the software to turn the laser off and assume you can enter the laser lab without safety glasses on. Always be in the room when engaging the laser via code, and always use safety interlocks and message boards to alert other users that an unattended laser is active.
 
 We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=LDC200CV>`_ Laser Diode Driver to control our diode laser excitation source. The driver does not have a computer interface, but supports current modulation via a 10 Volt analog signal supplied by a BNC connection at the rear of the device. To supply an analog signal to the current controller, we utilize a `USB-231 DAQ card from Measurment Computing Corporation (MCC) <https://www.mccdaq.com/usb-data-acquisition/USB-230-Series.aspx>`_. MCC publishes a `Python API for their Universal Library (mcculw) <https://github.com/mccdaq/mcculw>`_. We also utilize their `instacal software <https://www.mccdaq.com/daq-software/instacal.aspx>`_ for installing the DAQ and setting the board number, though this may not be strictly necessary when using the `mcculw library <https://www.mccdaq.com/PDFs/Manuals/Mcculw_WebHelp/ULStart.htm>`_. Our :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser` class hides interaction with the mcculw from the user, favoring method calls such as "Diode_Laser.set_power()" over interacting directly with the DAQ board. The intention is to ignore the existence of the DAQ interface when operating the laser programmatically. In fact, this makes some troubleshooting activities a bit easier for the Diode_Laser class as the laser can remain off (by unplugging or pressing the physical off switch) while the user interacts safely with the DAQ board. All commands will remain functional, though voltage readings from the current driver output won't return realistic values.
+
+In version 1 of Catalight, the diode laser class relies on a auxiliary script to perform calibraiton (unlike the NKT_System which has calibration as a built in method). This was originally done because the calibration needs to be performed in conjunction with a power meter. More information about performing the calibration can be found in the section: :ref:`diode_calibration`
 
 .. admonition:: Making the Connection
 
@@ -57,6 +62,75 @@ We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=
     :width: 800
 
     Screenshot of product page for the DAQ board used in D-Lab hardware configuration
+
+.. _nkt_doc:
+
+NKT Fianium/Extreme + Varia System
+----------------------------------
+.. Warning::
+    Lasers present serious safety hazards, even in lab environments. This is especially true when software is used to automatically control them. Always take abundant safety precautions to ensure laser beams are physically contained. Never assume the code is working properly. Don't rely on the software to turn the laser off and assume you can enter the laser lab without safety glasses on. Always be in the room when engaging the laser via code, and always use safety interlocks and message boards to alert other users that an unattended laser is active.
+
+Support for an NKT laser and the Varia tunable emission system is provided through the :class:`catalight.equipment.light_sources.nkt_system.NKT_System` class. The NKT connection is acheived through NKT's DLL interface. To simplify the interaction with the user, we developed this interface as a seperate python package, `nkt_tools <https://nkt-tools.readthedocs.io/en/latest/>`_, which is installed as a requirement of the catalight package. The DLL file is also included in the source files of :mod:`nkt_tools`, so no additional software should be needed to interface with the NKT system.
+
+The :mod:`nkt_tools` package provides a python interface for the NKT Varia and Extreme/Fianium individual, whereas the :class:`~catalight.equipment.light_sources.nkt_system.NKT_System` class bundles the Varia and laser into a single interface. In the first iteration of this tool (v0.2.0), the hardware is configured without an inline power meter and power management is handled by varying the power setpoint (in %) of the Fianium/Extreme. This type of power management alters the output spectrum of the laser, making the power output (in mW) non-linear. We try to circumvent this challenge by performing a calibration on the system (described below), but future users should consider utilizing a computer controlled neutral density filter or incorporating an inline power meter to monitor the NKT output. In the former case, the NKT could be set to 100% power output, and the delivered power (in mW) could be more easily calibrated since the output spectrum shouldn't change with an ND filter. In the latter case, a certain percent of the NKT laser could be monitored to inform the software of the delivered power, and a feedback loop can be written to better deliver the requested power.
+
+.. admonition:: Making the Connection
+
+    All of the connection needed for the NKT System should be handled automatically, and the user should only need to plug in their system to the computer. It is necessary to calibrate the NKT system prior to use.
+
+
+Calibrating the NKT_System:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The NKT_System provides a calibration prodedure utilizing the method :meth:`~catalight.equipment.light_sources.nkt_system.NKT_System.run_calibration`. An example script for running the calibration process is provided below. Note, the calibration process takes a few hours to complete.
+
+.. code:: python
+
+    from catalight.equipment.light_sources import nkt_system
+    from catalight.equipment.power_meter import newport
+
+
+    meter = newport.NewportMeter()
+    nkt = nkt_system.NKT_System()
+
+    nkt.run_calibration(meter)
+
+The strategy of the calibration process is to vary the central wavelength of the NKT Varia and compute the spectrally averaged power output for each central wavelength. This is done using a bandwidth of 10 nm, moved in increments of 1 nm. The spectral power density is computed as a mW/nm value, and this process is repeated for multiple power setpoints (in percents). The outcome of the calibration process is seen below:
+
+.. figure:: _static/images/nkt_addition/nkt_calibration_data.svg
+    :width: 800
+
+    Calculated spectral power of laser based on wavelength sweeps at various setpoints.
+
+The raw data is fit on a power setpoint vs power output function for each wavelength value tested, as shown in the figure below. Especially for short wavelengths, the fit function is non-linear.
+
+.. figure:: _static/images/nkt_addition/nkt_calibration_plots.svg
+    :width: 800
+
+    Compilation of fits for select wavelengths across different power settings. The top left value in each subplot indicates the last wavelength plotted, givin an approximate wavelength range for each plot.
+
+An algorithm is used to compute the expected laser output for a given laser setpoint value under a given set of optical conditions (central wavelength and bandwidth). Several benchmarking tests are performed in the course of the calibration process to check the accuracy of the calibration. A measurement is performed by setting a fixed short pass value and extending the bandwidth out from the min to max bandwidth value. The predicted vs measured output values are compared so that the user can get a sense for the error of the calibration performance. Similarly, the calibration data itself is plotted as a "growing window" test in which a 10 nm bandwidth window is moved across the spectrum. The power output by a given setpoint value is computed and the error is plotted in terms of (LHS) what power is expected vs measured and the (RHS) what power setpoint should be needed to acheive the measured power output. In this sense, the calibration formula is being solved in "both directions"
+
+In all benchmarking cases, no verifications are performed by the software. The user must manually evaluate the performance of the system and judge whether the performance is acceptable.
+
+.. figure:: _static/images/nkt_addition/nkt_growing_window_benchmark.svg
+    :width: 800
+
+    Predicted and measured powers output by the laser for a variable bandwidth showing the error associated with changing the bandwidth feature.
+
+.. figure:: _static/images/nkt_addition/nkt_moving_window_benchmark.svg
+    :width: 800
+
+    Predicted power and measured power for a moving window test. A fixed bandwidth is moved across the laser spectrum, and the requested power is compared to the measured value.
+
+Finally, the calibration is verified using a randomized comparison. Random power outputs, center wavelengths, and bandwidths are requested from the system. If the optical conditions are acheivable (the power is within the measured limits) then the system actuates those conditions and measures the output power. The results are plotted as a function of the requested output power, but the data points also differ in central wavelength and bandwidth to give a more varied few of the calibration performance. On the Dionne Lab system, there is a constant over estimate of the output power causing slightly lower power output than requested.
+
+.. figure:: _static/images/nkt_addition/calibration_verification.svg
+    :width: 800
+
+    Predicted power vs measured power for randomized optical conditions, post-calibration.
+
+It should be noted that there is a significant error in the power output produced in this manner. I would suggest that users establishing a new experimental setup consider placing a power meter permanently in-line with the system using a beam splitter such that a fraction of the power output is always being measured. The calibration process is slow, tedious, and inaccurate.
 
 .. _newport_meter_doc:
 

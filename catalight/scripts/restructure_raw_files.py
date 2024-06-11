@@ -153,7 +153,7 @@ def restructure_data(sample_path, Expt1, sample_set_size):
 
     Returns
     -------
-    None.
+    None
 
     '''
     # Calculate num of samples based on sample set size and num temp values
