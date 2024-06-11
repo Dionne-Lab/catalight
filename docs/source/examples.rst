@@ -52,9 +52,9 @@ Please first look at the :ref:`basic scripting example <scripting>` in the intro
     reduction = Experiment(eqpt_list)
     # Use the sample set size to determine the length of the reduction
     # Here, the sample time is 12 minutes, and we run 10 collections
-    # for a 2 hr reduction (this isn't accounting for 
+    # for a 2 hr reduction (this isn't accounting for
     # steady state, buffer, and ramp times
-    reduction.sample_set_size = 10  
+    reduction.sample_set_size = 10
     reduction.expt_type = 'stability_test'
     reduction.temp = [295]
     reduction.gas_type = ['C2H2', 'Ar', 'H2']
@@ -118,9 +118,33 @@ Please first look at the :ref:`basic scripting example <scripting>` in the intro
     expt6.sample_name = sample_name
     expt6.create_dirs(os.path.join(main_fol, 'postreduction'))
 
-    expt_list = [expt1, expt2, reduction, 
-                 expt3, expt4, stability_test, 
+    expt_list = [expt1, expt2, reduction,
+                 expt3, expt4, stability_test,
                  expt5, expt6]  # Order is important here!!
     calculate_time(expt_list)
     run_study(expt_list, eqpt_list)
     shut_down(eqpt_list)
+
+
+Training Videos
+===============
+We have created a `youtube playlist <https://www.youtube.com/playlist?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu>`_ with videos of some of the most important features of the catalight system:
+
+.. raw:: html
+
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+       <iframe src="https://www.youtube.com/embed/-8Cob1xNpf4?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Introduction to the GUI" frameborder="0" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+    <br/>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/6VJg5W6GpIg?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Running a Calibration" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+    <br/>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/M1izA4k8QBw?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Initial Data Analysis" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+    <br/>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; height: auto;">
+        <iframe src="https://www.youtube.com/embed/urjR0mDqkzE?list=PLZdPKi6exYOAvwgxAP9JBAuJ5nciuvDhu" title="Catalight: Using the Multiplot Tool" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+    <br/>

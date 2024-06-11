@@ -17,7 +17,7 @@ catalight.catalight\_GUI.MainWindow
    
       ~MainWindow.__init__
       ~MainWindow.add_expt
-      ~MainWindow.change_label_color
+      ~MainWindow.change_laser
       ~MainWindow.closeEvent
       ~MainWindow.connect_manual_ctrl
       ~MainWindow.delete_expt
@@ -45,10 +45,18 @@ catalight.catalight\_GUI.MainWindow
       ~MainWindow.update_ind_var
       ~MainWindow.update_ind_var_grid
       ~MainWindow.update_plot
+      ~MainWindow.update_power_estimate
       ~MainWindow.values_from_spinboxes
    
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~MainWindow.loading_screen
+      ~MainWindow.update_flag
    
    

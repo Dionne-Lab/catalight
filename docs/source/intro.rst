@@ -7,7 +7,7 @@ Introduction
 ------------
 Catalight is tool set developed by scientists at Stanford to help automate photocatalysis experiments. Catalight is capable of connecting to hardware, coordinating instruments to run a variety of different experimental procedures, and organizing and analyzing data collected by the system. The project is designed in a modular format to enable users to bring their own unique hardware while still utilizing the core features of experiment management and data handling. The program functions in both a scripted version and a GUI to aid users in planning experimental procedures and manually controlling hardware.
 
-To date, catalight is compatible with :ref:`Alicat mass flow controllers <alicat_doc>`, heater systems controlled by :ref:`Watlow <harrick_doc>` components, Measurement Computing data acquisition boards (used for communication with :ref:`ThorLabs laser diode drivers <thorlabs_diode_doc>`), :ref:`NewPort 843-R power meter <newport_meter_doc>`, and :ref:`SRI gas chromatographs <sri_gc_doc>`. Support for additional hardware is planned for the future, including FTIR data collection and analysis and NKT Photonics lasers. We strongly encourage interested users to consider :doc:`contributing to the project <developer_guide>` by adding new device support and helping expand the catalight functionality.
+To date, catalight is compatible with :ref:`Alicat mass flow controllers <alicat_doc>`, heater systems controlled by :ref:`Watlow <harrick_doc>` components, Measurement Computing data acquisition boards (used for communication with :ref:`ThorLabs laser diode drivers <thorlabs_diode_doc>`), :ref:`NewPort 843-R power meter <newport_meter_doc>`, and :ref:`SRI gas chromatographs <sri_gc_doc>`. Support has now been added for :ref:`NKT Photonics lasers <nkt_doc>`! We strongly encourage interested users to consider :doc:`contributing to the project <developer_guide>` by adding new device support and helping expand the catalight functionality.
 
 .. figure:: _static/images/overview.png
     :width: 800
@@ -39,10 +39,37 @@ As such, you should install the package in an editable configuration. Before doi
     This package relies on PyQt which has a different package name when using pip or conda for installation. We try to automatically detect and handle conflicts, but please be aware that its possible to overwrite one with the other if installing in an existing virtual environment. Avoid this by using a fresh environment!
 
 .. code-block:: console
+    :caption: Editable installation of Catalight package
 
     git clone https://github.com/Dionne-Lab/catalight.git
     cd catalight
     pip install -e .  # install in editable mode.
+
+As of v0.2.0, users can tell catalight the location of specific equipment using the :mod:`config.py file <catalight.config>` located in the top level of the catalight package. After installing the package, the user can directly edit this form. :mod:`catalight.equipment.alicat_connection_tester` can be used to assist in determining the port names for connected Alicat MFCs.
+
+.. code-block:: python
+    :caption: Contents of :mod:`catalight.config` file (0.2.0)
+
+    """Configuration file containing hardware setup specific information."""
+
+    data_path = r"C:\Users\dionn\GC\GC_Data"
+    """This is the folder in which experimental data will be saved"""
+
+
+    peaksimple_path = r"C:\Users\dionn\GC\Peak495Win10\Peak495Win10.exe"
+    """This is the full path to Peaksimple .exe"""
+
+
+    mfc_list = [{'port': 'COM7', 'unit': 'A'},
+                {'port': 'COM6', 'unit': 'B'},
+                {'port': 'COM4', 'unit': 'C'},
+                {'port': 'COM3', 'unit': 'D'},
+                {'port': 'COM5', 'unit': 'E'}]
+    """COM address info for mass flow controllers"""
+
+    heater_address = {'port': 'COM9', 'address': '1'}
+    """COM address info for heater"""
+
 
 .. note::
     Some hardware requires Windows OS to access. The package should still install and allow use of other tools and data analysis on other operating system. If you have an OS related bug when pip installing, please report this issue.

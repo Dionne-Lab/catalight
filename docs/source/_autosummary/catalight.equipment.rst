@@ -1,4 +1,4 @@
-catalight.equipment
+﻿catalight.equipment
 ===================
 
 .. automodule:: catalight.equipment

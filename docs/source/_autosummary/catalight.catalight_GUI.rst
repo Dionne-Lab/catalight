@@ -26,6 +26,7 @@ catalight.catalight\_GUI
       :template: custom-class-template.rst
    
       EmittingStream
+      LoadingScreen
       MainWindow
       Worker
       WorkerSignal

@@ -2,7 +2,8 @@
 Graphical User Interface Module.
 
 Imports a GUI design created using QT Designer. Connects signals/slots and
-adds additional functionality.
+adds additional functionality. This version was built to support an NKT tunable
+laser, but that feature has been removed due to multithreading conflicts.
 
 Created on Sun Feb 20 18:45:10 2022.
 
@@ -23,6 +24,7 @@ from catalight.equipment.light_sources.diode_control import Diode_Laser
 from catalight.equipment.heating.watlow import Heater
 from catalight.equipment.gc_control.sri_gc import GC_Connector
 from catalight.equipment.experiment_control import Experiment
+import catalight.config as cfg
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import \
@@ -33,7 +35,8 @@ from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QComboBox,
                              QDialogButtonBox, QDoubleSpinBox, QFileDialog,
                              QLabel, QListWidgetItem, QMainWindow, QMessageBox,
-                             QPushButton, QSpinBox)
+                             QPushButton, QSpinBox, QDialog, QVBoxLayout,
+                             QProgressBar)
 from PyQt5.uic import loadUi
 matplotlib.use('Qt5Agg')
 
@@ -45,16 +48,25 @@ class MainWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
-        loadUi(r'.\gui_components\\reactorUI.ui', self)
+        self.loading_screen = LoadingScreen()
+        """Loading screen shown during initialization of system"""
+
+        fol = os.path.dirname(__file__)
+        ui_path = os.path.join(fol, 'gui_components/reactorUI.ui')
+        loadUi(ui_path, self)
 
         # Initilize GUI
+        self.loading_screen.status_msg.setText('Opening Peaksimple...')
+        self.loading_screen.progress_bar.setValue(5)
         try:
-            peaksimple = self.open_peaksimple(r"C:\Peak489Win10\Peak489Win10.exe")
+            peaksimple = self.open_peaksimple(cfg.peaksimple_path)
         except FileNotFoundError:
             print('Peaksimple.exe not found')
 
-        # sys.stdout = EmittingStream(self.consoleOutput)
-        self.timer = QTimer(self)
+        self.update_flag = False
+        """True means system is currently updating in backend. Default False"""
+        sys.stdout = EmittingStream(self.consoleOutput)
+
         self.threadpool = QThreadPool()
         # Pass the function to execute
         # Any other args, kwargs are passed to the run function
@@ -64,7 +76,11 @@ class MainWindow(QMainWindow):
         self.manual_ctrl_thread.setAutoDelete(False)
 
         # Initilize equipment
+        self.loading_screen.status_msg.setText('Initializing Equipment...')
+        self.loading_screen.progress_bar.setValue(20)
         self.init_equipment()
+        self.loading_screen.status_msg.setText('Initializing other tabs...')
+        self.loading_screen.progress_bar.setValue(90)
         self.init_study_tab()
         self.init_design_tab()
         self.init_manual_ctrl_tab()
@@ -75,6 +91,12 @@ class MainWindow(QMainWindow):
         self.file_browser = QFileDialog()
         self.emergencyStop.clicked.connect(self.emergency_stop)
 
+        self.loading_screen.progress_bar.setValue(100)
+        self.loading_screen.close()
+        setup_style(self)
+        self.show()
+
+    # TODO i don't think i'm using this method anymore?
     def normalOutputWritten(self, text):
         """Append console ouput to the QTextEdit."""
         # Maybe QTextEdit.append() works as well, but this is how I do it:
@@ -112,7 +134,7 @@ class MainWindow(QMainWindow):
                      self.gas_controller, self.heater]
         sample_name = (self.sample_name.text()
                        + str(self.sample_mass.value()))
-        main_fol = os.path.join(r'C:\Peak489Win10\GCDATA', sample_name)
+        main_fol = os.path.join(cfg.data_path, sample_name)
         os.makedirs(main_fol, exist_ok=True)
 
         for expt in expt_list:
@@ -198,35 +220,76 @@ class MainWindow(QMainWindow):
         """
         # Initialize Equipment
         # Try to connect to each device, mark indicator off on failed connect
+        self.loading_screen.status_msg.setText('Connecting to GC...')
+        self.loading_screen.progress_bar.setValue(35)
         try:
             self.gc_connector = GC_Connector()
             self.gc_Status.setChecked(1)
         except Exception as e:
             print(e)
             self.gc_Status.setChecked(0)
+
+        self.loading_screen.status_msg.setText('Connecting to gas system...')
+        self.loading_screen.progress_bar.setValue(50)
+        time.sleep(0.2)
         try:
             self.gas_controller = Gas_System()
             self.gas_Status.setChecked(1)
         except Exception as e:
             print(e)
             self.gas_Status.setChecked(0)
+
+        self.loading_screen.status_msg.setText('Connecting to heater...')
+        self.loading_screen.progress_bar.setValue(60)
+        time.sleep(0.2)
         try:
             self.heater = Heater()
             self.heater_Status.setChecked(1)
         except Exception as e:
             print(e)
             self.heater_Status.setChecked(0)
+
+        self.loading_screen.status_msg.setText('Connecting to lasers...')
+        self.loading_screen.progress_bar.setValue(70)
+        time.sleep(0.2)
+
+        # Make sure combobox is empty (in case restarting equipment)
+        self.laser_selection_box.clear()
+        # Create combo box options for diode and nkt lasers, connect signal
+        self.laser_selection_box.addItem("Diode Laser")
+        # self.laser_selection_box.addItem("NKT Laser")
+        self.laser_selection_box.currentIndexChanged.connect(self.change_laser)
+
+        # Try to connect with diode laser
         try:
-            self.laser_controller = Diode_Laser()
+            laser = Diode_Laser()
             # Check if output is supported by DAQ
-            if self.laser_controller._ao_info.is_supported:
-                self.diode_Status.setChecked(1)
-            else:
-                self.diode_Status.setChecked(0)
+            if laser._ao_info.is_supported:
+                # Assign diode laser to first item in combobox
+                self.laser_selection_box.setItemData(0, laser)
+                # Make sure diode is selected in box and change active laser
+                self.laser_selection_box.setCurrentIndex(0)
+                self.change_laser()
         except Exception as e:
             print(e)
-            self.diode_Status.setChecked(0)
+            self.laser_Status.setChecked(0)
 
+        self.loading_screen.progress_bar.setValue(80)
+
+        # 20240610 NKT has unresolvable multithreading issues that need rework
+        # # Try to connect with NKT laser
+        # try:
+        #     laser = NKT_System()
+        #     # Assign nkt laser to first item in combobox
+        #     self.laser_selection_box.setItemData(1, laser)
+        #     # If previous laser didn't connect, set the nkt as active
+        #     if not self.laser_Status.isChecked():
+        #         self.laser_selection_box.setCurrentIndex(1)
+        #         self.change_laser()
+        # except Exception as e:
+        #     print(e)
+
+        self.loading_screen.progress_bar.setValue(85)
         self.set_form_limits()
 
     def init_study_tab(self):
@@ -249,6 +312,7 @@ class MainWindow(QMainWindow):
         Initializes widgets used for defining comp_sweep experiments.
         """
         self.expt_types.currentIndexChanged.connect(self.update_expt)
+        self.expt_types.currentIndexChanged.connect(self.set_form_limits)
         # On first run, this should populate expt drop down on GUI
         if self.expt_types.count() < len(Experiment().expt_list['Expt Name']):
             self.expt_types.addItem('Undefined')
@@ -256,8 +320,13 @@ class MainWindow(QMainWindow):
             self.expt_types.addItems(expt_list)
         self.setTemp.valueChanged.connect(self.update_expt)
         self.setPower.valueChanged.connect(self.update_expt)
+        self.setCenter.valueChanged.connect(self.update_expt)
+        self.setBandwidth.valueChanged.connect(self.update_expt)
+        # Tunable laser updates also connect w/ power estimation
+        self.setCenter.valueChanged.connect(self.update_power_estimate)
+        self.setBandwidth.valueChanged.connect(self.update_power_estimate)
+        self.setBandwidth.valueChanged.connect(self.set_form_limits)
         self.setFlow.valueChanged.connect(self.update_expt)
-        # TODO This needs to have a min set by ctrl file
         self.setSampleRate.valueChanged.connect(self.update_expt)
         self.setSampleSize.valueChanged.connect(self.update_expt)
         # TODO get from heater?
@@ -276,6 +345,9 @@ class MainWindow(QMainWindow):
         self.IndVar_start.valueChanged.connect(self.update_expt)
         self.IndVar_stop.valueChanged.connect(self.update_expt)
         self.IndVar_step.valueChanged.connect(self.update_expt)
+        self.IndVar_start.valueChanged.connect(self.update_power_estimate)
+        self.IndVar_stop.valueChanged.connect(self.update_power_estimate)
+        self.IndVar_step.valueChanged.connect(self.update_power_estimate)
         self.setGasAType.insertItems(0, Gas_System.factory_gasses)
         self.setGasBType.insertItems(0, Gas_System.factory_gasses)
         self.setGasCType.insertItems(0, Gas_System.factory_gasses)
@@ -312,7 +384,7 @@ class MainWindow(QMainWindow):
             self.comp_sweep_widgets[i][2].currentIndexChanged.connect(self.update_expt)
             for j in [1, 3, 4, 5]:
                 self.comp_sweep_widgets[i][j].valueChanged.connect(self.update_expt)
-                self.comp_sweep_widgets[i][j].setMaximum(100)
+                self.comp_sweep_widgets[i][j].setMaximum(101)
 
     def init_manual_ctrl_tab(self):
         """
@@ -356,10 +428,31 @@ class MainWindow(QMainWindow):
             self.manualTemp.setValue(self.heater.read_setpoint())
             self.manualRamp.setValue(self.heater.ramp_rate)
 
-        if self.diode_Status.isChecked():  # Initialize Values for Laser
+        if self.laser_Status.isChecked():  # Initialize Values for Laser
+
             self.manualPower.setValue(self.laser_controller.get_output_power())
+            # If applicable, update bandpass settings
+            if self.laser_controller.is_tunable:
+                # Get current setpoints directly from bandpass filter
+                self.manualCenter.setValue(self.laser_controller.central_wavelength)
+                self.manualBandwidth.setValue(self.laser_controller.bandwidth)
 
         self.tabWidget.setUpdatesEnabled(True)  # Allow signals again
+
+    def init_figs(self):
+        """
+        Initialize figure canvas.
+
+        Creates figure objects, adds to gui, adds navigation bar
+        """
+        # Create New figure to share
+        self.figure = plt.figure()
+        # Reset fig in canvases
+        self.plotWidgetStudy.canvas.figure = self.figure
+        self.plotWidgetDesign.canvas.figure = self.figure
+        # Add navigation bar beneath each figure widget
+        self.verticalLayoutStudyFig.addWidget(NavigationToolbar(self.plotWidgetStudy.canvas, self))
+        self.verticalLayoutDesignFig.addWidget(NavigationToolbar(self.plotWidgetDesign.canvas, self))
 
     def sum_spinboxes(self, spinboxes, qlabel):
         """
@@ -367,14 +460,14 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        spinboxes : list of PyQt5.QtWidgets.QSpinBoxes
+        spinboxes : list`[`PyQt5.QtWidgets.QSpinBoxes`]
             spinboxes to sum
-        qlabel : PyQt5.QtWidgets.QLabel
+        qlabel : `PyQt5.QtWidgets.QLabel`
             qlabel to write to
 
         Returns
         -------
-        None.
+        None
 
         """
         values = self.values_from_spinboxes(spinboxes)
@@ -406,7 +499,7 @@ class MainWindow(QMainWindow):
 
         Connect buttons within manual control tab to corresponding functions.
         Also initialize a timer that calls update_eqpt_status(), updating both
-        the manua_ctrl tab and live view
+        the manual_ctrl tab and live view
         """
         # Connect buttons in manual ctrl tab
         self.buttonBox.button(QDialogButtonBox.Apply).clicked \
@@ -415,6 +508,11 @@ class MainWindow(QMainWindow):
         self.buttonBox.button(QDialogButtonBox.Reset).clicked \
             .connect(self.init_manual_ctrl_tab)
 
+        # Connect changes to bandpass filter to power estimate label
+        self.manualCenter.valueChanged.connect(self.update_power_estimate)
+        self.manualBandwidth.valueChanged.connect(self.update_power_estimate)
+
+        # Connect button from live view tab. maybe shouldn't be here
         self.eqpt_ReconnectBut.clicked.connect(self.reset_eqpt)
 
         # Connect timer for live feed
@@ -434,22 +532,34 @@ class MainWindow(QMainWindow):
         self.manualGasCComp.valueChanged.connect(lambda: func(*args))
         self.manualGasDComp.valueChanged.connect(lambda: func(*args))
         self.progress_signal.connect(self.progressBar.setValue)
-        self.change_color_signal.connect(self.change_label_color)
+        # TODO this line should be obsolete if direct edit changes work
+        self.change_color_signal.connect(lambda label,
+                                         color:
+                                         label.setStyleSheet('Color: ' + color)
+                                         )
 
-    def init_figs(self):
+    def change_laser(self):
         """
-        Initialize figure canvas.
+        Set the active laser to the one currently selected in combobox.
 
-        Creates figure objects, adds to gui, adds navigation bar
+        Will also adjust the laser_Status icon if a laser exists
         """
-        # Create New figure to share
-        self.figure = plt.figure()
-        # Reset fig in canvases
-        self.plotWidgetStudy.canvas.figure = self.figure
-        self.plotWidgetDesign.canvas.figure = self.figure
-        # Add navigation bar beneath each figure widget
-        self.verticalLayoutStudyFig.addWidget(NavigationToolbar(self.plotWidgetStudy.canvas, self))
-        self.verticalLayoutDesignFig.addWidget(NavigationToolbar(self.plotWidgetDesign.canvas, self))
+        self.laser_controller = self.laser_selection_box.currentData()
+        """Currently active laser system"""
+
+        self.update_flag = False
+        self.set_form_limits()
+        if self.laser_controller:
+            self.laser_Status.setChecked(1)
+            self.manualBandwidth.setValue(self.laser_controller.bandwidth)
+            self.manualCenter.setValue(self.laser_controller.central_wavelength)
+            self.setBandwidth.setValue(self.laser_controller.bandwidth)
+            self.setCenter.setValue(self.laser_controller.central_wavelength)
+
+        else:
+            self.laser_Status.setChecked(0)
+        self.update_flag = True
+        self.update_power_estimate()
 
     def set_form_limits(self):
         """
@@ -464,18 +574,68 @@ class MainWindow(QMainWindow):
             self.setSampleRate.setMinimum(self.gc_connector.min_sample_rate)
 
         if self.heater_Status.isChecked():
-            self.manualTemp.setMaximum(450)
+            self.manualTemp.setMaximum(650)
 
         if self.gas_Status.isChecked():
             self.manualFlow.setMaximum(350)
+            # TODO this should come from the gas_system object
+
+        if self.laser_Status.isChecked():
+
+            lambda_min = self.laser_controller.wavelength_range[0]
+            lambda_max = self.laser_controller.wavelength_range[1]
+
+            # Change bounds of laser control on manual ctrl tab
+            bandwidth = self.manualBandwidth.value()
+            self.manualCenter.setMinimum(lambda_min + bandwidth/2)
+            self.manualCenter.setMaximum(lambda_max - bandwidth/2)
+            self.manualBandwidth.setMinimum(self.laser_controller.bandwidth_range[0])
+            self.manualBandwidth.setMaximum(self.laser_controller.bandwidth_range[1])
+
+            # Change bounds of laser control on expt design tab
+            bandwidth = self.setBandwidth.value()
+            self.setCenter.setMinimum(lambda_min + bandwidth/2)
+            self.setCenter.setMaximum(lambda_max - bandwidth/2)
+            self.setBandwidth.setMinimum(self.laser_controller.bandwidth_range[0])
+            self.setBandwidth.setMaximum(self.laser_controller.bandwidth_range[1])
+
+            # Enable/Disable tunable laser properties according to laser type
+            self.manualCenter.setEnabled(self.laser_controller.is_tunable)
+            self.manualBandwidth.setEnabled(self.laser_controller.is_tunable)
+            self.setCenter.setEnabled(self.laser_controller.is_tunable)
+            self.setBandwidth.setEnabled(self.laser_controller.is_tunable)
+            self.label_max_power_1.setEnabled(self.laser_controller.is_tunable)
+            self.label_max_power_2.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label1.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label2.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label3.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label4.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label5.setEnabled(self.laser_controller.is_tunable)
+            self.tunable_laser_label6.setEnabled(self.laser_controller.is_tunable)
+            self.set_in_percent.setEnabled(self.laser_controller.is_tunable)
+            if not self.laser_controller.is_tunable:  # Uncheck box for fixed self.laser_controller
+                self.set_in_percent.setChecked(False)
+
+        # Change limits on independent variable spinboxes
+        if (self.expt_types.currentText() == 'wavelength_sweep'
+                and self.laser_Status.isChecked()):
+            self.IndVar_start.setMinimum(lambda_min + bandwidth/2)
+            self.IndVar_stop.setMinimum(lambda_min + bandwidth/2)
+            self.IndVar_start.setMaximum(lambda_max - bandwidth/2)
+            self.IndVar_stop.setMaximum(lambda_max - bandwidth/2)
+        else:
+            self.IndVar_start.setMinimum(0)
+            self.IndVar_stop.setMinimum(0)
+            self.IndVar_start.setMaximum(9999)
+            self.IndVar_stop.setMaximum(9999)
 
     # Updating Tabs/Objects:
     # ----------------------
     def display_expt(self):
         """Update GUI display when new expt is selected in listWidget."""
         self.tabWidget.setUpdatesEnabled(False)
-        global update_flag
-        update_flag = False
+
+        self.update_flag = False
         item = self.listWidget.currentItem()
         expt = item.data(Qt.UserRole)
 
@@ -508,9 +668,10 @@ class MainWindow(QMainWindow):
 
         self.setTemp.setValue(expt.temp[0])
         self.setPower.setValue(expt.power[0])
+        self.setCenter.setValue(expt.wavelength[0])
+        self.setBandwidth.setValue(expt.bandwidth[0])
         self.setFlow.setValue(expt.tot_flow[0])
-
-        self.setSampleRate.setValue(expt.sample_rate)  # This needs to have a min set by ctrl file
+        self.setSampleRate.setValue(expt.sample_rate)
         self.setSampleSize.setValue(expt.sample_set_size)
         self.setRampRate.setValue(expt.heat_rate)  # get from heater?
         self.setBuffer.setValue(expt.t_buffer)
@@ -527,7 +688,7 @@ class MainWindow(QMainWindow):
         comp_total = sum(expt.gas_comp[0])  # Calculate gas comp total
         self.designCompSum.setText('%.2f' % comp_total)
         self.tabWidget.setUpdatesEnabled(True)
-        update_flag = True
+        self.update_flag = True
 
     def update_expt(self):
         """
@@ -539,9 +700,9 @@ class MainWindow(QMainWindow):
         """
         # grab the data associated with selected listWidget item
         item = self.listWidget.currentItem()
-        global update_flag
+
         # If there is data in listWidget item and now in the middle of updating
-        if (item is not None) & update_flag:
+        if (item is not None) & self.update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
             # set the attributes of expt object based on GUI entries
             if self.expt_types.currentText() == 'Undefined':
@@ -549,8 +710,10 @@ class MainWindow(QMainWindow):
             expt.expt_type = self.expt_types.currentText()
             expt.temp[0] = self.setTemp.value()
             expt.power[0] = self.setPower.value()
+            expt.wavelength[0] = self.setCenter.value()
+            expt.bandwidth[0] = self.setBandwidth.value()
             expt.tot_flow[0] = self.setFlow.value()
-            expt.sample_rate = self.setSampleRate.value()  # This needs to have a min set by ctrl file
+            expt.sample_rate = self.setSampleRate.value()
             expt.sample_set_size = self.setSampleSize.value()
             expt.heat_rate = self.setRampRate.value()  # get from heater?
             expt.t_buffer = self.setBuffer.value()
@@ -587,7 +750,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-            expt : catalight.equipment.Experiment
+            expt : catalight.equipment.experiment_control.Experiment
                 Experiment object containing the expt_type to be analyzed
         """
         # only actually updates ind var if number check out
@@ -652,6 +815,8 @@ class MainWindow(QMainWindow):
             comp_list = comp_list.tolist()  # return to list of lists
             setattr(expt, expt.ind_var, comp_list)
 
+        # All other experiment types:
+        # Confirm stop value > start value and step size is > 0
         elif (self.IndVar_stop.value() > self.IndVar_start.value()) and \
              (self.IndVar_step.value() > 0) and \
              (expt.expt_type != 'stability_test'):
@@ -659,9 +824,16 @@ class MainWindow(QMainWindow):
                     list(np.arange(self.IndVar_start.value(),
                                    self.IndVar_stop.value() + 1,
                                    self.IndVar_step.value())))
+
+        # Don't reject stability test, but don't use IndVar
+        elif expt.expt_type == 'stability_test':
+            pass
+
+        # If no conditions are met
         else:
             self.update_plot()  # clear plot
             return  # reject update
+
         self.update_plot(expt)  # if either if statement was true
 
     def update_ind_var_grid(self):
@@ -682,9 +854,9 @@ class MainWindow(QMainWindow):
                         widget.setHidden(True)
 
         item = self.listWidget.currentItem()
-        global update_flag
-        # If there is data in listWidget item and now in the middle of updating
-        if (item is not None) & update_flag:
+
+        # If there is data in listWidget item and not in the middle of updating
+        if (item is not None) & self.update_flag:
             expt = item.data(Qt.UserRole)  # pull listWidgetItem data out
         else:
             return
@@ -761,7 +933,7 @@ class MainWindow(QMainWindow):
 
         Parameters
         ----------
-        expt : catalight.equipment.experiment_control.Experiment, optional
+        expt : `catalight.equipment.experiment_control.Experiment`, optional
             Updates plot with contents of experiment if supplied.
             Scrubs plot if expt=None. The default is None.
         """
@@ -786,11 +958,27 @@ class MainWindow(QMainWindow):
         This function updates the live view of the equipment in both the
         manual control (1) and the live view (2) tabs
         """
-        if self.diode_Status.isChecked():
+        if self.laser_Status.isChecked():
+
             self.current_power_1.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_2.setText('%.2f' % self.laser_controller.get_output_power())
             self.current_power_setpoint1.setText('%.2f' % self.laser_controller.P_set)
             self.current_power_setpoint2.setText('%.2f' % self.laser_controller.P_set)
+
+            # If applicable, update bandpass settings
+            if self.laser_controller.is_tunable:
+                # Get current setpoints directly from bandpass filter
+                bandwidth = (self.laser_controller.bandwidth)
+                center = (self.laser_controller.central_wavelength)
+
+                self.current_center_1.setText('%.2f' % center)
+                self.current_center_2.setText('%.2f' % center)
+                self.current_bandwidth_1.setText('%.2f' % bandwidth)
+                self.current_bandwidth_2.setText('%.2f' % bandwidth)
+                self.current_center_setpoint1.setText('%.2f' % self.laser_controller.central_wavelength)
+                self.current_center_setpoint2.setText('%.2f' % self.laser_controller.central_wavelength)
+                self.current_bandwidth_setpoint1.setText('%.2f' % self.laser_controller.bandwidth)
+                self.current_bandwidth_setpoint2.setText('%.2f' % self.laser_controller.bandwidth)
 
         if self.heater_Status.isChecked():
             self.current_temp_1.setText('%.2f' % self.heater.read_temp())
@@ -830,6 +1018,38 @@ class MainWindow(QMainWindow):
             self.current_gasE_flow_2.setText('%.2f' % flow_dict['mfc_E']['mass_flow'])
             self.current_gasE_pressure_2.setText('%.2f' % flow_dict['mfc_E']['pressure'])
 
+    def update_power_estimate(self):
+        """
+        Estimate the max uniform power in wavelength range and update labels.
+
+        Updates label_max_power 1 and 2. If an eligible wavelength sweep is
+        entered, estimates the power over that range.
+        """
+        # Only update power estimate for conencted tunable lasers
+        if not (self.laser_Status.isChecked() and self.laser_controller.is_tunable):
+            return
+
+        # label_max_power_1:
+        # If eligible wavelength sweep selected, show max power in range
+        if ((self.IndVar_stop.value() > self.IndVar_start.value())
+                and (self.expt_types.currentText() == 'wavelength_sweep')):
+            centers = [self.IndVar_start.value(),
+                       self.IndVar_stop.value()]
+
+        else:  # Otherwise, use fixed value
+            centers = 2*[self.setCenter.value()]  # duplicate in list
+
+        if self.update_flag:
+            bandwidth = self.setBandwidth.value()
+            power = self.laser_controller.max_constant_power(bandwidth, centers)
+            self.label_max_power_1.setText(('%4.0f mW' % power))
+
+            # label_max_power_2:
+            centers = [self.manualCenter.value()]  # Single value in list
+            bandwidth = self.manualBandwidth.value()
+            power = self.laser_controller.max_constant_power(bandwidth, centers)
+            self.label_max_power_2.setText(('%4.0f mW' % power))
+
     def manual_ctrl_eqpt(self):
         """
         Update setpoint of equipment.
@@ -845,7 +1065,7 @@ class MainWindow(QMainWindow):
             issues with updating the GUI outside the main thread!!
 
         """
-        self.toggle_controls(True)
+        self.toggle_controls(True)  # Block user from double updating
         comp_list = [self.manualGasAComp.value(),
                      self.manualGasBComp.value(),
                      self.manualGasCComp.value(),
@@ -862,19 +1082,79 @@ class MainWindow(QMainWindow):
             self.gas_controller.set_flows(comp_list, tot_flow)
         self.progress_signal.emit(50)
 
-        if self.diode_Status.isChecked():
+        if self.laser_Status.isChecked():
+            # Set Laser power
+            # change text color to red while updating
+            # TODO I'm not sure why i ever set this up with signal instead of
+            # directly just changing the color.
+            # I think i can just delete this version after checking
+            self.current_power_setpoint1.setStyleSheet('Color: red')
             self.change_color_signal.emit(self.current_power_setpoint1, 'red')
             self.change_color_signal.emit(self.current_power_setpoint2, 'red')
             self.laser_controller.set_power(self.manualPower.value())
+            # Change text color back to white after update
             self.change_color_signal.emit(self.current_power_setpoint1, 'white')  # noqa
             self.change_color_signal.emit(self.current_power_setpoint2, 'white')  # noqa
+            self.progress_signal.emit(65)
+
+            # If applicable, set laser wavelength/bandwidth
+            if self.laser_controller.is_tunable:
+                # change text color to red while updating
+                self.change_color_signal.emit(self.current_center_setpoint1, 'red')
+                self.change_color_signal.emit(self.current_center_setpoint2, 'red')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'red')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'red')
+                self.laser_controller.set_bandpass(self.manualCenter,
+                                                   self.manualBandwidth)
+                # Change text color back to white after update
+                self.change_color_signal.emit(self.current_center_setpoint1, 'white')
+                self.change_color_signal.emit(self.current_center_setpoint2, 'white')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint1, 'white')
+                self.change_color_signal.emit(self.current_bandwidth_setpoint2, 'white')
+
+            # Set Laser power
+            # change text color to red while updating
+            self.current_power_setpoint1.setStyleSheet('Color: red')
+            self.current_power_setpoint2.setStyleSheet('Color: red')
+
+            # If the user wants to control the % setpoint instead
+            if self.set_in_percent.isChecked():
+                self.laser_controller.set_setpoint(self.manualPower.value())
+
+            # Otherwise set power using nkt_system methods
+            else:
+                self.laser_controller.set_power(self.manualPower.value())
+
+            # Change text color back to white after update
+            self.current_power_setpoint1.setStyleSheet('Color: white')  # noqa
+            self.current_power_setpoint2.setStyleSheet('Color: white')  # noqa
+            self.progress_signal.emit(65)
+
+            # If applicable, set laser wavelength/bandwidth
+            if self.laser_controller.is_tunable:
+                # change text color to red while updating
+                self.current_center_setpoint1.setStyleSheet('Color: red')
+                self.current_center_setpoint2.setStyleSheet('Color: red')
+                self.current_bandwidth_setpoint1.setStyleSheet('Color: red')
+                self.current_bandwidth_setpoint2.setStyleSheet('Color: red')
+                self.laser_controller.set_bandpass(self.manualCenter.value(),
+                                                   self.manualBandwidth.value())
+                # Change text color back to white after update
+                self.current_center_setpoint1.setStyleSheet('Color: white')
+                self.current_center_setpoint2.setStyleSheet('Color: white')
+                self.current_bandwidth_setpoint1.setStyleSheet('Color: white')
+                self.current_bandwidth_setpoint2.setStyleSheet('Color: white')
+
         self.progress_signal.emit(75)
 
+        # Update ramp rate and set temperature of heater
         if self.heater_Status.isChecked():
+            # change text color to red while updating
             self.change_color_signal.emit(self.current_temp_setpoint1, 'red')
             self.change_color_signal.emit(self.current_temp_setpoint2, 'red')
             self.heater.ramp_rate = self.manualRamp.value()
             self.heater.ramp(self.manualTemp.value())
+            # Change text color back to white after update
             self.change_color_signal.emit(self.current_temp_setpoint1, 'white')
             self.change_color_signal.emit(self.current_temp_setpoint2, 'white')
 
@@ -899,9 +1179,7 @@ class MainWindow(QMainWindow):
 
         for item in group:
             item.setDisabled(value)
-
-    def change_label_color(self, label, new_color):
-        label.setStyleSheet('Color: ' + new_color)
+        self.set_form_limits()  # Some laser widgets are toggled by this func
 
     def open_peaksimple(self, path_name):
         """
@@ -919,12 +1197,12 @@ class MainWindow(QMainWindow):
 
         Returns
         -------
-        process : subprocess.process
+        process : subprocess.Popen
             returns a process object for peaksimple instance
         """
         for process in psutil.process_iter():
             if 'Peak489Win10' in process.name():
-                # process.kill()
+                # process.kill()  # closing peaksimple this way caused errors
                 print('please close peaksimple and reconnect')
                 time.sleep(5)
                 return
@@ -961,8 +1239,12 @@ class MainWindow(QMainWindow):
         if self.heater_Status.isChecked():
             self.heater.shut_down()
 
-        if self.diode_Status.isChecked():
-            self.laser_controller.shut_down()
+        # Iterate over each laser in the laser_selection_box and turn it off
+        for index in range(self.laser_selection_box.count()):
+            laser = self.laser_selection_box.itemData(index)
+            if laser is not None:
+                # Perform the shutdown operation on the associated object
+                laser.shut_down()
 
     def emergency_stop(self):
         """Cancel active threads, call self.shut_down()."""
@@ -970,8 +1252,29 @@ class MainWindow(QMainWindow):
         # self.threadpool.cancel()
         self.threadpool.cancel(self.run_study_thread)
         self.threadpool.cancel(self.manual_ctrl_thread)
-        # self.threadpool.disconnect()
+        self.threadpool.clear()
+        self.threadpool.disconnect()
         self.shut_down()
+
+
+class LoadingScreen(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlag(Qt.WindowStaysOnTopHint)
+        self.setWindowTitle("Loading Catalight...")
+        self.setFixedSize(300, 150)
+        layout = QVBoxLayout(self)
+
+        self.progress_bar = QProgressBar(self)
+        self.progress_bar.setAlignment(Qt.AlignCenter)
+
+        self.status_msg = QLabel("Loading")
+        self.status_msg.setAlignment(Qt.AlignCenter)
+
+        layout.addWidget(self.status_msg)
+        layout.addWidget(self.progress_bar)
+        setup_style(self)
+        self.show()
 
 
 class EmittingStream():
@@ -983,7 +1286,7 @@ class EmittingStream():
 
     Arguments
     ---------
-    textedit : QLineEdit
+    textedit : :obj:`PyQt5.QtWidgets.QLineEdit`
         This should be a line edit box you want to populate w/ print statement.
     """
     def __init__(self, textedit):
@@ -1008,6 +1311,10 @@ class EmittingStream():
 class WorkerSignal(QObject):
     """Provide signals for interacting w/ worker threads."""
     finished = pyqtSignal()
+    """
+    Basic pyqtSignal indicating worker thread called by worker thread to
+    indicate when the process is finished.
+    """
 
 
 class Worker(QRunnable):
@@ -1019,7 +1326,7 @@ class Worker(QRunnable):
 
     Parameters
     ----------
-    callback : function
+    callback : `function`
         The function callback to run on this worker thread. Supplied args and
         kwargs will be passed through to the runner.
 
@@ -1064,9 +1371,6 @@ def setup_style(app):
 if __name__ == "__main__":
     # Main
     plt.close('all')
-    update_flag = False
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
-    setup_style(app)
     sys.exit(app.exec_())

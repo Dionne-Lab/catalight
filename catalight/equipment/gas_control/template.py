@@ -3,11 +3,11 @@ import time
 
 class Gas_System:
     """MFC control."""
-    # ToDo update based on specific model
+    # TODO update based on specific model
     factory_gasses = ['C2H2', 'Air', 'Ar', 'i-C4H10', 'n-C4H10', 'CO2', 'CO',
                       'D2', 'C2H6', 'C2H4', 'He', 'H2', 'Kr', 'CH4', 'Ne',
                       'N2', 'N2O', 'O2', 'C3H8', 'SF6', 'Xe']
-    #: Factory gas list saved to Alicat MFCs
+    """Factory gas list saved to Alicat MFCs"""
 
     def __init__(self):
         """
@@ -15,13 +15,22 @@ class Gas_System:
 
         The user needs to update the address and COM ports for each mfc
         based on their specific setup. This process can be assisted by using
-        the "connection_tester.py" file
+        the "alicat_connection_tester.py" file
         """
-        self.mfc_A = FlowController(port='COM6', address='A')
-        self.mfc_B = FlowController(port='COM9', address='B')
-        self.mfc_C = FlowController(port='COM8', address='C')
-        self.mfc_D = FlowController(port='COM10', address='D')
-        self.mfc_E = FlowMeter(port='COM11', address='E')
+        self.mfc_A = FlowController(port=cfg.mfc_list[0]['port'],
+                                    address=cfg.mfc_list[0]['unit'])
+
+        self.mfc_B = FlowController(port=cfg.mfc_list[1]['port'],
+                                    address=cfg.mfc_list[1]['unit'])
+
+        self.mfc_C = FlowController(port=cfg.mfc_list[2]['port'],
+                                    address=cfg.mfc_list[2]['unit'])
+
+        self.mfc_D = FlowController(port=cfg.mfc_list[3]['port'],
+                                    address=cfg.mfc_list[3]['unit'])
+
+        self.mfc_E = FlowMeter(port=cfg.mfc_list[4]['port'],
+                               address=cfg.mfc_list[4]['unit'])
         self.is_busy = False
 
     def set_gasses(self, gas_list):
@@ -30,12 +39,12 @@ class Gas_System:
 
         Parameters
         ----------
-        gas_list : list of str
+        gas_list : list[`str`]
             [gasA, gasB, gasC, gasD] Each must be within factory gasses.
 
         Returns
         -------
-        None.
+        None
 
         """
         # Custom mixes cannot be indexed by name in alicat package
@@ -63,7 +72,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[`float`]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
         tot_flow : float
             Total flow to send.
@@ -75,7 +84,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -94,12 +103,12 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float
+        comp_list : list[`float`]
             list of gas fraction for mfc [a, b, c, d]. Must sum to 1 or 100
 
         Returns
         -------
-        None.
+        None
 
         """
         comp_list = self.check_comp_total(comp_list)
@@ -138,7 +147,7 @@ class Gas_System:
 
         Parameters
         ----------
-        comp_list : list of float or int
+        comp_list : list[`float` or `int`]
             Composition list in either percents or fractions.
 
         Raises
@@ -148,7 +157,7 @@ class Gas_System:
 
         Returns
         -------
-        comp_list : list of float
+        comp_list : list[`float`]
             Updated composition list as fractions
 
         """
@@ -185,7 +194,7 @@ class Gas_System:
 
         Returns
         -------
-        None.
+        None
 
         """
         while self.is_busy:
@@ -205,7 +214,7 @@ class Gas_System:
 
         Returns
         -------
-        flow_dict : dict of dict
+        flow_dict : `dict` of `dict`
             {mfc: mfc.get()}
         """
         while self.is_busy:
@@ -260,7 +269,7 @@ class Gas_System:
 
         Parameters
         ----------
-        mfc : alicat.FlowController | alicat.FlowMeter
+        mfc : `alicat.FlowController` | `alicat.FlowMeter`
             Mass flow controller or meter to update with calgas
         calDF : pandas.DataFrame
             Formatted DataFrame containing gc calibration data.
@@ -299,9 +308,9 @@ class Gas_System:
         ----------
         savepath : str
             Path to folder to save the results in.
-        flows : list[int or float]
+        flows : list[`int` or `float`]
             Flow rate setpoints to sweep through when testing pressure build up
-        num_samples : int, optional
+        num_samples : `int`, optional
             Number of samples to collect at each flow rate. Default is 5.
         """
         print('Testing Pressure Build-up...')

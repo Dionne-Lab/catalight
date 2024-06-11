@@ -27,17 +27,17 @@ def main(main_fol, filename, dilution, tot_flow=1):
         Directory to save folders in.
     filename : str
         Folder name you'd like to use when saving 'calibration expt'
-    dilution : list of float or int
+    dilution : list[float or int]
         Percent amount you diluted the original calibration gas
         For example, you have 1000 ppm, 500 ppm, and 100 ppm calibration gasses
         This would mimic diluting a 1000 ppm gas by 100%, 50%, 10%
         So the list you provide would be [100, 50, 10]
-    tot_flow : float or int, optional
+    tot_flow : `float` or `int`, optional
         Enter if you'd like to specify/record flow rate used. The default is 1.
 
     Returns
     -------
-    None.
+    None
 
     """
 

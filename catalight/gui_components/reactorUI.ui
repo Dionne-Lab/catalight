@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1210</width>
-    <height>980</height>
+    <height>930</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -26,7 +26,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>style_guide/icon.png</normaloff>style_guide/icon.png</iconset>
+    <normaloff>../../../../../../.designer/backup/style_guide/icon.png</normaloff>../../../../../../.designer/backup/style_guide/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -51,6 +51,65 @@
     <property name="verticalSpacing">
      <number>5</number>
     </property>
+    <item row="1" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <property name="spacing">
+       <number>20</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QTextBrowser" name="consoleOutput">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>110</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="emergencyStop">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>60</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: red; border-width: 2 px; border-style: outset</string>
+        </property>
+        <property name="text">
+         <string>Emergency
+Stop</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -69,7 +128,7 @@
        <bool>false</bool>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tabOverview">
        <property name="sizePolicy">
@@ -317,9 +376,9 @@
          <number>5</number>
         </property>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,3,5,5">
           <property name="spacing">
-           <number>20</number>
+           <number>10</number>
           </property>
           <item>
            <layout class="QFormLayout" name="formLayout_6">
@@ -351,10 +410,16 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_9">
             <property name="sizeConstraint">
-             <enum>QLayout::SetMaximumSize</enum>
+             <enum>QLayout::SetDefaultConstraint</enum>
             </property>
             <item>
              <widget class="QLabel" name="IndVar">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="maximumSize">
                <size>
                 <width>16777215</width>
@@ -368,6 +433,12 @@
             </item>
             <item>
              <widget class="QLabel" name="label_IndVar">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
                <string> - </string>
               </property>
@@ -460,7 +531,7 @@
           <item>
            <layout class="QFormLayout" name="formLayout_4">
             <property name="verticalSpacing">
-             <number>20</number>
+             <number>6</number>
             </property>
             <item row="0" column="0">
              <widget class="QLabel" name="label_7">
@@ -482,14 +553,14 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="label_77">
               <property name="text">
                <string>Temperature (K)</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
+            <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="setTemp">
               <property name="toolTip">
                <string>Constant temperature setting for the heater if it is not the independent variable</string>
@@ -502,14 +573,14 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="label_8">
               <property name="text">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample Rate (min)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="5" column="1">
              <widget class="QDoubleSpinBox" name="setSampleRate">
               <property name="toolTip">
                <string>Length of time between starting GC samples.</string>
@@ -519,14 +590,14 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="label_9">
               <property name="text">
                <string>Sample Size (#)</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="6" column="1">
              <widget class="QSpinBox" name="setSampleSize">
               <property name="toolTip">
                <string>Number of GC samples per step in the sweep.</string>
@@ -534,16 +605,19 @@
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="7" column="0">
              <widget class="QLabel" name="label_10">
               <property name="text">
                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ramp Rate (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C/min)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="7" column="1">
              <widget class="QDoubleSpinBox" name="setRampRate">
               <property name="toolTip">
                <string>Heating rate used when going between setpoints.</string>
@@ -553,14 +627,14 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="0">
+            <item row="9" column="0">
              <widget class="QLabel" name="label_11">
               <property name="text">
                <string>Buffer Time (min)</string>
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
+            <item row="9" column="1">
              <widget class="QDoubleSpinBox" name="setBuffer">
               <property name="toolTip">
                <string>Time between the last GC sample being taken and the system going to the next setpoint.</string>
@@ -570,14 +644,14 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
+            <item row="10" column="0">
              <widget class="QLabel" name="label_15">
               <property name="text">
                <string>Total Flow (sccm)</string>
               </property>
              </widget>
             </item>
-            <item row="7" column="1">
+            <item row="10" column="1">
              <widget class="QDoubleSpinBox" name="setFlow">
               <property name="toolTip">
                <string>Constant total flow for the gas system if it is not the independent variable.</string>
@@ -586,24 +660,102 @@
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
               <property name="maximum">
-               <double>50.000000000000000</double>
+               <double>99999.000000000000000</double>
               </property>
               <property name="singleStep">
                <double>0.100000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="8" column="0">
              <widget class="QLabel" name="label_36">
               <property name="text">
                <string>Steady State Time (min)</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="8" column="1">
              <widget class="QDoubleSpinBox" name="setTSteady">
               <property name="toolTip">
                <string>Time between the setpoint ramp ending and the first GC sample being taken.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="tunable_laser_label2">
+              <property name="text">
+               <string>Laser Center Wavelength (nm)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="tunable_laser_label3">
+              <property name="text">
+               <string>Laser Bandwidth (nm)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="setCenter">
+              <property name="toolTip">
+               <string>For tunable lasers, this is the desired center wavelength</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>400.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>900.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="setBandwidth">
+              <property name="toolTip">
+               <string>For tunable lasers, this is the desired bandwidth, if applicable</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>10.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="tunable_laser_label1">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;For supported laser systems (NKT), this is the maximum predicted power based on the last run calibration and the currently selected central wavelength and bandwidth. If running a wavelength sweep, this value is the maximum constant power across the entire sweep.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Max Constant Power at Center/Width</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="label_max_power_1">
+              <property name="toolTip">
+               <string>For supported laser systems (NKT), this is the maximum predicted power based on the last run calibration and the currently selected central wavelength and bandwidth. If running a wavelength sweep, this value is the maximum constant power across the entire sweep</string>
+              </property>
+              <property name="text">
+               <string>---</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -615,7 +767,7 @@
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
             <property name="verticalSpacing">
-             <number>16</number>
+             <number>8</number>
             </property>
             <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="setGasDComp">
@@ -819,42 +971,38 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tabManualControl">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <attribute name="title">
         <string>Manual Control</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="4">
-         <spacer name="horizontalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
+       <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,4,2,2,1">
         <item row="1" column="2">
          <widget class="QLabel" name="label_18">
           <property name="text">
            <string>Manual Update Progress:</string>
           </property>
          </widget>
+        </item>
+        <item row="0" column="4">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Ignored</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="2" column="2" colspan="2">
          <widget class="QProgressBar" name="progressBar">
@@ -866,335 +1014,26 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="2" colspan="2">
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Live Readout:</string>
+        <item row="0" column="0">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_4">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLiveReadout1" stretch="1,3">
-             <item>
-              <layout class="QGridLayout" name="gridLayout_5">
-               <item row="1" column="1">
-                <widget class="QLabel" name="current_temp_1">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="current_power_1">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_30">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>Reading:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_75">
-                 <property name="text">
-                  <string>Current Power (mW):</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_74">
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current Temperature (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="current_temp_setpoint1">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="current_power_setpoint1">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_33">
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
-                 </property>
-                 <property name="text">
-                  <string>Setpoint:</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QGridLayout" name="gridLayout_8">
-               <item row="5" column="3">
-                <widget class="QLabel" name="current_gasE_pressure_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLabel" name="current_gasC_comp_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_53">
-                 <property name="text">
-                  <string>Output:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_69">
-                 <property name="text">
-                  <string>Gas C</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="2">
-                <widget class="QLabel" name="current_gasB_type_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_67">
-                 <property name="text">
-                  <string>Gas A</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="2">
-                <widget class="QLabel" name="current_gasC_type_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_21">
-                 <property name="text">
-                  <string>Gas D</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QLabel" name="current_gasE_flow_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QLabel" name="current_gasD_comp_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="3">
-                <widget class="QLabel" name="current_gasA_pressure_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLabel" name="current_gasB_comp_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="2">
-                <widget class="QLabel" name="label_66">
-                 <property name="text">
-                  <string>Gas Type</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="current_gasA_type_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="2">
-                <widget class="QLabel" name="current_gasD_type_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_68">
-                 <property name="text">
-                  <string>Gas B</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="3">
-                <widget class="QLabel" name="label_28">
-                 <property name="text">
-                  <string>Pressure (PSIA)</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_65">
-                 <property name="text">
-                  <string>Flow (sccm)</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="3">
-                <widget class="QLabel" name="current_gasB_pressure_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="3">
-                <widget class="QLabel" name="current_gasC_pressure_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="2">
-                <widget class="QLabel" name="label_73">
-                 <property name="text">
-                  <string>sccm</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="3">
-                <widget class="QLabel" name="current_gasD_pressure_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="current_gasA_comp_1">
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
+          <property name="sizeType">
+           <enum>QSizePolicy::MinimumExpanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>100</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item row="0" column="1" rowspan="3">
          <layout class="QVBoxLayout" name="manualControlLayout" stretch="1,2,1">
           <property name="spacing">
-           <number>20</number>
+           <number>11</number>
           </property>
           <item>
            <layout class="QFormLayout" name="formLayout_2">
@@ -1210,6 +1049,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QDoubleSpinBox" name="manualTemp">
+              <property name="toolTip">
+               <string>The desired temperature to set the reactor to. Command is only given when the &quot;Apply&quot; button is pressed.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1235,15 +1077,119 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_63">
+            <item row="5" column="0">
+             <widget class="QLabel" name="tunable_laser_label5">
               <property name="text">
-               <string>Power (mW)</string>
+               <string>Central Wavelength (nm)</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="6" column="0">
+             <widget class="QLabel" name="tunable_laser_label6">
+              <property name="text">
+               <string>Bandwidth (nm)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QDoubleSpinBox" name="manualCenter">
+              <property name="toolTip">
+               <string>If using a tunable laser (i.e. NKT), sets the central wavelength for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="suffix">
+               <string/>
+              </property>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>400.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>900.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QDoubleSpinBox" name="manualBandwidth">
+              <property name="toolTip">
+               <string>If using a tunable laser (i.e. NKT), sets the bandwidth for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="minimum">
+               <double>10.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>100.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.100000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="tunable_laser_label4">
+              <property name="text">
+               <string>Max Power at Center/Width (mW):</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLabel" name="label_max_power_2">
+              <property name="text">
+               <string>---</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <property name="spacing">
+               <number>50</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_63">
+                <property name="text">
+                 <string>Power (mW)</string>
+                </property>
+               </widget>
+              </item>
+              <item alignment="Qt::AlignRight">
+               <widget class="QRadioButton" name="set_in_percent">
+                <property name="toolTip">
+                 <string>Clicking this option will allow you to set the power of a tunable laser (i.e. NKT) in percent instead of mW.</string>
+                </property>
+                <property name="layoutDirection">
+                 <enum>Qt::LeftToRight</enum>
+                </property>
+                <property name="text">
+                 <string>set in %</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="manualPower">
+              <property name="toolTip">
+               <string>The desired power to set for the laser. Command is only given when the &quot;Apply&quot; button is pressed.</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1257,10 +1203,14 @@
              <number>9</number>
             </property>
             <property name="verticalSpacing">
-             <number>20</number>
+             <number>12</number>
             </property>
             <item row="3" column="2">
-             <widget class="QComboBox" name="manualGasCType"/>
+             <widget class="QComboBox" name="manualGasCType">
+              <property name="toolTip">
+               <string>Set the gas type used by the corresponding mass flow controller.</string>
+              </property>
+             </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="label_20">
@@ -1271,6 +1221,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QDoubleSpinBox" name="manualGasCComp">
+              <property name="toolTip">
+               <string>Set the composition (in %) of the corresponding gas in the total gas input. The sum of all input gasses must be 100%!</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1304,6 +1257,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QDoubleSpinBox" name="manualGasBComp">
+              <property name="toolTip">
+               <string>Set the composition (in %) of the corresponding gas in the total gas input. The sum of all input gasses must be 100%!</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1326,10 +1282,17 @@
              </widget>
             </item>
             <item row="2" column="2">
-             <widget class="QComboBox" name="manualGasBType"/>
+             <widget class="QComboBox" name="manualGasBType">
+              <property name="toolTip">
+               <string>Set the gas type used by the corresponding mass flow controller.</string>
+              </property>
+             </widget>
             </item>
             <item row="4" column="1">
              <widget class="QDoubleSpinBox" name="manualGasDComp">
+              <property name="toolTip">
+               <string>Set the composition (in %) of the corresponding gas in the total gas input. The sum of all input gasses must be 100%!</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1346,6 +1309,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QDoubleSpinBox" name="manualGasAComp">
+              <property name="toolTip">
+               <string>Set the composition (in %) of the corresponding gas in the total gas input. The sum of all input gasses must be 100%!</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1371,10 +1337,18 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QComboBox" name="manualGasAType"/>
+             <widget class="QComboBox" name="manualGasAType">
+              <property name="toolTip">
+               <string>Set the gas type used by the corresponding mass flow controller.</string>
+              </property>
+             </widget>
             </item>
             <item row="4" column="2">
-             <widget class="QComboBox" name="manualGasDType"/>
+             <widget class="QComboBox" name="manualGasDType">
+              <property name="toolTip">
+               <string>Set the gas type used by the corresponding mass flow controller.</string>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_57">
@@ -1423,6 +1397,9 @@
             </item>
             <item row="0" column="1">
              <widget class="QDoubleSpinBox" name="manualFlow">
+              <property name="toolTip">
+               <string>The total flow rate of the input gas in standard cubic centrimeters per minute (sccm). Be careful to not overflow any of the MFCs!</string>
+              </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
@@ -1433,6 +1410,9 @@
             </item>
             <item row="1" column="0" colspan="2">
              <widget class="QDialogButtonBox" name="buttonBox">
+              <property name="toolTip">
+               <string>Pressing the &quot;Apply&quot; button sends the currently entered values to the corresponding devices. Pressing the &quot;Reset&quot; button will replace the values in the boxes with the last used setpoints.</string>
+              </property>
               <property name="layoutDirection">
                <enum>Qt::RightToLeft</enum>
               </property>
@@ -1451,6 +1431,22 @@
           </item>
          </layout>
         </item>
+        <item row="4" column="3" colspan="2">
+         <widget class="QLabel" name="label_38">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap>../../../../../../.designer/backup/style_guide/drawing.svg</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>false</bool>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
+          </property>
+         </widget>
+        </item>
         <item row="3" column="2">
          <spacer name="verticalSpacer_2">
           <property name="orientation">
@@ -1464,20 +1460,383 @@
           </property>
          </spacer>
         </item>
-        <item row="4" column="3" colspan="2">
-         <widget class="QLabel" name="label_38">
-          <property name="text">
-           <string/>
+        <item row="0" column="2" colspan="2">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Live Readout:</string>
           </property>
-          <property name="pixmap">
-           <pixmap>style_guide/drawing.svg</pixmap>
-          </property>
-          <property name="scaledContents">
-           <bool>false</bool>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignBottom|Qt::AlignRight|Qt::AlignTrailing</set>
-          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLiveReadout1" stretch="0,3">
+             <item>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_30">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Reading:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="current_power_setpoint1">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="current_power_1">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="current_temp_1">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_75">
+                 <property name="text">
+                  <string>Current Power (mW):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_33">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Setpoint:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="current_temp_setpoint1">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_74">
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current Temperature (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_41">
+                 <property name="text">
+                  <string>Current Laser Center (nm):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="current_center_setpoint1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="current_center_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_44">
+                 <property name="text">
+                  <string>Current Laser Bandwidth (nm):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="current_bandwidth_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLabel" name="current_bandwidth_setpoint1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QGridLayout" name="gridLayout_8">
+               <item row="1" column="3">
+                <widget class="QLabel" name="current_gasA_pressure_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="current_gasC_type_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_69">
+                 <property name="text">
+                  <string>Gas C</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="current_gasB_comp_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="3">
+                <widget class="QLabel" name="current_gasE_pressure_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_66">
+                 <property name="text">
+                  <string>Gas Type</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="current_gasA_type_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="current_gasB_type_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_67">
+                 <property name="text">
+                  <string>Gas A</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="current_gasC_comp_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLabel" name="current_gasE_flow_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_21">
+                 <property name="text">
+                  <string>Gas D</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_53">
+                 <property name="text">
+                  <string>Output:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="current_gasD_comp_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="current_gasA_comp_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLabel" name="current_gasD_type_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_68">
+                 <property name="text">
+                  <string>Gas B</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="3">
+                <widget class="QLabel" name="current_gasC_pressure_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QLabel" name="label_73">
+                 <property name="text">
+                  <string>sccm</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="3">
+                <widget class="QLabel" name="current_gasD_pressure_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3">
+                <widget class="QLabel" name="current_gasB_pressure_1">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLabel" name="label_28">
+                 <property name="text">
+                  <string>Pressure (PSIA)</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLabel" name="label_65">
+                 <property name="text">
+                  <string>Flow (sccm)</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -1486,7 +1845,7 @@
        <attribute name="title">
         <string>Live View</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_11" rowstretch="10,10,10">
+       <layout class="QGridLayout" name="gridLayout_11" rowstretch="10,5,10" columnstretch="1,2,2,1">
         <item row="0" column="0">
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -1554,19 +1913,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_91">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current Temperature (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                 </property>
-                </widget>
-               </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_92">
                  <property name="sizePolicy">
@@ -1582,22 +1928,6 @@
                </item>
                <item row="2" column="1">
                 <widget class="QLabel" name="current_power_2">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>-</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="current_temp_2">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
@@ -1631,6 +1961,25 @@
                  </property>
                 </widget>
                </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="current_temp_setpoint2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
                <item row="2" column="2">
                 <widget class="QLabel" name="current_power_setpoint2">
                  <property name="sizePolicy">
@@ -1650,17 +1999,81 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QLabel" name="current_temp_setpoint2">
+               <item row="1" column="1">
+                <widget class="QLabel" name="current_temp_2">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="layoutDirection">
-                  <enum>Qt::LeftToRight</enum>
+                 <property name="text">
+                  <string>-</string>
                  </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_91">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Current Temperature (&lt;span style=&quot; vertical-align:super;&quot;&gt;o&lt;/span&gt;C):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_47">
+                 <property name="text">
+                  <string>Current Laser Center (nm):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLabel" name="current_center_setpoint2">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="current_center_2">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_50">
+                 <property name="text">
+                  <string>Current Laser Bandwidth (nm):</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="current_bandwidth_2">
+                 <property name="text">
+                  <string>-</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLabel" name="current_bandwidth_setpoint2">
                  <property name="text">
                   <string>-</string>
                  </property>
@@ -1903,33 +2316,19 @@
           <property name="title">
            <string>Equipment Status:</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_12" columnstretch="1,4">
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_23">
-             <property name="text">
-              <string>Gas Chomatograph</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="LedIndicator" name="gas_Status" native="true">
-             <property name="styleSheet">
-              <string notr="true">background-color:black</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="LedIndicator" name="diode_Status" native="true">
+          <layout class="QGridLayout" name="gridLayout_12" columnstretch="1,5">
+           <property name="verticalSpacing">
+            <number>9</number>
+           </property>
+           <item row="2" column="0">
+            <widget class="LedIndicator" name="heater_Status" native="true">
              <property name="styleSheet">
               <string notr="true">background-color:black</string>
              </property>
             </widget>
            </item>
            <item row="5" column="0">
-            <widget class="LedIndicator" name="widget_4" native="true">
-             <property name="autoFillBackground">
-              <bool>false</bool>
-             </property>
+            <widget class="LedIndicator" name="laser_Status" native="true">
              <property name="styleSheet">
               <string notr="true">background-color:black</string>
              </property>
@@ -1942,24 +2341,10 @@
              </property>
             </widget>
            </item>
-           <item row="6" column="0" colspan="2">
-            <widget class="QPushButton" name="eqpt_ReconnectBut">
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_23">
              <property name="text">
-              <string>Reconnect</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="QLabel" name="label_25">
-             <property name="text">
-              <string>Thorlabs Diode</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="1">
-            <widget class="QLabel" name="label_27">
-             <property name="text">
-              <string>New Laser</string>
+              <string>Gas Chomatograph</string>
              </property>
             </widget>
            </item>
@@ -1970,10 +2355,13 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
-            <widget class="LedIndicator" name="heater_Status" native="true">
-             <property name="styleSheet">
-              <string notr="true">background-color:black</string>
+           <item row="6" column="0" colspan="2">
+            <widget class="QPushButton" name="eqpt_ReconnectBut">
+             <property name="toolTip">
+              <string>Restart the hardware connection process. If using Peaksimple, please close the software before reconnecting</string>
+             </property>
+             <property name="text">
+              <string>Reconnect</string>
              </property>
             </widget>
            </item>
@@ -1981,6 +2369,20 @@
             <widget class="QLabel" name="label_24">
              <property name="text">
               <string>Heater</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="laser_selection_box">
+             <property name="toolTip">
+              <string>Select the desired laser to use.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="LedIndicator" name="gas_Status" native="true">
+             <property name="styleSheet">
+              <string notr="true">background-color:black</string>
              </property>
             </widget>
            </item>
@@ -2006,7 +2408,7 @@
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap>style_guide/drawing.svg</pixmap>
+           <pixmap>../../../../../../.designer/backup/style_guide/drawing.svg</pixmap>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -2020,65 +2422,6 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
-      <property name="spacing">
-       <number>20</number>
-      </property>
-      <property name="leftMargin">
-       <number>5</number>
-      </property>
-      <property name="topMargin">
-       <number>5</number>
-      </property>
-      <property name="rightMargin">
-       <number>5</number>
-      </property>
-      <property name="bottomMargin">
-       <number>5</number>
-      </property>
-      <item>
-       <widget class="QTextBrowser" name="consoleOutput">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>110</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="emergencyStop">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>60</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>12</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: red; border-width: 2 px; border-style: outset</string>
-        </property>
-        <property name="text">
-         <string>Emergency
-Stop</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -2087,7 +2430,7 @@ Stop</string>
      <x>0</x>
      <y>0</y>
      <width>1210</width>
-     <height>24</height>
+     <height>34</height>
     </rect>
    </property>
   </widget>
@@ -2142,7 +2485,6 @@ Stop</string>
   <tabstop>consoleOutput</tabstop>
   <tabstop>manualTemp</tabstop>
   <tabstop>manualRamp</tabstop>
-  <tabstop>manualPower</tabstop>
   <tabstop>manualGasAComp</tabstop>
   <tabstop>manualGasBComp</tabstop>
   <tabstop>manualGasCComp</tabstop>

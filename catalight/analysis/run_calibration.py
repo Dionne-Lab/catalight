@@ -20,9 +20,9 @@ def get_user_inputs(starting_dir=None, cal_folder=None):
 
     Parameters
     ----------
-    starting_dir : str, optional
+    starting_dir : `str`, optional
         Directory to start filedialog in. The default is None.
-    cal_folder : str, optional
+    cal_folder : `str`, optional
         Directory containing calibrations. The default is None.
 
     Returns
@@ -76,12 +76,12 @@ def main(expt, calDF, figsize=(6.5, 4.5), forcezero=True):
         Formatted DataFrame containing gc calibration data.
         Specific to control file used!
         Format [ChemID, slope, intercept, start, end, ppm]
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
         1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    force_zero : bool, optional
+    force_zero : `bool`, optional
         Add point (x=0, y=0) to data set. The default is True.
 
     Returns

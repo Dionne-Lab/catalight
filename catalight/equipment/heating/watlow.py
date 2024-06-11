@@ -13,6 +13,7 @@ import time
 import numpy as np
 import pandas as pd
 from pywatlow.watlow import Watlow
+import catalight.config as cfg
 
 
 def convert_temp(old_unit, new_unit, temp):
@@ -52,13 +53,14 @@ class Heater:
     on heater, printing output
     """
 
-    max_temp = 450
-    """int or float: Max temp in C; 450C reduces lifetime 900C is real max.
+    max_temp = 650
+    """int or float: Max temp in C; 650C reduces lifetime 900C is real max.
     To change, use Heater.max_temp = new_value"""
 
     def __init__(self):
         """Connect to watlow, print current state."""
-        self.controller = Watlow(port='COM5', address=1)
+        self.controller = Watlow(port=cfg.heater_address['port'],
+                                 address=cfg.heater_address['address'])
         self.is_busy = False  #: Used to block access from other threads
         print('Heater Initializing...')
         print('Current temperature = ' + str(self.read_temp()) + ' C')
@@ -72,7 +74,7 @@ class Heater:
 
         Parameters
         ----------
-        temp_units : str, optional
+        temp_units : `str`, optional
             (C, K, or F) units to return temp in. The default is 'C'.
 
         Returns
@@ -81,11 +83,16 @@ class Heater:
             Current temperature in requested units.
 
         """
+        temp = None
         while self.is_busy:
             time.sleep(0)
+
         self.is_busy = True
-        temp = self.controller.read()['data']
+        # Occasionlly controller.read seems to return None
+        while temp is None:
+            temp = self.controller.read()['data']
         self.is_busy = False
+
         if temp_units.upper() != 'F':
             temp = convert_temp('F', temp_units, temp)
         return round(temp, 3)
@@ -96,7 +103,7 @@ class Heater:
 
         Parameters
         ----------
-        temp_units : str, optional
+        temp_units : `str`, optional
             (C, K, or F) units to return temp in. The default is 'C'.
 
         Returns
@@ -223,12 +230,12 @@ class Heater:
             (deg C/min) List of heater ramp rates to test e.g. [5, 10, 15, 20]
         T_max : int or float
             (deg C) Maximum temperature setpoint to use for testing
-        T_min : int or float, optional
+        T_min : `int` or `float`, optional
             (deg C) Starting setpoint to use for testing. The default is 30.
 
         Returns
         -------
-        None.
+        None
 
         """
         self.ramp(20)  # Start from 'off'

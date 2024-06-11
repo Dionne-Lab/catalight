@@ -16,13 +16,16 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 # Sets path when file is imported
 package_dir = os.path.dirname(os.path.abspath(__file__))
-calibration_path = os.path.join(package_dir, 'XXX_calibration.txt')
+calibration_path = os.path.join(package_dir, 'nkt_calibration.csv')
 # TODO: Update calibration path w/ lightsource name
+
 
 class Template_Laser():
     """
     Vi
     """
+    is_tunable = False
+    """bool: Defines whether laser class is tunable."""
 
     def __init__(self):
         # Set public attr
@@ -31,8 +34,10 @@ class Template_Laser():
         self._calibration = [0, 0]
 
         # Set non-public attr
-
         self._P_set = 0
+        #TODO Update for hardware
+        self._wavelength_range = [400, 800]
+        self._bandwidth_range = [10, 100]
 
         self.read_calibration()
 
@@ -52,6 +57,10 @@ class Template_Laser():
         self.set_power(0)
 
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+    wavelength_range = property(lambda self: self._wavelength_range)
+    """[min, max] Min/Max wavelength of tunable laser, read-only"""
+    bandwidth_range = property(lambda self: self._bandwidth_range)
+    """[min, max] Min/Max bandwidth of tunable laser, read-only"""
 
     def set_power(self, P_set):
         """
@@ -209,9 +218,9 @@ class Template_Laser():
 
         Parameters
         ----------
-        log_frequency : float or int, optional
+        log_frequency : `float` or `int`, optional
             (seconds) interval to record data with. The default is 0.1 sec.
-        save_path : str, optional
+        save_path : `str`, optional
             Full tile path to save data to. If None, saves in module directory
             with file name 'YYYYMMDDlaser_log.txt'. Appends int to end of file
             name if file name already exists.
@@ -258,7 +267,7 @@ class RepeatTimer(Timer):
     ----------
     interval : float or int
         Time interval in seconds to call function.
-    function : func
+    function : `function`
         Functions to call
     args
         Arguments of function.
@@ -273,9 +282,4 @@ class RepeatTimer(Timer):
 
 
 if __name__ == "__main__":
-    laser_controller = Diode_Laser()
-    laser_controller.start_logger()
-    laser_controller.time_warning(1)
-    laser_controller.print_output()
-    laser_controller.stop_logger()
-    laser_controller.shut_down()
+    print('test code')

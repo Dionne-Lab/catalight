@@ -177,7 +177,7 @@ class PlotDialog(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         super().__init__()
@@ -233,7 +233,7 @@ class ChangeXDialog(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         super().__init__()
@@ -289,7 +289,7 @@ class MultiplotDialog(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         super().__init__()
@@ -344,7 +344,7 @@ class CalDialog(QDialog):
 
         Returns
         -------
-        None.
+        None
 
         """
         super().__init__()

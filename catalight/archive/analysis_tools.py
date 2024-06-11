@@ -212,7 +212,7 @@ def get_timepassed(concentrations, switch_to_hours=2):
         3D matrix of concentrations for each molecule, gc collection,
         and condition
         [Condition x [Timestamps, ChemID] x run number
-    switch_to_hours : float, optional
+    switch_to_hours : `float`, optional
         Time in hours when the output should switch units to
         hours instead of minutes. The default is 2.
 
@@ -264,7 +264,7 @@ def analyze_cal_data(expt, calDF, figsize=(6.5, 4.5), force_zero=True):
 
     Returns
     -------
-    None.
+    None
 
     """
     print('Analyzing Calibration data')

@@ -29,6 +29,8 @@ class Diode_Laser():
     a specified power from the laser. The user must perform a calibration of
     the system prior to using this class!
     """
+    is_tunable = False
+    """bool: Defines whether laser class is tunable. Diode is not."""
 
     def __init__(self):
         # Set public attr
@@ -43,6 +45,10 @@ class Diode_Laser():
         self._I_max = 2000  #: (mA) Max current of current controller
         self._k_mod = self._I_max / 10  #: (mA/V)
         self._P_set = 0
+        self._bandwidth = 0
+        self._central_wavelength = 450
+        self._wavelength_range = [450, 450]
+        self._bandwidth_range = [0, 0]
 
         # Initiate DAQ
         self._daq_dev_info = DaqDeviceInfo(self.board_num)
@@ -63,8 +69,6 @@ class Diode_Laser():
         # Initialize equipment
         print('Active DAQ device: ', self._daq_dev_info.product_name, ' (',
               self._daq_dev_info.unique_id, ')\n', sep='')
-        self.read_calibration()
-
         # Initiate a voice control object to send alert messages
         self.voice_control = pyttsx3.init()
         self.voice_control.setProperty('volume', 1.0)
@@ -76,9 +80,14 @@ class Diode_Laser():
         interface = devices.Activate(IAudioEndpointVolume._iid_,
                                      CLSCTX_ALL, None)
         self.volume_control = cast(interface, POINTER(IAudioEndpointVolume))
+        try:
+            self.read_calibration()
+            # Turn power to zero on initialization
+            self.set_power(0)
+        except FileNotFoundError:
+            print('Warning, no cabration found.')
 
-        # Turn power to zero on initialization
-        self.set_power(0)
+
 
     # Read Only Attributes
     I_max = property(lambda self: self._I_max)  #: (mA) Max current
@@ -89,6 +98,14 @@ class Diode_Laser():
     ai_info = property(lambda self: self._ai_info)  #: Analog input info
     ai_range = property(lambda self: self._ai_range)  #: Analog input range
     P_set = property(lambda self: self._P_set)  #: Current laser setpoint
+    wavelength_range = property(lambda self: self._wavelength_range)
+    """[min, max] Min/Max wavelength of tunable laser, read-only"""
+    bandwidth_range = property(lambda self: self._bandwidth_range)
+    """[min, max] Min/Max bandwidth of tunable laser, read-only"""
+    central_wavelength = property(lambda self: self._central_wavelength)
+    """Current wavelength of laser, read-only"""
+    bandwidth = property(lambda self: self._bandwidth)
+    """Current bandwidth of laser, read-only"""
 
     def set_power(self, P_set):
         """
@@ -184,13 +201,13 @@ class Diode_Laser():
                                                   self._ai_range, Vin_value)
             # Convert to relevant output numbers
             V = Vin_eng_units_value
-            I = round(V * self._k_mod, 3) #noqa I==current
+            I = round(V * self._k_mod, 3)  # noqa I==current
         else:
             print('DAQ Read Not Supported')
-            I = 0 #noqa I==current
+            I = 0  # noqa I==current
 
         self.is_busy = False
-        return(abs(I))
+        return (abs(I))
 
     def get_output_power(self):
         """
@@ -201,33 +218,35 @@ class Diode_Laser():
         P : float or int
             Power [mW] rounded to 3 decimal points
         """
-        I = self.get_output_current() #noqa I==current
+        I = self.get_output_current()  # noqa I==current
         P = round(self.I_to_P(I), 3)
-        return(P)
+        return (P)
 
     def print_output(self):
         """Print the output current and power to console."""
-        I = self.get_output_current() #noqa I==current
+        I = self.get_output_current()  # noqa I==current
         P = self.get_output_power()
         print('Measured Laser output = %7.2f mW / %7.2f mA' % (P, I))
 
-    def I_to_P(self, I): #noqa I==current
+    def I_to_P(self, I):  # noqa I==current
         """
         converts a current to power based on read calibration
 
         Parameters
         ----------
-        I : current you'd like to convert [mA]
+        I : float
+            Current you'd like to convert [mA]
 
         Returns
         -------
-        P : Power [mW]
+        P : float
+            Power [mW]
 
         """
         m = self._calibration[0]
         b = self._calibration[1]
         P = I * m + b
-        return(P)
+        return (P)
 
     def P_to_I(self, P):
         """
@@ -276,21 +295,11 @@ class Diode_Laser():
             Y intercept of linear calibration (mA)
         """
         # open and write to calibration file
-        with open(calibration_path, 'r+') as old_cal_file:
-            new_cal_file = []
+        with open(calibration_path, 'w+') as cal_file:
+            cal_file.write('m = ' + str(slope) + ' \n')
+            cal_file.write('b = ' + str(intercept) + ' \n')
+            cal_file.write('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
 
-            for line in old_cal_file:  # read values after '=' line by line
-                if re.search('m = ', line):
-                    line = ('m = ' + str(slope) + ' \n')
-                elif re.search('b = ', line):
-                    line = ('b = ' + str(intercept) + ' \n')
-                elif re.search('date = ', line):
-                    line = ('date = ' + dt.date.today().strftime('%Y-%m-%d') + '\n')
-
-                new_cal_file += line
-
-            old_cal_file.seek(0)  # Starting from beginning line
-            old_cal_file.writelines(new_cal_file)
         self.read_calibration()
 
     def read_calibration(self):
@@ -375,9 +384,9 @@ class Diode_Laser():
 
         Parameters
         ----------
-        log_frequency : float or int, optional
+        log_frequency : `float` or `int`, optional
             (seconds) interval to record data with. The default is 0.1 sec.
-        save_path : str, optional
+        save_path : `str`, optional
             Full tile path to save data to. If None, saves in module directory
             with file name 'YYYYMMDDlaser_log.txt'. Appends int to end of file
             name if file name already exists.
@@ -424,7 +433,7 @@ class RepeatTimer(Timer):
     ----------
     interval : float or int
         Time interval in seconds to call function.
-    function : func
+    function : `function`
         Functions to call
     args
         Arguments of function.

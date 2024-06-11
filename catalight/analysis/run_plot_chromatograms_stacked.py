@@ -29,14 +29,14 @@ def get_user_inputs(starting_dir=None):
 
     Parameters
     ----------
-    starting_dir : str, optional
+    starting_dir : `str`, optional
         Directory to start file dialog in. The default is None.
 
     Returns
     -------
-    file_list : list of str
+    file_list : list[str]
         List of files selected by user.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels provided by user for plot legend.
     response_dict : dict
         Dictionary of user plot options.
@@ -67,16 +67,16 @@ def main(file_list, data_labels, figsize=(6.5, 4.5), basecorrect=True):
 
     Parameters
     ----------
-    file_list : list of str
+    file_list : list[str]
         list of full filepaths to ".asc" files for GC data.
-    data_labels : list of str
+    data_labels : list[str]
         List of data labels used for generating plot legends.
-    figsize : tuple, optional
+    figsize : `tuple`, optional
         Desired size of output figure in inches (x,y), Default is (6.5, 4.5).
         figsize suggestions:
         1/2 slide = (6.5, 4.5);  1/6 slide = (4.35, 3.25);
         1/4 slide =  (5, 3.65); Full slide =    (9, 6.65);
-    basecorrect : bool, optional
+    basecorrect : `bool`, optional
         Indicates whether or not to baseline correct individual gc data.
         The default is 'True'.
 
@@ -93,6 +93,8 @@ def main(file_list, data_labels, figsize=(6.5, 4.5), basecorrect=True):
     for filename, data_label in zip(file_list, data_labels):
         data = GCData(filename, basecorrect)
         ax.plot(data.time, data.signal, label=data_label)
+    ax.set_xlabel("Time [min]")
+    ax.set_ylabel("Signal [a.u.]")
     plt.legend()
     plt.show()
     return fig, ax

@@ -21,9 +21,9 @@ release = toml['project']["version"]
 author = ', '.join([entry['name'] for entry in toml['project']["authors"]])
 copyright = '2022, Briley Bourgeois, Claire Carlin'
 # These are grabbed from toml now.
-#project = 'catalight'
-#author = 'Briley Bourgeois, Claire Carlin'
-#release = '0.1.1'
+# project = 'catalight'
+# author = 'Briley Bourgeois, Claire Carlin'
+# release = '0.1.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -39,13 +39,14 @@ extensions = [
     ]
 
 autosummary_generate = True
-autodoc_default_options = {'inherited-members': False}
+autodoc_default_options = {'inherited-members': False,
+                           'private-members': True}
 
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 exclude_patterns = ['catalight/data_analysis/IntegrationTesting.rst']
-
+nitpicky = True
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
 todo_include_todos = True
@@ -68,7 +69,8 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/docs/", None),
     "matplotlib": ("https://matplotlib.org/stable/", None),
-    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None)
+    "PyQt5": ("https://www.riverbankcomputing.com/static/Docs/PyQt5/", None),
+    "nkt_tools": ("https://nkt-tools.readthedocs.io/en/latest/", None)
 }
 
 autodoc_mock_imports = [
@@ -92,5 +94,11 @@ autodoc_mock_imports = [
     'clr',
     'serial',
     'Peaksimple',
-    'win32gui'
+    'win32gui',
+    'nkt_tools'
 ]
+
+nitpick_ignore_regex = [('py:exc', 'Peaksimple.*'),
+                        (r'py:.*', r'PyQt5.*'),
+                        (r'py:.*', r'\bQ\w*')]
+linkcheck_ignore = [('py:*', 'PyQt5*')]

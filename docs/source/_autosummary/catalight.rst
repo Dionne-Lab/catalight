@@ -29,5 +29,7 @@
 
    catalight.analysis
    catalight.catalight_GUI
+   catalight.cl_tools
+   catalight.config
    catalight.equipment
 

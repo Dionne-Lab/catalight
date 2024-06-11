@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "catalight"
-version = "0.1.6"
+version = "0.2.0"
 authors = [
   { name="Briley Bourgeois", email="bbourge6@stanford.edu" },
   { name="Claire Carlin", email="cccarlin@stanford.edu" }

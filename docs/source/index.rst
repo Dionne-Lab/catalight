@@ -1,5 +1,11 @@
 Welcome to Catalight!
 ========================================
+.. meta::
+    :description lang=en:
+        A python toolbox for the automation of (photo)catalysis experiments and data analysis. Incorporates MFCs, heaters, light sources, detectors, etc.
+    :keywords:
+        Python, NKT, automation, catalysis, photocatalysis, chemistry, experiments, Stanford, Dionne, catalight
+
 .. figure:: _static/images/catalight_header_g.png
     :width: 800
 
