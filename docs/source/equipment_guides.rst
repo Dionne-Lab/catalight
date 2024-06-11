@@ -6,7 +6,7 @@ Alicat MFCs
 -----------
 .. note::
     The Alicat Python package was updated with a breaking change after implementation into the Catalight project. Version 0.4.1 is the last compatible version and has been hard pinned into the Catalight requirements file.
-    
+
 Alicat brand MFCs are accessed utilizing the Alicat python package developed by Patrick Fuller and Numat.
 
 | `numat/alicat: Python driver and command line tool for Alicat mass flow controllers. (github.com) <https://github.com/numat/alicat>`_
@@ -47,6 +47,8 @@ ThorLabs Laser Diode Driver
 
 We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=LDC200CV>`_ Laser Diode Driver to control our diode laser excitation source. The driver does not have a computer interface, but supports current modulation via a 10 Volt analog signal supplied by a BNC connection at the rear of the device. To supply an analog signal to the current controller, we utilize a `USB-231 DAQ card from Measurment Computing Corporation (MCC) <https://www.mccdaq.com/usb-data-acquisition/USB-230-Series.aspx>`_. MCC publishes a `Python API for their Universal Library (mcculw) <https://github.com/mccdaq/mcculw>`_. We also utilize their `instacal software <https://www.mccdaq.com/daq-software/instacal.aspx>`_ for installing the DAQ and setting the board number, though this may not be strictly necessary when using the `mcculw library <https://www.mccdaq.com/PDFs/Manuals/Mcculw_WebHelp/ULStart.htm>`_. Our :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser` class hides interaction with the mcculw from the user, favoring method calls such as "Diode_Laser.set_power()" over interacting directly with the DAQ board. The intention is to ignore the existence of the DAQ interface when operating the laser programmatically. In fact, this makes some troubleshooting activities a bit easier for the Diode_Laser class as the laser can remain off (by unplugging or pressing the physical off switch) while the user interacts safely with the DAQ board. All commands will remain functional, though voltage readings from the current driver output won't return realistic values.
 
+In version 1 of Catalight, the diode laser class relies on a auxiliary script to perform calibraiton (unlike the NKT_System which has calibration as a built in method). This was originally done because the calibration needs to be performed in conjunction with a power meter. More information about performing the calibration can be found in the section: :ref:`diode_calibration`
+
 .. admonition:: Making the Connection
 
     It isn't completely necessary to install additional software before using a :class:`~catalight.equipment.light_sources.diode_control.Diode_Laser` instance, but you will need to install the MCC DAQ board in some way. We suggest you install and use `instacal <https://www.mccdaq.com/daq-software/instacal.aspx>`_, but there is a command line method documented in the `mcculw library <https://www.mccdaq.com/PDFs/Manuals/Mcculw_WebHelp/ULStart.htm>`_
@@ -61,6 +63,8 @@ We use the `LDC200C Series <https://www.thorlabs.com/thorproduct.cfm?partnumber=
 
     Screenshot of product page for the DAQ board used in D-Lab hardware configuration
 
+.. _nkt_doc:
+
 NKT Fianium/Extreme + Varia System
 ----------------------------------
 .. Warning::
@@ -74,8 +78,11 @@ The :mod:`nkt_tools` package provides a python interface for the NKT Varia and E
 
     All of the connection needed for the NKT System should be handled automatically, and the user should only need to plug in their system to the computer. It is necessary to calibrate the NKT system prior to use.
 
+
 Calibrating the NKT_System:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The NKT_System provides a calibration prodedure utilizing the method :meth:`~catalight.equipment.light_sources.nkt_system.NKT_System.run_calibration`. An example script for running the calibration process is provided below. Note, the calibration process takes a few hours to complete.
 
 .. code:: python
 
@@ -87,6 +94,43 @@ Calibrating the NKT_System:
     nkt = nkt_system.NKT_System()
 
     nkt.run_calibration(meter)
+
+The strategy of the calibration process is to vary the central wavelength of the NKT Varia and compute the spectrally averaged power output for each central wavelength. This is done using a bandwidth of 10 nm, moved in increments of 1 nm. The spectral power density is computed as a mW/nm value, and this process is repeated for multiple power setpoints (in percents). The outcome of the calibration process is seen below:
+
+.. figure:: _static/images/nkt_addition/nkt_calibration_data.svg
+    :width: 800
+
+    Calculated spectral power of laser based on wavelength sweeps at various setpoints.
+
+The raw data is fit on a power setpoint vs power output function for each wavelength value tested, as shown in the figure below. Especially for short wavelengths, the fit function is non-linear.
+
+.. figure:: _static/images/nkt_addition/nkt_calibration_plots.svg
+    :width: 800
+
+    Compilation of fits for select wavelengths across different power settings. The top left value in each subplot indicates the last wavelength plotted, givin an approximate wavelength range for each plot.
+
+An algorithm is used to compute the expected laser output for a given laser setpoint value under a given set of optical conditions (central wavelength and bandwidth). Several benchmarking tests are performed in the course of the calibration process to check the accuracy of the calibration. A measurement is performed by setting a fixed short pass value and extending the bandwidth out from the min to max bandwidth value. The predicted vs measured output values are compared so that the user can get a sense for the error of the calibration performance. Similarly, the calibration data itself is plotted as a "growing window" test in which a 10 nm bandwidth window is moved across the spectrum. The power output by a given setpoint value is computed and the error is plotted in terms of (LHS) what power is expected vs measured and the (RHS) what power setpoint should be needed to acheive the measured power output. In this sense, the calibration formula is being solved in "both directions"
+
+In all benchmarking cases, no verifications are performed by the software. The user must manually evaluate the performance of the system and judge whether the performance is acceptable.
+
+.. figure:: _static/images/nkt_addition/nkt_growing_window_benchmark.svg
+    :width: 800
+
+    Predicted and measured powers output by the laser for a variable bandwidth showing the error associated with changing the bandwidth feature.
+
+.. figure:: _static/images/nkt_addition/nkt_moving_window_benchmark.svg
+    :width: 800
+
+    Predicted power and measured power for a moving window test. A fixed bandwidth is moved across the laser spectrum, and the requested power is compared to the measured value.
+
+Finally, the calibration is verified using a randomized comparison. Random power outputs, center wavelengths, and bandwidths are requested from the system. If the optical conditions are acheivable (the power is within the measured limits) then the system actuates those conditions and measures the output power. The results are plotted as a function of the requested output power, but the data points also differ in central wavelength and bandwidth to give a more varied few of the calibration performance. On the Dionne Lab system, there is a constant over estimate of the output power causing slightly lower power output than requested.
+
+.. figure:: _static/images/nkt_addition/calibration_verification.svg
+    :width: 800
+
+    Predicted power vs measured power for randomized optical conditions, post-calibration.
+
+It should be noted that there is a significant error in the power output produced in this manner. I would suggest that users establishing a new experimental setup consider placing a power meter permanently in-line with the system using a beam splitter such that a fraction of the power output is always being measured. The calibration process is slow, tedious, and inaccurate.
 
 .. _newport_meter_doc:
 

@@ -2,7 +2,10 @@ In this section, I'll describe the addition of the NKT system into the catalight
 
 Connection with the equipment:
 ------------------------------
+Each piece of equipment brought into the Catalight system needs to have communication independently developed. Communicating with various pieces of hardware in a abstract and generalized way is beyond the scope of the package. Instead, users are encouraged to develop their own packages to enable hardware connection, and import those packages into Catalight for further integration with the remainder of the "virtual lab space".
 
+In the case of the NKT system, this was accomplished utilizing the NKT Photonics provided software development kit. This connection was established in a stan
+Support for an NKT laser and the Varia tunable emission system is provided through a standalone package, `nkt_tools <https://nkt-tools.readthedocs.io/en/latest/>`_, which is installed as a requirement of the catalight package. Further details of the hardware connection can be found in the :ref:`nkt_doc`  section of this guide and the nkt_tools documentation.
 
 Integration to Catalight:
 -------------------------

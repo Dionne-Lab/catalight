@@ -1,3 +1,5 @@
+.. _diode_calibration:
+
 Laser calibration
 -----------------
 .. warning::
